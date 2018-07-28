@@ -10,6 +10,7 @@ canonifyurls = true # Enable to turn relative URLs into absolute.
 pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
 pygmentscodefences = true # Enable code fence background highlighting.
 pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
+publishDir = "docs"
 
 [params]
     langseparator = "|" # separates menus from language selectors.
@@ -49,7 +50,7 @@ pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences wi
         # You can configure the theme parameter for each language. 
         [languages.en.params]
         author = "Italo Vietro"
-        info = "Software Engineer and OS lover"
+        info = "Software Engineer"
         description = "Italo's personal website"
         keywords = "developer,engineer,personal"
 
@@ -68,7 +69,7 @@ pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences wi
             author = "Italo Vietro"
             description = "Meu website pessoal"
             keywords = "developer,strona domowa"
-            info = "Engenheiro de Software e amante de Open Source"
+            info = "Engenheiro de Software"
 
         [languages.pt.menu]
 
