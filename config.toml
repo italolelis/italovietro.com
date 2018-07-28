@@ -10,7 +10,6 @@ canonifyurls = true # Enable to turn relative URLs into absolute.
 pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
 pygmentscodefences = true # Enable code fence background highlighting.
 pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
-publishDir = "docs"
 
 [params]
     langseparator = "|" # separates menus from language selectors.
