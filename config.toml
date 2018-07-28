@@ -1,4 +1,4 @@
-baseURL = "https://italovietro.com/"
+# baseURL = "https://italovietro.com/"
 title = "italovietro" # Site title.
 theme = "coder" # Set the theme.
 languagecode = "en" # The site’s language code used to generate RSS.
