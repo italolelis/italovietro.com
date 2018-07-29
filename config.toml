@@ -1,78 +1,68 @@
 baseURL = "https://italovietro.com/"
-title = "italovietro" # Site title.
-theme = "coder" # Set the theme.
-languagecode = "en" # The site’s language code used to generate RSS.
+title = "Italo Vietro"
+theme = "minimal"
+languagecode = "en-US" # The site’s language code used to generate RSS.
 defaultcontentlanguage = "en" # The default content language.
 
-paginate = 20 # Default number of pages per page in pagination.
 canonifyurls = true # Enable to turn relative URLs into absolute.
-
-pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
-pygmentscodefences = true # Enable code fence background highlighting.
-pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
+enableRobotsTXT = true
+googleAnalytics = "UA-5628814-4"
 
 [params]
-    langseparator = "|" # separates menus from language selectors.
-    avatarurl = "images/avatar.jpg"
-    hideCredits = true
-    hideCopyright = true
+    author = "Italo Vietro"
+    description = "Software Engineer"
+    githubUsername = "italolelis"
+    accent = "red"
+    showBorder = false
+    backgroundColor = "white"
+    font = "Open-Sans" # should match the name on Google Fonts!
+    highlight = true
+    highlightStyle = "solarized-dark"
+    highlightLanguages = ["go", "python", "php"]
+    favicon = "images/fav.ico"
+    copyright = "&copy; All rights reserved. Powered by [Hugo](https://gohugo.io) and [Minimal](https://github.com/calintat/minimal)"
 
-    # Custom CSS
-    custom_css = ["css/all.min.css"]
-
-[[params.social]]
-    name = ""
-    icon = "fa-github"
+[[menu.main]]
+    url = "/"
+    name = "Home"
     weight = 1
-    url = "https://github.com/italolelis/"
-[[params.social]]
-    name = ""
-    icon = "fa-twitter"
+
+[[menu.main]]
+    url = "/about"
+    name = "About"
     weight = 2
-    url = "https://twitter.com/italolelis/"
-[[params.social]]
-    name = ""
-    icon = "fa-linkedin"
+
+[[menu.main]]
+    url = "/manager"
+    name = "Manager"
+    weight = 2
+
+[[menu.main]]
+    url = "/project/"
+    name = "Projects"
     weight = 3
+
+# Social icons to be shown on the right-hand side of the navigation bar
+# The "name" field should match the name of the icon to be used
+# The list of available icons can be found at http://fontawesome.io/icons/
+
+[[menu.icon]]
+    url = "https://github.com/italolelis/"
+    name = "github"
+    weight = 2
+
+[[menu.icon]]
+    url = "https://twitter.com/italolelis/"
+    name = "twitter"
+    weight = 3
+
+[[menu.icon]]
     url = "https://www.linkedin.com/in/italolelis/"
-[[params.social]]
-    name = ""
-    icon = "fa-medium"
+    name = "linkedin"
     weight = 4
+
+[[menu.icon]]
     url = "https://medium.com/@italolelis"
+    name = "medium"
+    weight = 5
 
-[languages]
-    [languages.en]
-        languagename = "English" # The language name to be displayed in the selector.
-        title = "Italo Vietro"
-
-        # You can configure the theme parameter for each language. 
-        [languages.en.params]
-        author = "Italo Vietro"
-        info = "Software Engineer"
-        description = "Italo's personal website"
-        keywords = "developer,engineer,personal"
-
-        [languages.en.menu] # It is possible to change the menu too.
-
-        [[languages.en.menu.main]]
-        name = "About"
-        weight = 1.0
-        url = "/about/"
-
-    [languages.pt]
-        languagename = "Português"
-        title = "Italo "
-
-        [languages.pt.params]
-            author = "Italo Vietro"
-            description = "Meu website pessoal"
-            keywords = "developer,strona domowa"
-            info = "Engenheiro de Software"
-
-        [languages.pt.menu]
-
-            [[languages.pt.menu.main]]
-            name = "Sobre"
-            weight = 1.0
-            url = "/pt/about/"

@@ -1,0 +1,91 @@
+baseURL = "https://italovietro.com/"
+title = "italovietro" # Site title.
+theme = "coder" # Set the theme.
+languagecode = "en" # The site’s language code used to generate RSS.
+defaultcontentlanguage = "en" # The default content language.
+
+paginate = 20 # Default number of pages per page in pagination.
+canonifyurls = true # Enable to turn relative URLs into absolute.
+enableEmoji = true
+enableRobotsTXT = true
+googleAnalytics = "UA-5628814-4"
+
+pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
+pygmentscodefences = true # Enable code fence background highlighting.
+pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
+
+[params]
+    langseparator = "|" # separates menus from language selectors.
+    avatarurl = "images/avatar.jpg"
+    hideCredits = true
+    hideCopyright = true
+
+    # Custom CSS
+    custom_css = ["css/all.min.css"]
+
+[[params.social]]
+    name = ""
+    icon = "fa-github"
+    weight = 1
+    url = "https://github.com/italolelis/"
+[[params.social]]
+    name = ""
+    icon = "fa-twitter"
+    weight = 2
+    url = "https://twitter.com/italolelis/"
+[[params.social]]
+    name = ""
+    icon = "fa-linkedin"
+    weight = 3
+    url = "https://www.linkedin.com/in/italolelis/"
+[[params.social]]
+    name = ""
+    icon = "fa-medium"
+    weight = 4
+    url = "https://medium.com/@italolelis"
+
+[languages]
+    [languages.en]
+        languagename = "English" # The language name to be displayed in the selector.
+        title = "Italo Vietro"
+
+        # You can configure the theme parameter for each language. 
+        [languages.en.params]
+        author = "Italo Vietro"
+        info = "Software Engineer"
+        description = "Italo's personal website"
+        keywords = "developer,engineer,personal"
+
+        [languages.en.menu] # It is possible to change the menu too.
+
+        [[languages.en.menu.main]]
+        name = "About"
+        weight = 1.0
+        url = "/about/"
+
+        [[languages.en.menu.main]]
+        name = "As Manager"
+        weight = 2.0
+        url = "/manager/"
+
+    [languages.pt]
+        languagename = "Português"
+        title = "Italo Vietro"
+
+        [languages.pt.params]
+            author = "Italo Vietro"
+            description = "Meu website pessoal"
+            keywords = "developer,engenheiro,software"
+            info = "Engenheiro de Software"
+
+        [languages.pt.menu]
+
+            [[languages.pt.menu.main]]
+            name = "Sobre"
+            weight = 1.0
+            url = "/pt/about/"
+
+            [[languages.pt.menu.main]]
+            name = "Como Gerente"
+            weight = 2.0
+            url = "/pt/manager/"

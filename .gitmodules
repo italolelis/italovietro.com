@@ -1,3 +1,9 @@
 [submodule "themes/coder"]
 	path = themes/coder
 	url = https://github.com/italolelis/hugo-coder
+[submodule "themes/intro"]
+	path = themes/intro
+	url = git@github.com:vickylai/hugo-theme-introduction.git
+[submodule "themes/minimal"]
+	path = themes/minimal
+	url = https://github.com/calintat/minimal.git
