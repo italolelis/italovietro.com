@@ -1,7 +1,7 @@
 +++
 title = "About me"
 slug = "about"
-date = ""
+date = "2018-07-29"
 +++
 
 I'm a brazilian living in Berlin, Germany. Currently working as Engineering Manager [@N6](https://twitter.com/n26).

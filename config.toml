@@ -15,12 +15,13 @@ googleAnalytics = "UA-5628814-4"
     accent = "red"
     showBorder = false
     backgroundColor = "white"
-    font = "Open-Sans" # should match the name on Google Fonts!
+    font = "Ubuntu" # should match the name on Google Fonts!
     highlight = true
     highlightStyle = "solarized-dark"
     highlightLanguages = ["go", "python", "php"]
     favicon = "images/fav.ico"
     copyright = "&copy; All rights reserved. Powered by [Hugo](https://gohugo.io) and [Minimal](https://github.com/calintat/minimal)"
+    profilePic = "images/profile.jpg"
 
 [[menu.main]]
     url = "/"
