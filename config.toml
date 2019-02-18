@@ -10,15 +10,15 @@ googleAnalytics = "UA-5628814-4"
 
 [params]
     author = "Italo Vietro"
-    description = "Software Engineer"
+    description = "SRE Enthusiast, Distributed Systems Engineer, and Coffee Lover"
     githubUsername = "italolelis"
     accent = "red"
     showBorder = false
     backgroundColor = "white"
-    font = "Ubuntu" # should match the name on Google Fonts!
+    font = "Roboto" # should match the name on Google Fonts!
     highlight = true
     highlightStyle = "solarized-dark"
-    highlightLanguages = ["go", "python", "php"]
+    highlightLanguages = ["go", "php"]
     favicon = "images/fav.ico"
     copyright = "&copy; All rights reserved. Powered by [Hugo](https://gohugo.io) and [Minimal](https://github.com/calintat/minimal)"
     profilePic = "images/profile.jpg"
@@ -37,11 +37,6 @@ googleAnalytics = "UA-5628814-4"
     url = "/manager"
     name = "Manager"
     weight = 2
-
-[[menu.main]]
-    url = "/project/"
-    name = "Projects"
-    weight = 3
 
 # Social icons to be shown on the right-hand side of the navigation bar
 # The "name" field should match the name of the icon to be used
@@ -63,7 +58,12 @@ googleAnalytics = "UA-5628814-4"
     weight = 4
 
 [[menu.icon]]
+    url = "https://stackoverflow.com/story/italolelis"
+    name = "stack-overflow"
+    weight = 5
+
+[[menu.icon]]
     url = "https://medium.com/@italolelis"
     name = "medium"
-    weight = 5
+    weight = 6
 
