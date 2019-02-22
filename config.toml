@@ -1,69 +1,82 @@
 baseURL = "https://italovietro.com/"
 title = "Italo Vietro"
-theme = "minimal"
-languagecode = "en-US" # The site’s language code used to generate RSS.
-defaultcontentlanguage = "en" # The default content language.
+theme                            = "introduction"
+defaultcontentlanguage           = "en"                    # Default language for multilingual sites
 
-canonifyurls = true # Enable to turn relative URLs into absolute.
-enableRobotsTXT = true
+# disqusshortname                 = ""                       # https://gohugo.io/content-management/comments
 googleAnalytics = "UA-5628814-4"
 
 [params]
-    author = "Italo Vietro"
-    description = "SRE Enthusiast, Distributed Systems Engineer, and Coffee Lover"
-    githubUsername = "italolelis"
-    accent = "red"
-    showBorder = false
-    backgroundColor = "white"
-    font = "Roboto" # should match the name on Google Fonts!
-    highlight = true
-    highlightStyle = "solarized-dark"
-    highlightLanguages = ["go", "php"]
-    favicon = "images/fav.ico"
-    copyright = "&copy; All rights reserved. Powered by [Hugo](https://gohugo.io) and [Minimal](https://github.com/calintat/minimal)"
-    profilePic = "images/profile.jpg"
+    themeStyle                   = "light"                 # Choose "light" or "dark"
+    favicon                      = "img/fav.ico"
+    showRSSButton                = true                   # Show rss button in navigation
+    fadeIn                       = true                   # Turn on/off the fade-in effect
+    fadeInIndex                  = false                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
+    dateFormat                   = "Jan 2, 2006"
+    email                        = "italolelis@gmail.com"   # E-mail address for contact section
 
-[[menu.main]]
-    url = "/"
-    name = "Home"
-    weight = 1
+    # Configure the home page
+    [params.home]
+        introHeight              = "large"                 # Input either "medium" or "large" or "fullheight"
+        showLatest               = true                    # Show latest blog post summary
+        showAllPosts             = false                   # Set true to list all posts on home page, or set false to link to separate blog list page
+        numberOfProjectsToShow   = 0                       # Maximum number of projects to show on home page. Unset or comment out to show all projects
 
-[[menu.main]]
-    url = "/about"
-    name = "About"
-    weight = 2
+        localTime                = true                    # Show your current local time in contact section
+        timeZone                 = "Europe/Berlin"   # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        timeFormat               = "h:mm A"                # https://momentjs.com/docs/#/displaying/format/
+    [params.projects]
+        useTwoColumns            = false                   # Use a layout with two columns instead of three
 
-[[menu.main]]
-    url = "/manager"
-    name = "Manager"
-    weight = 2
+    # Share buttons on blog post pages
+    [params.share]
+        twitter                  = true
+        facebook                 = true
+        googlePlus               = true
+        pinterest                = true
 
-# Social icons to be shown on the right-hand side of the navigation bar
-# The "name" field should match the name of the icon to be used
-# The list of available icons can be found at http://fontawesome.io/icons/
+    # Social icons appear in introduction and contact section. Add as many more as you like.
+    # Icon pack "fab" includes social network icons, see: https://fontawesome.com/icons?d=gallery&s=brands&m=free
+    # Icon pack "fas" includes solid style icons, see: https://fontawesome.com/icons?d=gallery&s=solid&m=free
+    [[params.social]]
+        url   = "https://github.com/italolelis/"
+        icon  = "github" # icon name without the 'fa-'
+        icon_pack = "fab"
+    [[params.social]]
+        url   = "https://twitter.com/italolelis/"
+        icon  = "twitter" # icon name without the 'fa-'
+        icon_pack = "fab"
+    [[params.social]]
+        url   = "https://www.linkedin.com/in/italolelis/"
+        icon  = "linkedin-in" # icon name without the 'fa-'
+        icon_pack = "fab"
+    [[params.social]]
+        url = "https://stackoverflow.com/story/italolelis"
+        icon = "stack-overflow" # icon name without the 'fa-'
+        icon_pack = "fab"
 
-[[menu.icon]]
-    url = "https://github.com/italolelis/"
-    name = "github"
-    weight = 2
+# If you don't want to use the default menu, you can define one by yourself
+# [[menu.main]]
+#     name    = "Home"
+#     url     = "/"
+#     weight  = 0
+# [[menu.main]]
+#     name    = "Blog"
+#     url     = "/blog/"
+#     weight  = 1
 
-[[menu.icon]]
-    url = "https://twitter.com/italolelis/"
-    name = "twitter"
-    weight = 3
+# We only use tag as a taxonomies
+# You can add more by yourself
+[taxonomies]
+  tag = "tags"
 
-[[menu.icon]]
-    url = "https://www.linkedin.com/in/italolelis/"
-    name = "linkedin"
-    weight = 4
-
-[[menu.icon]]
-    url = "https://stackoverflow.com/story/italolelis"
-    name = "stack-overflow"
-    weight = 5
-
-[[menu.icon]]
-    url = "https://medium.com/@italolelis"
-    name = "medium"
-    weight = 6
-
+[languages]
+    [languages.en]
+        languageName     = "English"
+        languageCode     = "en-us"
+        contentDir       = "content/en"
+        weight           = 0
+        title            = "Italo Vietro"
+        [languages.en.params]
+            description  = "Website Description"   # Max 160 characters show in search results
+            # footerText   = ""                      # Text to override default footer text (markdown allowed)
