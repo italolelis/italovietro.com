@@ -1,5 +1,5 @@
 +++
-title = "Hi, I’m Italo"
+title = "👋 Hi, I’m Italo"
 slug = "manager"
 date = ""
 +++
@@ -12,7 +12,6 @@ In a more granular way I’ll  focus mainly (but not exclusively) on 3 things: p
 1. **People**: I’m here to make sure you have a way to progress in your professional life, I’ll give you all the support that you need to succeed.
 2. **Process**: I’m here to make sure our team is successful and pointed in the right direction
 3. **Culture**: I’m here to foster a healthy and great environment to work. This is extremely important in the journey of creating high performing teams.
-
 
 ## My values and expectations
 

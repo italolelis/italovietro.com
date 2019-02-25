@@ -2,6 +2,10 @@
 title: "Scaling @ HelloFresh: API Gateway"
 date: 2017-02-15T14:38:02+01:00
 draft: false
+tags: 
+  - scalability
+  - distributed-systems
+  - hellofresh
 ---
 
 HelloFresh keeps growing every single day: our product is always improving, new ideas are popping up from everywhere, our supply chain is being completely automated. All of this is simply amazing us, but of course this constant growth brings many technical challenges.
@@ -27,7 +31,7 @@ I like to say that anything that goes in our infrastructure should be monitored 
 * For logging we use the ELK Stack, which allows us to quickly analyze detailed data about a service’s behavior.
 * For monitoring we love the combination of statsd + grafana. It is simply amazing what you can accomplish with this tool.
 
-![](/img/scaling-hellofresh-gateway/grafana.png)
+{{< figure src="/img/scaling-hellofresh-gateway/grafana.png" title="Grafana dashboards give amazing insight into your performance metrics" >}}
 
 ### Understanding the current architecture
 Even with all these tools in place we still have a hard problem to solve: understand the current architecture and how we can pull off a smooth migration. At this stage, we invested some time on refactoring our legacy applications to support our new gateway and authentication service that would be also introduced in this migration (watch this space for another article on that — Ed).
@@ -44,7 +48,7 @@ To test the communication between the services we simply set up our whole infras
 
 After we were quite sure that our setup worked on our staging environment we started to think about on how to move this to production.
 
-![](/img/scaling-hellofresh-gateway/team.png)
+{{< figure src="/img/scaling-hellofresh-gateway/team.png" title="The team behind the migration, hard at work" >}}
 
 ## The first attempt
 Spoiler alert: our first attempt at going live was pretty much a disaster. Even though we had a quite nice plan in place we were definitely not ready to go live at that point. Let’s check the step by step of our initial plan:
@@ -79,7 +83,7 @@ It took us around a week to finish all those tasks, and when we were finished, o
 
 In the end, our architecture looked like this:
 
-![](/img/scaling-hellofresh-gateway/architecture.jpg)
+{{< figure src="/img/scaling-hellofresh-gateway/architecture.jpg" title="API Gateway Architecture" >}}
 
 ### Main API
 * 10+ main API servers on High-CPU Large machines
@@ -104,6 +108,6 @@ In the end, our architecture looked like this:
 
 And here is the team that accomplished this migration. A big thanks to everyone of you.
 
-![](/img/scaling-hellofresh-gateway/team2.jpg)
+{{< figure src="/img/scaling-hellofresh-gateway/team2.jpg" title="The API Gateway Tiger Team" >}}
 
 I hope you’ve enjoyed our little journey, stay tuned for our next article.

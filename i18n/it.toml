@@ -1,0 +1,39 @@
+# Translations for Italian
+# https://gohugo.io/content-management/multilingual/#translation-of-strings
+
+# 404.html
+#
+[notFound]
+other = "Oops, pagina non trovata…"
+
+[home]
+other = "Home"
+
+[archives]
+other = "Archivi"
+
+# posts/single.html
+#
+[wordCount]
+other = "{{ .WordCount }} Parole"
+
+[tableOfContents]
+other = "Sommario"
+
+[newer]
+other = "Prossimo"
+
+[older]
+other = "Precedente"
+
+# partials/header.html
+#
+[menu]
+other = "Menu"
+
+[featuredImage]
+other = "Immagine in primo piano"
+
+[blog_readingTime]
+one = "☕️ {{ .Count }} minuto di lettura"
+other = "☕️ {{ .Count }} minuti di lettura"
