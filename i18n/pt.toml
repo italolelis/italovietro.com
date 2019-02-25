@@ -1,0 +1,39 @@
+# Translations for Portuguese
+# https://gohugo.io/content-management/multilingual/#translation-of-strings
+
+# 404.html
+#
+[notFound]
+other = "Oops, pagina não encontrada...."
+
+[home]
+other = "Home"
+
+[archives]
+other = "Arquivo"
+
+# posts/single.html
+#
+[wordCount]
+other = "{{ .WordCount }} Palavras"
+
+[tableOfContents]
+other = "Sumário"
+
+[newer]
+other = "Próximo"
+
+[older]
+other = "Anterior"
+
+# partials/header.html
+#
+[menu]
+other = "Menu"
+
+[featuredImage]
+other = "Immagine in primo piano"
+
+[blog_readingTime]
+one = "☕️ {{ .Count }} minuto de leitura"
+other = "☕️ {{ .Count }} minutos de leitura"
