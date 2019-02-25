@@ -3,6 +3,7 @@ title: "Navigating the rough seas of environment scaling with Ahoy!"
 author: Italo Vietro
 date: 2018-02-07T13:45:05+01:00
 draft: false
+comments: true
 type: post
 tags: 
   - scalability

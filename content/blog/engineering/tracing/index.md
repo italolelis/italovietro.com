@@ -3,6 +3,7 @@ title: "Scaling @ HelloFresh: Distributed Tracing"
 author: Italo Vietro
 date: 2017-05-08T14:38:02+01:00
 draft: false
+comments: true
 type: post
 tags: 
   - scalability

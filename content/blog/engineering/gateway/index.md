@@ -3,6 +3,7 @@ title: "Scaling @ HelloFresh: API Gateway"
 author: Italo Vietro
 date: 2017-02-15T14:38:02+01:00
 draft: false
+comments: true
 type: post
 tags: 
   - scalability
