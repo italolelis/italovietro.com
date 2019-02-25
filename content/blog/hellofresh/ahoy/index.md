@@ -21,7 +21,7 @@ I’m going to tell you about how we solved scaling our staging and local enviro
 
 ## The Problem
 
-{{< figure src="/img/ahoy/ship.jpg" title="Photo by Abraham Wiebe on Unsplash" >}}
+{{< figure src="ship.jpg" title="Photo by Abraham Wiebe on Unsplash" >}}
 
 When we were smaller we had only 2 environments, what we called staging and production. This setup was great for simple applications and small teams. Once we moved to a [microservice](https://martinfowler.com/articles/microservices.html) architecture with 90+ services it quickly became apparent that it was not a scalable solution.
 
@@ -45,7 +45,7 @@ That was when we realised we had to rethink our environments completely, from a 
 
 ## The Solution
 
-{{< figure src="/img/ahoy/ship2.jpg" title="Photo by Ian Simmonds on Unsplash" >}}
+{{< figure src="ship2.jpg" title="Photo by Ian Simmonds on Unsplash" >}}
 
 We started to think about a solution that would be _scalable_ and at the same time _simple to use_. Right away we thought about [Phoenix environments](https://www.thoughtworks.com/de/radar/techniques/phoenix-environments) which would give us the most flexibility.
 
@@ -73,7 +73,7 @@ Let’s take a look at what Ahoy! is actually doing:
 2. Creates entry machine and API gateway clusters for a namespace. This makes sure that each namespace has their own gateway configurations
 3. Imports consul services from staging. This imports all declared consul services into a namespace. You can check an example scenario below:
 
-{{< figure src="/img/ahoy/architecture.png" title="Consul2Kube example" >}}
+{{< figure src="architecture.png" title="Consul2Kube example" >}}
 
 Now that we know what Ahoy! is doing under the hood let’s take a look at how a configuration file looks like.
 
