@@ -1,7 +1,14 @@
 ---
 title: "Navigating the rough seas of environment scaling with Ahoy!"
+author: Italo Vietro
 date: 2018-02-07T13:45:05+01:00
 draft: false
+type: post
+tags: 
+  - scalability
+  - distributed-system
+  - testing
+  - hellofresh
 ---
 
 ### How did we manage to scale our environments @ HelloFresh?

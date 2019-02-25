@@ -1,7 +1,9 @@
 ---
 title: "Scaling @ HelloFresh: Distributed Tracing"
+author: Italo Vietro
 date: 2017-05-08T14:38:02+01:00
 draft: false
+type: post
 tags: 
   - scalability
   - distributed-tracing
@@ -50,9 +52,9 @@ Please check the [OpenTracing website](http://opentracing.io/) for more supporte
 ## The Tracer
 After understanding how OpenTracing works we had to pick one application to be our Proof of Concept to try this out. We chose one of our services that has a good amount of traffic (to generate a lot of data).
 
-With our [API Gateway]({{< ref "scaling-hellofresh-gateway.md" >}}), we had a central place where we could generate the parent tracing information to stream down to the microservices. Each service can then add to the trace to get a contiguous view of a request flowing through our systems. We implemented a simple middleware in the Gateway which creates this parent span and injects it into the proxy request.
+With our [API Gateway]({{< ref "gateway/index.md" >}}), we had a central place where we could generate the parent tracing information to stream down to the microservices. Each service can then add to the trace to get a contiguous view of a request flowing through our systems. We implemented a simple middleware in the Gateway which creates this parent span and injects it into the proxy request.
 
-{{< figure src="/img/scaling-hellofresh-tracing/tracing.png" title="An example of how distributed tracing works within our architecture" >}}
+{{< figure src="tracing.png" title="An example of how distributed tracing works within our architecture" >}}
 
 After implementing OpenTracing, we had to ship those metrics somewhere. This is where a Tracer comes in.
 There are a lot of tracer implementations out there, some good ones are:
@@ -65,7 +67,7 @@ There are a lot of tracer implementations out there, some good ones are:
 
 We chose to use **Stackdriver Trace** as our Tracer. We made that decision because we didn’t want to spend some time building and maintaining all the infrastructure required to have a reliable cluster for Zipkin or Jaeger. The [Google Cloud Platform](https://cloud.google.com/) provided us with a tracer that worked out of the box and could handle a huge amount of data. It was incredibly simple to use and integrate, which factored into our decision in a big way.
 
-{{< figure src="/img/scaling-hellofresh-tracing/tracer.png" title="An example of a tracing request across services — in this case, ending up at our Auth Service" >}}
+{{< figure src="tracer.png" title="An example of a tracing request across services — in this case, ending up at our Auth Service" >}}
 
 ## What should we do with the tracing data?
 
@@ -75,7 +77,7 @@ It really comes down to what do we want to see as information. Initially we had 
 * If you’ve found a bottleneck, use the tracing data as a guide for making improvements in your system. Many Tracers enable you to create reports/dashboards to see if a new version of your service actually improved or degraded latency compared to the previous version.
 * Don’t try to use distributed tracing as your monitoring tool, even though you can setup alerts based on latency problems. A dedicated monitoring tool will always be better for that.
 
-{{< figure src="/img/scaling-hellofresh-tracing/dashboard.png" title="Dashboard on Stackdriver Trace" >}}
+{{< figure src="dashboard.png" title="Dashboard on Stackdriver Trace" >}}
 
 ## Results
 
