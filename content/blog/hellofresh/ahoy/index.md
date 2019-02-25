@@ -15,7 +15,7 @@ tags:
 
 In the past couple of years, our engineering team experienced a huge growth spurt. Within 2 years our team grew from 35 engineers to well over 150. One of the biggest challenges we faced was how to allow over 20 teams to test their code in a stable environment, independently of other teams.
 
-{{< figure src="/img/ahoy/team-growth.png" title="HelloTech Team Growth" >}}
+{{< figure src="team-growth.png" title="HelloTech Team Growth" >}}
 
 I’m going to tell you about how we solved scaling our staging and local environments using phoenix environments.
 
