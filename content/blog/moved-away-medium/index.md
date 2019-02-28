@@ -1,7 +1,7 @@
 ---
 title: "Why I moved away from Medium?"
 author: Italo Vietro
-date: 2019-02-28T22:49:03+01:00
+date: 2019-02-28T18:00:00+01:00
 draft: false
 comments: true
 type: post
