@@ -10,4 +10,4 @@ I chose [Hugo](https://gohugo.io) to manage my blog and I find it very great exp
 ## Contributing
 
 There are many ways you can help me out in this website. You can add new translations, fix any bugs or even add new articles. 
-Just follow the [CONTRIBUTING.md] guidelines.
+Just follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines.
