@@ -12,6 +12,10 @@ const client = contentful.createClient({
 const getAboutEntry = entry => entry.sys.contentType.sys.id === 'about';
 
 const plugins = [
+  'gatsby-plugin-react-helmet',
+  'gatsby-plugin-styled-components',
+  'gatsby-transformer-remark',
+  'gatsby-plugin-offline',
   {
     resolve: "gatsby-source-graphql",
     options: {
@@ -23,7 +27,12 @@ const plugins = [
       },
     },
   },
-  'gatsby-plugin-react-helmet',
+  {
+    resolve: "gatsby-source-dev",
+    options: {
+      username: 'italolelis'
+    }
+  },
   {
     resolve: 'gatsby-plugin-web-font-loader',
     options: {
@@ -36,7 +45,6 @@ const plugins = [
     resolve: 'gatsby-plugin-manifest',
     options: manifestConfig,
   },
-  'gatsby-plugin-styled-components',
   {
     resolve: 'gatsby-source-contentful',
     options: {
@@ -44,20 +52,9 @@ const plugins = [
       accessToken: ACCESS_TOKEN,
     },
   },
-  'gatsby-transformer-remark',
-  'gatsby-plugin-offline',
 ];
 
 module.exports = client.getEntries().then(entries => {
-  const { mediumUser } = entries.items.find(getAboutEntry).fields;
-
-  plugins.push({
-    resolve: 'gatsby-source-medium',
-    options: {
-      username: mediumUser || '@medium',
-    },
-  });
-
   if (ANALYTICS_ID) {
     plugins.push({
       resolve: 'gatsby-plugin-google-analytics',
@@ -69,7 +66,6 @@ module.exports = client.getEntries().then(entries => {
 
   return {
     siteMetadata: {
-      isMediumUserDefined: !!mediumUser,
       deterministicBehaviour: !!DETERMINISTIC,
     },
     plugins,
