@@ -1,7 +1,5 @@
 {
-    "name": "gatsby-starter-mate",
-    "version": "2.5.1",
-    "description": "Gatsby v2 starter to create a top notch portfolio!",
+    "name": "italovietro",
     "main": "index.js",
     "scripts": {
         "build": "gatsby clean && gatsby build",
@@ -11,23 +9,8 @@
         "lint": "eslint ./src",
         "setup": "node ./bin/setup.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/EmaSuriano/gatsby-starter-mate.git"
-    },
-    "keywords": [
-        "gatsby",
-        "starter",
-        "contentful",
-        "PWA",
-        "portfolio"
-    ],
-    "author": "Ema Suriano",
+    "author": "Italo Vietro",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/EmaSuriano/gatsby-starter-mate/issues"
-    },
-    "homepage": "https://github.com/EmaSuriano/gatsby-starter-mate#readme",
     "dependencies": {
         "@tippy.js/react": "^2.2.3",
         "contentful": "^7.0.3",
@@ -73,16 +56,5 @@
         "lint-staged": "^8.1.0",
         "prettier": "^1.18.2",
         "start-server-and-test": "^1.10.0"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "*.{js,json,css,md}": [
-            "prettier --write",
-            "git add"
-        ]
     }
 }
