@@ -2,7 +2,7 @@ const contentful = require('contentful');
 const manifestConfig = require('./manifest-config');
 require('dotenv').config();
 
-const { ACCESS_TOKEN, SPACE_ID, ANALYTICS_ID, DETERMINISTIC, GITHUB_TOKEN } = process.env;
+const { ACCESS_TOKEN, SPACE_ID, ANALYTICS_ID, DETERMINISTIC, GITHUB_TOKEN, DEVTO_USERNAME } = process.env;
 
 const client = contentful.createClient({
   space: SPACE_ID,
@@ -30,7 +30,7 @@ const plugins = [
   {
     resolve: "gatsby-source-dev",
     options: {
-      username: 'italolelis'
+      username: DEVTO_USERNAME
     }
   },
   {

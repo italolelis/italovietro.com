@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Image, Text, Flex, Box } from 'rebass';
 import { StaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
@@ -143,9 +142,9 @@ const Project = ({
           <ImageSubtitle bg="primary" color="white" y="bottom" x="right" round>
             {stargazers.totalCount}
           </ImageSubtitle>
-          {/* <Hide query={MEDIA_QUERY_SMALL}> */}
-          <ImageSubtitle bg="backgroundDark">{new Date(createdAt).getFullYear()}</ImageSubtitle>
-          {/* </Hide> */}
+          <Hide query={MEDIA_QUERY_SMALL}>
+            <ImageSubtitle bg="backgroundDark">{new Date(createdAt).getFullYear()}</ImageSubtitle>
+          </Hide>
         </ProjectTag>
       </ImageContainer>
     </Flex>

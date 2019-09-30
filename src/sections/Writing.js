@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Text, Flex, Box } from 'rebass';
+import { Heading } from 'rebass';
 import { StaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
 import Fade from 'react-reveal/Fade';
