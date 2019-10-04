@@ -28,7 +28,7 @@
         "gatsby-source-graphql": "^2.1.17",
         "gatsby-transformer-remark": "^2.3.10",
         "prop-types": "^15.6.2",
-        "react": "^16.10.0",
+        "react": "^16.10.2",
         "react-dom": "^16.10.0",
         "react-fontawesome": "^1.6.1",
         "react-headroom": "^2.2.4",
