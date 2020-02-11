@@ -11103,10 +11103,10 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-react-text-loop@^2.0.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-text-loop/-/react-text-loop-2.1.1.tgz#4d78fce7ba37144be36dc33313b588bf7754ffd6"
-  integrity sha512-yqjVPm/iUn86dhbDAIEtqpUxJLofTB6BUsYVrODPIdkAWIgszx9csmYinTwCDJ9d4JDzphYizsZtZeuXo2an0g==
+react-text-loop@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-text-loop/-/react-text-loop-2.3.0.tgz#c4035b1f3fb8216b34ed93f3160025fc7b1af3b7"
+  integrity sha512-tRLxdkhc1ojAICxERJNOWj3Ry7NIGmFQF4tR6cRVyL+5zVD+gj+8uGPvOgEBLuj2vmjTXLPvBMVVCnoAIy1+DA==
   dependencies:
     cxs "^6.2.0"
     react-fast-compare "2.0.4"
