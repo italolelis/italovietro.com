@@ -41,17 +41,32 @@ const questions = [
     name: 'managementToken',
     message: 'Your Content Management API access token',
   },
+  {
+    name: 'analyticsID',
+    message: 'Your Google Analytics ID',
+  },
+  {
+    name: 'githubToken',
+    message: 'Your Github token',
+  },
+  {
+    name: 'devtoUsername',
+    message: 'Your Dev.to username',
+  },
 ];
 
 inquirer
   .prompt(questions)
-  .then(({ spaceId, deliveryToken, managementToken }) => {
+  .then(({ spaceId, deliveryToken, managementToken, analyticsID, githubToken, devtoUsername }) => {
     console.log('Writing config file...');
 
     const configFilePath = path.resolve(__dirname, '..', '.env');
     const envData = envfile.stringifySync({
       SPACE_ID: spaceId,
       ACCESS_TOKEN: deliveryToken,
+      ANALYTICS_ID: analyticsID,
+      GITHUB_TOKEN: githubToken,
+      DEVTO_USERNAME: devtoUsername,
     });
 
     writeFileSync(configFilePath, envData);
