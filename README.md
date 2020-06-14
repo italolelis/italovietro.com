@@ -4,7 +4,7 @@
 
 My name is Italo and welcome to my personal website.
 
-I chose [Hugo](https://gohugo.io) to manage my blog and I find it very great experience.
+I chose [Gatsby](https://www.gatsbyjs.org/) to manage my blog and I find it a very great experience.
 
 
 ## Contributing
