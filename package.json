@@ -26,7 +26,7 @@
         "gatsby-plugin-web-font-loader": "^1.0.4",
         "gatsby-source-contentful": "2.1.79",
         "gatsby-source-dev": "^0.1.4",
-        "gatsby-source-graphql": "^2.1.33",
+        "gatsby-source-graphql": "^2.7.5",
         "gatsby-transformer-remark": "^2.6.48",
         "prop-types": "^15.6.2",
         "react": "^16.7.0",
