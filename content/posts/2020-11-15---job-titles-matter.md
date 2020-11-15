@@ -1,17 +1,19 @@
 ---
+template: post
 title: Do job titles matter?
-date: "2020-11-15T18:00:00.000Z"
-template: "post"
+slug: do-job-titles-matter
+socialImage: /media/header.jpg
 draft: false
-slug: "do-job-titles-matter"
-category: "Engineering Management"
-description: "I like to reflect on titles from time to time. Over the past years in my career, I always wondered if job titles matter. That's why I want to share my view on this subject."
-socialImage: "/media/header.jpg"
+date: 2020-11-15T18:00:00.000Z
+description: I like to reflect on titles from time to time. Over the past years
+  in my career, I always wondered if job titles matter. That's why I want to
+  share my view on this subject.
+category: Engineering Management
 tags:
-  - "Software Development"
-  - "Titles"
-  - "Management"
-  - "Career"
+  - Software Development
+  - Titles
+  - Management
+  - Career
 ---
 
 Over the past years in my career, I always wondered if job titles matter. When I started in tech, titles for me represented level of knowledge, where the most senior person would be the most experiment and their word would be the final one. But, as everything in life, when you start growing in your field, you start realizing that titles sometimes are just something to fill somebody's ego.
@@ -25,7 +27,7 @@ I really liked a tweet from [Kelsey Hightower](https://twitter.com/kelseyhightow
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Job titles are important; that&#39;s the problem.</p>&mdash; Kelsey Hightower (@kelseyhightower) <a href="https://twitter.com/kelseyhightower/status/1327642471291965440?ref_src=twsrc%5Etfw">November 14, 2020</a></blockquote>
 
-I couldn't agree more to this statement. As titles matter let's start by showing how the majority of tech companies define their engineering job titles.
+I couldn't agree more with this statement. As titles matter let's start by showing how the majority of tech companies define their engineering job titles.
 
 * Junior Software Developer/Engineer
 * Software Developer/Engineer
