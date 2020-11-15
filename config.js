@@ -4,7 +4,7 @@ module.exports = {
   url: 'https://italovietro.com',
   pathPrefix: '/',
   title: 'Italo Vietro',
-  subtitle: 'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
+  subtitle: 'This is my personal website. Here is where I will share some thoughts about the tech industry, computers, and gaming.',
   copyright: '© All rights reserved.',
   disqusShortname: '',
   postsPerPage: 4,
