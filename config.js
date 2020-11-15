@@ -38,7 +38,7 @@ module.exports = {
       telegram: '',
       twitter: 'italolelis',
       github: 'italolelis',
-      rss: '',
+      rss: 'https://feeds.feedburner.com/ItaloVietro',
       vkontakte: '',
       linkedin: 'italolelis',
       instagram: '',
