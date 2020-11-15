@@ -218,7 +218,7 @@ exports[`Sidebar renders correctly 1`] = `
     <div
       className="copyright"
     >
-      2020 Test copyright
+      Test copyright
     </div>
   </div>
 </div>
