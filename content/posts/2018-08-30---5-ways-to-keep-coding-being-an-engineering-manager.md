@@ -6,7 +6,7 @@ draft: false
 slug: "5-ways-to-keep-coding-being-an-engineering-manager"
 category: "Engineering Management"
 description: "I currently work as an Engineering Manager at N26. We are going through a hyper-growth phase that involves many different challenges. This is extremely exciting as I have the opportunity to help in shaping how the organization can grow but still maintain its principles and alignment."
-socialImage: "./images/header.jpg"
+socialImage: "./media/header.jpg"
 tags:
   - "Software Development"
   - "Engineering Management"
@@ -56,7 +56,7 @@ I like contributing to OS projects in my free time. If you’re interested check
 ### 2. Be part of a community
 
 <figure>
-	<img src="./images/meetup.jpg" alt="March 2018 Golang meetup picture with Italo Vietro as a speaker">
+	<img src="./media/meetup.jpg" alt="March 2018 Golang meetup picture with Italo Vietro as a speaker">
 	<figcaption>March 2018 Golang meetup</figcaption>
 </figure>
 
@@ -66,7 +66,7 @@ Whatever language or technology you’re into, make sure to [find](http://meetup
 ### 3. Read… a lot!
 
 <figure>
-	<img src="./images/books.jpg" alt="Photo by Daria Nepriakhina on Unsplash showing a stack of books">
+	<img src="./media/books.jpg" alt="Photo by Daria Nepriakhina on Unsplash showing a stack of books">
 	<figcaption>Photo by Daria Nepriakhina on Unsplash</figcaption>
 </figure>
 
@@ -88,7 +88,7 @@ Time won’t allow you to take part in the implementation details, and that is f
 ### 5. Code reviews
 
 <figure>
-	<img src="./images/review.jpg" alt="Photo by Goran Ivos on Unsplash showing a laptop with code. Next to it shows a brown coffee mug and one iPhone facing down.">
+	<img src="./media/review.jpg" alt="Photo by Goran Ivos on Unsplash showing a laptop with code. Next to it shows a brown coffee mug and one iPhone facing down.">
 	<figcaption>Photo by Goran Ivos on Unsplash</figcaption>
 </figure>
 

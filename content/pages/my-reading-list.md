@@ -51,7 +51,7 @@ These are books I learned a lot from, as a software engineer.
 A Philosophy of Software Design There are few books like this, that discuss software design in a simple and approachable way, while leaving the reader novel and practical concepts to use. Read my longer review here.
 Clean Code A reference book of coding best practices/patterns for a healthy codebase with some case studies. I read this book after having about five years' professional coding experience. It changed how I approached code readability, testing, and maintenance.
 Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems. The most practical book I've found so far on distributed systems. It covers the different large scale concepts - both those that I've gone through in this post on distributed systems - together with real-world examples.
-Working Effectively with Legacy Code Legacy code has no test and is not written to be testable. Touching it this sphaghetti code somewhere breaks the system. And to refactor safely, we'd need to have tests first... but where to start? This book gives practical suggestions
+Working Effectively with Legacy Code Legacy code has no test and is not written to be testable. Touching it this spaghetti code somewhere breaks the system. And to refactor safely, we'd need to have tests first... but where to start? This book gives practical suggestions
 C# in Depth (also on the publisher's site). C# is the language I probably understood down to the nitty-gritty details. Just when I thought myself of being an expert - knowing all that is to know on memory allocation, garbage collection, LINQ - I read this book. It made me realize how many things I did not know. I found the parts on how C# implemented generics under the hood and the sections on covariance and contravariance especially memorable.
 Javascript: The Good Parts - Before this book I used to think that Javascript is "bad" or a "hacky" language. This book changed my perspective, understanding some tradeoffs and some remarkable strengths of this weakly typed language that is starting to take over the world. Note that this book is now dated - I would recommend Eloquent JavaScript (free online, paperback) or  the You Don't Know JS series instead (free online, paperback).
 ★★★★☆
@@ -85,7 +85,7 @@ Not everyone gets a trophy - Tips and observations on how to manage the Millenia
 First, Break all the Rules - Gallup interviewed thousands of high-performing teams and managers and found a dozen of things each of these teams had in common. While the insights are good, the content itself was quite dry for my taste.
 
 ## Newsletters
-Curated newsletters are my preferred way to stay up to speed with what's new and relevant on software engineering. I've tried out many newsletters and here are my favorite ones, which I keep reading though every week. (Note: I also send a newsletter on engineering, tech leadership and distributed systems once a month).
+Curated newsletters are my preferred way to stay up to speed with what's new and relevant on software engineering. I've tried out many newsletters and here are my favorite ones, which I keep reading through every week. (Note: I also send a newsletter on engineering, tech leadership and distributed systems once a month).
 
 ### Tech Leadership
 Software Lead Weekly by Oren Ellenbogen, VP of engineering at Forter. Five articles per week on technology and leadership. 23,500+ readers.
