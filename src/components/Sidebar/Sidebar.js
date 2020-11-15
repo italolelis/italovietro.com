@@ -20,7 +20,7 @@ const Sidebar = ({ isIndex }: Props) => {
         <Author author={author} isIndex={isIndex} />
         <Menu menu={menu} />
         <Contacts contacts={author.contacts} />
-        <Copyright copyright={new Date().getFullYear() + copyright} />
+        <Copyright copyright={new Date().getFullYear() + " " + copyright} />
       </div>
     </div>
   );
