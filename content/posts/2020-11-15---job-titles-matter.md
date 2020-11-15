@@ -6,7 +6,7 @@ draft: false
 slug: "do-job-titles-matter"
 category: "Engineering Management"
 description: "I like to reflect on titles from time to time. Over the past years in my career, I always wondered if job titles matter. That's why I want to share my view on this subject."
-socialImage: "./images/header.jpg"
+socialImage: "/media/header.jpg"
 tags:
   - "Software Development"
   - "Titles"

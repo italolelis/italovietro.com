@@ -6,7 +6,7 @@ draft: false
 slug: "cto-reading-list-1"
 category: "Reading-List"
 description: "This week I want to start something I wanted to do a while ago. I want to start sharing the articles and books I like and learned from in my career. Many people ask me about which books I read, and if I have any materials to share. So, every 2 weeks I want to release interesting articles and books I have read and learned from."
-socialImage: "./images/header.jpg"
+socialImage: "/media/header.jpg"
 tags:
   - "Reading List"
   - "CTO"
