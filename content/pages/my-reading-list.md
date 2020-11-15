@@ -37,10 +37,6 @@ These are books I learned a lot from, as a software engineer.
 
 * [Site Reliability Engineering](https://amzn.to/3kzDD1R): How Google Runs Production Systems - Hardcover & (free) online book - a good overview of SRE at Google. For those who worked at places with oncall, much of the first part of the book will likely be very familiar. Keep in mind that your mileage might vary: what works at Google scale, might not be the ideal fit for your use case.
 
-★★★☆☆
-
-Software Architecture Patterns by Mark Richards - a lightweight introduction to common design patterns that can be read in one sitting. Covers layered, event-driven, microkernel, microservices and space-based architecture.
-
 ## (Engineering) Management Books
 
 These are books that helped me level up, being a tech lead and engineering manager.
