@@ -12,21 +12,10 @@ This page is based on the reading list from [Gergely Orosz](https://blog.pragmat
 
 This is a collection of software engineering and engineering management books that I have read and would recommend to others.
 
-* [Currently reading](#currently-reading)
 * [Engineering Books](#engineering-career-books)
 * [(Engineering) Management Books](#engineering-management-books)
 * [Newsletters](#newsletters)
 * [Podcasts](#podcasts)
-
-## Currently Reading
-
-These are books I have either read, or ones I'm reading.
-
-The Coding Career Handbook: guides, principles, strategies and tactics from code newbie to senior developer. Impressions so far: I'm impressed. Lots of fresh ideas, and food for thought.
-The Standout Developer: a complete guide for developers on job hunting, acing the interview and landing the job. Impressions so far: I like the authentic voice from Randall. I'd recommend this book for people starting out in software, or with a few years' experience.
-14 Habits of Highly Productive Developers: a short and sweet book, with good inspiration from prolific software engineers (Kindle version, ePub version)
-Software Engineering at Google. Impressions so far: the second part is interesting in getting a proper look into Google software engineering practices.
-But How Do It Know? - The Basic Principles of Computers for Everyone. Impressions so far: I've picked this up, reading with a friend. Most of it is a refresher on how computers work. I am interested in how simple the explanations are for something complex. So far, it's an okay book.
 
 ## Engineering Books
 
