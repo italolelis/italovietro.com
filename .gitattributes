@@ -1,2 +1,6 @@
-resources/**    linguist-generated=true
-resources/**     -diff -merge
+/.github export-ignore
+/.gitattributes export-ignore
+/.editorconfig export-ignore
+/.travis.yml export-ignore
+**/*.js.snap export-ignore
+/static/css export-ignore
