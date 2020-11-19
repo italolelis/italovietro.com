@@ -5,11 +5,10 @@ slug: cto-reading-list-2
 socialImage: /media/image-2.jpg
 draft: false
 date: 2020-11-19T15:56:32.499Z
-description: I was finally able to build the
-  [fourkeys](/posts/cto-reading-list-1) project I mentioned in my last article.
-  I will soon share some metrics for Lykon on how this project is helping us
-  become a more efficient tech department. Maybe I can also open source it in
-  case someone would be interested in checking it out.
+description: I was finally able to build the fourkeys project I mentioned in my
+  last article. I will soon share some metrics for Lykon on how this project is
+  helping us become a more efficient tech department. Maybe I can also open
+  source it in case someone would be interested in checking it out.
 category: Reading-List
 tags:
   - Reading List
