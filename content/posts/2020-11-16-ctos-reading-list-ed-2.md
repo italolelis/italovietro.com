@@ -3,7 +3,7 @@ template: post
 title: CTO's reading list ed.2
 slug: cto-reading-list-2
 socialImage: /media/image-2.jpg
-draft: true
+draft: false
 date: 2020-11-19T15:56:32.499Z
 description: I was finally able to build the
   [fourkeys](/posts/cto-reading-list-1) project I mentioned in my last article.
