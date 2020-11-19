@@ -100,7 +100,7 @@ Jr. Engineer -> Engineer -> Sr. Engineer -> Staff Engineer -> Principal Engineer
 ```
 
 A bit better, right? It is, but now you have another problem. Is a tech lead position supposed to be in a managerial career track?                                        
-I like to remind you of something, [a quote I wrote in another article](/posts/2018-08-30/5-ways-to-keep-coding-being-an-engineering-manager) a while ago.
+I like to remind you of something, [a quote I wrote in another article](/posts/5-ways-to-keep-coding-being-an-engineering-manager) a while ago.
 
 <figure>
 	<blockquote>
