@@ -1,14 +1,15 @@
 ---
 template: post
 title: CTO's reading list ed.3
-slug: cto-reading-list-2
+slug: cto-reading-list-3
 socialImage: /media/image-2.jpg
 draft: false
-date: 2020-12-03T15:07:38.425Z
-description: I was finally able to build the fourkeys project I mentioned in my
-  last article. I will soon share some metrics for Lykon on how this project is
-  helping us become a more efficient tech department. Maybe I can also open
-  source it in case someone would be interested in checking it out.
+date: 2020-12-03T15:59:02.180Z
+description: >
+  Wow, what an interesting year wasn't it? I realized that after reading the
+  Octoverse 2020 report. You know... even with COVID-19, and a lot of other
+  challenges everybody went through this year, we were able to make such an
+  amazing progress in the tech community. 
 category: Reading-List
 tags:
   - Reading List
@@ -16,33 +17,33 @@ tags:
   - Articles
   - Books
 ---
-I was finally able to build the [fourkeys](/posts/cto-reading-list-1) project I mentioned in my last article. I will soon share some metrics for Lykon on how this project is helping us become a more efficient tech department. Maybe I can also open source it in case someone would be interested in checking it out.
+Wow, what an interesting year wasn't it? I realized that after reading the [Octoverse 2020 report](https://octoverse.github.com/). You know... even with COVID-19, and a lot of other challenges everybody went through this year, we were able to make such an amazing progress in the tech community. 
 
-This week I've also been looking into Rust more in depth. Trying to understand how it works, it's ecosystem, and how it performs when compared to Go. I don't intend to change Go for Rust, but I'd like to understand it better and maybe, in the future, use it for something.
+Can you maybe guess what was the top language on GitHub this year? Yeah... same as last year: Javascript. But at least we see some change for other languages coming up, such as Typescript going up by 6 positions.
 
 Let’s dive into this week’s picks. ✍️
 
 ## 3 Articles
 
-✍️[Autoscaling Monzo: How we optimize our platform to be just the right size](https://monzo.com/blog/2020/10/19/autoscaling-monzo)
-> An amazing review of how Monzo does autoscaling in their Kubernetes infrastructure. Monzo is one the references I always like to look when dealing complex Kubernetes set ups. Definitely worth a reading.
+✍ Not exactly an article today, but more of a twitter thread. Did you know that Kubernetes is deprecating Docker? Haha, it seems really bad for everyone doesn't it? But thanks to [Kat Cosgrove](https://twitter.com/Dixie3Flatline) I could better understand that is not so bad as it seems. It will break things up, so be prepared, but honestly it's for the best.
 
-✍️[2020 State of DevOps Report](https://puppet.com/resources/report/2020-state-of-devops-report/)
-> This week we had the state of devops report from puppet release. It's an interesting research, and I think it's worth reading it. It shows how the industry is evolving on understanding the devops culture.
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">So, Kubernetes is deprecating Docker support and you&#39;re either nervous or confused. That&#39;s okay! I would like to help you understand what&#39;s happening. A thread! 1/10</p>&mdash; Kat Cosgrove, but ✨festive✨ (@Dixie3Flatline) <a href="https://twitter.com/Dixie3Flatline/status/1334188913724850177?ref_src=twsrc%5Etfw">December 2, 2020</a></blockquote>
 
-✍️[On being a Senior Engineer](https://www.kitchensoap.com/2012/10/25/on-being-a-senior-engineer/)
-> I always like to talk about, what does being a Senior Engineer actually is about? This article here summarizes a lot of things that I agree on, and I think every Sr. Engineer should strive to have. And what I also like about this post is the terminology of a mature Engineer. That's a great way of determine wether someone (being a senior engineer or not) has the emotional inteligence to deal with certain topics.
+✍️[A Practical Introduction to Container Security](https://cloudberry.engineering/article/practical-introduction-container-security/)
+> Working at Lykon makes me research a lot about security. After all, I'm dealing with medical data, and I have to better understand which security standards we need to adopt. We use Kubernetes pretty extensively here, and of course, that also means (for now) Docker images. This article summarizes a few security topics that we can implement in our SDP to enhance security in our containers. Also, check out the [Docker Security Best practices](https://cloudberry.engineering/article/dockerfile-security-best-practices/).
+
+
+✍️[Macro trends in the tech industry](https://www.thoughtworks.com/insights/blog/macro-trends-tech-industry-oct-2020?utm_campaign=Level%20Up&utm_medium=email&utm_source=Revue%20newsletter)
+> This is a great analysis from ThoughtWorks on the trending technologies in our field up to now. As I reckoned, Rust would be for sure in there. Pulumi was quite a surprise to me honestly. Curious? Check the article out!
 
 ## 1 Book
 
-📚[Grokking Algorithms](https://amzn.to/2IFpL91)
+📚[Software Engineering at Google](https://amzn.to/37rwCLQ)
 
-![https://images-na.ssl-images-amazon.com/images/I/51cV560hqBL._SX396_BO1,204,203,200_.jpg](https://images-na.ssl-images-amazon.com/images/I/51cV560hqBL._SX396_BO1,204,203,200_.jpg)
+![https://amzn.to/37rwCLQ](https://images-na.ssl-images-amazon.com/images/I/41oiI3x67dL._SX379_BO1,204,203,200_.jpg)
 
-> Ah, the beauty of algorithms. This week I started re-reading this amazing piece of art. Doesn't matter if you are an experienced developer, or just started studying Computer Science, or a curious person. This books is for everyone. You'll have the opportunity to learn about the Big O notation, and how to properly use it. You'll dive into the mysteries of graphs, and trees.
-The book is very didactic and easy to follow. Go ahead and read it, you'll love it!
+> This is a great book if you are into to understanding how software development works in depth. The author was able to make the reading relevant to small, medium and big companies. I really enjoyed how they talk about CI/CD, Testing & Quality, and code reviews.
 
 *Thank you for reading! Have some feedback? -- Just send me a DM.*
 
 See you in the next article 👋
-
