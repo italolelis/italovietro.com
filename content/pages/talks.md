@@ -1,7 +1,7 @@
 ---
 template: page
 title: Talks and Podcasts
-slug: talks-and-podcasts
+slug: talks
 socialImage: /media/image-4.jpg
 draft: false
 ---
