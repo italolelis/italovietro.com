@@ -16,7 +16,7 @@ In this talk, I would like to talk about how to design a system for failure. Wha
 
 [Recording](https://www.youtube.com/watch?v=BOn3R41UrV8&feature=youtu.be) and [slides](https://github.com/italolelis/talks/tree/master/talks/designing-for-failure). Last presented at [Golang Poland Meetup 2020](https://www.meetup.com/Golang-Poland/events/273948416/).
 
-## Discovering the Tech Lead in You
+## Discovering the tech lead in you
 When you transition from a developer role to a tech lead, you realize how lonely it is, predominantly if you work in a smaller company. Your responsibilities and accountability grow, and when you have questions, you don't have many people to look out for when in need of help. What exactly being a tech lead means? What are the problems that you will have to solve in this role? How can you get better at it? In this talk, I'd like to share that experience with you and hopefully shed some light on this new journey you are going through (even if you already are a tech lead).
 
 [Outline](https://github.com/italolelis/talks/tree/master/talks/discovering-the-tech-lead-in-you).
