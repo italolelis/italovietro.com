@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.128.0/containers/hugo
+{
+	"name": "Hugo",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"VARIANT": "hugo_extended",
+			"VERSION": "latest",
+		}
+	},
+	"extensions": [
+		"bungcip.better-toml",
+		"davidanson.vscode-markdownlint"
+	],
+	"containerEnv": {
+		"HUGO_SERVICES_INSTAGRAM_ACCESSTOKEN": "xxx"
+	},
+	"forwardPorts": [1313],
+	"remoteUser": "vscode"
+}
