@@ -5,8 +5,8 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
-			"VARIANT": "hugo_extended",
-			"VERSION": "latest",
+			"VARIANT": "1.19-bullseye",
+			"VERSION": "latest"
 		}
 	},
 	"extensions": [

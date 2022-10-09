@@ -9,17 +9,19 @@ math:
   enable: false
 ---
 
-Hello 👋 I'm Italo Vietro. I’m a Brazilian living in Berlin, Germany. Currently working as CTO [@Lykon](https://lykon.de/).
+Hello 👋 I'm Italo Vietro, based in Berlin, Germany.
 
-I've spent 3,5 years working at [@HelloFresh](https://hellofresh.com/), in Berlin. I worked from developing software at a high scale, to growing a team of 13 people to a 300 people organization.
-We went through hyper-growth, and had to learn on the go how to build an effective organization. I believe we were pretty successful, and I had extremely good people next to me, from which I learned a lot.
+Currently working as VP of Platform Engineering [@urbansportsclub](https://urbansportsclub.com). Previously, I was heading the technology department as CTO [@Lykon](https://lykon.de/), where I built a great engineering team to innovate in the HealthTech industry.
 
-Eventually, I moved on to [@N26](https://n26.com/), to explore new horizons. That was an amazing experience. I met lots of brilliant people, went though hyper-growth once again, but now in a different scale -- global.
-We had to learn, in very little time, how to build teams across distributed sites and still ensure we could foster an engineering culture were people could feel safe and productive.
+I've spent 3,5 years working at [@HelloFresh](https://hellofresh.com/) in Berlin. I worked from developing software at a large scale to growing a team of 13 people to a 300 people organization.
+We went through hyper-growth and had to learn on the go how to build an effective organization. I believe we were pretty successful, and I had extremely good people next to me from which I learned a lot.
 
-Finally, I moved on to a new challenge. Now, in a very different setup. I wanted to try to build an organization from scratch. So, I took the role of CTO at [@Lykon](https://lykon.de/). Here I have the opportunity to guide a tech department in all fronts. With the experience I got from prior challenges, I can share and help people to grow in their careers, build an awesome product and technology in the coming years. It is a hard road, I have to say, but it's one that I'm enjoying a lot.
+Eventually, I moved on to [@N26](https://n26.com/) to explore new horizons. That was a fantastic experience, and I met many brilliant people and went through hyper-growth once again, but now on a different scale -- global.
+In very little time, we had to learn how to build teams across distributed sites and still ensure we could foster an engineering culture where people could feel safe and productive.
 
-Throughout my career I had the opportunity to work with inspiring people, on many different challenging projects, solving interesting problems. On this blog, I'm sharing my learnings for building and shipping successful products/projects, from an engineer and lead perspective. You can also read about [some of the books that I read and would recommend](my-reading-list) and check out some of the [public talks I have given](talks).
+Finally, I moved on to a new challenge. Now, in a very different setup. I wanted to try to build an organization from scratch. So, I took the role of CTO at [@Lykon](https://lykon.de/). Here I have the opportunity to guide a tech department on all fronts. With the experience I got from past challenges, I can share and help people to grow in their careers and build incredible products and technology in the coming years. I have to say it is a hard road, but it's one that I'm enjoying.
+
+Throughout my career, I worked with inspiring people on many different challenging projects, solving interesting problems. This blog shares my learnings for building and shipping successful products/projects from an engineer and leadership perspective. You can also read about [some of the books that I read and would recommend](my-reading-list) and check out some of the [public talks I have given](talks).
 
 ## Time line for context
 
@@ -37,6 +39,7 @@ Throughout my career I had the opportunity to work with inspiring people, on man
 * 2018: Joined N26 as an Engineering Manager.
 * 2019: Joined Lykon as CTO.
 * 2020: Started writing in my blog once again!
+* 2022: Started as VP Platform Engineering at Urban Sports Club.
 
 ## Contact
 
