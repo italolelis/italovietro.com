@@ -39,7 +39,7 @@ jobs:
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: 'latest'
-          # extended: true
+          extended: true
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
