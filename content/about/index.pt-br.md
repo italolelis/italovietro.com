@@ -29,7 +29,7 @@ Parti então para um novo desafio. Agora, em uma configuração muito diferente.
 
 Por fim, aceitei um novo desafio na industria de FitTech como VP de Platform Engineering na [@urbansportsclub](https://urbansportsclub.com). Aqui, preciso ajudar uma organização em expansão a se tornar uma empresa sólida e madura, desenvolvendo um produto forte em um mercado competitivo usando [tecnologia de ponta](https://tech-radar.urbansportsclub.tech) e promovendo uma cultura de engenharia saudável.
 
-Ao longo da minha carreira, trabalhei com pessoas inspiradoras em muitos projetos desafiadores, resolvendo problemas interessantes. Aqui, compartilho meus aprendizados para criar e enviar produtos/projetos bem-sucedidos do ponto de vista do engenheiro e da liderança. Você também pode ler sobre [alguns dos livros que li e recomendo] (minha lista de leitura) e conferir algumas das [palestras públicas que dei] (palestras).
+Ao longo da minha carreira, trabalhei com pessoas inspiradoras em muitos projetos desafiadores, resolvendo problemas interessantes. Aqui, compartilho meus aprendizados para criar e enviar produtos/projetos bem-sucedidos do ponto de vista do engenheiro e da liderança. Você também pode ler sobre [alguns dos livros que li e recomendo](my-reading-list) e conferir algumas das [palestras públicas que dei](talks).
 
 ## Linha do tempo
 
