@@ -20,11 +20,11 @@ googleAnalytics = "UA-5628814-4"
 
     [languages.en.menu]
       [[languages.en.menu.main]]
-        identifier = "posts"
+        identifier = "consulting"
         pre = ""
         post = ""
-        name = "Posts"
-        url = "/posts/"
+        name = "Consulting"
+        url = "/consulting/"
         title = ""
         weight = 1
       [[languages.en.menu.main]]
@@ -43,14 +43,6 @@ googleAnalytics = "UA-5628814-4"
         url = "/talks/"
         title = ""
         weight = 3
-      [[languages.en.menu.main]]
-        identifier = "about"
-        pre = ""
-        post = ""
-        name = "About me"
-        url = "/about/"
-        title = ""
-        weight = 4
     [languages.en.params]
       description = "My personal website"
       keywords = ["italolelis", "personal", "software"]
@@ -84,7 +76,7 @@ googleAnalytics = "UA-5628814-4"
           disclaimer = ""
         # Home page posts
         [languages.en.params.home.posts]
-          enable = true
+          enable = false
           # special amount of posts in each home posts page
           paginate = 6
 
@@ -97,11 +89,11 @@ googleAnalytics = "UA-5628814-4"
     copyright = "italovietro"
     [languages.pt-br.menu]
       [[languages.pt-br.menu.main]]
-        identifier = "posts"
+        identifier = "consultoria"
         pre = ""
         post = ""
-        name = "Posts"
-        url = "/posts/"
+        name = "Consultoria"
+        url = "/consultoria/"
         title = ""
         weight = 1
       [[languages.pt-br.menu.main]]
@@ -119,14 +111,6 @@ googleAnalytics = "UA-5628814-4"
         url = "/talks/"
         title = ""
         weight = 3
-      [[languages.pt-br.menu.main]]
-        identifier = "sobre"
-        pre = ""
-        post = ""
-        name = "Sobre mim"
-        url = "/about/"
-        title = ""
-        weight = 4
     [languages.pt-br.params]
       description = "Meu site pessoal"
       keywords = ["italolelis", "personal", "software"]
@@ -149,7 +133,7 @@ googleAnalytics = "UA-5628814-4"
           social = true
           disclaimer = ""
         [languages.pt-br.params.home.posts]
-          enable = true
+          enable = false
           paginate = 6
 
 [params]
@@ -459,4 +443,3 @@ googleAnalytics = "UA-5628814-4"
   page = ["HTML", "MarkDown"]
   section = ["HTML", "RSS"]
   taxonomy = ["HTML", "RSS"]
-  taxonomyTerm = ["HTML"]
