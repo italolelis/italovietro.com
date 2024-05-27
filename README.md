@@ -1,7 +1,5 @@
 # Italo Vietro's Personal Website
 
-![Vietro Consulting Logo](path/to/your/logo.png)
-
 Welcome to the repository for [Italo Vietro's personal website](https://italovietro.com). This site showcases my professional journey, projects, and insights into technology and engineering leadership.
 
 ## Table of Contents
