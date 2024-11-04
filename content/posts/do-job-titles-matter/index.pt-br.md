@@ -30,9 +30,7 @@ Oh, how do we have titles in tech, there are so many of them that sometimes you 
 
 I really liked a tweet from [Kelsey Hightower](https://twitter.com/kelseyhightower).
 
-{{< twitter user="kelseyhightower" id="1327642471291965440" >}}
-
-I couldn't agree more with this statement. As titles matter let's start by showing how the majority of tech companies define their engineering job titles.
+As titles matter let's start by showing how the majority of tech companies define their engineering job titles.
 
 * Junior Software Developer/Engineer
 * Software Developer/Engineer
