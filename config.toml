@@ -355,7 +355,7 @@ googleAnalytics = "G-KYX115R541"
 
   # Cookie consent config
   [params.cookieconsent]
-    enable = false
+    enable = true
     # text strings used for Cookie consent banner
     [params.cookieconsent.content]
       message = ""
