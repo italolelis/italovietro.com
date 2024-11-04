@@ -15,9 +15,11 @@ googleAnalytics = "G-KYX115R541"
     languageCode = "en"
     languageName = "English"
     hasCJKLanguage = false
-    paginate = 12
     copyright = "italo Vietro."
 
+    [pagination]
+      pagerSize = 12
+      
     [languages.en.menu]
       [[languages.en.menu.main]]
         identifier = "consulting"
@@ -374,6 +376,12 @@ googleAnalytics = "G-KYX115R541"
     Email = ""
     RSS = true
 
+  # Author config
+  [params.author]
+    name = "Italo Vietro"
+    email = "me@italovietro.com"
+    link = ""
+  
 # Markup related configuration in Hugo
 [markup]
   # Syntax Highlighting (https://gohugo.io/content-management/syntax-highlighting)
@@ -399,12 +407,6 @@ googleAnalytics = "G-KYX115R541"
   [markup.tableOfContents]
     startLevel = 2
     endLevel = 6
-
-# Author config
-[author]
-  name = "Italo Vietro"
-  email = "me@italovietro.com"
-  link = ""
 
 # Sitemap config
 [sitemap]
