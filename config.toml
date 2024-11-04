@@ -16,9 +16,6 @@ googleAnalytics = "G-KYX115R541"
     languageName = "English"
     hasCJKLanguage = false
     copyright = "italo Vietro."
-
-    [pagination]
-      pagerSize = 12
       
     [languages.en.menu]
       [[languages.en.menu.main]]
@@ -45,6 +42,9 @@ googleAnalytics = "G-KYX115R541"
         url = "/talks/"
         title = ""
         weight = 3
+    [languages.en.pagination]
+      disableAliases = true
+      pagerSize = 12
     [languages.en.params]
       description = "My personal website"
       keywords = ["italolelis", "personal", "software"]
@@ -87,7 +87,6 @@ googleAnalytics = "G-KYX115R541"
     languageCode = "pt-BR"
     languageName = "Português"
     hasCJKLanguage = false
-    paginate = 12
     copyright = "italovietro"
     [languages.pt-br.menu]
       [[languages.pt-br.menu.main]]
@@ -113,6 +112,9 @@ googleAnalytics = "G-KYX115R541"
         url = "/talks/"
         title = ""
         weight = 3
+    [languages.pt-br.pagination]
+      disableAliases = true
+      pagerSize = 12
     [languages.pt-br.params]
       description = "Meu site pessoal"
       keywords = ["italolelis", "personal", "software"]

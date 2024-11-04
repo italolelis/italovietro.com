@@ -31,7 +31,7 @@ Let’s dive into this week’s picks. ✍️
 
 ✍ Not exactly an article today, but more of a twitter thread. Did you know that Kubernetes is deprecating Docker? Haha, it seems really bad for everyone doesn't it? But thanks to [Kat Cosgrove](https://twitter.com/Dixie3Flatline) I could better understand that is not so bad as it seems. It will break things up, so be prepared, but honestly it's for the best.
 
-{{< tweet user="Dixie3Flatline" id="1334188913724850177" >}}
+{{< twitter user="Dixie3Flatline" id="1334188913724850177" >}}
 
 ✍️[A Practical Introduction to Container Security](https://cloudberry.engineering/article/practical-introduction-container-security/)
 > Working at Lykon makes me research a lot about security. After all, I'm dealing with medical data, and I have to better understand which security standards we need to adopt. We use Kubernetes pretty extensively here, and of course, that also means (for now) Docker images. This article summarizes a few security topics that we can implement in our SDP to enhance security in our containers. Also, check out the [Docker Security Best practices](https://cloudberry.engineering/article/dockerfile-security-best-practices/).
