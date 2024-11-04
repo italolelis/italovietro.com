@@ -7,7 +7,7 @@ title = "Italo Vietro"
 enableRobotsTXT = true
 enableGitInfo = true
 enableEmoji = true
-googleAnalytics = "UA-5628814-4"
+googleAnalytics = "G-KYX115R541"
 
 [languages]
   [languages.en]
@@ -339,10 +339,10 @@ googleAnalytics = "UA-5628814-4"
 
   # Analytics config
   [params.analytics]
-    enable = false
+    enable = true
     # Google Analytics
     [params.analytics.google]
-      id = "UA-5628814-4"
+      id = "G-KYX115R541"
       anonymizeIP = true
     # Fathom Analytics
     [params.analytics.fathom]
