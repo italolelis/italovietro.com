@@ -9,6 +9,9 @@ enableGitInfo = true
 enableEmoji = true
 googleAnalytics = "G-KYX115R541"
 
+# Suppress warnings
+ignoreLogs = ['shortcode-twitter-getremote']
+
 [languages]
   [languages.en]
     weight = 1
@@ -19,21 +22,13 @@ googleAnalytics = "G-KYX115R541"
       
     [languages.en.menu]
       [[languages.en.menu.main]]
-        identifier = "consulting"
-        pre = ""
-        post = ""
-        name = "Consulting"
-        url = "/consulting/"
-        title = ""
-        weight = 1
-      [[languages.en.menu.main]]
         identifier = "reading-list"
         pre = ""
         post = ""
         name = "My reading list"
         url = "/my-reading-list/"
         title = ""
-        weight = 2
+        weight = 1
       [[languages.en.menu.main]]
         identifier = "talks"
         pre = ""
@@ -41,7 +36,7 @@ googleAnalytics = "G-KYX115R541"
         name = "Talks"
         url = "/talks/"
         title = ""
-        weight = 3
+        weight = 2
     [languages.en.pagination]
       disableAliases = true
       pagerSize = 12
@@ -69,7 +64,7 @@ googleAnalytics = "G-KYX115R541"
           # title shown in home page (HTML format is supported)
           title = ""
           # subtitle shown in home page
-          subtitle = "SRE Enthusiast 👨‍💻, Distributed Systems Engineer 🔧, and Coffee Lover ☕"
+          subtitle = "Engineering Leader 👨‍💼 • Platform Engineering 🚀 • Coffee Lover ☕"
           # whether to use typeit animation for subtitle
           typeit = true
           # whether to show social links
@@ -90,28 +85,20 @@ googleAnalytics = "G-KYX115R541"
     copyright = "italovietro"
     [languages.pt-br.menu]
       [[languages.pt-br.menu.main]]
-        identifier = "consultoria"
-        pre = ""
-        post = ""
-        name = "Consultoria"
-        url = "/consultoria/"
-        title = ""
-        weight = 1
-      [[languages.pt-br.menu.main]]
         identifier = "reading-list"
         pre = ""
         post = ""
         name = "Minha lista de livros"
         url = "/my-reading-list/"
         title = ""
-        weight = 2
+        weight = 1
       [[languages.pt-br.menu.main]]
         identifier = "palestras"
         pre = ""
         name = "Palestras"
         url = "/talks/"
         title = ""
-        weight = 3
+        weight = 2
     [languages.pt-br.pagination]
       disableAliases = true
       pagerSize = 12
@@ -129,10 +116,10 @@ googleAnalytics = "G-KYX115R541"
         rss = 10
         [languages.pt-br.params.home.profile]
           enable = true
-          gravatarEmail = ""
+          gravatarEmail = "me@italovietro.com"
           avatarURL = "/images/avatar.png"
           title = ""
-          subtitle = "SRE Enthusiast 👨‍💻, Distributed Systems Engineer 🔧, and Coffee Lover ☕"
+          subtitle = "Engineering Leader 👨‍💼 • Platform Engineering 🚀 • Coffee Lover ☕"
           typeit = true
           social = true
           disclaimer = ""
@@ -418,14 +405,14 @@ googleAnalytics = "G-KYX115R541"
 
 # Permalinks config (https://gohugo.io/content-management/urls/#permalinks)
 [Permalinks]
-  posts = ":filename"
+  posts = ":contentbasename"
 
 # Privacy config (https://gohugo.io/about/hugo-and-gdpr/)
 [privacy]
   # privacy of the Google Analytics (replaced by params.analytics.google)
   [privacy.googleAnalytics]
     # ...
-  [privacy.twitter]
+  [privacy.x]
     enableDNT = true
   [privacy.youtube]
     privacyEnhanced = true

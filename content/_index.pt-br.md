@@ -1,28 +1,50 @@
 ---
 title: "Bem-vindo ao Meu Site"
-description: "Meu site pessoal"
+description: "Líder de engenharia, arquiteto de plataforma e defensor de código aberto. Construindo equipes de alto desempenho e sistemas escaláveis nas principais empresas de tecnologia da Europa."
 ---
 
 <div class="home-content">
 
-Olá 👋 Eu sou Italo Vietro, atualmente vivendo em Berlim, Alemanha.
+# Olá, Eu sou Italo Vietro
 
-> No momento, estou liderando como VP de Plataforma na [Babbel](https://babbel.com). É aqui que eu misturo meu amor por inovação com soluções tecnológicas práticas. Meus dias são preenchidos liderando nossa equipe de produto de plataforma, impulsionando a inovação e garantindo que tudo escale perfeitamente.
+<p style="font-size: 1.25rem; color: #666; margin: 1.5rem 0 2.5rem;">
+Líder de engenharia trabalhando no futuro do atendimento ao cliente com IA na <strong>Parloa</strong>, onde a gente transforma conversas complexas em tempo real em experiências rápidas e confiáveis pra milhões de usuários todo dia.
+</p>
 
 ---
 
-Antes desta aventura na Babbel, tive a incrível oportunidade de moldar o futuro como VP de Engenharia no [Urban Sports Club](https://urbansportsclub.com). Foi uma jornada intensa supervisionando uma equipe vibrante de mais de 100 mentes brilhantes, montando um TechHub eficiente na Espanha e cortando 20% dos custos operacionais — tudo em um dia de trabalho! O papel exigiu que eu arregaçasse as mangas para definir KPIs essenciais de engenharia e reformular nossa estratégia de contratação. Transformar uma empresa ambiciosa em uma potência não foi fácil, mas é nisso que eu prospero!
+## Construindo Sistemas Que Escalam, Times Que Entregam
 
-Voltando no tempo, fui CTO na [Lykon](https://lykon.de/), onde construí uma equipe do zero. Criamos uma plataforma com mais de 40 microsserviços — um testemunho do nosso trabalho árduo e dedicação à inovação. Este papel me ensinou a importância da tomada de decisões técnicas transparentes e práticas de engenharia resilientes.
+Hoje sou **Head of Engineering na [Parloa](https://parloa.com)**, cuidando dos serviços principais da maior plataforma de atendimento ao cliente com IA da Europa. A gente transforma conversas complexas em tempo real em experiências rápidas e confiáveis pra milhões de usuários todo dia.
 
-Antes da Lykon, na [N26](https://n26.com/), liderei uma talentosa equipe de 40 engenheiros, focando nos serviços bancários essenciais. Capacitar equipes para tomar decisões sólidas e otimizar operações era o objetivo, e nós conseguimos!
+Mas a jornada que me trouxe até aqui começou no **Brasil**, onde passei sete anos indo de dev júnior a líder técnico. Esses anos me ensinaram que os melhores sistemas e times funcionam melhor quando o conhecimento circula mais rápido que o código—um princípio que guia tudo que faço desde então.
 
-Minha saga alemã começou na [HelloFresh](https://hellofresh.com/), onde subi de Engenheiro de Software Sênior para Head de Engenharia. Transicionar para uma arquitetura de microsserviços, migrar do PHP para [Go](https://go.dev/), e escalar a equipe foram tarefas monumentais, mas juntos, fizemos acontecer.
+### Onde Tive Impacto
 
-Mas vamos voltar ainda mais às minhas raízes no Brasil, onde minha jornada tecnológica começou. Ao longo de sete anos incríveis, evoluí de Engenheiro Júnior, aprendendo a programar, até liderar grandes projetos de software.
+Na **[Babbel](https://babbel.com)** como VP de Plataforma, reconstruí um motor de aprendizagem global que entrega aulas de idiomas pro mundo todo. O desafio não era só técnico—era criar sistemas que ficam invisíveis quando funcionam bem.
 
-Quando não estou imerso em código, sou um aficionado por café, entusiasta da aviação e estrategista de mesa com Dungeons & Dragons. Acima de tudo, sou um pai dedicado e um marido amoroso, sempre buscando equilibrar uma vida familiar gratificante com uma carreira tecnológica movimentada.
+Liderando engenharia no **[Urban Sports Club](https://urbansportsclub.com)**, montei um TechHub na Espanha do zero e tripliquei a cadência de entrega. O segredo não era trabalhar mais—era trocar heroísmo improvisado por metas claras e ganhos consistentes.
 
-Ao longo da minha jornada, colaborei com algumas das mentes mais brilhantes para enfrentar desafios fascinantes. Este espaço é onde compartilho essas histórias e lições, desde insights em engenharia até estratégias de liderança. Curioso sobre o que leio ou quer saber mais sobre minhas palestras públicas? Confira [minha lista de leitura](my-reading-list) e [as palestras que dei](talks).
+Como **CTO na [Lykon](https://lykon.com)**, construí do zero uma stack de health-tech com 40+ microsserviços e criei uma cultura de RFCs abertos e post-mortems sem julgamento. Tecnologia importa, mas cultura multiplica.
+
+Na **[N26](https://n26.com)**, liderei 40 engenheiros nos sistemas bancários principais, mudando de aprovações centralizadas pra squads com autonomia. "You build it, you run it, you own it" virou nossa cultura de verdade, não só um slogan.
+
+Na **[HelloFresh](https://hellofresh.com)** fui de Engenheiro Sênior a Head de Engenharia, onde com um time sensacional lideramos a transição de PHP monolítico pra serviços Go cloud-native—escalando pra 100+ engenheiros e mantendo as sextas como dia de "friday-beers", não de sprint final.
+
+---
+
+## O Que Me Move
+
+Acredito que os melhores líderes de engenharia criam ambientes onde **excelência técnica e impacto no negócio não competem**—eles andam juntos.
+
+Sou apaixonado por Go, Kubernetes, engenharia de plataforma e criar culturas onde times entregam com confiança. Seja projetando sistemas distribuídos ou mentorando futuros líderes, busco soluções que escalam tanto tecnicamente quanto humanamente.
+
+---
+
+## Além do Código
+
+Quando não tô arquitetando sistemas, você me encontra mexendo no meu homelab, automatizando tudo em casa, fazendo café com capricho, bolando estratégias em campanhas de D&D, ou—o mais importante—sendo pai dedicado e marido presente.
+
+Sou viciado em automação residencial e self-hosting—montar minha própria infraestrutura em casa é onde eu experimento e aprendo. Aviação e tecnologia de voo ainda me fascinam, mas hoje em dia é mais sobre clusters Kubernetes rodando no meu porão.
 
 </div>

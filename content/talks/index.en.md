@@ -2,6 +2,7 @@
 title: "Talks and Podcasts"
 date: 2019-08-02T11:04:49+08:00
 draft: false
+featuredimage: "/images/speaking.webp"
 
 lightgallery: false
 
@@ -9,11 +10,29 @@ math:
   enable: false
 ---
 
+## Recent Talks
+
+### From cost to impact: Leading through infrastructure investment decisions
+
+Engineering leaders often find themselves at a crossroads when it comes to infrastructure investment decisions. The pressure to deliver immediate business value while building a sustainable technical foundation can create significant tension. This talk explores how to navigate these complex decisions, balancing short-term business needs with long-term technical health.
+
+I share frameworks and real-world experiences on how to evaluate infrastructure investments, communicate their value to stakeholders, and build a culture where technical excellence and business impact go hand-in-hand.
+
+[Talk details and video](https://leaddev.com/leadership/from-cost-to-impact-leading-through-infrastructure-investment-decisions) presented at **LeadingEng Berlin 2024**, Berlin, Germany.
+
+---
+
 ## Podcast Episodes
+
+* [Building an Elite Engineering Culture](https://open.spotify.com/episode/2QwC5SWr7UoPCdLXCFzfUQ?si=383ff6c465c645e8) - The Ventellect Podcast 2023. A deep dive into building high-performing engineering teams and fostering a culture of excellence.
 
 * [The critical channel](https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/) - I'm a co-host at The Critical Channel. We talk about leadership, culture, engineering, and much more.
 
-## Designing for failure
+---
+
+## Past Conference Talks
+
+### Designing for failure
 
 Recently, we've discussed failure and resilience in a distributed system architecture. Unfortunately, failure has been neglected for quite some time in our industry. Systems have become much more complex and challenging, especially in the Kubernetes era. With all this new complexity comes the question: how can we design systems to be resilient and ready to fail? This is something that mission-critical systems had to think of first, but many services (until today) neglect the importance of this. There are many concepts we can learn and use from other fields like electronics, aviation, or naval industries that will help us be prepared for the unexpected.
 

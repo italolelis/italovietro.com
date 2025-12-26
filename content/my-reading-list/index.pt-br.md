@@ -1,77 +1,105 @@
 ---
-template: page
 title: Minha Lista de Leitura e Audição
 slug: minha-lista-de-leitura
 socialImage: /media/image-2.jpg
 draft: false
 ---
 
-Esta página é baseada na lista de leitura do [Gergely Orosz](https://blog.pragmaticengineer.com/my-reading-list/). Acho que é um formato excelente para compartilhar livros que eu recomendo.
+<style>
+.content p + ul {
+    margin-top: 0.5rem;
+}
 
-- - -
+.content strong {
+    font-size: 1.1rem;
+}
 
-A lista abaixo é uma coleção de livros sobre engenharia de software e gestão de engenharia que eu li e recomendo para outros.
+.content li {
+    margin-bottom: 1.5rem;
+}
+
+.content h3 {
+    margin-top: 2.5rem;
+}
+</style>
+
+Sempre acreditei que **o conhecimento viaja mais rápido que o código**. Ao longo de mais de 17 anos, esses livros, newsletters e podcasts moldaram como penso sobre construir sistemas, liderar times e crescer como líder de engenharia.
+
+Esta não é uma lista completa—apenas aqueles que ficaram. Os que eu revisito. Os que eu coloco nas mãos das pessoas quando perguntam "o que devo ler?"
+
+---
 
 * [Livros de Engenharia](#livros-de-engenharia)
-* [Livros de Gestão (de Engenharia)](#livros-de-gestao-de-engenharia)
+* [Livros de Gestão](#livros-de-gestao)
 * [Newsletters](#newsletters)
 * [Podcasts](#podcasts)
 
 ## Livros de Engenharia
 
-Esses são livros dos quais aprendi muito como engenheiro de software.
+Livros que mudaram como escrevo código e penso sobre sistemas.
 
-★★★★★
+**Essenciais**
 
-* [Grokking Algorithms](https://amzn.to/3pvir0o). Uma ótima introdução ou um refresco para todos os algoritmos que você provavelmente vai precisar usar em uma empresa de tecnologia. Este livro divide algoritmos complexos em partes fáceis de entender com exemplos claros, sendo ideal tanto para iniciantes quanto para desenvolvedores experientes.
-* [Clean Code](https://amzn.to/3f4tfO8) - Um livro de melhores práticas e padrões de codificação para manter uma base de código saudável, com alguns estudos de caso. Li este livro depois de ter cerca de cinco anos de experiência profissional em codificação, e ele mudou minha abordagem à legibilidade do código, testes e manutenção. É leitura obrigatória para quem leva a sério a escrita de código de qualidade.
-* [Domain-Driven Design](https://amzn.to/32NQx63) - Ótimo livro para aprender todos os conceitos básicos de DDD. Você pode aprender muito sobre linguagem ubíqua e contexto delimitado neste livro. É especialmente útil para enfrentar projetos de software complexos, alinhando seu código às necessidades do negócio.
+* [Clean Code](https://amzn.to/3f4tfO8) - Li isso cinco anos depois de começar minha carreira. Mudou tudo sobre como eu abordo legibilidade, testes e manutenção. Pare de escrever código para compiladores; escreva para humanos.
 
-★★★★☆
+* [Domain-Driven Design](https://amzn.to/32NQx63) - O livro que me ensinou a falar a linguagem do negócio em código. Linguagem ubíqua e contextos delimitados não são buzzwords—são como você sobrevive a domínios complexos sem perder a sanidade.
 
-* [Refactoring](https://amzn.to/3lDbNmG) - Um livro do Martin Fowler. Ele tem padrões únicos para refatorar seu código de maneira inteligente e iterativa. É leitura obrigatória para todo engenheiro. Este livro oferece um catálogo de técnicas de refatoração, ajudando você a melhorar o design do código existente sem alterar seu comportamento.
-* [Clean Architecture](https://amzn.to/3f4tfO8) - Do mesmo autor de Clean Code, este livro aborda as armadilhas da arquitetura que precisamos evitar. Ele também nos dá muitas dicas sobre como construir uma arquitetura eficaz. É uma leitura essencial para qualquer pessoa envolvida no design de sistemas de software escaláveis e sustentáveis.
-* [Site Reliability Engineering](https://amzn.to/3kzDD1R): How Google Runs Production Systems - Livro físico e (gratuito) online - uma boa visão geral do SRE no Google. Para aqueles que trabalharam em lugares com on-call, grande parte da primeira parte do livro será muito familiar. Lembre-se de que sua experiência pode variar: o que funciona na escala do Google pode não ser o ideal para o seu caso de uso. Oferece insights profundos sobre as práticas e princípios de execução de sistemas de produção confiáveis.
-* [Staff Engineer](https://amzn.eu/d/cAtTpf3) - Este livro fornece um roteiro para colaboradores individuais seniores que buscam causar um impacto maior em suas equipes e organizações. Oferece conselhos práticos sobre liderança, estratégia técnica e desenvolvimento de carreira para engenheiros de staff.
+* [Grokking Algorithms](https://amzn.to/3pvir0o) - O livro de algoritmos que não parece lição de casa. Exemplos claros, pedaços digestíveis. Perfeito para refrescar antes de entrevistas ou quando você precisa lembrar por que hash tables existem.
 
-## Livros de Gestão (de Engenharia)
+**Altamente Recomendados**
 
-Esses livros me ajudaram a crescer como líder técnico e gerente de engenharia.
+* [Refactoring](https://amzn.to/3lDbNmG) - Catálogo do Martin Fowler de "como melhorar código sem quebrar". Ainda referencio padrões específicos deste livro ao revisar PRs.
 
-★★★★★
+* [Clean Architecture](https://amzn.to/3f4tfO8) - Continuação do Uncle Bob ao Clean Code. Menos sobre código, mais sobre estrutura. Ajuda você a evitar os erros arquiteturais que eu cometi no início da carreira.
 
-* [The Manager's Path](https://amzn.to/3f0FnzM) - Um guia conciso para gerentes, desde líderes técnicos, passando por gerentes de linha, gerentes de gerentes, até CTO. Oferece conselhos práticos e exemplos do mundo real para ajudá-lo a enfrentar os desafios da gestão de engenharia em vários níveis.
-* [The Phoenix Project](https://amzn.to/3kyPsVU) - Um romance inspirado no The Goal, desta vez ambientado em uma empresa em 2010. Fornece insights valiosos sobre DevOps e a importância da gestão eficaz de TI através de uma história envolvente.
-* [An Elegant Puzzle](https://amzn.to/3kHB3Hb) - Uma leitura muito esperada para líderes de engenharia. A leitura mais prática sobre gestão de engenharia que já encontrei. Além do livro, a seção de artigos recomendados no apêndice lista excelentes leituras sobre engenharia. Veja minha análise detalhada e notas do livro para mais insights. Este livro abrange uma ampla gama de tópicos, desde dinâmicas de equipe até o escalonamento eficaz de organizações.
+* [Site Reliability Engineering](https://amzn.to/3kzDD1R) - A bíblia de SRE do Google. Primeira metade vai parecer familiar se você já fez on-call. Lembre-se: o que funciona na escala do Google pode ser exagero para você. Mas os princípios? Sólidos.
 
-★★★★☆
+* [Staff Engineer](https://amzn.eu/d/cAtTpf3) - Bateu diferente quando estava navegando entre IC vs gestão. Roteiro prático para ICs seniores que querem impacto sem inflação de título.
 
-* [The Engineering Executive's Primer](https://amzn.eu/d/2ET5UiD) - Este livro fornece conhecimento fundamental e estratégias práticas para executivos de engenharia. Cobre vários aspectos de liderança, pensamento estratégico e desenvolvimento organizacional, tornando-se um recurso valioso para líderes de engenharia aspirantes e atuais.
+## Livros de Gestão
+
+Os livros que me ajudaram a não ser ruim liderando pessoas.
+
+**Essenciais**
+
+* [The Manager's Path](https://amzn.to/3f0FnzM) - Seu roteiro de tech lead a CTO. Camille Fournier acerta em cada estágio. Releio capítulos diferentes dependendo de onde estou. Atualmente marcando a seção de VP.
+
+* [An Elegant Puzzle](https://amzn.to/3kHB3Hb) - O guia do Will Larson é o livro mais prático de gestão de engenharia que encontrei. Táticas reais para contratação, dinâmica de time e escalar organizações. Só o apêndice vale o preço—uma mina de ouro de recomendações de papers.
+
+* [The Phoenix Project](https://amzn.to/3kyPsVU) - DevOps embrulhado em romance. Parece cafona, mas funciona. Leia isso quando estiver lutando para explicar por que "só entregue mais rápido" não é estratégia.
+
+**Altamente Recomendados**
+
+* [The Engineering Executive's Primer](https://amzn.eu/d/2ET5UiD) - Base sólida para papéis VP+. Pensamento estratégico, design organizacional, dinâmica de conselho. Queria ter lido isso antes do meu primeiro papel de CTO.
 
 ## Newsletters
 
-Newsletters curadas são minha maneira preferida de me manter atualizado com o que é novo e relevante em engenharia de software. Experimentei muitas newsletters, e aqui estão as minhas favoritas, que leio toda semana. (Nota: também envio uma newsletter sobre engenharia, liderança técnica e sistemas distribuídos uma vez por mês).
+Tentei dezenas. Essas são as que eu realmente leio toda semana.
 
 ### Liderança Técnica
 
-* [Software Lead Weekly](http://softwareleadweekly.com/) por Oren Ellenbogen, VP de engenharia na Forter. Cinco artigos por semana sobre tecnologia e liderança. 23.500+ leitores. Esta newsletter fornece uma seleção curada de artigos que ajudam você a se manter atualizado sobre as últimas tendências e melhores práticas em liderança técnica.
-* [Level Up](http://levelup.patkua.com/) de [Pat Kua](https://twitter.com/patkua), Cientista Chefe na N26. Outra pessoa brilhante com quem tive o privilégio de trabalhar. Sua newsletter oferece 15-20 links interessantes sobre liderança, tecnologia, organizações e processos. Os insights de Pat são inestimáveis para quem busca crescer como líder técnico.
-* [The Weekly Hagakure](https://hagakure.substack.com/) por [Paulo André](https://twitter.com/prla), anteriormente diretor de engenharia na HelloFresh, com quem trabalhei. Uma newsletter semanal com três artigos, dois vídeos e uma recomendação de livro para líderes técnicos. Paulo fornece uma mistura equilibrada de conteúdo que é ao mesmo tempo informativo e inspirador.
+* [Software Lead Weekly](http://softwareleadweekly.com/) - Oren Ellenbogen curada cinco artigos afiados semanalmente sobre tech e liderança. Sem enrolação, só sinal.
+
+* [Level Up](http://levelup.patkua.com/) - Pat Kua era Chief Scientist quando eu estava na N26. Uma das mentes mais afiadas com quem trabalhei. Seus 15-20 links semanais sobre liderança, tech e design organizacional são ouro.
+
+* [The Weekly Hagakure](https://hagakure.substack.com/) - Paulo André e eu nos cruzamos na HelloFresh. Sua newsletter tem o mix perfeito: três artigos, dois vídeos, uma recomendação de livro. Sempre provocante.
 
 ### Engenharia de Software
 
-* [Changelog](https://changelog.com/) - Links semanais interessantes sobre o que está acontecendo na indústria de engenharia. Esta newsletter mantém você informado sobre os últimos desenvolvimentos, ferramentas e tecnologias no mundo da engenharia de software.
+* [Changelog](https://changelog.com/) - Pulso semanal sobre o que está acontecendo em engenharia. Bom para ficar atualizado sem se afogar em ruído.
 
 ## Podcasts
 
-Costumo ouvir os seguintes podcasts.
+O que ouço enquanto faço café ou em voos longos.
 
 ### Liderança Técnica
 
-* [The Critical Channel](https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/) - Um podcast que co-apresento. É sobre liderança, cultura e muito mais. Abordamos vários aspectos da liderança técnica, compartilhando nossas experiências e insights para ajudar você a se tornar um líder melhor.
+* [The Critical Channel](https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/) - Meu podcast. Falamos sobre liderança, cultura e a realidade bagunçada de construir times de engenharia. Histórias reais, sem papo corporativo.
 
 ### Engenharia de Software
 
-* [The Ladybug Podcast](https://www.listennotes.com/podcasts/ladybug-podcast-emma-wedekind-kelly-vaughn-swCn6DupJQe/) - Uma visão fresca da indústria com três mulheres engenheiras de software como anfitriãs. Episódios mais curtos a cada semana ou duas. Este podcast oferece perspectivas diversas sobre tópicos de engenharia de software, tornando-o uma audição refrescante.
-* [Kubernetes](https://www.listennotes.com/podcasts/kubernetes-podcast-from-google-adam-glick-0hPZxnL7suS/) - Notícias e entrevistas semanais da comunidade Kubernetes. Fique atualizado com as últimas notícias e insights do mundo do Kubernetes, diretamente de especialistas e membros da comunidade.
-* [Go Time](https://www.listennotes.com/podcasts/go-time/defer-gotime-cC8RWfLohr3/) - Um podcast semanal com várias discussões sobre a comunidade Go. Quer você seja um desenvolvedor Go experiente ou esteja apenas começando, este podcast fornece discussões valiosas e insights sobre a linguagem de programação Go e seu ecossistema.
+* [The Ladybug Podcast](https://www.listennotes.com/podcasts/ladybug-podcast-emma-wedekind-kelly-vaughn-swCn6DupJQe/) - Perspectivas frescas de três mulheres engenheiras. Episódios mais curtos, tópicos diversos. Visão refrescante da indústria.
+
+* [Kubernetes Podcast](https://www.listennotes.com/podcasts/kubernetes-podcast-from-google-adam-glick-0hPZxnL7suS/) - Notícias semanais de K8s e entrevistas da comunidade. Essencial se você vive no mundo cloud-native.
+
+* [Go Time](https://www.listennotes.com/podcasts/go-time/defer-gotime-cC8RWfLohr3/) - Discussões semanais sobre Go. Seja você profundo em Go ou apenas curioso, conversas sólidas sobre a linguagem e ecossistema.

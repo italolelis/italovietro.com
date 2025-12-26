@@ -1,0 +1,30 @@
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    <div class="page single special">
+        {{- /* Title */ -}}
+        <h1 class="single-title animate__animated animate__pulse animate__faster">
+            {{- .Title -}}
+        </h1>
+
+        {{- /* Subtitle */ -}}
+        {{- with .Params.subtitle -}}
+            <h2 class="single-subtitle">{{ . }}</h2>
+        {{- end -}}
+
+        {{- /* Featured image */ -}}
+        {{- with .Params.featuredimage -}}
+            <div class="featured-image" style="margin: 2rem 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <img src="{{ . }}" alt="{{ $.Title }}" style="width: 100%; height: 280px; object-fit: cover; object-position: center 20%; display: block;">
+            </div>
+        {{- end -}}
+
+        {{- /* Content */ -}}
+        <div class="content" id="content">
+            {{- .Content | safeHTML -}}
+        </div>
+
+        {{- /* Comment */ -}}
+        {{- partial "comment.html" . -}}
+    </div>
+{{- end -}}
