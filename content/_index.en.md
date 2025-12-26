@@ -13,7 +13,7 @@ Engineering leader architecting the future of AI-powered customer service at <st
 
 ---
 
-## Building Systems That Scale, Teams That Ship
+## Engineering for Scale, Leading for Impact
 
 I'm currently **Head of Engineering at [Parloa](https://parloa.com)**, architecting the core services behind Europe's leading agentic-AI customer service platform. We're turning complex real-time conversations into fast, reliable experiences for millions of users daily.
 

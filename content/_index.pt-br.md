@@ -13,7 +13,7 @@ Líder de engenharia trabalhando no futuro do atendimento ao cliente com IA na <
 
 ---
 
-## Construindo Sistemas Que Escalam, Times Que Entregam
+## Escalando Sistemas, Ampliando Impacto
 
 Hoje sou **Head of Engineering na [Parloa](https://parloa.com)**, cuidando dos serviços principais da maior plataforma de atendimento ao cliente com IA da Europa. A gente transforma conversas complexas em tempo real em experiências rápidas e confiáveis pra milhões de usuários todo dia.
 
