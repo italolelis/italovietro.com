@@ -27,7 +27,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. DevTools shows no `var()` resolution failures — all CSS custom properties resolve to actual values
   3. No `<style>` blocks exist in either `index.en.md` or `index.pt-br.md`
   4. The site builds and deploys successfully via GitHub Actions with Hugo Extended enabled in both workflows
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 01-01-PLAN.md — Extract inline styles to SCSS partial, fix broken var() references, add dark mode support
+
 **UI hint**: yes
 
 ### Phase 2: Layout and Content
@@ -61,6 +65,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. CSS Foundation | 0/? | Not started | - |
+| 1. CSS Foundation | 0/1 | Planning complete | - |
 | 2. Layout and Content | 0/? | Not started | - |
 | 3. Features and Publishing | 0/? | Not started | - |
