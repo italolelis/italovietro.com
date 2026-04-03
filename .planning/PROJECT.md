@@ -32,13 +32,15 @@ A clean, scannable reading list page with star ratings that makes it immediately
 - ✓ Inline styles extracted to SCSS partial — Validated in Phase 1: CSS Foundation
 - ✓ Dark mode support via [theme=dark] selectors — Validated in Phase 1: CSS Foundation
 - ✓ Mobile-responsive layout with LoveIt breakpoints — Validated in Phase 1: CSS Foundation
+- ✓ Clean typography-driven layout replacing card-based design — Validated in Phase 2: Layout and Content
+- ✓ "Currently Reading" section at the top — Validated in Phase 2: Layout and Content
+- ✓ Hugo book shortcode with structured entry format — Validated in Phase 2: Layout and Content
+- ✓ Consistent tier labels (Must Read / Recommended / Worth Your Time) — Validated in Phase 2: Layout and Content
 
 ### Active
 
 - [ ] Star ratings for each book/resource
-- [ ] "Currently Reading" section at the top
 - [ ] Consolidated content from CTO reading list blog posts
-- [ ] Clean typography-driven layout replacing card-based design
 - [ ] Anchor-based category navigation
 - [ ] Page rename/rebrand for shareability
 
@@ -92,4 +94,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-03 after Phase 1: CSS Foundation completion*
+*Last updated: 2026-04-03 after Phase 2: Layout and Content completion*
