@@ -28,6 +28,10 @@ A clean, scannable reading list page with star ratings that makes it immediately
 - ✓ Hugo + LoveIt theme architecture — existing
 - ✓ Multi-language support (en/pt-br) — existing
 - ✓ CSS variable theming (light/dark mode) — existing
+- ✓ Broken CSS var() references fixed — Validated in Phase 1: CSS Foundation
+- ✓ Inline styles extracted to SCSS partial — Validated in Phase 1: CSS Foundation
+- ✓ Dark mode support via [theme=dark] selectors — Validated in Phase 1: CSS Foundation
+- ✓ Mobile-responsive layout with LoveIt breakpoints — Validated in Phase 1: CSS Foundation
 
 ### Active
 
@@ -68,7 +72,7 @@ A clean, scannable reading list page with star ratings that makes it immediately
 |----------|-----------|---------|
 | Typography-driven, no book covers | Matches reference style, faster loading, cleaner | — Pending |
 | Consolidate into one page | User wants single shareable URL | — Pending |
-| Keep inline CSS vs custom template | TBD during planning | — Pending |
+| Keep inline CSS vs custom template | Dedicated `_reading-list.scss` partial imported by `_custom.scss` | Phase 1 complete |
 
 ## Evolution
 
@@ -88,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-03 after initialization*
+*Last updated: 2026-04-03 after Phase 1: CSS Foundation completion*
