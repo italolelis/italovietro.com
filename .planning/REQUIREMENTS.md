@@ -9,16 +9,16 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FOUND-01**: Broken CSS custom property references (`var(--header-title-color)` etc.) are fixed to use actual LoveIt theme variables
-- [ ] **FOUND-02**: Inline `<style>` blocks extracted from both language markdown files into `_custom.scss`
-- [ ] **FOUND-03**: Dark mode works correctly with `[theme=dark] &` SCSS selectors for all new styles
+- [x] **FOUND-01**: Broken CSS custom property references (`var(--header-title-color)` etc.) are fixed to use actual LoveIt theme variables
+- [x] **FOUND-02**: Inline `<style>` blocks extracted from both language markdown files into `_custom.scss`
+- [x] **FOUND-03**: Dark mode works correctly with `[theme=dark] &` SCSS selectors for all new styles
 
 ### Layout
 
 - [ ] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout (no borders, no hover effects)
 - [ ] **LAYOUT-02**: Category sections have clear, consistent headings
 - [ ] **LAYOUT-03**: Anchor-based category navigation at the top of the page
-- [ ] **LAYOUT-04**: Layout is mobile-responsive and works with LoveIt theme breakpoints
+- [x] **LAYOUT-04**: Layout is mobile-responsive and works with LoveIt theme breakpoints
 
 ### Ratings
 
@@ -71,10 +71,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| LAYOUT-04 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
+| FOUND-03 | Phase 1 | Complete |
+| LAYOUT-04 | Phase 1 | Complete |
 | LAYOUT-01 | Phase 2 | Pending |
 | LAYOUT-02 | Phase 2 | Pending |
 | CONT-01 | Phase 2 | Pending |
