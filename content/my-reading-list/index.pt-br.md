@@ -12,48 +12,77 @@ Esta não é uma lista completa—apenas aqueles que ficaram. Os que eu revisito
 
 ---
 
+* [Currently Reading](#currently-reading)
 * [Livros de Engenharia](#livros-de-engenharia)
 * [Livros de Gestão](#livros-de-gestao)
 * [Newsletters](#newsletters)
 * [Podcasts](#podcasts)
 
+## Currently Reading
+
+{{< book title="[Book Title]" author="[Author Name]" link="https://example.com" type="book" >}}
+[Por que estou lendo isso -- substitua com sua leitura atual.]
+{{< /book >}}
+
 ## Livros de Engenharia
 
 Livros que mudaram como escrevo código e penso sobre sistemas.
 
-**Essenciais**
+### Must Read
 
-* [Clean Code](https://amzn.to/3f4tfO8) - Li isso cinco anos depois de começar minha carreira. Mudou tudo sobre como eu abordo legibilidade, testes e manutenção. Pare de escrever código para compiladores; escreva para humanos.
+{{< book title="Clean Code" author="Robert C. Martin" link="https://amzn.to/3f4tfO8" type="book" >}}
+Li isso cinco anos depois de começar minha carreira. Mudou tudo sobre como eu abordo legibilidade, testes e manutenção. Pare de escrever código para compiladores; escreva para humanos.
+{{< /book >}}
 
-* [Domain-Driven Design](https://amzn.to/32NQx63) - O livro que me ensinou a falar a linguagem do negócio em código. Linguagem ubíqua e contextos delimitados não são buzzwords—são como você sobrevive a domínios complexos sem perder a sanidade.
+{{< book title="Domain-Driven Design" author="Eric Evans" link="https://amzn.to/32NQx63" type="book" >}}
+O livro que me ensinou a falar a linguagem do negócio em código. Linguagem ubíqua e contextos delimitados não são buzzwords—são como você sobrevive a domínios complexos sem perder a sanidade.
+{{< /book >}}
 
-* [Grokking Algorithms](https://amzn.to/3pvir0o) - O livro de algoritmos que não parece lição de casa. Exemplos claros, pedaços digestíveis. Perfeito para refrescar antes de entrevistas ou quando você precisa lembrar por que hash tables existem.
+{{< book title="Grokking Algorithms" author="Aditya Bhargava" link="https://amzn.to/3pvir0o" type="book" >}}
+O livro de algoritmos que não parece lição de casa. Exemplos claros, pedaços digestíveis. Perfeito para refrescar antes de entrevistas ou quando você precisa lembrar por que hash tables existem.
+{{< /book >}}
 
-**Altamente Recomendados**
+### Recommended
 
-* [Refactoring](https://amzn.to/3lDbNmG) - Catálogo do Martin Fowler de "como melhorar código sem quebrar". Ainda referencio padrões específicos deste livro ao revisar PRs.
+{{< book title="Refactoring" author="Martin Fowler" link="https://amzn.to/3lDbNmG" type="book" >}}
+Catálogo do Martin Fowler de "como melhorar código sem quebrar". Ainda referencio padrões específicos deste livro ao revisar PRs.
+{{< /book >}}
 
-* [Clean Architecture](https://amzn.to/3f4tfO8) - Continuação do Uncle Bob ao Clean Code. Menos sobre código, mais sobre estrutura. Ajuda você a evitar os erros arquiteturais que eu cometi no início da carreira.
+{{< book title="Clean Architecture" author="Robert C. Martin" link="https://amzn.to/3f4tfO8" type="book" >}}
+Continuação do Uncle Bob ao Clean Code. Menos sobre código, mais sobre estrutura. Ajuda você a evitar os erros arquiteturais que eu cometi no início da carreira.
+{{< /book >}}
 
-* [Site Reliability Engineering](https://amzn.to/3kzDD1R) - A bíblia de SRE do Google. Primeira metade vai parecer familiar se você já fez on-call. Lembre-se: o que funciona na escala do Google pode ser exagero para você. Mas os princípios? Sólidos.
+{{< book title="Site Reliability Engineering" author="Betsy Beyer, Chris Jones, Jennifer Petoff, Niall Richard Murphy" link="https://amzn.to/3kzDD1R" type="book" >}}
+A bíblia de SRE do Google. Primeira metade vai parecer familiar se você já fez on-call. Lembre-se: o que funciona na escala do Google pode ser exagero para você. Mas os princípios? Sólidos.
+{{< /book >}}
 
-* [Staff Engineer](https://amzn.eu/d/cAtTpf3) - Bateu diferente quando estava navegando entre IC vs gestão. Roteiro prático para ICs seniores que querem impacto sem inflação de título.
+{{< book title="Staff Engineer" author="Will Larson" link="https://amzn.eu/d/cAtTpf3" type="book" >}}
+Bateu diferente quando estava navegando entre IC vs gestão. Roteiro prático para ICs seniores que querem impacto sem inflação de título.
+{{< /book >}}
 
 ## Livros de Gestão
 
 Os livros que me ajudaram a não ser ruim liderando pessoas.
 
-**Essenciais**
+### Must Read
 
-* [The Manager's Path](https://amzn.to/3f0FnzM) - Seu roteiro de tech lead a CTO. Camille Fournier acerta em cada estágio. Releio capítulos diferentes dependendo de onde estou. Atualmente marcando a seção de VP.
+{{< book title="The Manager's Path" author="Camille Fournier" link="https://amzn.to/3f0FnzM" type="book" >}}
+Seu roteiro de tech lead a CTO. Camille Fournier acerta em cada estágio. Releio capítulos diferentes dependendo de onde estou. Atualmente marcando a seção de VP.
+{{< /book >}}
 
-* [An Elegant Puzzle](https://amzn.to/3kHB3Hb) - O guia do Will Larson é o livro mais prático de gestão de engenharia que encontrei. Táticas reais para contratação, dinâmica de time e escalar organizações. Só o apêndice vale o preço—uma mina de ouro de recomendações de papers.
+{{< book title="An Elegant Puzzle" author="Will Larson" link="https://amzn.to/3kHB3Hb" type="book" >}}
+O guia do Will Larson é o livro mais prático de gestão de engenharia que encontrei. Táticas reais para contratação, dinâmica de time e escalar organizações. Só o apêndice vale o preço—uma mina de ouro de recomendações de papers.
+{{< /book >}}
 
-* [The Phoenix Project](https://amzn.to/3kyPsVU) - DevOps embrulhado em romance. Parece cafona, mas funciona. Leia isso quando estiver lutando para explicar por que "só entregue mais rápido" não é estratégia.
+{{< book title="The Phoenix Project" author="Gene Kim, Kevin Behr, George Spafford" link="https://amzn.to/3kyPsVU" type="book" >}}
+DevOps embrulhado em romance. Parece cafona, mas funciona. Leia isso quando estiver lutando para explicar por que "só entregue mais rápido" não é estratégia.
+{{< /book >}}
 
-**Altamente Recomendados**
+### Recommended
 
-* [The Engineering Executive's Primer](https://amzn.eu/d/2ET5UiD) - Base sólida para papéis VP+. Pensamento estratégico, design organizacional, dinâmica de conselho. Queria ter lido isso antes do meu primeiro papel de CTO.
+{{< book title="The Engineering Executive's Primer" author="Will Larson" link="https://amzn.eu/d/2ET5UiD" type="book" >}}
+Base sólida para papéis VP+. Pensamento estratégico, design organizacional, dinâmica de conselho. Queria ter lido isso antes do meu primeiro papel de CTO.
+{{< /book >}}
 
 ## Newsletters
 
@@ -61,15 +90,23 @@ Tentei dezenas. Essas são as que eu realmente leio toda semana.
 
 ### Liderança Técnica
 
-* [Software Lead Weekly](http://softwareleadweekly.com/) - Oren Ellenbogen curada cinco artigos afiados semanalmente sobre tech e liderança. Sem enrolação, só sinal.
+{{< book title="Software Lead Weekly" author="Oren Ellenbogen" link="http://softwareleadweekly.com/" type="newsletter" >}}
+Oren Ellenbogen curada cinco artigos afiados semanalmente sobre tech e liderança. Sem enrolação, só sinal.
+{{< /book >}}
 
-* [Level Up](http://levelup.patkua.com/) - Pat Kua era Chief Scientist quando eu estava na N26. Uma das mentes mais afiadas com quem trabalhei. Seus 15-20 links semanais sobre liderança, tech e design organizacional são ouro.
+{{< book title="Level Up" author="Pat Kua" link="http://levelup.patkua.com/" type="newsletter" >}}
+Pat Kua era Chief Scientist quando eu estava na N26. Uma das mentes mais afiadas com quem trabalhei. Seus 15-20 links semanais sobre liderança, tech e design organizacional são ouro.
+{{< /book >}}
 
-* [The Weekly Hagakure](https://hagakure.substack.com/) - Paulo André e eu nos cruzamos na HelloFresh. Sua newsletter tem o mix perfeito: três artigos, dois vídeos, uma recomendação de livro. Sempre provocante.
+{{< book title="The Weekly Hagakure" author="Paulo Andre" link="https://hagakure.substack.com/" type="newsletter" >}}
+Paulo André e eu nos cruzamos na HelloFresh. Sua newsletter tem o mix perfeito: três artigos, dois vídeos, uma recomendação de livro. Sempre provocante.
+{{< /book >}}
 
 ### Engenharia de Software
 
-* [Changelog](https://changelog.com/) - Pulso semanal sobre o que está acontecendo em engenharia. Bom para ficar atualizado sem se afogar em ruído.
+{{< book title="Changelog" author="Changelog Media" link="https://changelog.com/" type="newsletter" >}}
+Pulso semanal sobre o que está acontecendo em engenharia. Bom para ficar atualizado sem se afogar em ruído.
+{{< /book >}}
 
 ## Podcasts
 
@@ -77,12 +114,20 @@ O que ouço enquanto faço café ou em voos longos.
 
 ### Liderança Técnica
 
-* [The Critical Channel](https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/) - Meu podcast. Falamos sobre liderança, cultura e a realidade bagunçada de construir times de engenharia. Histórias reais, sem papo corporativo.
+{{< book title="The Critical Channel" author="Italo Vietro" link="https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/" type="podcast" >}}
+Meu podcast. Falamos sobre liderança, cultura e a realidade bagunçada de construir times de engenharia. Histórias reais, sem papo corporativo.
+{{< /book >}}
 
 ### Engenharia de Software
 
-* [The Ladybug Podcast](https://www.listennotes.com/podcasts/ladybug-podcast-emma-wedekind-kelly-vaughn-swCn6DupJQe/) - Perspectivas frescas de três mulheres engenheiras. Episódios mais curtos, tópicos diversos. Visão refrescante da indústria.
+{{< book title="The Ladybug Podcast" author="Emma Bostian, Kelly Vaughn, Ali Spittel" link="https://www.listennotes.com/podcasts/ladybug-podcast-emma-wedekind-kelly-vaughn-swCn6DupJQe/" type="podcast" >}}
+Perspectivas frescas de três mulheres engenheiras. Episódios mais curtos, tópicos diversos. Visão refrescante da indústria.
+{{< /book >}}
 
-* [Kubernetes Podcast](https://www.listennotes.com/podcasts/kubernetes-podcast-from-google-adam-glick-0hPZxnL7suS/) - Notícias semanais de K8s e entrevistas da comunidade. Essencial se você vive no mundo cloud-native.
+{{< book title="Kubernetes Podcast" author="Adam Glick, Craig Box" link="https://www.listennotes.com/podcasts/kubernetes-podcast-from-google-adam-glick-0hPZxnL7suS/" type="podcast" >}}
+Notícias semanais de K8s e entrevistas da comunidade. Essencial se você vive no mundo cloud-native.
+{{< /book >}}
 
-* [Go Time](https://www.listennotes.com/podcasts/go-time/defer-gotime-cC8RWfLohr3/) - Discussões semanais sobre Go. Seja você profundo em Go ou apenas curioso, conversas sólidas sobre a linguagem e ecossistema.
+{{< book title="Go Time" author="Mat Ryer, Johnny Boursiquot, Angelica Hill" link="https://www.listennotes.com/podcasts/go-time/defer-gotime-cC8RWfLohr3/" type="podcast" >}}
+Discussões semanais sobre Go. Seja você profundo em Go ou apenas curioso, conversas sólidas sobre a linguagem e ecossistema.
+{{< /book >}}
