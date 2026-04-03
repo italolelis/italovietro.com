@@ -62,14 +62,15 @@ Exceptions: Mobile breakpoint at 768px (matches LoveIt theme breakpoint and exis
 
 ## Typography
 
-Values are taken directly from `themes/LoveIt/assets/css/_variables.scss` to stay consistent with the theme system. Phase 1 must not change typography — only fix broken color references.
+Phase 1 must not change typography — only fix broken color references. The declared weight scale is **[400, 700]** only. h3 heading weight is inherited from the LoveIt theme default and is not part of this phase's declared scale.
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px (`$global-font-size`) | 400 (`$global-font-weight`) | 1.5rem (`$global-line-height`) |
 | Label / secondary text | 14px (0.875rem) | 400 | 1.5 |
-| Heading h3 | 24px (1.5rem) — preserved from existing inline styles | 600 | 1.2 |
 | Heading h2 | 32px (2rem) — preserved from existing inline styles | 700 | 1.2 |
+
+**h3:** Size 24px (1.5rem) preserved from existing inline styles. Weight is a LoveIt theme default — Phase 1 does not declare or change it.
 
 **Mobile override:** h2 drops to 25.6px (1.6rem) at `max-width: 768px`. Preserve this breakpoint exactly.
 
