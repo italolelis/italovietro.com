@@ -17,55 +17,20 @@
     color: $global-font-color;
 }
 
+// Tier labels (h3 within category sections) — per D-08, D-09, LAYOUT-02
 .single .content h3 {
-    font-size: 1.5rem;
-    margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
-    color: $global-font-color;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $global-font-secondary-color;
+    margin-top: 32px;
+    margin-bottom: 12px;
 }
 
 .single .content > ul {
     padding-left: 0;
     list-style: none;
-}
-
-.single .content > ul > li {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: $global-background-color;
-    border: 1px solid $global-border-color;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.single .content > ul > li:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-color: $single-link-color;
-}
-
-.single .content > ul > li strong {
-    font-size: 1.2rem;
-    color: $global-font-color;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-.single .content > ul > li a {
-    color: $single-link-color;
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s ease;
-}
-
-.single .content > ul > li a:hover {
-    border-bottom-color: $single-link-color;
-}
-
-.single .content p + ul {
-    margin-top: 1rem;
 }
 
 .single .content > p:first-of-type {
@@ -113,6 +78,41 @@
     opacity: 0.9;
 }
 
+// Book entry — typography-driven, no cards (per D-02)
+.single .content .book-entry {
+    margin-bottom: 24px;
+}
+
+.single .content .book-entry__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.single .content .book-entry__title a {
+    color: $single-link-color;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.single .content .book-entry__title a:hover {
+    color: $single-link-hover-color;
+}
+
+.single .content .book-entry__author {
+    font-size: 0.8125rem;
+    color: $global-font-secondary-color;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.single .content .book-entry__description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: $global-font-color;
+}
+
 // Dark mode
 [theme=dark] .single .content h2 {
     border-bottom-color: $global-border-color-dark;
@@ -120,28 +120,7 @@
 }
 
 [theme=dark] .single .content h3 {
-    color: $global-font-color-dark;
-}
-
-[theme=dark] .single .content > ul > li {
-    background: $global-background-color-dark;
-    border-color: $global-border-color-dark;
-}
-
-[theme=dark] .single .content > ul > li:hover {
-    border-color: $single-link-color-dark;
-}
-
-[theme=dark] .single .content > ul > li strong {
-    color: $global-font-color-dark;
-}
-
-[theme=dark] .single .content > ul > li a {
-    color: $single-link-color-dark;
-}
-
-[theme=dark] .single .content > ul > li a:hover {
-    border-bottom-color: $single-link-color-dark;
+    color: $global-font-secondary-color-dark;
 }
 
 [theme=dark] .single .content > hr {
@@ -158,6 +137,22 @@
     color: white;
 }
 
+[theme=dark] .single .content .book-entry__title a {
+    color: $single-link-color-dark;
+}
+
+[theme=dark] .single .content .book-entry__title a:hover {
+    color: $single-link-hover-color-dark;
+}
+
+[theme=dark] .single .content .book-entry__author {
+    color: $global-font-secondary-color-dark;
+}
+
+[theme=dark] .single .content .book-entry__description {
+    color: $global-font-color-dark;
+}
+
 // Auto theme
 [theme=auto] .single .content h2 {
     border-bottom-color: $global-border-color;
@@ -171,28 +166,7 @@
     }
 
     [theme=auto] .single .content h3 {
-        color: $global-font-color-dark;
-    }
-
-    [theme=auto] .single .content > ul > li {
-        background: $global-background-color-dark;
-        border-color: $global-border-color-dark;
-    }
-
-    [theme=auto] .single .content > ul > li:hover {
-        border-color: $single-link-color-dark;
-    }
-
-    [theme=auto] .single .content > ul > li strong {
-        color: $global-font-color-dark;
-    }
-
-    [theme=auto] .single .content > ul > li a {
-        color: $single-link-color-dark;
-    }
-
-    [theme=auto] .single .content > ul > li a:hover {
-        border-bottom-color: $single-link-color-dark;
+        color: $global-font-secondary-color-dark;
     }
 
     [theme=auto] .single .content > hr {
@@ -208,16 +182,28 @@
         background: $single-link-color-dark;
         color: white;
     }
+
+    [theme=auto] .single .content .book-entry__title a {
+        color: $single-link-color-dark;
+    }
+
+    [theme=auto] .single .content .book-entry__title a:hover {
+        color: $single-link-hover-color-dark;
+    }
+
+    [theme=auto] .single .content .book-entry__author {
+        color: $global-font-secondary-color-dark;
+    }
+
+    [theme=auto] .single .content .book-entry__description {
+        color: $global-font-color-dark;
+    }
 }
 
 // Mobile breakpoint (aligned with LoveIt 680px breakpoint)
 @media (max-width: 680px) {
     .single .content h2 {
         font-size: 1.6rem;
-    }
-
-    .single .content > ul > li {
-        padding: 1.25rem;
     }
 
     .single .content > ul:first-of-type {
@@ -227,5 +213,9 @@
     .single .content > ul:first-of-type li a {
         display: block;
         text-align: center;
+    }
+
+    .single .content .book-entry__title {
+        font-size: 1rem;
     }
 }
