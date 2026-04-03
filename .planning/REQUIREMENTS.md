@@ -28,10 +28,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Content
 
-- [ ] **CONT-01**: "Currently Reading" section displayed prominently at the top with 1-3 entries
-- [ ] **CONT-02**: Each "Currently Reading" entry has title, author, and a personal note
-- [ ] **CONT-03**: Page-level intro paragraph preserved
-- [ ] **CONT-04**: Per-entry descriptions preserved and consistent across all entries
+- [x] **CONT-01**: "Currently Reading" section displayed prominently at the top with 1-3 entries
+- [x] **CONT-02**: Each "Currently Reading" entry has title, author, and a personal note
+- [x] **CONT-03**: Page-level intro paragraph preserved
+- [x] **CONT-04**: Per-entry descriptions preserved and consistent across all entries
 
 ### Multi-language
 
@@ -77,10 +77,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LAYOUT-04 | Phase 1 | Complete |
 | LAYOUT-01 | Phase 2 | Complete |
 | LAYOUT-02 | Phase 2 | Complete |
-| CONT-01 | Phase 2 | Pending |
-| CONT-02 | Phase 2 | Pending |
-| CONT-03 | Phase 2 | Pending |
-| CONT-04 | Phase 2 | Pending |
+| CONT-01 | Phase 2 | Complete |
+| CONT-02 | Phase 2 | Complete |
+| CONT-03 | Phase 2 | Complete |
+| CONT-04 | Phase 2 | Complete |
 | RATE-01 | Phase 3 | Pending |
 | RATE-02 | Phase 3 | Pending |
 | RATE-03 | Phase 3 | Pending |

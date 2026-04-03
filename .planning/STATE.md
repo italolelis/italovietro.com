@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 02-layout-and-content/02-01-PLAN.md
-last_updated: "2026-04-03T13:18:54.907Z"
+status: verifying
+stopped_at: Completed 02-layout-and-content/02-02-PLAN.md
+last_updated: "2026-04-03T13:23:09.836Z"
 last_activity: 2026-04-03
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-03)
 
 Phase: 02 (layout-and-content) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-03
 
 Progress: [░░░░░░░░░░] 0%
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 01-css-foundation P01 | 8 | 2 tasks | 4 files |
 | Phase 02-layout-and-content P01 | 2 | 2 tasks | 2 files |
+| Phase 02-layout-and-content P02 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-css-foundation]: No CSS custom properties defined - all reading list styles use SCSS variables resolved at build time
 - [Phase 02-layout-and-content]: Use trim .Inner before .Page.RenderString in book shortcode to prevent extra paragraph wrapping
 - [Phase 02-layout-and-content]: h4 for book entry title to sit below h2 (category) and h3 (tier) in heading hierarchy
+- [Phase 02-layout-and-content]: Tier labels remain in English for both language files (Must Read / Recommended) — editorial vocabulary, not UI chrome
+- [Phase 02-layout-and-content]: Currently Reading placeholder used for EN/PT files pending Italo's actual current read
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-03T13:18:54.904Z
-Stopped at: Completed 02-layout-and-content/02-01-PLAN.md
+Last session: 2026-04-03T13:23:09.833Z
+Stopped at: Completed 02-layout-and-content/02-02-PLAN.md
 Resume file: None
