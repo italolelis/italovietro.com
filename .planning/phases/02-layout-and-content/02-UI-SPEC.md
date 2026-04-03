@@ -131,16 +131,22 @@ Exceptions: 12px gap between tier heading and first entry (not on the 8-point gr
 
 All values continue from Phase 1. Phase 2 adds only the book entry title and author roles.
 
+**Declared font size scale (4 sizes):**
+
 | Role | Size | Weight | Line Height | Element |
 |------|------|--------|-------------|---------|
-| Body | 16px (`$global-font-size`) | 400 | 1.5 | Page prose, entry descriptions |
-| Secondary / author | 14px (0.875rem) | 400 | 1.5 | `.book-entry__author`, tier labels (h3) |
-| Book entry title | 17px (1.0625rem) | 600 | 1.3 | `.book-entry__title a` |
-| Tier label (h3) | 13px (0.8125rem) | 600 | 1.2 | `### Must Read`, `### Recommended`, etc. |
-| Section heading (h2) | 32px (2rem) — preserved from Phase 1 | 700 | 1.2 | Category headings |
-| Intro paragraph | 17.6px (1.1rem) — preserved from Phase 1 | 400 | 1.8 | First paragraph |
+| Tier label | 13px (0.8125rem) | 600 | 1.2 | `### Must Read`, `### Recommended`, etc.; also `.book-entry__author` |
+| Body | 16px (`$global-font-size`) | 400 | 1.5 | Page prose, entry descriptions, intro paragraph |
+| Book entry title | 18px (1.125rem) | 600 | 1.3 | `.book-entry__title a` |
+| Section heading (h2) | 32px (2rem) — preserved from Phase 1 | 700* | 1.2 | Category headings |
 
-**Weight scale: [400, 600] only.** Phase 1 used 700 for h2 (LoveIt default). Phase 2 introduces 600 (semibold) for book titles and tier labels. No new weights beyond these three.
+*h2 at weight 700 is the LoveIt theme default. Phase 2 does not override it. The declared project weight scale is **[400, 600]** — 700 is an inherited theme default outside this phase's scope, following the same pattern established in Phase 1.
+
+**Consolidation rationale (checker revision):**
+- 14px author line → merged into 13px (tier label role; author is secondary metadata, same visual tier)
+- 17.6px intro paragraph → merged into 16px body (0.6px difference is imperceptible; 1.1rem removed)
+- 17px book entry title → rounded up to 18px (1.125rem) for clear separation from 16px body
+- Result: 4 declared sizes (13 / 16 / 18 / 32px), down from 6
 
 **Tier label visual treatment:** All-caps, letter-spacing 0.08em, font-size 0.8125rem, weight 600, color `$global-font-secondary-color` (light) / `$global-font-secondary-color-dark` (dark). This makes tier labels read as metadata, not content headings.
 
@@ -196,7 +202,7 @@ New styles are appended to `assets/css/_reading-list.scss`. The Phase 1 card sty
 }
 
 .single .content .book-entry__title {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;   // 18px — book entry title size
     font-weight: 600;
     margin-bottom: 4px; // xs
     line-height: 1.3;
@@ -213,21 +219,21 @@ New styles are appended to `assets/css/_reading-list.scss`. The Phase 1 card sty
 }
 
 .single .content .book-entry__author {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;  // 13px — same tier as tier labels (secondary metadata)
     color: $global-font-secondary-color;
     margin-bottom: 8px; // sm
     display: block;
 }
 
 .single .content .book-entry__description {
-    font-size: 1rem;
+    font-size: 1rem;       // 16px body
     line-height: 1.5;
     color: $global-font-color;
 }
 
 // Tier labels (h3 within category sections)
 .single .content h3 {
-    font-size: 0.8125rem;
+    font-size: 0.8125rem;  // 13px — tier label
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -324,7 +330,7 @@ Breakpoint: `max-width: 680px` (LoveIt-aligned, established in Phase 1).
 | Breakpoint | Rule |
 |-----------|------|
 | `max-width: 680px` | h2 font-size: 1.6rem (preserved from Phase 1) |
-| `max-width: 680px` | `.book-entry` margin-bottom: 20px |
+| `max-width: 680px` | `.book-entry` margin-bottom: 24px (lg — on-grid) |
 | `max-width: 680px` | `.book-entry__title` font-size: 1rem |
 | `max-width: 680px` | Anchor nav flexes to column (preserved from Phase 1) |
 
@@ -370,6 +376,7 @@ No third-party component registries. All output is custom SCSS and Hugo shortcod
 | `_variables.scss` (codebase scan) | `$global-font-secondary-color` and `$single-link-hover-color` confirmed |
 | `index.en.md` (codebase scan) | Full content inventory — 4 categories, tier labels, entry count |
 | User input this session | 0 — all decisions pre-populated from upstream artifacts |
+| Checker revision (2026-04-03) | Typography consolidated 6→4 sizes; mobile spacing 20px→24px; weight note aligned to Phase 1 pattern |
 
 ---
 
