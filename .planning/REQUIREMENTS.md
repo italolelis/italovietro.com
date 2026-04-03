@@ -15,8 +15,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Layout
 
-- [ ] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout (no borders, no hover effects)
-- [ ] **LAYOUT-02**: Category sections have clear, consistent headings
+- [x] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout (no borders, no hover effects)
+- [x] **LAYOUT-02**: Category sections have clear, consistent headings
 - [ ] **LAYOUT-03**: Anchor-based category navigation at the top of the page
 - [x] **LAYOUT-04**: Layout is mobile-responsive and works with LoveIt theme breakpoints
 
@@ -75,8 +75,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUND-02 | Phase 1 | Complete |
 | FOUND-03 | Phase 1 | Complete |
 | LAYOUT-04 | Phase 1 | Complete |
-| LAYOUT-01 | Phase 2 | Pending |
-| LAYOUT-02 | Phase 2 | Pending |
+| LAYOUT-01 | Phase 2 | Complete |
+| LAYOUT-02 | Phase 2 | Complete |
 | CONT-01 | Phase 2 | Pending |
 | CONT-02 | Phase 2 | Pending |
 | CONT-03 | Phase 2 | Pending |

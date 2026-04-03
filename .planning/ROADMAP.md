@@ -43,10 +43,10 @@ Plans:
   2. A "Currently Reading" section appears at the top of the page with 1-3 entries, each showing title, author, and a personal note
   3. Category sections have consistent headings and each book entry includes a description
   4. The page-level intro paragraph is present and the overall reading experience is scannable on desktop and mobile
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 02-01-PLAN.md — Create book shortcode template and replace Phase 1 card SCSS with typography-driven shortcode styles
+- [x] 02-01-PLAN.md — Create book shortcode template and replace Phase 1 card SCSS with typography-driven shortcode styles
 - [ ] 02-02-PLAN.md — Migrate English and Portuguese content files to shortcode format with Currently Reading section
 
 **UI hint**: yes
@@ -71,5 +71,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. CSS Foundation | 1/1 | Complete   | 2026-04-03 |
-| 2. Layout and Content | 0/2 | Not started | - |
+| 2. Layout and Content | 1/2 | In Progress|  |
 | 3. Features and Publishing | 0/? | Not started | - |
