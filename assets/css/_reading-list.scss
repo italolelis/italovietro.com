@@ -1,0 +1,231 @@
+// ==============================
+// Reading List Styles
+// ==============================
+
+// Light mode (default)
+.single .content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.single .content h2 {
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid $global-border-color;
+    color: $global-font-color;
+}
+
+.single .content h3 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    color: $global-font-color;
+}
+
+.single .content > ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.single .content > ul > li {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: $global-background-color;
+    border: 1px solid $global-border-color;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.single .content > ul > li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: $single-link-color;
+}
+
+.single .content > ul > li strong {
+    font-size: 1.2rem;
+    color: $global-font-color;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.single .content > ul > li a {
+    color: $single-link-color;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.single .content > ul > li a:hover {
+    border-bottom-color: $single-link-color;
+}
+
+.single .content p + ul {
+    margin-top: 1rem;
+}
+
+.single .content > p:first-of-type {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.single .content > hr {
+    margin: 2.5rem 0;
+    border: none;
+    border-top: 1px solid $global-border-color;
+}
+
+.single .content > ul:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: $global-background-color;
+    border: 1px solid $global-border-color;
+    border-radius: 12px;
+}
+
+.single .content > ul:first-of-type li {
+    margin: 0;
+    padding: 0;
+}
+
+.single .content > ul:first-of-type li a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: $single-link-color;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.single .content > ul:first-of-type li a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+}
+
+// Dark mode
+[theme=dark] .single .content h2 {
+    border-bottom-color: $global-border-color-dark;
+    color: $global-font-color-dark;
+}
+
+[theme=dark] .single .content h3 {
+    color: $global-font-color-dark;
+}
+
+[theme=dark] .single .content > ul > li {
+    background: $global-background-color-dark;
+    border-color: $global-border-color-dark;
+}
+
+[theme=dark] .single .content > ul > li:hover {
+    border-color: $single-link-color-dark;
+}
+
+[theme=dark] .single .content > ul > li strong {
+    color: $global-font-color-dark;
+}
+
+[theme=dark] .single .content > ul > li a {
+    color: $single-link-color-dark;
+}
+
+[theme=dark] .single .content > ul > li a:hover {
+    border-bottom-color: $single-link-color-dark;
+}
+
+[theme=dark] .single .content > hr {
+    border-top-color: $global-border-color-dark;
+}
+
+[theme=dark] .single .content > ul:first-of-type {
+    background: $global-background-color-dark;
+    border-color: $global-border-color-dark;
+}
+
+[theme=dark] .single .content > ul:first-of-type li a {
+    background: $single-link-color-dark;
+    color: white;
+}
+
+// Auto theme
+[theme=auto] .single .content h2 {
+    border-bottom-color: $global-border-color;
+    color: $global-font-color;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .single .content h2 {
+        border-bottom-color: $global-border-color-dark;
+        color: $global-font-color-dark;
+    }
+
+    [theme=auto] .single .content h3 {
+        color: $global-font-color-dark;
+    }
+
+    [theme=auto] .single .content > ul > li {
+        background: $global-background-color-dark;
+        border-color: $global-border-color-dark;
+    }
+
+    [theme=auto] .single .content > ul > li:hover {
+        border-color: $single-link-color-dark;
+    }
+
+    [theme=auto] .single .content > ul > li strong {
+        color: $global-font-color-dark;
+    }
+
+    [theme=auto] .single .content > ul > li a {
+        color: $single-link-color-dark;
+    }
+
+    [theme=auto] .single .content > ul > li a:hover {
+        border-bottom-color: $single-link-color-dark;
+    }
+
+    [theme=auto] .single .content > hr {
+        border-top-color: $global-border-color-dark;
+    }
+
+    [theme=auto] .single .content > ul:first-of-type {
+        background: $global-background-color-dark;
+        border-color: $global-border-color-dark;
+    }
+
+    [theme=auto] .single .content > ul:first-of-type li a {
+        background: $single-link-color-dark;
+        color: white;
+    }
+}
+
+// Mobile breakpoint (aligned with LoveIt 680px breakpoint)
+@media (max-width: 680px) {
+    .single .content h2 {
+        font-size: 1.6rem;
+    }
+
+    .single .content > ul > li {
+        padding: 1.25rem;
+    }
+
+    .single .content > ul:first-of-type {
+        flex-direction: column;
+    }
+
+    .single .content > ul:first-of-type li a {
+        display: block;
+        text-align: center;
+    }
+}
