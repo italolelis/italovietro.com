@@ -25,8 +25,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "My reading list"
-        url = "/my-reading-list/"
+        name = "What I'm Reading"
+        url = "/recommended-reading/"
         title = ""
         weight = 1
       [[languages.en.menu.main]]
@@ -88,8 +88,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "Minha lista de livros"
-        url = "/my-reading-list/"
+        name = "O que estou lendo"
+        url = "/leituras-recomendadas/"
         title = ""
         weight = 1
       [[languages.pt-br.menu.main]]
