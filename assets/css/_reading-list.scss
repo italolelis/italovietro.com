@@ -45,15 +45,13 @@
     border-top: 1px solid $global-border-color;
 }
 
+// Anchor nav — plain text links with separator dots (Phase 3)
 .single .content > ul:first-of-type {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: $global-background-color;
-    border: 1px solid $global-border-color;
-    border-radius: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
 }
 
 .single .content > ul:first-of-type li {
@@ -61,21 +59,25 @@
     padding: 0;
 }
 
+.single .content > ul:first-of-type li:not(:first-child)::before {
+    content: "\00B7";
+    color: $global-font-secondary-color;
+    padding: 0 4px;
+}
+
 .single .content > ul:first-of-type li a {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: $single-link-color;
-    color: white;
-    border-radius: 6px;
+    font-size: 0.875rem;
+    color: $single-link-color;
     text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    font-weight: 400;
+    transition: color 0.2s ease;
 }
 
 .single .content > ul:first-of-type li a:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    opacity: 0.9;
+    color: $single-link-hover-color;
 }
 
 // Book entry — typography-driven, no cards (per D-02)
@@ -113,6 +115,19 @@
     color: $global-font-color;
 }
 
+// Star ratings — inline with title (per D-01, D-03, D-04)
+.single .content .book-entry__rating {
+    margin-left: 8px;
+    vertical-align: middle;
+    display: inline;
+}
+
+.single .content .book-entry__rating .fa-star {
+    font-size: 0.75rem;
+    color: $single-link-color;
+    letter-spacing: 2px;
+}
+
 // Dark mode
 [theme=dark] .single .content h2 {
     border-bottom-color: $global-border-color-dark;
@@ -127,14 +142,17 @@
     border-top-color: $global-border-color-dark;
 }
 
-[theme=dark] .single .content > ul:first-of-type {
-    background: $global-background-color-dark;
-    border-color: $global-border-color-dark;
+[theme=dark] .single .content > ul:first-of-type li:not(:first-child)::before {
+    color: $global-font-secondary-color-dark;
 }
 
 [theme=dark] .single .content > ul:first-of-type li a {
-    background: $single-link-color-dark;
-    color: white;
+    color: $single-link-color-dark;
+    background: none;
+}
+
+[theme=dark] .single .content > ul:first-of-type li a:hover {
+    color: $single-link-hover-color-dark;
 }
 
 [theme=dark] .single .content .book-entry__title a {
@@ -151,6 +169,10 @@
 
 [theme=dark] .single .content .book-entry__description {
     color: $global-font-color-dark;
+}
+
+[theme=dark] .single .content .book-entry__rating .fa-star {
+    color: $single-link-color-dark;
 }
 
 // Auto theme
@@ -173,14 +195,17 @@
         border-top-color: $global-border-color-dark;
     }
 
-    [theme=auto] .single .content > ul:first-of-type {
-        background: $global-background-color-dark;
-        border-color: $global-border-color-dark;
+    [theme=auto] .single .content > ul:first-of-type li:not(:first-child)::before {
+        color: $global-font-secondary-color-dark;
     }
 
     [theme=auto] .single .content > ul:first-of-type li a {
-        background: $single-link-color-dark;
-        color: white;
+        color: $single-link-color-dark;
+        background: none;
+    }
+
+    [theme=auto] .single .content > ul:first-of-type li a:hover {
+        color: $single-link-hover-color-dark;
     }
 
     [theme=auto] .single .content .book-entry__title a {
@@ -198,6 +223,10 @@
     [theme=auto] .single .content .book-entry__description {
         color: $global-font-color-dark;
     }
+
+    [theme=auto] .single .content .book-entry__rating .fa-star {
+        color: $single-link-color-dark;
+    }
 }
 
 // Mobile breakpoint (aligned with LoveIt 680px breakpoint)
@@ -208,11 +237,17 @@
 
     .single .content > ul:first-of-type {
         flex-direction: column;
+        gap: 0;
+    }
+
+    .single .content > ul:first-of-type li:not(:first-child)::before {
+        display: none;
     }
 
     .single .content > ul:first-of-type li a {
         display: block;
-        text-align: center;
+        padding: 4px 0;
+        text-align: left;
     }
 
     .single .content .book-entry__title {
