@@ -1,19 +1,24 @@
 {{- /* layouts/shortcodes/book.html */ -}}
-{{- /* Parameters: title (required), author (required), link (required), type (required), rating (reserved Phase 3) */ -}}
+{{- /* Parameters: title (required), author (required), link (required), type (required), rating (Phase 3) */ -}}
 {{- $title  := .Get "title" -}}
 {{- $author := .Get "author" -}}
 {{- $link   := .Get "link" -}}
 {{- $type   := .Get "type" | default "book" -}}
+{{- $rating := .Get "rating" | default "" -}}
 {{- $inner  := trim .Inner "\n" | .Page.RenderString -}}
 <div class="book-entry book-entry--{{ $type }}">
     <div class="book-entry__header">
         <h4 class="book-entry__title">
             <a href="{{ $link }}" target="_blank" rel="noopener noreferrer">{{ $title }}</a>
+            {{- if $rating -}}
+            <span class="book-entry__rating" aria-label="{{ $rating }} out of 5 stars">
+              {{- range (seq (int $rating)) -}}<i class="fas fa-star"></i>{{- end -}}
+            </span>
+            {{- end -}}
         </h4>
         <span class="book-entry__author">{{ $author }}</span>
     </div>
     <div class="book-entry__description">
         {{- $inner -}}
     </div>
-    {{- /* .book-entry__rating slot reserved for Phase 3 — absent in Phase 2 */ -}}
 </div>
