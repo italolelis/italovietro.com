@@ -77,9 +77,10 @@ Add a `rating` parameter to `layouts/shortcodes/book.html`. The rendered HTML in
 | Font-size | 0.75rem (12px) — smaller than title (18px) to not dominate | D-03 |
 | Color (light) | `$single-link-color` (`#2d96bd`) | D-04 |
 | Color (dark) | `$single-link-color-dark` (`#55bde2`) | D-04 |
-| Margin-left | 6px (between end of title link and first star) | discretion |
+| Margin-left | 8px (sm token — between end of title link and first star) | discretion |
 | Vertical align | `vertical-align: middle` | discretion |
-| Letter-spacing | 2px between individual stars | discretion |
+
+**Note on star icon spacing:** `letter-spacing` between individual star icons is set to `2px` in the SCSS implementation. This is a typography/rendering property for icon sequences, not a spacing token — it is not part of the 8-point spacing scale.
 
 **Accent reserved for (updated):** book entry title link text color AND star rating icons. Stars use the same accent variable as title links — they are a unified visual signal.
 
@@ -130,8 +131,8 @@ Style: **text links with separator dots** — clean, typographic, no pill backgr
 | Link color | `$single-link-color` / `$single-link-color-dark` |
 | Link font-size | 0.875rem (14px) |
 | Link font-weight | 400 |
-| Link padding | 0 12px (horizontal only — no vertical padding) |
-| Separator | `::before` pseudo-element: `·` (middle dot, U+00B7), color `$global-font-secondary-color`, on all items except first |
+| Link padding | 0 (no padding on anchor element — separator spacing handled by `::before` pseudo-element) |
+| Separator | `::before` pseudo-element: `·` (middle dot, U+00B7), color `$global-font-secondary-color`, padding `0 4px`, on all items except first |
 | Hover | `color: $single-link-hover-color` with `transition: color 0.2s ease` |
 | Container margin | `margin: 0 0 2rem 0` (32px below, matching xl token) |
 | Container padding | 0 (no card background — matches Phase 2 removal of card borders) |
@@ -145,7 +146,7 @@ Style: **text links with separator dots** — clean, typographic, no pill backgr
 
 ```scss
 // REMOVE these Phase 1 selectors — replaced by plain anchor nav in Phase 3
-.single .content > ul:first-of-type { /* background, border, border-radius, padding, flex */ }
+.single .content > ul:first-of-type { /* background, border, border-radius, padding: 1.5rem */ }
 .single .content > ul:first-of-type li { /* margin, padding */ }
 .single .content > ul:first-of-type li a { /* background, color, border-radius, padding, font-weight */ }
 .single .content > ul:first-of-type li a:hover { /* transform, box-shadow, opacity */ }
@@ -193,17 +194,17 @@ Inherited from Phase 1 and Phase 2. No new tokens introduced. Star ratings and a
 | Token | Value | Usage |
 |-------|-------|-------|
 | xs | 4px | Icon gaps, inline padding |
-| sm | 8px | Compact spacing |
+| sm | 8px | Compact spacing — star `margin-left` (between title text and first star) |
 | md | 16px | Default element spacing |
 | lg | 24px | Section padding, book entry margin-bottom |
 | xl | 32px | Anchor nav margin-bottom, tier h3 margin-top |
 | 2xl | 48px | Major section breaks |
 | 3xl | 64px | Page-level spacing |
 
-**Phase 3 specific:**
-- Star `margin-left`: 6px (between title text and first star — exception to 8-point grid, 4px too tight, 8px too wide)
-- Star letter-spacing between icons: 2px (exception — optical spacing for icon sequence)
-- Anchor nav link padding-left/right: 12px (exception — between sm 8px and md 16px; optimal for separator dot pattern)
+**Phase 3 specific usage notes:**
+- Star `margin-left`: 8px (sm token)
+- Anchor nav separator padding: `0 4px` (xs token) — applied to `::before` pseudo-element
+- Star icon `letter-spacing: 2px` is a typography/rendering property for icon sequences, not a spacing token, and is not part of the scale above
 
 ---
 
@@ -223,6 +224,8 @@ All values inherited from Phase 2. Phase 3 adds only the star rating icon size.
 **Star rating icons:** 0.75rem (12px). Intentionally smaller than surrounding text. Not a declared typography size — icon sizing only.
 
 **Anchor nav links:** 0.875rem (14px) — between tier label (13px) and body (16px). Secondary navigation, should read quieter than body prose.
+
+**Note:** The 16px body and 18px book-entry-title are only 2px apart. This is a Phase 2 locked decision inherited here — not changed in Phase 3.
 
 ---
 
@@ -252,7 +255,7 @@ All changes appended to `assets/css/_reading-list.scss`. Phase 1/2 anchor nav ca
 ```scss
 // Star ratings — inline with title
 .single .content .book-entry__rating {
-    margin-left: 6px;
+    margin-left: 8px; // sm token (8px)
     vertical-align: middle;
     display: inline;
 }
@@ -260,7 +263,7 @@ All changes appended to `assets/css/_reading-list.scss`. Phase 1/2 anchor nav ca
 .single .content .book-entry__rating .fa-star {
     font-size: 0.75rem;
     color: $single-link-color;
-    letter-spacing: 2px;
+    letter-spacing: 2px; // rendering/optical property — not a spacing token
 }
 
 // Anchor nav — plain text links with separator dots
@@ -281,7 +284,7 @@ All changes appended to `assets/css/_reading-list.scss`. Phase 1/2 anchor nav ca
 .single .content > ul:first-of-type li:not(:first-child)::before {
     content: "·";
     color: $global-font-secondary-color;
-    padding: 0 4px;
+    padding: 0 4px; // xs token (4px) — separator dot spacing
 }
 
 .single .content > ul:first-of-type li a {
@@ -340,7 +343,7 @@ Auto theme dark mode mirrors the above under `@media (prefers-color-scheme: dark
 
     .single .content > ul:first-of-type li a {
         display: block;
-        padding: 4px 0;
+        padding: 4px 0; // xs token (4px) — mobile tap target vertical spacing
         text-align: left;
     }
 }
