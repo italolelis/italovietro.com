@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 3 context gathered
-last_updated: "2026-04-04T17:19:29.841Z"
-last_activity: 2026-04-03
+status: executing
+stopped_at: Completed 03-features-and-publishing-03-01-PLAN.md
+last_updated: "2026-04-04T18:20:44.261Z"
+last_activity: 2026-04-04
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-03)
 
 **Core value:** A clean, scannable reading list page with star ratings that makes it immediately obvious which books matter most and what Italo is currently reading.
-**Current focus:** Phase 02 — layout-and-content
+**Current focus:** Phase 03 — features-and-publishing
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-04-03
+Phase: 03 (features-and-publishing) — EXECUTING
+Plan: 2 of 2
+Status: Ready to execute
+Last activity: 2026-04-04
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-css-foundation P01 | 8 | 2 tasks | 4 files |
 | Phase 02-layout-and-content P01 | 2 | 2 tasks | 2 files |
 | Phase 02-layout-and-content P02 | 2 | 2 tasks | 2 files |
+| Phase 03-features-and-publishing P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ Recent decisions affecting current work:
 - [Phase 02-layout-and-content]: h4 for book entry title to sit below h2 (category) and h3 (tier) in heading hierarchy
 - [Phase 02-layout-and-content]: Tier labels remain in English for both language files (Must Read / Recommended) — editorial vocabulary, not UI chrome
 - [Phase 02-layout-and-content]: Currently Reading placeholder used for EN/PT files pending Italo's actual current read
+- [Phase 03-features-and-publishing]: rating parameter uses .Get | default empty string + if guard to safely handle absent param and prevent int-empty panic
+- [Phase 03-features-and-publishing]: Anchor nav separator uses ::before pseudo-element with middle-dot U+00B7 for clean editorial look without extra HTML elements
 
 ### Pending Todos
 
@@ -84,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T17:19:29.832Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-features-and-publishing/03-CONTEXT.md
+Last session: 2026-04-04T18:20:44.258Z
+Stopped at: Completed 03-features-and-publishing-03-01-PLAN.md
+Resume file: None

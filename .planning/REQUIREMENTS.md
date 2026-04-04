@@ -17,13 +17,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout (no borders, no hover effects)
 - [x] **LAYOUT-02**: Category sections have clear, consistent headings
-- [ ] **LAYOUT-03**: Anchor-based category navigation at the top of the page
+- [x] **LAYOUT-03**: Anchor-based category navigation at the top of the page
 - [x] **LAYOUT-04**: Layout is mobile-responsive and works with LoveIt theme breakpoints
 
 ### Ratings
 
-- [ ] **RATE-01**: Each book/resource displays a 5-star rating using Font Awesome icons
-- [ ] **RATE-02**: Star ratings are visible and properly colored in both light and dark mode
+- [x] **RATE-01**: Each book/resource displays a 5-star rating using Font Awesome icons
+- [x] **RATE-02**: Star ratings are visible and properly colored in both light and dark mode
 - [ ] **RATE-03**: Consistent tier labels (Essential / Highly Recommended / Worth Reading) align with star ratings
 
 ### Content
@@ -81,10 +81,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-02 | Phase 2 | Complete |
 | CONT-03 | Phase 2 | Complete |
 | CONT-04 | Phase 2 | Complete |
-| RATE-01 | Phase 3 | Pending |
-| RATE-02 | Phase 3 | Pending |
+| RATE-01 | Phase 3 | Complete |
+| RATE-02 | Phase 3 | Complete |
 | RATE-03 | Phase 3 | Pending |
-| LAYOUT-03 | Phase 3 | Pending |
+| LAYOUT-03 | Phase 3 | Complete |
 | LANG-01 | Phase 3 | Pending |
 | LANG-02 | Phase 3 | Pending |
 

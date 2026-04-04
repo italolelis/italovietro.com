@@ -60,10 +60,10 @@ Plans:
   2. Clicking an anchor navigation link at the top of the page scrolls to the correct category section
   3. The English version passes a full visual check: dark mode, star rendering in Chrome/Firefox, anchor clicks, "Currently Reading" visible above the fold on desktop and mobile
   4. The Portuguese version mirrors the English layout and content structure and the site deploys without build errors
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 03-01-PLAN.md — Extend book shortcode with star rating parameter and restyle anchor nav from pills to plain text links
+- [x] 03-01-PLAN.md — Extend book shortcode with star rating parameter and restyle anchor nav from pills to plain text links
 - [ ] 03-02-PLAN.md — Add rating values to all entries in both languages, rename page, set up redirects, update config
 
 **UI hint**: yes
@@ -77,4 +77,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. CSS Foundation | 1/1 | Complete   | 2026-04-03 |
 | 2. Layout and Content | 2/2 | Complete   | 2026-04-03 |
-| 3. Features and Publishing | 0/2 | In progress | - |
+| 3. Features and Publishing | 1/2 | In Progress|  |
