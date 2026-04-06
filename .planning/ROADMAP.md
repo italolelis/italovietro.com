@@ -75,7 +75,7 @@ Plans:
   2. Entries with `type="talk"`, `type="podcast"`, and `type="host"` each receive visually distinct treatment — the difference is observable without inspecting HTML
   3. The page displays three separate sections (Conference Talks, Podcast Appearances, The Critical Channel) with clear headings
   4. The page passes a dark mode visual check and is readable on mobile — no broken layouts or invisible text
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — Create talk shortcode template and speaking page SCSS partial with dark mode and mobile support
@@ -93,11 +93,13 @@ Plans:
   3. Visiting `/speaking/` serves the page; visiting `/talks/` redirects there without a 404
   4. Both the English and Portuguese versions are structurally identical and the site builds without errors
   5. The nav menu in both languages links to `/speaking/` with updated display text
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 05-01: Rewrite intro paragraph and talk descriptions in authentic voice; populate both EN and PT-BR content files using `{{< talk >}}` shortcodes
-- [ ] 05-02: Rename content directory to `speaking/`, add redirect alias from `/talks/`, update `config.toml` menu entries for both languages
+- [ ] 05-01-PLAN.md — Rewrite intro paragraph and all 7 talk descriptions in authentic voice for EN and PT-BR
+- [ ] 05-02-PLAN.md — Rename content directory to speaking/, add redirect aliases, update config.toml menu entries
+
+**UI hint**: yes
 
 ## Progress
 
@@ -109,5 +111,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. CSS Foundation | v1.0 | 1/1 | Complete | 2026-04-03 |
 | 2. Layout and Content | v1.0 | 2/2 | Complete | 2026-04-03 |
 | 3. Features and Publishing | v1.0 | 2/2 | Complete | 2026-04-06 |
-| 4. Shortcode and Layout | v1.1 | 1/2 | In Progress|  |
-| 5. Content and Publishing | v1.1 | 0/2 | Not started | - |
+| 4. Shortcode and Layout | v1.1 | 2/2 | Complete |  |
+| 5. Content and Publishing | v1.1 | 0/2 | In Progress | - |
