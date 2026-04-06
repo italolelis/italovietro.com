@@ -75,10 +75,10 @@ Plans:
   2. Entries with `type="talk"`, `type="podcast"`, and `type="host"` each receive visually distinct treatment — the difference is observable without inspecting HTML
   3. The page displays three separate sections (Conference Talks, Podcast Appearances, The Critical Channel) with clear headings
   4. The page passes a dark mode visual check and is readable on mobile — no broken layouts or invisible text
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 04-01-PLAN.md — Create talk shortcode template and speaking page SCSS partial with dark mode and mobile support
+- [x] 04-01-PLAN.md — Create talk shortcode template and speaking page SCSS partial with dark mode and mobile support
 - [ ] 04-02-PLAN.md — Fix layout template inline styles, create three-section test content, visual verification
 
 **UI hint**: yes
@@ -109,5 +109,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. CSS Foundation | v1.0 | 1/1 | Complete | 2026-04-03 |
 | 2. Layout and Content | v1.0 | 2/2 | Complete | 2026-04-03 |
 | 3. Features and Publishing | v1.0 | 2/2 | Complete | 2026-04-06 |
-| 4. Shortcode and Layout | v1.1 | 0/2 | Not started | - |
+| 4. Shortcode and Layout | v1.1 | 1/2 | In Progress|  |
 | 5. Content and Publishing | v1.1 | 0/2 | Not started | - |

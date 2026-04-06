@@ -7,14 +7,14 @@
 
 ### Shortcode
 
-- [ ] **TALK-01**: A `{{< talk >}}` shortcode renders each entry with title, event, date, and optional video/slides links
-- [ ] **TALK-02**: The shortcode accepts a `type` parameter (talk/podcast/host) that controls visual treatment
-- [ ] **TALK-03**: Description/personal note is passed as shortcode body content
+- [x] **TALK-01**: A `{{< talk >}}` shortcode renders each entry with title, event, date, and optional video/slides links
+- [x] **TALK-02**: The shortcode accepts a `type` parameter (talk/podcast/host) that controls visual treatment
+- [x] **TALK-03**: Description/personal note is passed as shortcode body content
 
 ### Layout
 
 - [ ] **LAYOUT-05**: Conference talks, podcast appearances, and The Critical Channel are rendered as separate sections with clear headings
-- [ ] **LAYOUT-06**: Page styling follows the reading list's typography-driven approach with dark mode and mobile responsive support
+- [x] **LAYOUT-06**: Page styling follows the reading list's typography-driven approach with dark mode and mobile responsive support
 
 ### Content
 
@@ -97,11 +97,11 @@ Deferred. Tracked but not in current roadmap.
 | LAYOUT-03 | Phase 3 | Complete |
 | LANG-01 | Phase 3 | Complete |
 | LANG-02 | Phase 3 | Complete |
-| TALK-01 | Phase 4 | Pending |
-| TALK-02 | Phase 4 | Pending |
-| TALK-03 | Phase 4 | Pending |
+| TALK-01 | Phase 4 | Complete |
+| TALK-02 | Phase 4 | Complete |
+| TALK-03 | Phase 4 | Complete |
 | LAYOUT-05 | Phase 4 | Pending |
-| LAYOUT-06 | Phase 4 | Pending |
+| LAYOUT-06 | Phase 4 | Complete |
 | CONT-05 | Phase 5 | Pending |
 | CONT-06 | Phase 5 | Pending |
 | PUB-01 | Phase 5 | Pending |
