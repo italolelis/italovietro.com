@@ -1,0 +1,33 @@
+{{- /* layouts/shortcodes/talk.html */ -}}
+{{- /* Parameters: title (required), event (required), date (required), type (required), video_url (optional), slides_url (optional) */ -}}
+{{- $title     := .Get "title" -}}
+{{- $event     := .Get "event" -}}
+{{- $date      := .Get "date" -}}
+{{- $type      := .Get "type" | default "talk" -}}
+{{- $videoUrl  := .Get "video_url" | default "" -}}
+{{- $slidesUrl := .Get "slides_url" | default "" -}}
+{{- $inner     := trim .Inner "\n" | .Page.RenderString -}}
+{{- $icon := "fa-microphone" -}}
+{{- if eq $type "podcast" -}}{{- $icon = "fa-podcast" -}}{{- end -}}
+{{- if eq $type "host" -}}{{- $icon = "fa-headphones" -}}{{- end -}}
+<div class="talk-entry talk-entry--{{ $type }}">
+    <div class="talk-entry__header">
+        <h4 class="talk-entry__title">
+            <span class="talk-entry__type-icon"><i class="fas {{ $icon }}"></i></span>{{ $title }}
+        </h4>
+        <div class="talk-entry__meta">
+            <span class="talk-entry__event">{{ $event }}</span>
+            <span class="talk-entry__date">{{ $date }}</span>
+            {{- if or $videoUrl $slidesUrl }}
+            <span class="talk-entry__links">
+                {{- if $videoUrl }}<a href="{{ $videoUrl }}" target="_blank" rel="noopener noreferrer">Watch</a>{{- end }}
+                {{- if and $videoUrl $slidesUrl }} &middot; {{- end }}
+                {{- if $slidesUrl }}<a href="{{ $slidesUrl }}" target="_blank" rel="noopener noreferrer">Slides</a>{{- end }}
+            </span>
+            {{- end }}
+        </div>
+    </div>
+    {{- if $inner }}
+    <div class="talk-entry__description">{{ $inner }}</div>
+    {{- end }}
+</div>
