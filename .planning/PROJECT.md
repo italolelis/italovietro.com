@@ -8,17 +8,14 @@ Italo Vietro's personal website and professional presence, built with Hugo (Love
 
 A clean, personal website that reflects how Italo actually thinks and works. Every page should sound like him, not like a press release.
 
-## Current Milestone: v1.1 Speaking Page Redesign
+## Current State
 
-**Goal:** Transform the talks page from a monolithic markdown file into a structured, shortcode-driven speaking page with typed entries (conference talks, podcast appearances, own podcast) and consistent design matching the reading list.
+Two milestones shipped:
+- **v1.0** Reading list redesigned with `{{< book >}}` shortcode, star ratings, dark mode. Live at `/recommended-reading/`.
+- **v1.1** Speaking page redesigned with `{{< talk >}}` shortcode, typed entries, authentic voice. Live at `/speaking/`.
+- **Homepage** rewritten with thematic structure (People/Teams/Systems) and personal voice.
 
-**Target features:**
-- `{{< talk >}}` shortcode with title, event, date, video_url, slides_url, type params
-- Structured entries replacing manual markdown
-- Type-based visual treatment (talks vs podcast guest vs podcast host)
-- Page renamed to "Speaking" at `/speaking/`
-- Both EN and PT-BR versions
-- SCSS styling matching the reading list's typography-driven approach
+No active milestone. Seeds planted for future work (see `.planning/seeds/`).
 
 ## Requirements
 
@@ -98,4 +95,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-06 — v1.1 Speaking Page Redesign milestone started*
+*Last updated: 2026-04-06 — v1.1 milestone complete, both milestones shipped*
