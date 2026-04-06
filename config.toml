@@ -30,11 +30,11 @@ ignoreLogs = ['shortcode-twitter-getremote']
         title = ""
         weight = 1
       [[languages.en.menu.main]]
-        identifier = "talks"
+        identifier = "speaking"
         pre = ""
         post = ""
-        name = "Talks"
-        url = "/talks/"
+        name = "Speaking"
+        url = "/speaking/"
         title = ""
         weight = 2
     [languages.en.pagination]
@@ -96,7 +96,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         identifier = "palestras"
         pre = ""
         name = "Palestras"
-        url = "/talks/"
+        url = "/palestras/"
         title = ""
         weight = 2
     [languages.pt-br.pagination]

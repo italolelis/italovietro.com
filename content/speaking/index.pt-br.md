@@ -1,8 +1,10 @@
 ---
-title: "Palestras e Podcasts"
+title: "Palestras"
 date: 2019-08-02T11:04:49+08:00
 draft: false
 featuredimage: "/images/speaking.webp"
+slug: "palestras"
+aliases: ["/pt-br/talks/"]
 
 lightgallery: false
 
