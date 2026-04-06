@@ -18,13 +18,13 @@
 
 ### Content
 
-- [ ] **CONT-05**: Talk descriptions are rewritten in Italo's authentic voice (not conference-abstract style)
-- [ ] **CONT-06**: Page intro paragraph sets the tone for the speaking page
+- [x] **CONT-05**: Talk descriptions are rewritten in Italo's authentic voice (not conference-abstract style)
+- [x] **CONT-06**: Page intro paragraph sets the tone for the speaking page
 
 ### Publishing
 
 - [ ] **PUB-01**: Page renamed to "Speaking" at `/speaking/` with redirect from `/talks/`
-- [ ] **PUB-02**: Both EN and PT-BR versions updated with matching structure
+- [x] **PUB-02**: Both EN and PT-BR versions updated with matching structure
 - [ ] **PUB-03**: Config.toml menu entries updated for both languages
 
 ## v1.0 Requirements (Complete)
@@ -102,10 +102,10 @@ Deferred. Tracked but not in current roadmap.
 | TALK-03 | Phase 4 | Complete |
 | LAYOUT-05 | Phase 4 | Complete |
 | LAYOUT-06 | Phase 4 | Complete |
-| CONT-05 | Phase 5 | Pending |
-| CONT-06 | Phase 5 | Pending |
+| CONT-05 | Phase 5 | Complete |
+| CONT-06 | Phase 5 | Complete |
 | PUB-01 | Phase 5 | Pending |
-| PUB-02 | Phase 5 | Pending |
+| PUB-02 | Phase 5 | Complete |
 | PUB-03 | Phase 5 | Pending |
 
 **Coverage:**

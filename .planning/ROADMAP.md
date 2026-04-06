@@ -93,10 +93,10 @@ Plans:
   3. Visiting `/speaking/` serves the page; visiting `/talks/` redirects there without a 404
   4. Both the English and Portuguese versions are structurally identical and the site builds without errors
   5. The nav menu in both languages links to `/speaking/` with updated display text
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 05-01-PLAN.md — Rewrite intro paragraph and all 7 talk descriptions in authentic voice for EN and PT-BR
+- [x] 05-01-PLAN.md — Rewrite intro paragraph and all 7 talk descriptions in authentic voice for EN and PT-BR
 - [ ] 05-02-PLAN.md — Rename content directory to speaking/, add redirect aliases, update config.toml menu entries
 
 **UI hint**: yes
@@ -112,4 +112,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Layout and Content | v1.0 | 2/2 | Complete | 2026-04-03 |
 | 3. Features and Publishing | v1.0 | 2/2 | Complete | 2026-04-06 |
 | 4. Shortcode and Layout | v1.1 | 2/2 | Complete |  |
-| 5. Content and Publishing | v1.1 | 0/2 | In Progress | - |
+| 5. Content and Publishing | v1.1 | 1/2 | In Progress|  |

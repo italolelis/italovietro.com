@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Speaking Page Redesign
-status: verifying
-stopped_at: Phase 5 context gathered
-last_updated: "2026-04-06T20:07:24.592Z"
+status: executing
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-04-06T20:30:28.106Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 4
+  completed_plans: 3
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** A clean, personal website that reflects how Italo actually thinks and works.
-**Current focus:** Phase 04 — shortcode-and-layout
+**Current focus:** Phase 05 — content-and-publishing
 
 ## Current Position
 
-Phase: 5
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 05 (content-and-publishing) — EXECUTING
+Plan: 2 of 2
+Status: Ready to execute
 Last activity: 2026-04-06
 
 Progress: [░░░░░░░░░░] 0%
@@ -49,6 +49,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 04-shortcode-and-layout P01 | 2 | 2 tasks | 4 files |
 | Phase 04-shortcode-and-layout P02 | 30 | 2 tasks | 3 files |
+| Phase 05-content-and-publishing P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,9 @@ Recent decisions affecting current work:
 - [Phase 04-shortcode-and-layout]: Inline styles extracted from layouts/talks/single.html to _speaking.scss per D-07
 - [Phase 04-shortcode-and-layout]: Featured image max-height set to 200px (reduced from 280px after visual review)
 - [Phase 04-shortcode-and-layout]: All inline styles removed from layouts/talks/single.html; SCSS owns all visual rules for the speaking page
+- [Phase 05-content-and-publishing]: Talk titles remain in English in both language versions
+- [Phase 05-content-and-publishing]: Portuguese section headings: Palestras / Participacoes em Podcasts; The Critical Channel kept in English as brand name
+- [Phase 05-content-and-publishing]: Voice pattern for talks: first-person descriptions with personal context and no em dashes
 
 ### Pending Todos
 
@@ -82,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T20:07:24.583Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-content-and-publishing/05-CONTEXT.md
+Last session: 2026-04-06T20:30:28.103Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
