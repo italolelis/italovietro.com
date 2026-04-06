@@ -1,50 +1,36 @@
 ---
 title: "Welcome to My Website"
-description: "Engineering leader, platform architect, and open-source advocate. Building high-performing teams and scalable systems across Europe's leading tech companies."
+description: "Engineering leader who builds teams, breaks monoliths, and occasionally brews a perfect espresso. Head of Engineering at Parloa, writing about systems, leadership, and the messy space between."
 ---
 
 <div class="home-content">
 
 # Hello, I'm Italo Vietro
 
-<p style="font-size: 1.25rem; color: #666; margin: 1.5rem 0 2.5rem;">
-Engineering leader architecting the future of AI-powered customer service at <strong>Parloa</strong>, where we turn complex real-time conversations into reliable experiences for millions of users daily.
+<p class="home-intro">
+I'm Head of Engineering at <strong><a href="https://parloa.com">Parloa</a></strong>, where we build the infrastructure behind real-time AI conversations at scale. I've been building software and teams for 17+ years — from junior dev in Brazil to leading engineering across some of Europe's best-known tech companies.
 </p>
 
 ---
 
-## Engineering for Scale, Leading for Impact
+## What I've learned about teams
 
-I'm currently **Head of Engineering at [Parloa](https://parloa.com)**, architecting the core services behind Europe's leading agentic-AI customer service platform. We're turning complex real-time conversations into fast, reliable experiences for millions of users daily.
+People are harder than distributed systems. At **HelloFresh**, I watched a team of 10 grow to 100+ engineers while we simultaneously replaced a monolithic PHP codebase with cloud-native Go services. The technical migration was the easy part. The hard part was making sure the culture didn't calcify as we scaled — keeping "friday-beers" days as a real thing, not just a slide in the all-hands deck.
 
-But the journey that brought me here started in **Brazil**, where I spent seven formative years going from junior developer to technical lead. Those years taught me that the best systems and teams thrive when knowledge travels faster than code—a principle that has guided every role since.
-
-### Where I've Made Impact
-
-At **[Babbel](https://babbel.com)** as VP of Platform, I rebuilt a global learning engine that quietly serves language lessons across the globe. The challenge wasn't just technical—it was about creating systems that feel invisible when they work perfectly.
-
-Leading engineering at **[Urban Sports Club](https://urbansportsclub.com)**, I established a TechHub in Spain from scratch, tripling our delivery cadence. The secret wasn't working harder—it was replacing ad-hoc heroics with transparent goals and steady, compounding gains.
-
-As **CTO at [Lykon](https://lykon.com)**, I bootstrapped a 40+ microservice health-tech stack while building a culture of open RFCs and blameless post-mortems. Technology choices matter, but culture compounds.
-
-At **[N26](https://n26.com)**, I led 40 engineers across core banking systems, shifting from centralized sign-offs to squad ownership. "You build it, you run it, you own it" became our everyday culture, not just a slogan.
-
-My time at **[HelloFresh](https://hellofresh.com)** took me from Senior Engineer to Head of Engineering, where together with an incredible team we shepherded the leap from monolithic PHP to cloud-native Go services—scaling to 100+ engineers while keeping Fridays as "friday-beers" days, not crunch sessions.
+At **Urban Sports Club**, I built a TechHub in Spain from scratch. No playbook, no prior team, just a mandate to ship faster. What worked wasn't working harder — it was replacing ad-hoc heroics with shared goals and compounding, predictable progress. At **N26**, I led 40 engineers across core banking and pushed hard for squad ownership: "you build it, you run it, you own it" as a lived practice, not a slogan.
 
 ---
 
-## What Drives Me
+## What I've learned about systems
 
-I believe the best engineering leaders build environments where **technical excellence and business impact aren't trade-offs**—they're the same thing.
+Complex systems don't fail loudly — they fail quietly, at 3am, through chains of decisions made years apart. At **Lykon**, I bootstrapped a 40+ microservice health-tech platform from the ground up. That experience taught me that architecture is mostly cultural: the RFC process and blameless post-mortems we built did more for reliability than any single technical choice.
 
-I'm passionate about Go, Kubernetes, platform engineering, and creating cultures where teams ship with confidence. Whether it's designing distributed systems or mentoring future leaders, I focus on solutions that scale both technically and humanly.
+At **Babbel** as VP of Platform, the goal was a learning engine that felt invisible when it worked. Global scale, diverse content types, multiple languages — the best infrastructure is the kind no one notices. I still think about that when I'm designing systems today.
 
 ---
 
 ## Beyond the Code
 
-When I'm not architecting systems, you'll find me tinkering with my homelab, automating everything at home, brewing coffee with precision, strategizing over D&D campaigns, or—most importantly—being a dedicated dad and husband.
-
-I'm deep into home automation and self-hosting—building my own infrastructure at home is where I experiment and learn. Aviation and flight tech still fascinate me, but these days it's more about Kubernetes clusters running in my basement.
+When I'm not thinking about distributed systems, you'll find me managing my homelab (Kubernetes clusters, self-hosted everything), brewing coffee with an amount of precision that my family finds unreasonable, strategizing over D&D campaigns, and being a dedicated dad and husband. The homelab is where I experiment. The coffee is where I focus. The D&D is where I accept that even the best-laid plans fall apart.
 
 </div>

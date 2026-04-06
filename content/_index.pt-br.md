@@ -1,50 +1,36 @@
 ---
 title: "Bem-vindo ao Meu Site"
-description: "Líder de engenharia, arquiteto de plataforma e defensor de código aberto. Construindo equipes de alto desempenho e sistemas escaláveis nas principais empresas de tecnologia da Europa."
+description: "Líder de engenharia que constrói times, quebra monolitos e, às vezes, prepara um espresso perfeito. Head of Engineering na Parloa, escrevendo sobre sistemas, liderança e o espaço bagunçado entre os dois."
 ---
 
 <div class="home-content">
 
 # Olá, Eu sou Italo Vietro
 
-<p style="font-size: 1.25rem; color: #666; margin: 1.5rem 0 2.5rem;">
-Líder de engenharia trabalhando no futuro do atendimento ao cliente com IA na <strong>Parloa</strong>, onde a gente transforma conversas complexas em tempo real em experiências rápidas e confiáveis pra milhões de usuários todo dia.
+<p class="home-intro">
+Sou Head of Engineering na <strong><a href="https://parloa.com">Parloa</a></strong>, onde a gente constrói a infraestrutura por trás de conversas com IA em tempo real e em escala. Estou construindo software e times há 17+ anos — de dev júnior no Brasil a líder de engenharia em algumas das empresas de tecnologia mais conhecidas da Europa.
 </p>
 
 ---
 
-## Escalando Sistemas, Ampliando Impacto
+## O que aprendi sobre times
 
-Hoje sou **Head of Engineering na [Parloa](https://parloa.com)**, cuidando dos serviços principais da maior plataforma de atendimento ao cliente com IA da Europa. A gente transforma conversas complexas em tempo real em experiências rápidas e confiáveis pra milhões de usuários todo dia.
+Pessoas são mais difíceis do que sistemas distribuídos. Na **HelloFresh**, acompanhei um time de 10 crescer pra 100+ engenheiros enquanto substituíamos um monolito PHP por serviços Go cloud-native. A migração técnica foi a parte fácil. A difícil foi garantir que a cultura não engessasse no processo — manter a "friday-beers" como coisa real, não só um slide no all-hands.
 
-Mas a jornada que me trouxe até aqui começou no **Brasil**, onde passei sete anos indo de dev júnior a líder técnico. Esses anos me ensinaram que os melhores sistemas e times funcionam melhor quando o conhecimento circula mais rápido que o código—um princípio que guia tudo que faço desde então.
-
-### Onde Tive Impacto
-
-Na **[Babbel](https://babbel.com)** como VP de Plataforma, reconstruí um motor de aprendizagem global que entrega aulas de idiomas pro mundo todo. O desafio não era só técnico—era criar sistemas que ficam invisíveis quando funcionam bem.
-
-Liderando engenharia no **[Urban Sports Club](https://urbansportsclub.com)**, montei um TechHub na Espanha do zero e tripliquei a cadência de entrega. O segredo não era trabalhar mais—era trocar heroísmo improvisado por metas claras e ganhos consistentes.
-
-Como **CTO na [Lykon](https://lykon.com)**, construí do zero uma stack de health-tech com 40+ microsserviços e criei uma cultura de RFCs abertos e post-mortems sem julgamento. Tecnologia importa, mas cultura multiplica.
-
-Na **[N26](https://n26.com)**, liderei 40 engenheiros nos sistemas bancários principais, mudando de aprovações centralizadas pra squads com autonomia. "You build it, you run it, you own it" virou nossa cultura de verdade, não só um slogan.
-
-Na **[HelloFresh](https://hellofresh.com)** fui de Engenheiro Sênior a Head de Engenharia, onde com um time sensacional lideramos a transição de PHP monolítico pra serviços Go cloud-native—escalando pra 100+ engenheiros e mantendo as sextas como dia de "friday-beers", não de sprint final.
+No **Urban Sports Club**, montei um TechHub na Espanha do zero. Sem manual, sem time pré-existente — só o desafio de entregar mais rápido. O que funcionou não foi trabalhar mais, foi trocar heroísmo improvisado por metas compartilhadas e progresso consistente e previsível. Na **N26**, liderei 40 engenheiros nos sistemas bancários principais e empurrei forte pela autonomia dos squads: "you build it, you run it, you own it" como prática real, não como slogan.
 
 ---
 
-## O Que Me Move
+## O que aprendi sobre sistemas
 
-Acredito que os melhores líderes de engenharia criam ambientes onde **excelência técnica e impacto no negócio não competem**—eles andam juntos.
+Sistemas complexos não falham em voz alta — eles falham em silêncio, às 3 da manhã, por meio de decisões encadeadas tomadas anos antes. Na **Lykon**, construí do zero uma plataforma de health-tech com 40+ microsserviços. Essa experiência me ensinou que arquitetura é, em grande parte, cultura: o processo de RFCs e os post-mortems sem julgamento que criamos fizeram mais pela confiabilidade do que qualquer escolha técnica isolada.
 
-Sou apaixonado por Go, Kubernetes, engenharia de plataforma e criar culturas onde times entregam com confiança. Seja projetando sistemas distribuídos ou mentorando futuros líderes, busco soluções que escalam tanto tecnicamente quanto humanamente.
+Na **Babbel** como VP de Plataforma, o objetivo era um motor de aprendizagem que se tornasse invisível quando funcionasse. Escala global, tipos de conteúdo diversos, múltiplos idiomas — a melhor infraestrutura é aquela que ninguém percebe. Ainda penso nisso quando estou desenhando sistemas hoje.
 
 ---
 
 ## Além do Código
 
-Quando não tô arquitetando sistemas, você me encontra mexendo no meu homelab, automatizando tudo em casa, fazendo café com capricho, bolando estratégias em campanhas de D&D, ou—o mais importante—sendo pai dedicado e marido presente.
-
-Sou viciado em automação residencial e self-hosting—montar minha própria infraestrutura em casa é onde eu experimento e aprendo. Aviação e tecnologia de voo ainda me fascinam, mas hoje em dia é mais sobre clusters Kubernetes rodando no meu porão.
+Quando não estou pensando em sistemas distribuídos, você me encontra gerenciando meu homelab (clusters Kubernetes, self-hosting de tudo), preparando café com uma precisão que minha família acha excessiva, bolando estratégias em campanhas de D&D e sendo pai dedicado e marido presente. O homelab é onde eu experimento. O café é onde eu foco. O D&D é onde eu aceito que até os melhores planos desmoronam.
 
 </div>
