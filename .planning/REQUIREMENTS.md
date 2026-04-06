@@ -24,7 +24,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **RATE-01**: Each book/resource displays a 5-star rating using Font Awesome icons
 - [x] **RATE-02**: Star ratings are visible and properly colored in both light and dark mode
-- [ ] **RATE-03**: Consistent tier labels (Essential / Highly Recommended / Worth Reading) align with star ratings
+- [x] **RATE-03**: Consistent tier labels (Essential / Highly Recommended / Worth Reading) align with star ratings
 
 ### Content
 
@@ -35,8 +35,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Multi-language
 
-- [ ] **LANG-01**: English version fully updated with new layout and features
-- [ ] **LANG-02**: Portuguese version updated to match English layout structure
+- [x] **LANG-01**: English version fully updated with new layout and features
+- [x] **LANG-02**: Portuguese version updated to match English layout structure
 
 ## v2 Requirements
 
@@ -83,10 +83,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-04 | Phase 2 | Complete |
 | RATE-01 | Phase 3 | Complete |
 | RATE-02 | Phase 3 | Complete |
-| RATE-03 | Phase 3 | Pending |
+| RATE-03 | Phase 3 | Complete |
 | LAYOUT-03 | Phase 3 | Complete |
-| LANG-01 | Phase 3 | Pending |
-| LANG-02 | Phase 3 | Pending |
+| LANG-01 | Phase 3 | Complete |
+| LANG-02 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 16 total
