@@ -97,22 +97,22 @@ Deferred. Tracked but not in current roadmap.
 | LAYOUT-03 | Phase 3 | Complete |
 | LANG-01 | Phase 3 | Complete |
 | LANG-02 | Phase 3 | Complete |
-| TALK-01 | TBD | Pending |
-| TALK-02 | TBD | Pending |
-| TALK-03 | TBD | Pending |
-| LAYOUT-05 | TBD | Pending |
-| LAYOUT-06 | TBD | Pending |
-| CONT-05 | TBD | Pending |
-| CONT-06 | TBD | Pending |
-| PUB-01 | TBD | Pending |
-| PUB-02 | TBD | Pending |
-| PUB-03 | TBD | Pending |
+| TALK-01 | Phase 4 | Pending |
+| TALK-02 | Phase 4 | Pending |
+| TALK-03 | Phase 4 | Pending |
+| LAYOUT-05 | Phase 4 | Pending |
+| LAYOUT-06 | Phase 4 | Pending |
+| CONT-05 | Phase 5 | Pending |
+| CONT-06 | Phase 5 | Pending |
+| PUB-01 | Phase 5 | Pending |
+| PUB-02 | Phase 5 | Pending |
+| PUB-03 | Phase 5 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 10 total
-- Mapped to phases: 0 (roadmap pending)
-- Unmapped: 10
+- Mapped to phases: 10/10
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-03*
-*Last updated: 2026-04-06 — v1.1 requirements added*
+*Last updated: 2026-04-06 — v1.1 roadmap created, all 10 requirements mapped*
