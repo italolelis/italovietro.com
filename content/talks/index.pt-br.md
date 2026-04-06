@@ -10,57 +10,38 @@ math:
   enable: false
 ---
 
-## Palestras Recentes
+Falar em público e gravarmos podcasts e como processo o que aprendi. Falo sobre os problemas que me tiraram o sono: decisoes de infraestrutura, resiliencia de sistemas, crescimento como lideranca tecnica, e construcao de culturas onde as pessoas conseguem dar o melhor de si. A maioria dessas palestras veio de dor real. Espero que poupe alguem de parte dessa dor.
 
-### Do custo ao impacto: Liderando através de decisões de investimento em infraestrutura
+## Palestras
 
-Líderes de engenharia frequentemente se encontram em uma encruzilhada quando se trata de decisões de investimento em infraestrutura. A pressão para entregar valor imediato aos negócios enquanto se constrói uma base técnica sustentável pode criar uma tensão significativa. Esta palestra explora como navegar essas decisões complexas, equilibrando necessidades de negócio de curto prazo com a saúde técnica de longo prazo.
+{{< talk title="From cost to impact: Leading through infrastructure investment decisions" event="LeadingEng Berlin 2024" date="November 2024" type="talk" video_url="https://leaddev.com/leadership/from-cost-to-impact-leading-through-infrastructure-investment-decisions" >}}
+Como Head of Engineering, eu vivia tendo a mesma conversa inconveniente: justificar gastos de infraestrutura para o negocio. Fui me cansando de perder esses argumentos porque estava usando a linguagem errada. Essa palestra e sobre reencadrar investimento em infraestrutura como impacto no negocio, nao como centro de custo. Levei anos de erros para acertar esse enquadramento.
+{{< /talk >}}
 
-Compartilho frameworks e experiências do mundo real sobre como avaliar investimentos em infraestrutura, comunicar seu valor aos stakeholders e construir uma cultura onde excelência técnica e impacto nos negócios andam de mãos dadas.
+{{< talk title="Designing for failure" event="Golang Poland Meetup 2020" date="November 2020" type="talk" video_url="https://www.youtube.com/watch?v=BOn3R41UrV8&feature=youtu.be" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
+Aprendi sobre falhas do jeito dificil, construindo sistemas de alta carga para o governo brasileiro. Quando milhoes de registros de empresas dependem da sua plataforma, "deve estar ok" nao e uma decisao de arquitetura. Essa palestra cobre os padroes que eu queria ter conhecido antes: circuit breakers, bulkheads, e como os principios de SRE se traduzem em sistemas reais de producao.
+{{< /talk >}}
 
-[Detalhes da palestra e vídeo](https://leaddev.com/leadership/from-cost-to-impact-leading-through-infrastructure-investment-decisions) apresentada no **LeadingEng Berlin 2024**, Berlim, Alemanha.
+{{< talk title="Discovering the tech lead in you" event="Conference" date="2020" type="talk" slides_url="https://github.com/italolelis/talks/tree/master/talks/discovering-the-tech-lead-in-you" >}}
+Ninguem te fala como e solitario o papel de tech lead, especialmente em empresas menores. Um dia voce esta escrevendo codigo, no outro e responsavel por coisas que nao controla totalmente. Essa palestra e o que eu gostaria que alguem tivesse me dito quando fiz essa transicao. As partes dificeis, as surpreendentes, e como parar de sentir que esta indo na sorte.
+{{< /talk >}}
 
----
+{{< talk title="Revealing the world of service meshes" event="Conference" date="2019" type="talk" slides_url="https://github.com/italolelis/talks/tree/master/talks/revealing-the-world-of-service-meshes" >}}
+Service meshes estavam em todo lugar em 2019. Todo mundo estava adotando, e eu queria cortar o hype. Tinha rodado em producao e tinha opiniao formada. Essa palestra e uma visao honesta do que service meshes realmente resolvem, onde te prejudicam, e como decidir se voce realmente precisa de uma.
+{{< /talk >}}
 
-## Episódios de Podcast
+{{< talk title="Building hexagonal architecture Go applications" event="Conference" date="2019" type="talk" slides_url="https://github.com/italolelis/talks/tree/master/talks/hexagonal-architecture" >}}
+Quando comecei a escrever Go a serio, vivia travando na mesma batalha: como manter uma base de codigo crescente sem que ela colapsasse sob o proprio peso? Arquitetura hexagonal me deu a resposta. Essa palestra e sobre aplicar isso especificamente em Go. Pratica, opinativa, e baseada em codigo que eu realmente coloquei em producao.
+{{< /talk >}}
 
-* [Building an Elite Engineering Culture](https://open.spotify.com/episode/2QwC5SWr7UoPCdLXCFzfUQ?si=383ff6c465c645e8) - The Ventellect Podcast 2023. Uma discussão profunda sobre construção de times de engenharia de alto desempenho e fomento de uma cultura de excelência.
+## Participacoes em Podcasts
 
-* [The critical channel](https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/) - Sou co-host no The Critical Channel. Falamos sobre liderança, cultura, engenharia e muito mais.
+{{< talk title="Building an Elite Engineering Culture" event="The Ventellect Podcast" date="2023" type="podcast" video_url="https://open.spotify.com/episode/2QwC5SWr7UoPCdLXCFzfUQ?si=383ff6c465c645e8" >}}
+O apresentador me questionou sobre o que "elite" significa na pratica, e gostei disso. Falamos sobre seguranca psicologica, como times de alto desempenho realmente se formam (nao e pelo processo de contratacao, na maioria das vezes), e por que a cultura que voce tem com 20 engenheiros nao sobrevive ate 200 sem um trabalho intencional.
+{{< /talk >}}
 
----
+## The Critical Channel
 
-## Palestras de Conferências Anteriores
-
-### Designing for failure
-
-Recentemente, discutimos falhas e resiliência em uma arquitetura de sistemas distribuídos. Infelizmente, a falha tem sido negligenciada há bastante tempo em nossa indústria. Os sistemas se tornaram muito mais complexos e desafiadores, especialmente na era do Kubernetes. Com toda essa nova complexidade vem a pergunta: como podemos projetar sistemas para serem resilientes e prontos para falhar? Isso é algo que sistemas de missão crítica tiveram que pensar primeiro, mas muitos serviços (até hoje) negligenciam a importância disso. Existem muitos conceitos que podemos aprender e usar de outros campos como eletrônica, aviação ou indústrias navais que nos ajudarão a estar preparados para o inesperado.
-
-Nesta palestra, gostaria de falar sobre como projetar um sistema para falhas. Quais armadilhas e pegadinhas devemos estar preparados em um ambiente de microsserviços? Como os princípios SRE podem nos ajudar a chegar lá? E o mais importante, como colocamos isso em prática?
-
-[Gravação](https://www.youtube.com/watch?v=BOn3R41UrV8&feature=youtu.be) e [slides](https://github.com/italolelis/talks/tree/master/talks/designing-for-failure). Apresentada pela última vez no [Golang Poland Meetup 2020](https://www.meetup.com/Golang-Poland/events/273948416/).
-
-Também apresentada em:
-* [Golab 2019](https://youtu.be/QWRPWb1Tzqs), Florença, Itália
-* [GoDays 2019](https://youtu.be/DKhC_XH8fDs), Berlim, Alemanha
-* [Golang Piter](https://youtu.be/BOn3R41UrV8), São Petersburgo, Rússia
-
-### Descobrindo o tech lead em você
-
-Quando você transita de um papel de desenvolvedor para tech lead, você percebe o quão solitário é, principalmente se você trabalha em uma empresa menor. Suas responsabilidades e accountability crescem, e quando você tem dúvidas, você não tem muitas pessoas para buscar ajuda. O que exatamente significa ser um tech lead? Quais são os problemas que você terá que resolver neste papel? Como você pode melhorar nisso? Nesta palestra, gostaria de compartilhar essa experiência com você e, espero, lançar alguma luz sobre esta nova jornada que você está passando (mesmo que você já seja um tech lead).
-
-[Outline](https://github.com/italolelis/talks/tree/master/talks/discovering-the-tech-lead-in-you).
-
-### Revelando o mundo das service meshes
-
-Engenharia de software é um mundo em constante mudança. Fomos de monólitos para SOA para microsserviços e agora lambda. Começamos simples, 5 serviços, depois 10 serviços, 100, e agora vemos empresas com mais de 2000 serviços. As tecnologias de service mesh ganharam muito interesse nos últimos anos, e empresas de alto tráfego começaram a adicionar uma service mesh às suas aplicações de produção. Mas o que é uma service mesh, exatamente? E por que é relevante para você?
-
-Quero explorar os altos e baixos de usar uma service mesh nesta palestra. Meu objetivo é garantir que você esteja bem informado para tomar uma decisão inteligente se você quer/precisa usar uma service mesh.
-
-[Slides](https://github.com/italolelis/talks/tree/master/talks/revealing-the-world-of-service-meshes).
-
-### Construindo aplicações Go com arquitetura hexagonal
-
-Você já se pegou pensando sobre como deveria estruturar seu código? E que tipo de arquitetura você deveria seguir? Se você vem de linguagens orientadas a objetos, geralmente, você escolherá alguns modelos clássicos como MVC ou em Camadas. Em Go, tipicamente usamos uma arquitetura de arquivo plano e tentamos estruturá-la logicamente, seguindo o Go idiomático. E se houver algo que irá encorajá-lo a replicar o domínio da sua empresa, ganhar mais manutenibilidade e ser mais fácil de testar? Gostaria de trazer a arquitetura hexagonal em Go, mostrando como podemos tornar projetos mais sustentáveis, testáveis e fáceis de entender.
-
-[Slides](https://github.com/italolelis/talks/tree/master/talks/hexagonal-architecture).
+{{< talk title="The Critical Channel" event="criticalchannel.io" date="Ongoing" type="host" video_url="https://www.listennotes.com/podcasts/the-critical-channel-criticalchannelio-UIiaVfJRxrs/" >}}
+Comecei esse podcast porque existia uma conversa que eu queria ter e que nao existia em lugar nenhum. A realidade bagunçada da liderança em engenharia. O que acontece nas entrelinhas dos posts do LinkedIn. Meu co-host e eu falamos sobre cultura, decisoes dificeis, disfuncao organizacional, e as coisas que sao dificeis de dizer em voz alta no trabalho.
+{{< /talk >}}
