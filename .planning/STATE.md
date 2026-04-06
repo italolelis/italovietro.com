@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 03-features-and-publishing-03-02-PLAN.md
-last_updated: "2026-04-06T09:04:36.015Z"
+stopped_at: "Completed quick task 260406-qzg: rewrite homepage content"
+last_updated: "2026-04-06T17:33:06.566Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 3
@@ -79,6 +79,7 @@ Recent decisions affecting current work:
 - [Phase 03-features-and-publishing]: Page renamed to 'What I'm Reading' / 'O que estou lendo'; old URLs preserved via Hugo aliases
 - [Phase 03-features-and-publishing]: Content directory renamed from my-reading-list to recommended-reading to match new slug
 - [Phase 03-features-and-publishing]: Currently Reading placeholder intentionally has no rating — pending final assessment
+- [Phase quick]: Homepage bio grouped by lessons learned (teams, systems) not company chronology — companies as supporting evidence
 
 ### Pending Todos
 
@@ -91,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T09:01:47.911Z
-Stopped at: Completed 03-features-and-publishing-03-02-PLAN.md
+Last session: 2026-04-06T17:33:03.055Z
+Stopped at: Completed quick task 260406-qzg: rewrite homepage content
 Resume file: None
