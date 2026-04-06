@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Speaking Page Redesign
-status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-04-06T20:30:28.106Z"
+status: verifying
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-04-06T21:07:51.822Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 2
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 Phase: 05 (content-and-publishing) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-06
 
 Progress: [░░░░░░░░░░] 0%
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-shortcode-and-layout P01 | 2 | 2 tasks | 4 files |
 | Phase 04-shortcode-and-layout P02 | 30 | 2 tasks | 3 files |
 | Phase 05-content-and-publishing P01 | 2 | 2 tasks | 2 files |
+| Phase 05-content-and-publishing P02 | 40 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 05-content-and-publishing]: Talk titles remain in English in both language versions
 - [Phase 05-content-and-publishing]: Portuguese section headings: Palestras / Participacoes em Podcasts; The Critical Channel kept in English as brand name
 - [Phase 05-content-and-publishing]: Voice pattern for talks: first-person descriptions with personal context and no em dashes
+- [Phase 05-content-and-publishing]: Layout renamed from layouts/talks/ to layouts/speaking/ to match content directory and URL structure
+- [Phase 05-content-and-publishing]: Talk list corrected: 3 non-existent talks removed, 3 missing talks added (DevTalks Romania, CTO Craft Con, Yeka interview)
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T20:30:28.103Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-04-06T21:07:51.818Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None

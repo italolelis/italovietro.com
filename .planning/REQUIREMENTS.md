@@ -23,9 +23,9 @@
 
 ### Publishing
 
-- [ ] **PUB-01**: Page renamed to "Speaking" at `/speaking/` with redirect from `/talks/`
+- [x] **PUB-01**: Page renamed to "Speaking" at `/speaking/` with redirect from `/talks/`
 - [x] **PUB-02**: Both EN and PT-BR versions updated with matching structure
-- [ ] **PUB-03**: Config.toml menu entries updated for both languages
+- [x] **PUB-03**: Config.toml menu entries updated for both languages
 
 ## v1.0 Requirements (Complete)
 
@@ -104,9 +104,9 @@ Deferred. Tracked but not in current roadmap.
 | LAYOUT-06 | Phase 4 | Complete |
 | CONT-05 | Phase 5 | Complete |
 | CONT-06 | Phase 5 | Complete |
-| PUB-01 | Phase 5 | Pending |
+| PUB-01 | Phase 5 | Complete |
 | PUB-02 | Phase 5 | Complete |
-| PUB-03 | Phase 5 | Pending |
+| PUB-03 | Phase 5 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 10 total

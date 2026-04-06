@@ -97,7 +97,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Rewrite intro paragraph and all 7 talk descriptions in authentic voice for EN and PT-BR
-- [ ] 05-02-PLAN.md — Rename content directory to speaking/, add redirect aliases, update config.toml menu entries
+- [x] 05-02-PLAN.md — Rename content directory to speaking/, add redirect aliases, update config.toml menu entries
 
 **UI hint**: yes
 
