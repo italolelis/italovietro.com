@@ -79,7 +79,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — Create talk shortcode template and speaking page SCSS partial with dark mode and mobile support
-- [ ] 04-02-PLAN.md — Fix layout template inline styles, create three-section test content, visual verification
+- [x] 04-02-PLAN.md — Fix layout template inline styles, create three-section test content, visual verification
 
 **UI hint**: yes
 

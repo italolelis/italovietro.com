@@ -13,7 +13,7 @@
 
 ### Layout
 
-- [ ] **LAYOUT-05**: Conference talks, podcast appearances, and The Critical Channel are rendered as separate sections with clear headings
+- [x] **LAYOUT-05**: Conference talks, podcast appearances, and The Critical Channel are rendered as separate sections with clear headings
 - [x] **LAYOUT-06**: Page styling follows the reading list's typography-driven approach with dark mode and mobile responsive support
 
 ### Content
@@ -100,7 +100,7 @@ Deferred. Tracked but not in current roadmap.
 | TALK-01 | Phase 4 | Complete |
 | TALK-02 | Phase 4 | Complete |
 | TALK-03 | Phase 4 | Complete |
-| LAYOUT-05 | Phase 4 | Pending |
+| LAYOUT-05 | Phase 4 | Complete |
 | LAYOUT-06 | Phase 4 | Complete |
 | CONT-05 | Phase 5 | Pending |
 | CONT-06 | Phase 5 | Pending |

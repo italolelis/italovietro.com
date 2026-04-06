@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Speaking Page Redesign
-status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-04-06T19:49:51.218Z"
+status: verifying
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-04-06T19:59:39.686Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 2
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 Phase: 04 (shortcode-and-layout) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-06
 
 Progress: [░░░░░░░░░░] 0%
@@ -48,6 +48,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 04-shortcode-and-layout P01 | 2 | 2 tasks | 4 files |
+| Phase 04-shortcode-and-layout P02 | 30 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,8 @@ Recent decisions affecting current work:
 - [Roadmap v1.1]: Shortcode + layout grouped into Phase 4; content + publishing grouped into Phase 5
 - [Phase 04-shortcode-and-layout]: Font Awesome icons for type differentiation in talk shortcode: fa-microphone (talk), fa-podcast (podcast), fa-headphones (host)
 - [Phase 04-shortcode-and-layout]: Inline styles extracted from layouts/talks/single.html to _speaking.scss per D-07
+- [Phase 04-shortcode-and-layout]: Featured image max-height set to 200px (reduced from 280px after visual review)
+- [Phase 04-shortcode-and-layout]: All inline styles removed from layouts/talks/single.html; SCSS owns all visual rules for the speaking page
 
 ### Pending Todos
 
@@ -79,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T19:49:51.215Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-04-06T19:59:39.683Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
