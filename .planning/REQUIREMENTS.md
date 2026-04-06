@@ -1,73 +1,83 @@
-# Requirements: Reading List Redesign
+# Requirements: italovietro.com
 
 **Defined:** 2026-04-03
-**Core Value:** A clean, scannable reading list page with star ratings that makes it immediately obvious which books matter most and what Italo is currently reading.
+**Core Value:** A clean, personal website that reflects how Italo actually thinks and works.
 
-## v1 Requirements
+## v1.1 Requirements (Speaking Page Redesign)
 
-Requirements for initial release. Each maps to roadmap phases.
+### Shortcode
 
-### Foundation
-
-- [x] **FOUND-01**: Broken CSS custom property references (`var(--header-title-color)` etc.) are fixed to use actual LoveIt theme variables
-- [x] **FOUND-02**: Inline `<style>` blocks extracted from both language markdown files into `_custom.scss`
-- [x] **FOUND-03**: Dark mode works correctly with `[theme=dark] &` SCSS selectors for all new styles
+- [ ] **TALK-01**: A `{{< talk >}}` shortcode renders each entry with title, event, date, and optional video/slides links
+- [ ] **TALK-02**: The shortcode accepts a `type` parameter (talk/podcast/host) that controls visual treatment
+- [ ] **TALK-03**: Description/personal note is passed as shortcode body content
 
 ### Layout
 
-- [x] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout (no borders, no hover effects)
+- [ ] **LAYOUT-05**: Conference talks, podcast appearances, and The Critical Channel are rendered as separate sections with clear headings
+- [ ] **LAYOUT-06**: Page styling follows the reading list's typography-driven approach with dark mode and mobile responsive support
+
+### Content
+
+- [ ] **CONT-05**: Talk descriptions are rewritten in Italo's authentic voice (not conference-abstract style)
+- [ ] **CONT-06**: Page intro paragraph sets the tone for the speaking page
+
+### Publishing
+
+- [ ] **PUB-01**: Page renamed to "Speaking" at `/speaking/` with redirect from `/talks/`
+- [ ] **PUB-02**: Both EN and PT-BR versions updated with matching structure
+- [ ] **PUB-03**: Config.toml menu entries updated for both languages
+
+## v1.0 Requirements (Complete)
+
+All 16 requirements from v1.0 Reading List Redesign are complete. See MILESTONES.md.
+
+### Foundation (Complete)
+- [x] **FOUND-01**: Broken CSS custom property references fixed to use actual LoveIt theme variables
+- [x] **FOUND-02**: Inline `<style>` blocks extracted from both language markdown files into SCSS
+- [x] **FOUND-03**: Dark mode works correctly with `[theme=dark]` SCSS selectors
+
+### Layout (Complete)
+- [x] **LAYOUT-01**: Card-based design replaced with clean typography-driven layout
 - [x] **LAYOUT-02**: Category sections have clear, consistent headings
 - [x] **LAYOUT-03**: Anchor-based category navigation at the top of the page
 - [x] **LAYOUT-04**: Layout is mobile-responsive and works with LoveIt theme breakpoints
 
-### Ratings
-
+### Ratings (Complete)
 - [x] **RATE-01**: Each book/resource displays a 5-star rating using Font Awesome icons
 - [x] **RATE-02**: Star ratings are visible and properly colored in both light and dark mode
-- [x] **RATE-03**: Consistent tier labels (Essential / Highly Recommended / Worth Reading) align with star ratings
+- [x] **RATE-03**: Consistent tier labels align with star ratings
 
-### Content
-
-- [x] **CONT-01**: "Currently Reading" section displayed prominently at the top with 1-3 entries
+### Content (Complete)
+- [x] **CONT-01**: "Currently Reading" section displayed prominently at the top
 - [x] **CONT-02**: Each "Currently Reading" entry has title, author, and a personal note
 - [x] **CONT-03**: Page-level intro paragraph preserved
-- [x] **CONT-04**: Per-entry descriptions preserved and consistent across all entries
+- [x] **CONT-04**: Per-entry descriptions preserved and consistent
 
-### Multi-language
-
-- [x] **LANG-01**: English version fully updated with new layout and features
+### Multi-language (Complete)
+- [x] **LANG-01**: English version fully updated
 - [x] **LANG-02**: Portuguese version updated to match English layout structure
 
-## v2 Requirements
+## Future Requirements
 
-Deferred to future release. Tracked but not in current roadmap.
+Deferred. Tracked but not in current roadmap.
 
-### Content Expansion
-
-- **CEXP-01**: Consolidated book picks from CTO Reading List blog posts merged into main page
-- **CEXP-02**: Page rename/rebrand for shareable-first title (e.g., "Recommended Reading for Engineering Leaders")
+- **CEXP-01**: Consolidated book picks from CTO Reading List blog posts
 - **CEXP-03**: "Last updated" timestamp near top of page
 - **CEXP-04**: "Back to top" links after each section
 
 ## Out of Scope
 
-Explicitly excluded. Documented to prevent scope creep.
-
 | Feature | Reason |
 |---------|--------|
-| Book cover images | Keeps design clean and fast-loading, matches reference style |
-| Interactive filtering/sorting | Unnecessary for list size (<30 items), requires JavaScript |
-| Goodreads integration | External dependency, poor API reliability |
-| Reading progress bars | Gimmicky for professional recommendation page |
-| Comment section / reactions | Content management overhead; DM CTA is sufficient |
-| Separate pages per book | Over-engineering for ~30 entries |
-| Pagination | Single long page with anchor nav is better for this size |
-| Auto-generated reading stats | Requires data model and JS, no reader value |
-| Podcast episode lists | Unsustainable curation; show-level entries sufficient |
+| JSON-LD SpeakingEvent schema | Deferred to SEO milestone (SEED-002) |
+| Talk filtering/search | Unnecessary for <10 entries |
+| Upcoming talks section | Not needed now, can add later |
+| Slides/video embed inline | Links to external resources sufficient |
+| Per-talk dedicated pages | Over-engineering for this content volume |
+| Book cover images | Keeps design clean and fast-loading |
+| Interactive filtering/sorting | Unnecessary for list sizes, requires JavaScript |
 
 ## Traceability
-
-Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -87,12 +97,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LAYOUT-03 | Phase 3 | Complete |
 | LANG-01 | Phase 3 | Complete |
 | LANG-02 | Phase 3 | Complete |
+| TALK-01 | TBD | Pending |
+| TALK-02 | TBD | Pending |
+| TALK-03 | TBD | Pending |
+| LAYOUT-05 | TBD | Pending |
+| LAYOUT-06 | TBD | Pending |
+| CONT-05 | TBD | Pending |
+| CONT-06 | TBD | Pending |
+| PUB-01 | TBD | Pending |
+| PUB-02 | TBD | Pending |
+| PUB-03 | TBD | Pending |
 
 **Coverage:**
-- v1 requirements: 16 total
-- Mapped to phases: 16
-- Unmapped: 0
+- v1.1 requirements: 10 total
+- Mapped to phases: 0 (roadmap pending)
+- Unmapped: 10
 
 ---
 *Requirements defined: 2026-04-03*
-*Last updated: 2026-04-03 after roadmap creation — all 16 requirements mapped*
+*Last updated: 2026-04-06 — v1.1 requirements added*
