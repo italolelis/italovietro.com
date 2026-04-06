@@ -90,6 +90,12 @@ None yet.
 - Phase 1: Verify both GitHub Actions workflows use `hugo-version: 0.153.2` with `extended: true` before adding new SCSS
 - Phase 3: Decide whether page slug changes (affects redirect need); keep `my-reading-list` recommended for URL stability
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260406-qzg | Rewrite homepage content to match authentic voice | 2026-04-06 | ad660c9 | [260406-qzg-rewrite-homepage-content-to-match-authen](./quick/260406-qzg-rewrite-homepage-content-to-match-authen/) |
+
 ## Session Continuity
 
 Last session: 2026-04-06T17:33:03.055Z
