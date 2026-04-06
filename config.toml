@@ -58,7 +58,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         # Home page profile
         [languages.en.params.home.profile]
           enable = true
-          gravatarEmail = "me@italovietro.com"
+          gravatarEmail = ""
           # URL of avatar shown in home page
           avatarURL = "/images/avatar.png"
           # title shown in home page (HTML format is supported)
@@ -116,7 +116,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         rss = 10
         [languages.pt-br.params.home.profile]
           enable = true
-          gravatarEmail = "me@italovietro.com"
+          gravatarEmail = ""
           avatarURL = "/images/avatar.png"
           title = ""
           subtitle = "Engineering Leader 👨‍💼 • Platform Engineering 🚀 • Coffee Lover ☕"
