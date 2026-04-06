@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: verifying
-stopped_at: "Completed quick task 260406-qzg: rewrite homepage content"
-last_updated: "2026-04-06T17:33:06.566Z"
+milestone: v1.1
+milestone_name: speaking-page-redesign
+status: defining-requirements
+stopped_at: "Milestone v1.1 started"
+last_updated: "2026-04-06T18:00:00.000Z"
 last_activity: 2026-04-06
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 5
-  completed_plans: 5
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
   percent: 0
 ---
 
@@ -18,17 +18,17 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-03)
+See: .planning/PROJECT.md (updated 2026-04-06)
 
-**Core value:** A clean, scannable reading list page with star ratings that makes it immediately obvious which books matter most and what Italo is currently reading.
-**Current focus:** Phase 03 — features-and-publishing
+**Core value:** A clean, personal website that reflects how Italo actually thinks and works.
+**Current focus:** Defining requirements for v1.1 Speaking Page Redesign
 
 ## Current Position
 
-Phase: 03
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-04-06
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-06 — Milestone v1.1 started
 
 Progress: [░░░░░░░░░░] 0%
 

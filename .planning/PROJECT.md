@@ -1,24 +1,24 @@
-# italovietro.com — Reading List Redesign
+# italovietro.com — Personal Website
 
 ## What This Is
 
-A personal website and blog built with Hugo (LoveIt theme), serving as Italo Vietro's professional presence. The site features blog posts, talks, and a reading list page. This project focuses on redesigning the reading list into a snappier, more appealing page that Italo can confidently share with colleagues and teammates.
+Italo Vietro's personal website and professional presence, built with Hugo (LoveIt theme). Features blog posts, a speaking page, and a recommended reading list. The site is where Italo shares what he's learned about people, teams, and systems.
 
 ## Core Value
 
-A clean, scannable reading list page with star ratings that makes it immediately obvious which books matter most and what Italo is currently reading.
+A clean, personal website that reflects how Italo actually thinks and works. Every page should sound like him, not like a press release.
 
-## Current Milestone: v1.0 Reading List Redesign
+## Current Milestone: v1.1 Speaking Page Redesign
 
-**Goal:** Transform the existing reading list page from a plain card-based layout into a clean, editorial-style page inspired by Pragmatic Engineer's reading list — with star ratings, a "currently reading" section, and consolidated content from the CTO reading list blog posts.
+**Goal:** Transform the talks page from a monolithic markdown file into a structured, shortcode-driven speaking page with typed entries (conference talks, podcast appearances, own podcast) and consistent design matching the reading list.
 
 **Target features:**
-- Star ratings (5-star scale) for each book
-- "Currently Reading" section prominently at the top
-- Consolidated single page merging reading list + CTO blog post recommendations
-- Clean, scannable typography-driven layout (no cards, no cover images)
-- Anchor-based category navigation
-- Renamed/rebranded page title for better reception
+- `{{< talk >}}` shortcode with title, event, date, video_url, slides_url, type params
+- Structured entries replacing manual markdown
+- Type-based visual treatment (talks vs podcast guest vs podcast host)
+- Page renamed to "Speaking" at `/speaking/`
+- Both EN and PT-BR versions
+- SCSS styling matching the reading list's typography-driven approach
 
 ## Requirements
 
@@ -43,7 +43,10 @@ A clean, scannable reading list page with star ratings that makes it immediately
 
 ### Active
 
-- [ ] Consolidated content from CTO reading list blog posts (deferred to v2)
+- [ ] Speaking page shortcode with structured entries
+- [ ] Type-based rendering (talk/podcast/host)
+- [ ] Page rename to "Speaking" at /speaking/
+- [ ] Both EN and PT-BR versions updated
 
 ### Out of Scope
 
@@ -95,4 +98,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-06 after Phase 3: Features and Publishing completion — v1 milestone complete*
+*Last updated: 2026-04-06 — v1.1 Speaking Page Redesign milestone started*
