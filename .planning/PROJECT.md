@@ -37,12 +37,13 @@ A clean, scannable reading list page with star ratings that makes it immediately
 - ✓ Hugo book shortcode with structured entry format — Validated in Phase 2: Layout and Content
 - ✓ Consistent tier labels (Must Read / Recommended / Worth Your Time) — Validated in Phase 2: Layout and Content
 
+- ✓ Star ratings for each book/resource — Validated in Phase 3: Features and Publishing
+- ✓ Anchor-based category navigation — Validated in Phase 3: Features and Publishing
+- ✓ Page rename/rebrand for shareability — Validated in Phase 3: Features and Publishing ("What I'm Reading" at /recommended-reading/)
+
 ### Active
 
-- [ ] Star ratings for each book/resource
-- [ ] Consolidated content from CTO reading list blog posts
-- [ ] Anchor-based category navigation
-- [ ] Page rename/rebrand for shareability
+- [ ] Consolidated content from CTO reading list blog posts (deferred to v2)
 
 ### Out of Scope
 
@@ -94,4 +95,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-03 after Phase 2: Layout and Content completion*
+*Last updated: 2026-04-06 after Phase 3: Features and Publishing completion — v1 milestone complete*
