@@ -62,7 +62,7 @@ Plans:
 
 </details>
 
-### 🚧 v1.1 Speaking Page Redesign (In Progress)
+### v1.1 Speaking Page Redesign (In Progress)
 
 **Milestone Goal:** Transform the talks page from a monolithic markdown file into a structured, shortcode-driven speaking page with typed entries and consistent design matching the reading list.
 
@@ -75,11 +75,11 @@ Plans:
   2. Entries with `type="talk"`, `type="podcast"`, and `type="host"` each receive visually distinct treatment — the difference is observable without inspecting HTML
   3. The page displays three separate sections (Conference Talks, Podcast Appearances, The Critical Channel) with clear headings
   4. The page passes a dark mode visual check and is readable on mobile — no broken layouts or invisible text
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: Create `{{< talk >}}` shortcode with title, event, date, type, video_url, slides_url, and body parameters
-- [ ] 04-02: Build speaking page layout with three typed sections and apply reading-list-consistent SCSS styling
+- [ ] 04-01-PLAN.md — Create talk shortcode template and speaking page SCSS partial with dark mode and mobile support
+- [ ] 04-02-PLAN.md — Fix layout template inline styles, create three-section test content, visual verification
 
 **UI hint**: yes
 
