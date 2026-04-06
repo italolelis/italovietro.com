@@ -48,4 +48,21 @@
     }
 }
 
+// Homepage intro paragraph -- replaces inline style on <p class="home-intro">
+.home-intro {
+    font-size: 1.25rem;
+    color: #666;
+    margin: 1.5rem 0 2.5rem;
+}
+
+[theme=dark] .home-intro {
+    color: #aaa;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .home-intro {
+        color: #aaa;
+    }
+}
+
 @import "reading-list";
