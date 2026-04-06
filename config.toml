@@ -64,7 +64,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
           # title shown in home page (HTML format is supported)
           title = ""
           # subtitle shown in home page
-          subtitle = "I build teams, break monoliths, and brew strong coffee"
+          subtitle = "The hardest problems aren't technical."
           # whether to use typeit animation for subtitle
           typeit = true
           # whether to show social links
@@ -119,7 +119,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
           gravatarEmail = ""
           avatarURL = "/images/avatar.png"
           title = ""
-          subtitle = "Construo times, quebro monolitos e faço café forte"
+          subtitle = "Os problemas mais difíceis não são técnicos."
           typeit = true
           social = true
           disclaimer = ""
