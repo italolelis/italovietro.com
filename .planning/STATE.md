@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.1
-milestone_name: speaking-page-redesign
-status: ready-to-plan
-stopped_at: "Roadmap created — Phase 4 ready to plan"
-last_updated: "2026-04-06T18:00:00.000Z"
-last_activity: 2026-04-06
+milestone_name: Speaking Page Redesign
+status: planning
+stopped_at: Phase 4 context gathered
+last_updated: "2026-04-06T19:35:48.305Z"
+last_activity: 2026-04-06 — Roadmap created for v1.1 (2 phases, 10 requirements)
 progress:
   total_phases: 2
   completed_phases: 0
-  total_plans: 4
+  total_plans: 0
   completed_plans: 0
   percent: 0
 ---
@@ -76,6 +76,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T18:00:00.000Z
-Stopped at: Roadmap created for v1.1 Speaking Page Redesign
-Resume file: None
+Last session: 2026-04-06T19:35:48.295Z
+Stopped at: Phase 4 context gathered
+Resume file: .planning/phases/04-shortcode-and-layout/04-CONTEXT.md
