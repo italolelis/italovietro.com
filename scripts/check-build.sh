@@ -123,8 +123,17 @@ else
     bad "logo is small enough to be a real vector (got $(wc -c < "$LOGO") bytes, ceiling 4096)"
 fi
 
-echo 'Cookie banner'
-contains "$EN_HOME" '#292a2d' 'banner uses the dark surface, not the theme blue'
+# The banner is gone because nothing sets cookies any more. These assert it
+# stays gone: re-enabling it would silently pull two jsDelivr requests back and
+# ask visitors to consent to storage that no longer exists.
+#
+# Asserted against the pages, not the whole output: the theme's bundled JS
+# contains the cookieconsent initialiser unconditionally and never runs it
+# unless the page injects a config. A `nowhere` check would fail on that bundle
+# forever and prove nothing.
+echo 'Cookie banner removed'
+absent_from "$EN_HOME" 'cookieconsent' 'en pages neither load nor configure the consent library'
+absent_from "$PT_HOME" 'cookieconsent' 'pt-br pages neither load nor configure it either'
 absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
 
 # Analytics is the one thing on the site with no visible symptom when it breaks:

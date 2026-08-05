@@ -343,26 +343,23 @@ ignoreLogs = ['shortcode-twitter-getremote']
       speedInsights = true
 
   # Cookie consent config
+  #
+  # Off, because there is nothing left to consent to. The banner existed for the
+  # Google tag; with that gone the site sets no cookies at all -- verified: no
+  # Set-Cookie header, and document.cookie appears nowhere in the built output.
+  # Vercel Web Analytics and Speed Insights are cookieless and collect no PII.
+  #
+  # The only client-side storage left is localStorage in the theme's JS, holding
+  # the light/dark preference the visitor set themselves.
+  #
+  # Disabling this also drops two third-party requests to jsDelivr for the
+  # cookieconsent library's CSS and JS.
+  #
+  # The banner's palette settings are removed rather than left dead. If it is
+  # ever re-enabled, recover them from git history -- they were tuned to fix a
+  # 2.72:1 contrast failure in the theme's default #1aa3ff banner.
   [params.cookieconsent]
-    enable = true
-    # text strings used for Cookie consent banner
-    [params.cookieconsent.content]
-      message = ""
-      dismiss = ""
-      link = ""
-    # Banner colours, overriding the theme default of a #1aa3ff popup, which
-    # was both off-palette and failing WCAG AA -- its white text measured
-    # 2.72:1. A dark surface lets the banner recede while the amber button
-    # carries the call to action, matching the accent everywhere else.
-    # Ratios measured: text 11.43:1, link 6.68:1, button text 8.14:1.
-    [params.cookieconsent.palette]
-      [params.cookieconsent.palette.popup]
-        background = "#292a2d"
-        text = "#e7e5e4"
-        link = "#f59e0b"
-      [params.cookieconsent.palette.button]
-        background = "#f59e0b"
-        text = "#1c1917"
+    enable = false
 
   # CDN config for third-party library files
   [params.cdn]
