@@ -9,3 +9,6 @@ gatsby-starter-lumen.iml
 # Hugo
 resources/
 .hugo_build.lock
+
+# Vercel build output / local project link
+.vercel/

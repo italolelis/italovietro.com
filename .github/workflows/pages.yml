@@ -1,4 +1,13 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
+# SUPERSEDED by deploy-vercel.yml -- but deliberately still running.
+#
+# italovietro.com DNS still points at GitHub Pages. Deleting this workflow
+# before the DNS cutover would freeze the live site at the last Pages build
+# while master moved on. Delete it once DNS resolves to Vercel and a production
+# deploy there has been verified.
+#
+# Note this workflow has no equivalent of the "Assert build output" gate that
+# deploy-vercel.yml runs, so while both are live, Pages can publish output the
+# assertions would have rejected.
 name: Deploy Hugo site to Pages
 
 on:

@@ -1,23 +1,34 @@
-name: PR Checks
+name: Deploy to Vercel
+
+# Actions builds, Vercel hosts.
+#
+# The build happens here rather than on Vercel for one reason: the post-build
+# assertions in scripts/check-build.sh gate production. If an assertion fails,
+# the deploy step never runs. Letting Vercel's own Git integration build would
+# publish whatever is on master regardless of whether those checks passed, so
+# that integration is disabled in vercel.json.
+#
+# Vercel receives finished output via the Build Output API and runs no build of
+# its own, which also means the Hugo version here is the only one that matters.
 
 on:
-  pull_request:
+  push:
     branches: ["master"]
+  workflow_dispatch:
 
-# Cancel in-progress runs when a new workflow with the same group name is triggered
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  build-check:
-    name: Build Check
+  deploy:
+    name: Build, assert, deploy
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
     env:
       HUGO_VERSION: 0.153.2
-      # Declared at job level, not step level: a step's own `env` block is not
-      # reliably readable from that same step's `if` condition.
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
@@ -58,36 +69,19 @@ jobs:
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
-        run: |
-          hugo \
-            --gc \
-            --minify
+        run: hugo --gc --minify
 
-      - name: Check for build warnings
-        run: |
-          if [ -s hugo-build.log ]; then
-            echo "⚠️ Build warnings found:"
-            cat hugo-build.log
-          fi
-
+      # The gate. Nothing below this runs if an assertion fails.
       - name: Assert build output
         run: ./scripts/check-build.sh public
 
-      # Preview deploys are the reason for moving off Pages, so they run from
-      # the same output the production deploy uses -- via the same script -- and
-      # only after the assertions above pass.
-      #
-      # Skipped rather than failed when the Vercel secrets are absent, so the
-      # build check keeps working for anyone without deploy access.
-      - name: Deploy preview to Vercel
-        id: preview
-        if: env.VERCEL_TOKEN != ''
+      - name: Prepare Vercel build output
+        run: .github/scripts/vercel-output.sh
+
+      - name: Deploy to Vercel
+        id: deploy
         run: |
-          .github/scripts/vercel-output.sh public
-          url=$(npx --yes vercel@latest deploy --prebuilt --token="$VERCEL_TOKEN")
+          url=$(npx --yes vercel@latest deploy --prebuilt --prod \
+            --token="${{ secrets.VERCEL_TOKEN }}")
           echo "url=$url" >> "$GITHUB_OUTPUT"
-          {
-            echo "### Preview"
-            echo ""
-            echo "$url"
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Deployed to $url" >> "$GITHUB_STEP_SUMMARY"
