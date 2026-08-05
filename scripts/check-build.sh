@@ -76,6 +76,7 @@ EN_HOME="$PUBLIC/index.html"
 PT_HOME="$PUBLIC/pt-br/index.html"
 EN_SPEAKING="$PUBLIC/speaking/index.html"
 PT_SPEAKING="$PUBLIC/pt-br/palestras/index.html"
+EN_ARCHIVE="$PUBLIC/posts/index.html"
 EN_READING="$PUBLIC/recommended-reading/index.html"
 PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
@@ -121,6 +122,14 @@ contains "$PT_HOME" '/pt-br/posts/' 'pt-br homepage links to the writing archive
 contains "$EN_HOME" '>Writing<' 'Writing appears in the en nav'
 contains "$PT_HOME" '>Artigos<' 'Artigos appears in the pt-br nav'
 contains "$EN_HOME" 'home-route__name' 'the homepage route list renders'
+contains "$EN_HOME" '>Reading<' 'nav uses the short parallel label, not the sentence fragment'
+
+# The archive page showed link-and-date rows and nothing else, while every post
+# already carried a description in front matter. These guard the substance.
+echo 'Writing archive has substance'
+contains "$EN_ARCHIVE" 'archive-item__desc' 'archive entries show their descriptions'
+contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
+absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
 
 echo 'Reading list'
 nowhere '[Book Title]' 'the placeholder entry appears nowhere'

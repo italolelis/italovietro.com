@@ -35,7 +35,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "What I'm Reading"
+        name = "Reading"
         url = "/recommended-reading/"
         title = ""
         weight = 2
@@ -106,7 +106,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "O que estou lendo"
+        name = "Leituras"
         url = "/leituras-recomendadas/"
         title = ""
         weight = 2
@@ -200,8 +200,9 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.section]
     # special amount of posts in each section page
     paginate = 20
-    # date format (month and day)
-    dateFormat = "01-02"
+    # The archive groups by year, so the year is already on screen. "January 2"
+    # reads as a date; "01-02" reads as a code.
+    dateFormat = "January 2"
     # amount of RSS pages
     rss = 10
 
