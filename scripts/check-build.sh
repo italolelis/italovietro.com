@@ -127,6 +127,15 @@ echo 'Cookie banner'
 contains "$EN_HOME" '#292a2d' 'banner uses the dark surface, not the theme blue'
 absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
 
+# Analytics is the one thing on the site with no visible symptom when it breaks:
+# a dropped script means silently zero data, discovered weeks later.
+echo 'Analytics'
+contains "$EN_HOME" '/_vercel/insights/script.js' 'Vercel Web Analytics script is present'
+contains "$EN_HOME" '/_vercel/speed-insights/script.js' 'Vercel Speed Insights script is present'
+contains "$PT_HOME" '/_vercel/insights/script.js' 'pt-br pages carry the analytics script too'
+nowhere 'googletagmanager.com' 'no Google Analytics tag remains'
+nowhere 'G-KYX115R541' 'the retired Google measurement id appears nowhere'
+
 echo 'Fonts'
 nowhere 'fonts.googleapis.com' 'no reference to the external font host'
 nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'

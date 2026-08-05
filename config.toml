@@ -7,7 +7,6 @@ title = "Italo Vietro"
 enableRobotsTXT = true
 enableGitInfo = true
 enableEmoji = true
-googleAnalytics = "G-KYX115R541"
 
 # Suppress warnings
 ignoreLogs = ['shortcode-twitter-getremote']
@@ -331,14 +330,17 @@ ignoreLogs = ['shortcode-twitter-getremote']
   # Analytics config
   [params.analytics]
     enable = true
-    # Google Analytics
-    [params.analytics.google]
-      id = "G-KYX115R541"
-      anonymizeIP = true
-    # Fathom Analytics
-    [params.analytics.fathom]
-      id = ""
-      server = ""
+    # Vercel Web Analytics and Speed Insights.
+    #
+    # Replaces Google Analytics (was G-KYX115R541). Both are served from Vercel's
+    # edge at /_vercel/*, need no npm package, and are rendered only in production
+    # by layouts/partials/plugin/analytics.html. Both must also be enabled in the
+    # Vercel project dashboard for data to be ingested.
+    #
+    # Unlike the Google tag, these are cookieless and collect no PII.
+    [params.analytics.vercel]
+      webAnalytics = true
+      speedInsights = true
 
   # Cookie consent config
   [params.cookieconsent]
@@ -421,9 +423,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
 
 # Privacy config (https://gohugo.io/about/hugo-and-gdpr/)
 [privacy]
-  # privacy of the Google Analytics (replaced by params.analytics.google)
-  [privacy.googleAnalytics]
-    # ...
+  # No [privacy.googleAnalytics] block: Google Analytics was removed in favour of
+  # Vercel Web Analytics, which is cookieless and sends nothing to Google.
   [privacy.x]
     enableDNT = true
   [privacy.youtube]
