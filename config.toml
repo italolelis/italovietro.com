@@ -210,8 +210,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.list]
     # special amount of posts in each list page
     paginate = 20
-    # date format (month and day)
-    dateFormat = "01-02"
+    # Year-bearing, like the section format. Every dated site in the reference
+    # survey shows the year without exception; "01-02" made a 2021 post read as
+    # if it were published this year.
+    dateFormat = "2006-01-02"
     # amount of RSS pages
     rss = 10
 
