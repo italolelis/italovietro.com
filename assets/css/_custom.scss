@@ -3,8 +3,12 @@
 // 自定义样式
 // ==============================
 /* assets/css/custom.css */
+// Was margin-top: 13rem. That existed to compensate for the theme pushing the
+// profile block down by translateY(16vh) -- two hacks cancelling each other, with
+// the result depending on viewport height. The transform is reset in _home.scss,
+// so this no longer needs to make room for anything.
 .home-content {
-    margin-top: 13rem;
+    margin-top: 2rem;
 }
 
 // Logo styling
@@ -51,6 +55,7 @@
     }
 }
 
+@import "home";
 @import "reading-list";
 @import "speaking";
 @import "interactions";

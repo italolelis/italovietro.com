@@ -20,6 +20,17 @@ ignoreLogs = ['shortcode-twitter-getremote']
     copyright = "italo Vietro."
       
     [languages.en.menu]
+      # Writing was missing entirely. Six published posts sat live and indexed at
+      # /posts/ with nothing linking to them from the nav or the homepage, so a
+      # visitor arriving at the domain had no path to any of them.
+      [[languages.en.menu.main]]
+        identifier = "writing"
+        pre = ""
+        post = ""
+        name = "Writing"
+        url = "/posts/"
+        title = ""
+        weight = 1
       [[languages.en.menu.main]]
         identifier = "reading-list"
         pre = ""
@@ -27,7 +38,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         name = "What I'm Reading"
         url = "/recommended-reading/"
         title = ""
-        weight = 1
+        weight = 2
       [[languages.en.menu.main]]
         identifier = "speaking"
         pre = ""
@@ -35,7 +46,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         name = "Speaking"
         url = "/speaking/"
         title = ""
-        weight = 2
+        weight = 3
     [languages.en.pagination]
       disableAliases = true
       pagerSize = 12
@@ -84,20 +95,28 @@ ignoreLogs = ['shortcode-twitter-getremote']
     copyright = "italovietro"
     [languages.pt-br.menu]
       [[languages.pt-br.menu.main]]
+        identifier = "writing"
+        pre = ""
+        post = ""
+        name = "Artigos"
+        url = "/posts/"
+        title = ""
+        weight = 1
+      [[languages.pt-br.menu.main]]
         identifier = "reading-list"
         pre = ""
         post = ""
         name = "O que estou lendo"
         url = "/leituras-recomendadas/"
         title = ""
-        weight = 1
+        weight = 2
       [[languages.pt-br.menu.main]]
         identifier = "palestras"
         pre = ""
         name = "Palestras"
         url = "/palestras/"
         title = ""
-        weight = 2
+        weight = 3
     [languages.pt-br.pagination]
       disableAliases = true
       pagerSize = 12

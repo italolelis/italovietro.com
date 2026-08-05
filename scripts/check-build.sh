@@ -111,6 +111,17 @@ absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the styleshe
 # that would silently undo it: the placeholder coming back, ratings returning, and
 # entry titles reverting to h4 (which skipped a heading level, because sections
 # here have no subheadings).
+# The highest-value guard on the site. Six published posts sat live at /posts/
+# with nothing in the nav or on the homepage linking to them, so a visitor
+# arriving at the domain could not reach any of them. Nothing about that failure
+# was visible: the posts returned 200, they were indexed, and RSS carried them.
+echo 'Writing is reachable'
+contains "$EN_HOME" '/posts/' 'en homepage links to the writing archive'
+contains "$PT_HOME" '/pt-br/posts/' 'pt-br homepage links to the writing archive'
+contains "$EN_HOME" '>Writing<' 'Writing appears in the en nav'
+contains "$PT_HOME" '>Artigos<' 'Artigos appears in the pt-br nav'
+contains "$EN_HOME" 'home-route__name' 'the homepage route list renders'
+
 echo 'Reading list'
 nowhere '[Book Title]' 'the placeholder entry appears nowhere'
 absent_from "$EN_READING" 'fa-star' 'no star ratings remain'
