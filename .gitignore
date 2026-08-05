@@ -12,3 +12,6 @@ resources/
 
 # Vercel build output / local project link
 .vercel/
+
+# Never commit env files -- appended by `vercel link`, kept deliberately
+.env*

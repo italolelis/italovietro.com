@@ -50,6 +50,11 @@ nowhere() {
     fi
 }
 
+# exists <file> <description>
+exists() {
+    if [ -f "$1" ]; then ok "$2"; else bad "$2 (no such file: $1)"; fi
+}
+
 # absent_from <file> <literal> <description>
 absent_from() {
     local file=$1 needle=$2 desc=$3
@@ -95,6 +100,14 @@ contains "$CSS" '#b45309' 'compiled css carries the light accent'
 contains "$CSS" '#f59e0b' 'compiled css carries the dark accent'
 absent_from "$CSS" '#2d96bd' 'superseded link colour is gone from the stylesheet'
 absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the stylesheet'
+
+# The Vercel routing in .github/scripts/vercel-output.sh sends unmatched paths
+# to these two files by name. If Hugo stopped emitting either, that route would
+# resolve to nothing and the failure would only surface as a broken 404 page in
+# production -- the least likely place anyone looks.
+echo 'Error pages'
+exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'
+exists "$PUBLIC/pt-br/404.html" 'pt-br 404 page exists for the localized route'
 
 echo 'Logo'
 LOGO="$PUBLIC/images/logo.svg"
