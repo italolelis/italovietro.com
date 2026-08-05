@@ -14,7 +14,7 @@ Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parlo
 <nav class="home-routes" aria-label="Seções">
   <a class="home-route" href="/pt-br/posts/">
     <span class="home-route__name">Artigos</span>
-    <span class="home-route__desc">Textos sobre liderança, times e sistemas.</span>
+    <span class="home-route__desc">Textos antigos sobre liderança, times e sistemas.</span>
   </a>
   <a class="home-route" href="/pt-br/leituras-recomendadas/">
     <span class="home-route__name">O que estou lendo</span>

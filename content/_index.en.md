@@ -14,7 +14,7 @@ I'm Senior Director of Engineering at <strong><a href="https://parloa.com">Parlo
 <nav class="home-routes" aria-label="Sections">
   <a class="home-route" href="/posts/">
     <span class="home-route__name">Writing</span>
-    <span class="home-route__desc">Posts on leadership, teams, and systems.</span>
+    <span class="home-route__desc">Older posts on leadership, teams, and systems.</span>
   </a>
   <a class="home-route" href="/recommended-reading/">
     <span class="home-route__name">What I'm Reading</span>
