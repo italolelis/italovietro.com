@@ -7,9 +7,9 @@ draft: false
 ---
 
 
-Sempre acreditei que **o conhecimento viaja mais rápido que o código**. Ao longo de mais de 17 anos, esses livros, newsletters e podcasts moldaram como penso sobre construir sistemas, liderar times e crescer como líder de engenharia.
+Sempre acreditei que **o conhecimento viaja mais rápido que o código**. Ao longo dos anos, esses livros, newsletters e podcasts moldaram como penso sobre construir sistemas, liderar times e crescer como líder de engenharia.
 
-Esta não é uma lista completa—apenas aqueles que ficaram. Os que eu revisito. Os que eu coloco nas mãos das pessoas quando perguntam "o que devo ler?"
+Esta não é uma lista completa, mas apenas os que ficaram comigo. Os que eu revisito. Os que eu coloco nas mãos das pessoas quando perguntam "o que devo ler?"
 
 ---
 

@@ -7,9 +7,9 @@ draft: false
 ---
 
 
-I've always believed that **knowledge travels faster than code**. Over 17+ years, these books, newsletters, and podcasts have shaped how I think about building systems, leading teams, and growing as an engineering leader.
+I've always believed that **knowledge travels faster than code**. Over the years, these books, newsletters, and podcasts have shaped how I think about building systems, leading teams, and growing as an engineering leader.
 
-This isn't a complete list—just the ones that stuck. The ones I return to. The ones I push into people's hands when they ask, "what should I read?"
+This isn't a complete list, but just the ones that stuck with me. The ones I return to. The ones I push into people's hands when they ask, "what should I read?"
 
 ---
 
