@@ -3,8 +3,12 @@
 // 自定义样式
 // ==============================
 /* assets/css/custom.css */
+// Was margin-top: 13rem. That existed to compensate for the theme pushing the
+// profile block down by translateY(16vh) -- two hacks cancelling each other, with
+// the result depending on viewport height. The transform is reset in _home.scss,
+// so this no longer needs to make room for anything.
 .home-content {
-    margin-top: 13rem;
+    margin-top: 2rem;
 }
 
 // Logo styling
@@ -51,6 +55,31 @@
     }
 }
 
+// Bold text carries emphasis by weight, not by a second colour.
+//
+// The theme sets `[theme=dark] .single .content b, strong { color: #ddd }` while
+// leaving bold alone in light mode. That gave dark mode two body text colours --
+// #a9a9b3 at 6.16:1 for prose and #ddd at 10.57:1 for bold -- so every bolded
+// company name in the bio read brighter than the sentence around it. Light mode
+// never had the problem.
+//
+// Body text already clears AA at 6.16:1, so bold comes down to match rather than
+// prose going up. The theme's more specific rule for bold inside links is left
+// intact, so a bolded link still takes the accent.
+[theme=dark] .single .content b,
+[theme=dark] .single .content strong {
+    color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .single .content b,
+    [theme=auto] .single .content strong {
+        color: inherit;
+    }
+}
+
+@import "home";
+@import "archive";
 @import "reading-list";
 @import "speaking";
 @import "interactions";

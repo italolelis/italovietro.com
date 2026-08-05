@@ -1,0 +1,146 @@
+// ==============================
+// Archive (the writing list)
+// ==============================
+//
+// Styled to match the reading list and speaking pages: amber title because it is
+// the link, muted metadata, description at body size. Before this the page had a
+// right-aligned heading, grey titles that did not read as links, numeric dates,
+// and no descriptions at all -- which is why it had no presence next to the other
+// two.
+
+.archive {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+// The theme right-aligns the archive title through `.archive .single-title`.
+// Matching that specificity is required; a bare `.single-title` rule loses.
+.archive .single-title {
+    text-align: left;
+    text-wrap: balance;
+}
+
+.archive-intro p {
+    font-size: 0.9375rem;
+    color: $muted-text-color;
+    margin: 0.5rem 0 0;
+}
+
+// --- Year groups ---------------------------------------------------------
+.archive .group-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $muted-text-color;
+    margin: 3rem 0 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $global-border-color;
+}
+
+// --- Entries -------------------------------------------------------------
+// The theme sets `.archive .archive-item { display: flex; justify-content:
+// space-between }` for its one-line link-and-date layout, plus a 1.5rem left
+// margin. With a description added as a second child, flex laid the header and
+// the description out side by side and squeezed the title into a narrow column.
+// Block stacking is what this markup needs, and the specificity has to match the
+// theme's two-class selector.
+.archive .archive-item {
+    display: block;
+    margin: 0 0 1.75rem;
+}
+
+.archive-item__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+}
+
+.archive-item__title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    margin: 0;
+}
+
+.archive-item__title a {
+    color: $single-link-color;
+    text-decoration: none;
+    transition: color $transition-base;
+}
+
+.archive-item__title a:hover {
+    color: $single-link-hover-color;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.archive-item__date {
+    font-size: 0.8125rem;
+    color: $muted-text-color;
+    // Dates line up as a column when they are the same width.
+    font-variant-numeric: tabular-nums;
+}
+
+.archive-item__desc,
+.archive-item__desc p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: $global-font-color;
+    margin: 0.25rem 0 0;
+}
+
+.archive-item__desc a {
+    color: $single-link-color;
+}
+
+.archive-item__desc a:hover {
+    color: $single-link-hover-color;
+}
+
+// --- Dark ----------------------------------------------------------------
+@mixin archive-dark {
+    .archive-intro p,
+    .archive .group-title,
+    .archive-item__date {
+        color: $muted-text-color-dark;
+    }
+
+    .archive .group-title {
+        border-bottom-color: $global-border-color-dark;
+    }
+
+    .archive-item__title a {
+        color: $single-link-color-dark;
+    }
+
+    .archive-item__title a:hover {
+        color: $single-link-hover-color-dark;
+    }
+
+    .archive-item__desc {
+        color: $global-font-color-dark;
+    }
+}
+
+[theme=dark] {
+    @include archive-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] {
+        @include archive-dark;
+    }
+}
+
+// --- Mobile --------------------------------------------------------------
+@media (max-width: 680px) {
+    .archive .group-title {
+        margin-top: 2.5rem;
+    }
+
+    .archive-item__header {
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+}

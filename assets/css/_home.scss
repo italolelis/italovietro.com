@@ -1,0 +1,188 @@
+// ==============================
+// Home page
+// ==============================
+//
+// The page previously stacked two alignment systems: a centered block of avatar,
+// tagline and social icons, then left-aligned prose underneath. Both reference
+// points for this design commit to one axis -- yegge.ai centres throughout,
+// macwright.com left-aligns throughout. This picks left, because the bio and the
+// section list below are left-aligned and they are the substance.
+//
+// It also led with biography and routed nowhere. Six published posts sat live at
+// /posts/ with nothing linking to them. The route list below is the fix: the
+// homepage now points at the work first, in the manner of yegge.ai's showcase
+// cards, and keeps the bio underneath for anyone who wants it.
+
+.home .home-profile {
+    text-align: left;
+    padding-top: 2rem;
+    margin-bottom: 0;
+
+    // The theme pushes this block down by translateY(16vh) to vertically centre a
+    // profile-style home page. That left roughly 210px of empty space under the
+    // header, and made the gap depend on viewport height, which is why the
+    // content below carried a matching 13rem top margin to compensate. Resetting
+    // the transform removes both halves of that arrangement.
+    transform: none;
+}
+
+// Smaller, and no longer the largest thing on the page. It carries the human
+// signal without becoming the headline.
+//
+// The theme's .5rem padding on the wrapper pushed the avatar 8px right of the
+// text column, so nothing quite lined up on the left edge. Zeroing it puts the
+// portrait, the subtitle, the prose and the route rows on one axis.
+.home .home-avatar {
+    padding: 0;
+}
+
+.home .home-avatar img {
+    width: 88px;
+    height: 88px;
+    margin: 0;
+}
+
+.home .home-subtitle,
+.home .links {
+    padding-left: 0;
+}
+
+.home .home-subtitle {
+    text-align: left;
+    font-size: 1rem;
+    margin: 1rem 0 0;
+}
+
+// Social icons are the least interesting thing here and were the first
+// interactive elements a visitor met. yegge.ai omits them outright; this keeps
+// them, quiet and after the subtitle rather than beneath a centred portrait.
+.home .links {
+    text-align: left;
+    margin-top: 0.75rem;
+}
+
+.home .links a {
+    color: $muted-text-color;
+    font-size: 1rem;
+    margin-right: 0.875rem;
+    transition: color $transition-base;
+}
+
+.home .links a:hover {
+    color: $single-link-color;
+}
+
+// --- Route list ----------------------------------------------------------
+//
+// Three destinations, each with one line saying what is there. Rows rather than
+// cards: a card is a box drawn around text, and at three items the box earns
+// nothing that a rule and some space do not already do.
+.home-routes {
+    display: flex;
+    flex-direction: column;
+    margin: 2.5rem 0 0;
+    border-top: 1px solid $global-border-color;
+}
+
+.home-route {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+    padding: 0.875rem 0.5rem 0.875rem 0;
+    border-bottom: 1px solid $global-border-color;
+    text-decoration: none;
+    transition:
+        background-color $transition-base,
+        padding-left $transition-base;
+}
+
+.home-route__name {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: $single-link-color;
+}
+
+.home-route__desc {
+    font-size: 0.9375rem;
+    color: $muted-text-color;
+}
+
+// Gated to real pointers so a tap does not leave a row stuck in hover state.
+@media (hover: hover) {
+    .home-route:hover {
+        background-color: rgba($single-link-color, 0.06);
+        padding-left: 0.5rem;
+    }
+
+    .home-route:hover .home-route__name {
+        color: $single-link-hover-color;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.home-route:focus-visible {
+    background-color: rgba($single-link-color, 0.06);
+}
+
+// --- Dark ----------------------------------------------------------------
+@mixin home-dark {
+    .home .links a {
+        color: $muted-text-color-dark;
+    }
+
+    .home .links a:hover {
+        color: $single-link-color-dark;
+    }
+
+    .home-routes,
+    .home-route {
+        border-color: $global-border-color-dark;
+    }
+
+    .home-route__name {
+        color: $single-link-color-dark;
+    }
+
+    .home-route__desc {
+        color: $muted-text-color-dark;
+    }
+
+    @media (hover: hover) {
+        .home-route:hover {
+            background-color: rgba($single-link-color-dark, 0.1);
+        }
+
+        .home-route:hover .home-route__name {
+            color: $single-link-hover-color-dark;
+        }
+    }
+
+    .home-route:focus-visible {
+        background-color: rgba($single-link-color-dark, 0.1);
+    }
+}
+
+[theme=dark] {
+    @include home-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] {
+        @include home-dark;
+    }
+}
+
+// --- Mobile --------------------------------------------------------------
+@media (max-width: 680px) {
+    .home .home-avatar img {
+        width: 72px;
+        height: 72px;
+    }
+
+    .home-route {
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+}

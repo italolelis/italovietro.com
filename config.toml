@@ -20,14 +20,25 @@ ignoreLogs = ['shortcode-twitter-getremote']
     copyright = "italo Vietro."
       
     [languages.en.menu]
+      # Writing was missing entirely. Six published posts sat live and indexed at
+      # /posts/ with nothing linking to them from the nav or the homepage, so a
+      # visitor arriving at the domain had no path to any of them.
+      [[languages.en.menu.main]]
+        identifier = "writing"
+        pre = ""
+        post = ""
+        name = "Writing"
+        url = "/posts/"
+        title = ""
+        weight = 1
       [[languages.en.menu.main]]
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "What I'm Reading"
+        name = "Reading"
         url = "/recommended-reading/"
         title = ""
-        weight = 1
+        weight = 2
       [[languages.en.menu.main]]
         identifier = "speaking"
         pre = ""
@@ -35,7 +46,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
         name = "Speaking"
         url = "/speaking/"
         title = ""
-        weight = 2
+        weight = 3
     [languages.en.pagination]
       disableAliases = true
       pagerSize = 12
@@ -84,20 +95,28 @@ ignoreLogs = ['shortcode-twitter-getremote']
     copyright = "italovietro"
     [languages.pt-br.menu]
       [[languages.pt-br.menu.main]]
+        identifier = "writing"
+        pre = ""
+        post = ""
+        name = "Artigos"
+        url = "/posts/"
+        title = ""
+        weight = 1
+      [[languages.pt-br.menu.main]]
         identifier = "reading-list"
         pre = ""
         post = ""
-        name = "O que estou lendo"
+        name = "Leituras"
         url = "/leituras-recomendadas/"
         title = ""
-        weight = 1
+        weight = 2
       [[languages.pt-br.menu.main]]
         identifier = "palestras"
         pre = ""
         name = "Palestras"
         url = "/palestras/"
         title = ""
-        weight = 2
+        weight = 3
     [languages.pt-br.pagination]
       disableAliases = true
       pagerSize = 12
@@ -181,8 +200,9 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.section]
     # special amount of posts in each section page
     paginate = 20
-    # date format (month and day)
-    dateFormat = "01-02"
+    # The archive groups by year, so the year is already on screen. "January 2"
+    # reads as a date; "01-02" reads as a code.
+    dateFormat = "January 2"
     # amount of RSS pages
     rss = 10
 
@@ -190,8 +210,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.list]
     # special amount of posts in each list page
     paginate = 20
-    # date format (month and day)
-    dateFormat = "01-02"
+    # Year-bearing, like the section format. Every dated site in the reference
+    # survey shows the year without exception; "01-02" made a 2021 post read as
+    # if it were published this year.
+    dateFormat = "2006-01-02"
     # amount of RSS pages
     rss = 10
 

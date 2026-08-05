@@ -1,39 +1,78 @@
 // ==============================
 // Reading List Styles
 // ==============================
+//
+// Two entry weights, one accent colour.
+//
+// The page previously gave twenty entries identical visual weight, then added 86
+// amber stars, an amber "#" on every heading, an amber nav strip and amber titles
+// -- four unrelated jobs for one colour, so nothing read as more important than
+// anything else. That, rather than any single style, is what made it feel chaotic.
+//
+// Now: amber marks entry titles, which are the links, and hover states. Section
+// headings, the nav strip and metadata are all quiet by default. Hierarchy comes
+// from size and space instead of from colour.
+//
+// Colours here use the $muted-text-color tokens rather than the theme's
+// $global-font-secondary-color. That variable measures 2.33:1 in light and 2.18:1
+// in dark -- both well under AA -- which is why the old tier labels and author
+// names looked washed out rather than merely subtle.
 
-// Light mode (default)
+// --- Column --------------------------------------------------------------
 .single .content {
     max-width: 800px;
     margin: 0 auto;
 }
 
+// The theme right-aligns the title on "special" pages via
+// `.special .single-title`, which reads as a mistake on a content page. Matching
+// that selector's specificity is required -- a bare `.single-title` rule loses
+// even though it is declared later. Blog posts are unaffected: they are not
+// .special, so their titles were never right-aligned.
+.special .single-title {
+    text-align: left;
+}
+
+// --- Section headings ----------------------------------------------------
 .single .content h2 {
-    font-size: 2rem;
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-wrap: balance;
+    margin-top: 4rem;
+    margin-bottom: 0.5rem;
     padding-bottom: 0.75rem;
-    border-bottom: 3px solid $global-border-color;
+    border-bottom: 1px solid $global-border-color;
     color: $global-font-color;
 }
 
-// Tier labels (h3 within category sections) — per D-08, D-09, LAYOUT-02
-.single .content h3 {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $global-font-secondary-color;
-    margin-top: 32px;
-    margin-bottom: 12px;
+// The theme's JS injects a "#" before each h2, inheriting the link colour. It
+// reads as markdown that failed to render, and it was one of amber's four jobs.
+.single .content > h2 > .header-mark {
+    display: none;
 }
 
-.single .content > ul {
-    padding-left: 0;
-    list-style: none;
+// The line under each section heading.
+//
+// Scoped with :has(.book-entry) so it only applies on this page. Unscoped, it
+// matched `h2 + p` on every .single page -- which on the home page meant the
+// first body paragraph after each "What I've learned about..." heading rendered
+// at 15px and muted while the paragraphs below it stayed at the 16px default.
+// A one-pixel inconsistency, visible, and reported.
+//
+// If :has() is unavailable the rule simply does not apply and these lines render
+// as ordinary paragraphs, which is a safe way to fail.
+.single .content:has(.book-entry) h2 + p {
+    font-size: 0.9375rem;
+    color: $muted-text-color;
+    margin: 0 0 2rem;
 }
 
-.single .content > p:first-of-type {
+// --- Intro ---------------------------------------------------------------
+//
+// Also scoped. It did not reach the home page, whose paragraphs sit inside a
+// .home-content wrapper rather than directly under .content, but it did apply to
+// the speaking page and to every blog post.
+.single .content:has(.book-entry) > p:first-of-type {
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 2rem;
@@ -45,13 +84,21 @@
     border-top: 1px solid $global-border-color;
 }
 
-// Anchor nav — plain text links with separator dots (Phase 3)
+// --- Section nav ---------------------------------------------------------
+//
+// Quiet by default. Four amber links in a row was a stripe of colour competing
+// with the entry titles for no reason -- these are wayfinding, not destinations.
+.single .content > ul {
+    padding-left: 0;
+    list-style: none;
+}
+
 .single .content > ul:first-of-type {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
-    margin: 0 0 2rem 0;
+    margin: 0 0 3rem 0;
 }
 
 .single .content > ul:first-of-type li {
@@ -61,41 +108,37 @@
 
 .single .content > ul:first-of-type li:not(:first-child)::before {
     content: "\00B7";
-    color: $global-font-secondary-color;
-    padding: 0 4px;
+    color: $muted-text-color;
+    padding: 0 6px;
 }
 
 .single .content > ul:first-of-type li a {
     font-size: 0.875rem;
-    color: $single-link-color;
+    color: $muted-text-color;
     text-decoration: none;
     padding: 0;
     background: none;
     border-radius: 0;
     font-weight: 400;
-    transition: color 0.2s ease;
+    transition: color $transition-base;
 }
 
 .single .content > ul:first-of-type li a:hover {
-    color: $single-link-hover-color;
+    color: $single-link-color;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
-// Book entry — typography-driven, no cards (per D-02)
-.single .content .book-entry {
-    margin-bottom: 24px;
-}
-
+// --- Entries, shared -----------------------------------------------------
 .single .content .book-entry__title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-    line-height: 1.3;
+    text-wrap: balance;
+    margin: 0;
 }
 
 .single .content .book-entry__title a {
     color: $single-link-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color $transition-base;
 }
 
 .single .content .book-entry__title a:hover {
@@ -103,136 +146,137 @@
 }
 
 .single .content .book-entry__author {
-    font-size: 0.8125rem;
-    color: $global-font-secondary-color;
-    margin-bottom: 8px;
-    display: block;
+    color: $muted-text-color;
 }
 
 .single .content .book-entry__description {
+    color: $global-font-color;
+    margin: 0;
+}
+
+// --- Compact entries (the default) ---------------------------------------
+//
+// Title and author share a line, which is where the density comes from. Long
+// author lists wrap naturally rather than being pushed out of the row.
+.single .content .book-entry {
+    margin-bottom: 1.75rem;
+}
+
+.single .content .book-entry__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
+}
+
+.single .content .book-entry__title {
     font-size: 1rem;
-    line-height: 1.5;
-    color: $global-font-color;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
-// Star ratings — inline with title (per D-01, D-03, D-04)
-.single .content .book-entry__rating {
-    margin-left: 8px;
-    vertical-align: middle;
-    display: inline;
+.single .content .book-entry__author {
+    font-size: 0.8125rem;
 }
 
-.single .content .book-entry__rating .fa-star {
-    font-size: 0.75rem;
-    color: $single-link-color;
-    letter-spacing: 2px;
+// No separator glyph between title and author. A "·" here orphans itself at the
+// start of the next line whenever a long author list wraps -- "Site Reliability
+// Engineering" has four authors and did exactly that. CSS cannot detect wrapping,
+// so the size and colour difference does the separating instead.
+
+.single .content .book-entry__description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-top: 0.25rem;
 }
 
-// Dark mode
-[theme=dark] .single .content h2 {
-    border-bottom-color: $global-border-color-dark;
-    color: $global-font-color-dark;
+// --- Featured entries ----------------------------------------------------
+//
+// The answer to "what should I read?" gets room to breathe: a bigger title, the
+// author on its own line, and the description at full reading size. An accent
+// edge groups them without turning them into cards.
+.single .content .book-entry--featured {
+    margin-bottom: 2.5rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid $global-border-color;
 }
 
-[theme=dark] .single .content h3 {
-    color: $global-font-secondary-color-dark;
+.single .content .book-entry--featured .book-entry__header {
+    display: block;
 }
 
-[theme=dark] .single .content > hr {
-    border-top-color: $global-border-color-dark;
+.single .content .book-entry--featured .book-entry__title {
+    font-size: 1.3125rem;
+    font-weight: 700;
+    line-height: 1.3;
 }
 
-[theme=dark] .single .content > ul:first-of-type li:not(:first-child)::before {
-    color: $global-font-secondary-color-dark;
+.single .content .book-entry--featured .book-entry__author {
+    display: block;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 }
 
-[theme=dark] .single .content > ul:first-of-type li a {
-    color: $single-link-color-dark;
-    background: none;
+.single .content .book-entry--featured .book-entry__description {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    margin-top: 0.625rem;
 }
 
-[theme=dark] .single .content > ul:first-of-type li a:hover {
-    color: $single-link-hover-color-dark;
-}
-
-[theme=dark] .single .content .book-entry__title a {
-    color: $single-link-color-dark;
-}
-
-[theme=dark] .single .content .book-entry__title a:hover {
-    color: $single-link-hover-color-dark;
-}
-
-[theme=dark] .single .content .book-entry__author {
-    color: $global-font-secondary-color-dark;
-}
-
-[theme=dark] .single .content .book-entry__description {
-    color: $global-font-color-dark;
-}
-
-[theme=dark] .single .content .book-entry__rating .fa-star {
-    color: $single-link-color-dark;
-}
-
-// Auto theme
-[theme=auto] .single .content h2 {
-    border-bottom-color: $global-border-color;
-    color: $global-font-color;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .single .content h2 {
+// --- Dark ----------------------------------------------------------------
+@mixin reading-list-dark {
+    .single .content h2 {
         border-bottom-color: $global-border-color-dark;
         color: $global-font-color-dark;
     }
 
-    [theme=auto] .single .content h3 {
-        color: $global-font-secondary-color-dark;
+    .single .content h2 + p,
+    .single .content > ul:first-of-type li:not(:first-child)::before,
+    .single .content > ul:first-of-type li a,
+    .single .content .book-entry__author {
+        color: $muted-text-color-dark;
     }
 
-    [theme=auto] .single .content > hr {
+    .single .content > ul:first-of-type li a:hover {
+        color: $single-link-color-dark;
+    }
+
+    .single .content > hr {
         border-top-color: $global-border-color-dark;
     }
 
-    [theme=auto] .single .content > ul:first-of-type li:not(:first-child)::before {
-        color: $global-font-secondary-color-dark;
-    }
-
-    [theme=auto] .single .content > ul:first-of-type li a {
-        color: $single-link-color-dark;
-        background: none;
-    }
-
-    [theme=auto] .single .content > ul:first-of-type li a:hover {
-        color: $single-link-hover-color-dark;
-    }
-
-    [theme=auto] .single .content .book-entry__title a {
+    .single .content .book-entry__title a {
         color: $single-link-color-dark;
     }
 
-    [theme=auto] .single .content .book-entry__title a:hover {
+    .single .content .book-entry__title a:hover {
         color: $single-link-hover-color-dark;
     }
 
-    [theme=auto] .single .content .book-entry__author {
-        color: $global-font-secondary-color-dark;
-    }
-
-    [theme=auto] .single .content .book-entry__description {
+    .single .content .book-entry__description {
         color: $global-font-color-dark;
     }
 
-    [theme=auto] .single .content .book-entry__rating .fa-star {
-        color: $single-link-color-dark;
+    .single .content .book-entry--featured {
+        border-left-color: $global-border-color-dark;
     }
 }
 
-// Mobile breakpoint (aligned with LoveIt 680px breakpoint)
+[theme=dark] {
+    @include reading-list-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] {
+        @include reading-list-dark;
+    }
+}
+
+// --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
     .single .content h2 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+        margin-top: 3rem;
     }
 
     .single .content > ul:first-of-type {
@@ -250,7 +294,15 @@
         text-align: left;
     }
 
-    .single .content .book-entry__title {
+    .single .content .book-entry--featured {
+        padding-left: 1rem;
+    }
+
+    .single .content .book-entry--featured .book-entry__title {
+        font-size: 1.1875rem;
+    }
+
+    .single .content .book-entry--featured .book-entry__description {
         font-size: 1rem;
     }
 }
