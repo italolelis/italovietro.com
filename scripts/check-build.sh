@@ -35,14 +35,30 @@ contains() {
 # nowhere <literal> <description> -- asserts the string is absent from every
 # generated file, which catches partial edits that fix visible copy but leave
 # metadata, search indexes or alternate output formats stale.
+#
+# Sourcemaps are excluded: they embed the theme's original SCSS verbatim, so
+# they legitimately contain values that were overridden downstream. Including
+# them would make every override look like a failure.
 nowhere() {
     local needle=$1 desc=$2 hits
-    hits=$(grep -rlIF -- "$needle" "$PUBLIC" 2>/dev/null || true)
+    hits=$(grep -rlIF --exclude='*.map' -- "$needle" "$PUBLIC" 2>/dev/null || true)
     if [ -z "$hits" ]; then
         ok "$desc"
     else
         bad "$desc, found in:"
         printf '          %s\n' $hits
+    fi
+}
+
+# absent_from <file> <literal> <description>
+absent_from() {
+    local file=$1 needle=$2 desc=$3
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+    elif grep -qF -- "$needle" "$file"; then
+        bad "$desc"
+    else
+        ok "$desc"
     fi
 }
 
@@ -55,6 +71,13 @@ EN_HOME="$PUBLIC/index.html"
 PT_HOME="$PUBLIC/pt-br/index.html"
 EN_SPEAKING="$PUBLIC/speaking/index.html"
 PT_SPEAKING="$PUBLIC/pt-br/palestras/index.html"
+# The stylesheet name carries a content fingerprint, so resolve it rather than
+# hardcoding a hash that changes on every style edit.
+CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
+if [ -z "$CSS" ]; then
+    printf 'error: no compiled stylesheet found under %s/css\n' "$PUBLIC" >&2
+    exit 2
+fi
 
 echo 'Job title'
 contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
@@ -66,6 +89,16 @@ contains "$EN_SPEAKING" "Inside Parloa's AI Kitchen" 'en speaking page lists the
 contains "$PT_SPEAKING" "Inside Parloa's AI Kitchen" 'pt-br speaking page lists the Beyond Vibe Coding episode'
 contains "$EN_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'en episode links to the episode page'
 contains "$PT_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'pt-br episode links to the episode page'
+
+echo 'Accent'
+contains "$CSS" '#b45309' 'compiled css carries the light accent'
+contains "$CSS" '#f59e0b' 'compiled css carries the dark accent'
+absent_from "$CSS" '#2d96bd' 'superseded link colour is gone from the stylesheet'
+absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the stylesheet'
+
+echo 'Fonts'
+nowhere 'fonts.googleapis.com' 'no reference to the external font host'
+nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'
 
 echo
 if [ "$failures" -gt 0 ]; then

@@ -35,12 +35,12 @@
 .talk-entry__type-icon {
     margin-right: 8px;
     font-size: 0.875rem;
-    color: $global-font-secondary-color;
+    color: $muted-text-color;
 }
 
 .talk-entry__meta {
     font-size: 0.8125rem;
-    color: $global-font-secondary-color;
+    color: $muted-text-color;
     margin-bottom: 8px;
     display: block;
 }
@@ -51,7 +51,7 @@
 
 .talk-entry__date::before {
     content: " \00B7 ";
-    color: $global-font-secondary-color;
+    color: $muted-text-color;
 }
 
 .talk-entry__links {
@@ -81,24 +81,24 @@
 }
 
 .talk-entry--podcast .talk-entry__type-icon {
-    color: #9b59b6;
+    color: $entry-podcast-color;
 }
 
 .talk-entry--host .talk-entry__type-icon {
-    color: #e67e22;
+    color: $single-link-color;
 }
 
 // Dark mode
 [theme=dark] .talk-entry__type-icon {
-    color: $global-font-secondary-color-dark;
+    color: $muted-text-color-dark;
 }
 
 [theme=dark] .talk-entry__meta {
-    color: $global-font-secondary-color-dark;
+    color: $muted-text-color-dark;
 }
 
 [theme=dark] .talk-entry__date::before {
-    color: $global-font-secondary-color-dark;
+    color: $muted-text-color-dark;
 }
 
 [theme=dark] .talk-entry__links a {
@@ -118,25 +118,25 @@
 }
 
 [theme=dark] .talk-entry--podcast .talk-entry__type-icon {
-    color: #bb8fce;
+    color: $entry-podcast-color-dark;
 }
 
 [theme=dark] .talk-entry--host .talk-entry__type-icon {
-    color: #f0b27a;
+    color: $single-link-color-dark;
 }
 
 // Auto theme
 @media (prefers-color-scheme: dark) {
     [theme=auto] .talk-entry__type-icon {
-        color: $global-font-secondary-color-dark;
+        color: $muted-text-color-dark;
     }
 
     [theme=auto] .talk-entry__meta {
-        color: $global-font-secondary-color-dark;
+        color: $muted-text-color-dark;
     }
 
     [theme=auto] .talk-entry__date::before {
-        color: $global-font-secondary-color-dark;
+        color: $muted-text-color-dark;
     }
 
     [theme=auto] .talk-entry__links a {
@@ -156,11 +156,11 @@
     }
 
     [theme=auto] .talk-entry--podcast .talk-entry__type-icon {
-        color: #bb8fce;
+        color: $entry-podcast-color-dark;
     }
 
     [theme=auto] .talk-entry--host .talk-entry__type-icon {
-        color: #f0b27a;
+        color: $single-link-color-dark;
     }
 }
 
