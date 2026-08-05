@@ -64,3 +64,6 @@ jobs:
             echo "⚠️ Build warnings found:"
             cat hugo-build.log
           fi
+
+      - name: Assert build output
+        run: ./scripts/check-build.sh public

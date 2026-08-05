@@ -1,6 +1,6 @@
 ---
 title: "Italo Vietro"
-description: "Head of Engineering na Parloa. 18+ anos construindo software, liderando times, e aprendendo que os problemas mais difíceis não são técnicos."
+description: "Senior Director of Engineering na Parloa. 18+ anos construindo software, liderando times, e aprendendo que os problemas mais difíceis não são técnicos."
 ---
 
 <div class="home-content">
@@ -8,7 +8,7 @@ description: "Head of Engineering na Parloa. 18+ anos construindo software, lide
 # Olá, Eu sou Italo Vietro
 
 <p class="home-intro">
-Sou Head of Engineering na <strong><a href="https://parloa.com">Parloa</a></strong>, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde "move fast and break things" não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.
+Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parloa</a></strong>, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde "move fast and break things" não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.
 </p>
 
 ---
