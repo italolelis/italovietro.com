@@ -53,11 +53,19 @@ fi
 
 EN_HOME="$PUBLIC/index.html"
 PT_HOME="$PUBLIC/pt-br/index.html"
+EN_SPEAKING="$PUBLIC/speaking/index.html"
+PT_SPEAKING="$PUBLIC/pt-br/palestras/index.html"
 
 echo 'Job title'
 contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
 contains "$PT_HOME" 'Senior Director of Engineering' 'pt-br homepage states the current title'
 nowhere 'Head of Engineering' 'superseded title appears nowhere'
+
+echo 'Speaking page'
+contains "$EN_SPEAKING" "Inside Parloa's AI Kitchen" 'en speaking page lists the Beyond Vibe Coding episode'
+contains "$PT_SPEAKING" "Inside Parloa's AI Kitchen" 'pt-br speaking page lists the Beyond Vibe Coding episode'
+contains "$EN_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'en episode links to the episode page'
+contains "$PT_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'pt-br episode links to the episode page'
 
 echo
 if [ "$failures" -gt 0 ]; then
