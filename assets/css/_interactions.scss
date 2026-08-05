@@ -1,0 +1,147 @@
+// ==============================
+// Interaction states
+// ==============================
+//
+// Hover, focus and motion for the entry lists. Colours come from the tokens in
+// _override.scss -- nothing here introduces a new value.
+//
+// Two rules govern everything below:
+//
+//   1. Hover styles live inside `@media (hover: hover)`. On a touch screen a
+//      tap counts as hover and the state sticks until the next tap lands
+//      elsewhere, so gating on real pointers is what actually prevents a
+//      stuck highlight rather than trying to clear it afterwards.
+//
+//   2. Focus is styled with :focus-visible and never depends on hover, so a
+//      keyboard user can always see where they are.
+
+// --- Entry rows ---------------------------------------------------------
+//
+// The entries are background-less blocks, so a shadow "lift" would have
+// nothing to lift off. A tint plus an accent edge reads as interactive
+// without inventing a card.
+//
+// The negative margin cancels the padding and border so text stays optically
+// aligned with the surrounding prose -- the row grows outward on hover
+// instead of shoving the content sideways.
+%entry-row {
+    padding: 12px 16px;
+    margin-left: -19px; // 16px padding + 3px border
+    border-left: 3px solid transparent;
+    border-radius: 6px;
+    transition:
+        background-color $transition-base,
+        border-left-color $transition-base;
+}
+
+.talk-entry,
+.single .content .book-entry {
+    @extend %entry-row;
+}
+
+@media (hover: hover) {
+    .talk-entry:hover,
+    .single .content .book-entry:hover {
+        background-color: rgba($single-link-color, 0.06);
+        border-left-color: $single-link-color;
+    }
+
+    [theme=dark] .talk-entry:hover,
+    [theme=dark] .single .content .book-entry:hover {
+        background-color: rgba($single-link-color-dark, 0.1);
+        border-left-color: $single-link-color-dark;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        [theme=auto] .talk-entry:hover,
+        [theme=auto] .single .content .book-entry:hover {
+            background-color: rgba($single-link-color-dark, 0.1);
+            border-left-color: $single-link-color-dark;
+        }
+    }
+}
+
+// A row containing the focused link is highlighted too, so tabbing through
+// the list moves the same visual marker a mouse user gets.
+.talk-entry:focus-within,
+.single .content .book-entry:focus-within {
+    background-color: rgba($single-link-color, 0.06);
+    border-left-color: $single-link-color;
+}
+
+[theme=dark] .talk-entry:focus-within,
+[theme=dark] .single .content .book-entry:focus-within {
+    background-color: rgba($single-link-color-dark, 0.1);
+    border-left-color: $single-link-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .talk-entry:focus-within,
+    [theme=auto] .single .content .book-entry:focus-within {
+        background-color: rgba($single-link-color-dark, 0.1);
+        border-left-color: $single-link-color-dark;
+    }
+}
+
+// --- Link underlines ----------------------------------------------------
+//
+// Entry links carry no underline at rest, which keeps the lists scannable.
+// Revealing one on hover and focus means the affordance is not carried by
+// colour alone.
+@media (hover: hover) {
+    .talk-entry__links a:hover,
+    .talk-entry__title a:hover,
+    .single .content .book-entry__title a:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.talk-entry__links a:focus-visible,
+.talk-entry__title a:focus-visible,
+.single .content .book-entry__title a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// --- Focus ring ---------------------------------------------------------
+//
+// One visible ring for every focusable element on the page, not just the
+// entry lists. Offset so it reads as a ring rather than a border, and sized
+// to stay visible against both backgrounds.
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid $single-link-color;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+[theme=dark] a:focus-visible,
+[theme=dark] button:focus-visible,
+[theme=dark] [tabindex]:focus-visible {
+    outline-color: $single-link-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] a:focus-visible,
+    [theme=auto] button:focus-visible,
+    [theme=auto] [tabindex]:focus-visible {
+        outline-color: $single-link-color-dark;
+    }
+}
+
+// --- Motion -------------------------------------------------------------
+//
+// Suppressed, not shortened. A visitor who asks for reduced motion gets the
+// same colours and the same affordances, arriving instantly.
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

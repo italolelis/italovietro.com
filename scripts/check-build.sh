@@ -100,6 +100,14 @@ echo 'Fonts'
 nowhere 'fonts.googleapis.com' 'no reference to the external font host'
 nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'
 
+# Presence only. These assert the rules survive a refactor or a theme bump --
+# they say nothing about whether the result looks right, which is why the
+# interaction work is signed off by review in both themes rather than by CI.
+echo 'Interaction rules present'
+contains "$CSS" ':focus-visible' 'keyboard focus styling is present'
+contains "$CSS" 'prefers-reduced-motion' 'reduced-motion guard is present'
+contains "$CSS" '(hover: hover)' 'hover styling is gated to real pointers'
+
 echo
 if [ "$failures" -gt 0 ]; then
     printf '%d assertion(s) failed\n' "$failures" >&2
