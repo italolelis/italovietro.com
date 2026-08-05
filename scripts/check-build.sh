@@ -76,6 +76,8 @@ EN_HOME="$PUBLIC/index.html"
 PT_HOME="$PUBLIC/pt-br/index.html"
 EN_SPEAKING="$PUBLIC/speaking/index.html"
 PT_SPEAKING="$PUBLIC/pt-br/palestras/index.html"
+EN_READING="$PUBLIC/recommended-reading/index.html"
+PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
 # hardcoding a hash that changes on every style edit.
 CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
@@ -105,6 +107,18 @@ absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the styleshe
 # to these two files by name. If Hugo stopped emitting either, that route would
 # resolve to nothing and the failure would only surface as a broken 404 page in
 # production -- the least likely place anyone looks.
+# The reading list was rebuilt around a featured set. These guard the three things
+# that would silently undo it: the placeholder coming back, ratings returning, and
+# entry titles reverting to h4 (which skipped a heading level, because sections
+# here have no subheadings).
+echo 'Reading list'
+nowhere '[Book Title]' 'the placeholder entry appears nowhere'
+absent_from "$EN_READING" 'fa-star' 'no star ratings remain'
+absent_from "$EN_READING" '<h4' 'entry titles are h3, leaving no gap in the heading outline'
+contains "$EN_READING" 'Start Here' 'en has the featured section'
+contains "$PT_READING" 'Comece por aqui' 'pt-br has the featured section, translated'
+nowhere 'Must Read' 'the tier subheadings are gone from both languages'
+
 echo 'Error pages'
 exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'
 exists "$PUBLIC/pt-br/404.html" 'pt-br 404 page exists for the localized route'
