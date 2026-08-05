@@ -96,6 +96,20 @@ contains "$CSS" '#f59e0b' 'compiled css carries the dark accent'
 absent_from "$CSS" '#2d96bd' 'superseded link colour is gone from the stylesheet'
 absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the stylesheet'
 
+echo 'Logo'
+LOGO="$PUBLIC/images/logo.svg"
+contains "$LOGO" '#c2680a' 'logo carries its own accent, so no per-theme filter is needed'
+# The mark was a 247KB traced bitmap masquerading as a vector. A hand-authored
+# version of it is well under 2KB, so this ceiling fails loudly if a traced
+# export ever replaces it again.
+if [ ! -f "$LOGO" ]; then
+    bad "logo is small enough to be a real vector (no such file: $LOGO)"
+elif [ "$(wc -c < "$LOGO")" -lt 4096 ]; then
+    ok 'logo is small enough to be a real vector'
+else
+    bad "logo is small enough to be a real vector (got $(wc -c < "$LOGO") bytes, ceiling 4096)"
+fi
+
 echo 'Cookie banner'
 contains "$EN_HOME" '#292a2d' 'banner uses the dark surface, not the theme blue'
 absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
