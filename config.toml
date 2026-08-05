@@ -348,6 +348,19 @@ ignoreLogs = ['shortcode-twitter-getremote']
       message = ""
       dismiss = ""
       link = ""
+    # Banner colours, overriding the theme default of a #1aa3ff popup, which
+    # was both off-palette and failing WCAG AA -- its white text measured
+    # 2.72:1. A dark surface lets the banner recede while the amber button
+    # carries the call to action, matching the accent everywhere else.
+    # Ratios measured: text 11.43:1, link 6.68:1, button text 8.14:1.
+    [params.cookieconsent.palette]
+      [params.cookieconsent.palette.popup]
+        background = "#292a2d"
+        text = "#e7e5e4"
+        link = "#f59e0b"
+      [params.cookieconsent.palette.button]
+        background = "#f59e0b"
+        text = "#1c1917"
 
   # CDN config for third-party library files
   [params.cdn]

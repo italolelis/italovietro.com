@@ -96,6 +96,10 @@ contains "$CSS" '#f59e0b' 'compiled css carries the dark accent'
 absent_from "$CSS" '#2d96bd' 'superseded link colour is gone from the stylesheet'
 absent_from "$CSS" '#ef3982' 'theme default hover pink is gone from the stylesheet'
 
+echo 'Cookie banner'
+contains "$EN_HOME" '#292a2d' 'banner uses the dark surface, not the theme blue'
+absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
+
 echo 'Fonts'
 nowhere 'fonts.googleapis.com' 'no reference to the external font host'
 nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'
