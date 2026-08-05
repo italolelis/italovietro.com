@@ -206,6 +206,16 @@ contains "$EN_READING" 'Start Here' 'en has the featured section'
 contains "$PT_READING" 'Comece por aqui' 'pt-br has the featured section, translated'
 nowhere 'Must Read' 'the tier subheadings are gone from both languages'
 
+# Read years are supported by the shortcode and styled as a right-hand column, but
+# no entry carries one yet: the years are the owner's to supply, and a wrong date is
+# worse than an absent one. So this asserts the rule survives, the way the
+# interaction rules below are asserted -- presence, not appearance.
+#
+# When the first years land, add content assertions here for both languages, and a
+# line to the reading list intro saying the years are when it was read rather than
+# when it was published. A bare year beside a book title reads as the latter.
+contains "$CSS" 'book-entry__date' 'the read-year column rule is present in the stylesheet'
+
 echo 'Error pages'
 exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'
 exists "$PUBLIC/pt-br/404.html" 'pt-br 404 page exists for the localized route'
