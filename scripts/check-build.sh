@@ -149,6 +149,21 @@ echo 'Fonts'
 nowhere 'fonts.googleapis.com' 'no reference to the external font host'
 nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'
 
+# Every asset is served from this origin. Outbound <a href> links in content are
+# untouched by these -- they are destinations a visitor chooses, not resources
+# the browser fetches without being asked.
+#
+# Cross-origin HTTP caches have been partitioned per-site in every major browser
+# since 2020, so a public CDN no longer buys a warm cache from another site.
+# Self-hosting is now strictly faster: same origin, multiplexed over a
+# connection that is already open, and covered by this site's SRI fingerprints.
+echo 'No third-party asset hosts'
+nowhere 'cdn.jsdelivr.net' 'nothing loads from jsDelivr'
+nowhere 'cdnjs.cloudflare.com' 'nothing loads from cdnjs'
+nowhere 'unpkg.com' 'nothing loads from unpkg'
+contains "$EN_HOME" '/lib/fontawesome-free/' 'icon CSS is served from this origin'
+contains "$EN_HOME" '/lib/typeit/' 'subtitle animation is served from this origin'
+
 # Presence only. These assert the rules survive a refactor or a theme bump --
 # they say nothing about whether the result looks right, which is why the
 # interaction work is signed off by review in both themes rather than by CI.

@@ -362,8 +362,21 @@ ignoreLogs = ['shortcode-twitter-getremote']
     enable = false
 
   # CDN config for third-party library files
+  #
+  # Empty on purpose. With a value ("jsdelivr.yml") the theme rewrites every
+  # library URL to a public CDN; empty, it serves the copies it already ships in
+  # themes/LoveIt/assets/lib/ from this origin, fingerprinted with SRI.
+  #
+  # Two reasons. Privacy: a CDN request hands the visitor's IP to a third party
+  # on every page load, which no cookie banner ever covered. Speed: cross-origin
+  # HTTP caches have been partitioned per-site in every major browser since 2020,
+  # so a public CDN no longer buys a warm cache from some other site -- and
+  # same-origin assets ride a connection that is already open.
+  #
+  # Cost is roughly 1.5MB added to the deploy, most of it FontAwesome webfonts.
+  # Visitors download about the same bytes as before, just from here.
   [params.cdn]
-    data = "jsdelivr.yml"
+    data = ""
 
   # Compatibility config
   [params.compatibility]
