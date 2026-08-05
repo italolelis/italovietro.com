@@ -123,13 +123,46 @@ else
     bad "logo is small enough to be a real vector (got $(wc -c < "$LOGO") bytes, ceiling 4096)"
 fi
 
-echo 'Cookie banner'
-contains "$EN_HOME" '#292a2d' 'banner uses the dark surface, not the theme blue'
+# The banner is gone because nothing sets cookies any more. These assert it
+# stays gone: re-enabling it would silently pull two jsDelivr requests back and
+# ask visitors to consent to storage that no longer exists.
+#
+# Asserted against the pages, not the whole output: the theme's bundled JS
+# contains the cookieconsent initialiser unconditionally and never runs it
+# unless the page injects a config. A `nowhere` check would fail on that bundle
+# forever and prove nothing.
+echo 'Cookie banner removed'
+absent_from "$EN_HOME" 'cookieconsent' 'en pages neither load nor configure the consent library'
+absent_from "$PT_HOME" 'cookieconsent' 'pt-br pages neither load nor configure it either'
 absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
+
+# Analytics is the one thing on the site with no visible symptom when it breaks:
+# a dropped script means silently zero data, discovered weeks later.
+echo 'Analytics'
+contains "$EN_HOME" '/_vercel/insights/script.js' 'Vercel Web Analytics script is present'
+contains "$EN_HOME" '/_vercel/speed-insights/script.js' 'Vercel Speed Insights script is present'
+contains "$PT_HOME" '/_vercel/insights/script.js' 'pt-br pages carry the analytics script too'
+nowhere 'googletagmanager.com' 'no Google Analytics tag remains'
+nowhere 'G-KYX115R541' 'the retired Google measurement id appears nowhere'
 
 echo 'Fonts'
 nowhere 'fonts.googleapis.com' 'no reference to the external font host'
 nowhere 'fonts.gstatic.com' 'no reference to the external font CDN'
+
+# Every asset is served from this origin. Outbound <a href> links in content are
+# untouched by these -- they are destinations a visitor chooses, not resources
+# the browser fetches without being asked.
+#
+# Cross-origin HTTP caches have been partitioned per-site in every major browser
+# since 2020, so a public CDN no longer buys a warm cache from another site.
+# Self-hosting is now strictly faster: same origin, multiplexed over a
+# connection that is already open, and covered by this site's SRI fingerprints.
+echo 'No third-party asset hosts'
+nowhere 'cdn.jsdelivr.net' 'nothing loads from jsDelivr'
+nowhere 'cdnjs.cloudflare.com' 'nothing loads from cdnjs'
+nowhere 'unpkg.com' 'nothing loads from unpkg'
+contains "$EN_HOME" '/lib/fontawesome-free/' 'icon CSS is served from this origin'
+contains "$EN_HOME" '/lib/typeit/' 'subtitle animation is served from this origin'
 
 # Presence only. These assert the rules survive a refactor or a theme bump --
 # they say nothing about whether the result looks right, which is why the

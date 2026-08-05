@@ -7,7 +7,6 @@ title = "Italo Vietro"
 enableRobotsTXT = true
 enableGitInfo = true
 enableEmoji = true
-googleAnalytics = "G-KYX115R541"
 
 # Suppress warnings
 ignoreLogs = ['shortcode-twitter-getremote']
@@ -331,40 +330,53 @@ ignoreLogs = ['shortcode-twitter-getremote']
   # Analytics config
   [params.analytics]
     enable = true
-    # Google Analytics
-    [params.analytics.google]
-      id = "G-KYX115R541"
-      anonymizeIP = true
-    # Fathom Analytics
-    [params.analytics.fathom]
-      id = ""
-      server = ""
+    # Vercel Web Analytics and Speed Insights.
+    #
+    # Replaces Google Analytics (was G-KYX115R541). Both are served from Vercel's
+    # edge at /_vercel/*, need no npm package, and are rendered only in production
+    # by layouts/partials/plugin/analytics.html. Both must also be enabled in the
+    # Vercel project dashboard for data to be ingested.
+    #
+    # Unlike the Google tag, these are cookieless and collect no PII.
+    [params.analytics.vercel]
+      webAnalytics = true
+      speedInsights = true
 
   # Cookie consent config
+  #
+  # Off, because there is nothing left to consent to. The banner existed for the
+  # Google tag; with that gone the site sets no cookies at all -- verified: no
+  # Set-Cookie header, and document.cookie appears nowhere in the built output.
+  # Vercel Web Analytics and Speed Insights are cookieless and collect no PII.
+  #
+  # The only client-side storage left is localStorage in the theme's JS, holding
+  # the light/dark preference the visitor set themselves.
+  #
+  # Disabling this also drops two third-party requests to jsDelivr for the
+  # cookieconsent library's CSS and JS.
+  #
+  # The banner's palette settings are removed rather than left dead. If it is
+  # ever re-enabled, recover them from git history -- they were tuned to fix a
+  # 2.72:1 contrast failure in the theme's default #1aa3ff banner.
   [params.cookieconsent]
-    enable = true
-    # text strings used for Cookie consent banner
-    [params.cookieconsent.content]
-      message = ""
-      dismiss = ""
-      link = ""
-    # Banner colours, overriding the theme default of a #1aa3ff popup, which
-    # was both off-palette and failing WCAG AA -- its white text measured
-    # 2.72:1. A dark surface lets the banner recede while the amber button
-    # carries the call to action, matching the accent everywhere else.
-    # Ratios measured: text 11.43:1, link 6.68:1, button text 8.14:1.
-    [params.cookieconsent.palette]
-      [params.cookieconsent.palette.popup]
-        background = "#292a2d"
-        text = "#e7e5e4"
-        link = "#f59e0b"
-      [params.cookieconsent.palette.button]
-        background = "#f59e0b"
-        text = "#1c1917"
+    enable = false
 
   # CDN config for third-party library files
+  #
+  # Empty on purpose. With a value ("jsdelivr.yml") the theme rewrites every
+  # library URL to a public CDN; empty, it serves the copies it already ships in
+  # themes/LoveIt/assets/lib/ from this origin, fingerprinted with SRI.
+  #
+  # Two reasons. Privacy: a CDN request hands the visitor's IP to a third party
+  # on every page load, which no cookie banner ever covered. Speed: cross-origin
+  # HTTP caches have been partitioned per-site in every major browser since 2020,
+  # so a public CDN no longer buys a warm cache from some other site -- and
+  # same-origin assets ride a connection that is already open.
+  #
+  # Cost is roughly 1.5MB added to the deploy, most of it FontAwesome webfonts.
+  # Visitors download about the same bytes as before, just from here.
   [params.cdn]
-    data = "jsdelivr.yml"
+    data = ""
 
   # Compatibility config
   [params.compatibility]
@@ -421,9 +433,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
 
 # Privacy config (https://gohugo.io/about/hugo-and-gdpr/)
 [privacy]
-  # privacy of the Google Analytics (replaced by params.analytics.google)
-  [privacy.googleAnalytics]
-    # ...
+  # No [privacy.googleAnalytics] block: Google Analytics was removed in favour of
+  # Vercel Web Analytics, which is cookieless and sends nothing to Google.
   [privacy.x]
     enableDNT = true
   [privacy.youtube]
