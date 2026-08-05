@@ -26,8 +26,8 @@ Os que eu entrego primeiro.
 Li isso cinco anos depois de começar minha carreira. Mudou tudo sobre como eu abordo legibilidade, testes e manutenção. Pare de escrever código para compiladores; escreva para humanos.
 {{< /book >}}
 
-{{< book title="Domain-Driven Design" author="Eric Evans" link="https://amzn.to/32NQx63" type="book" featured="true" >}}
-O livro que me ensinou a falar a linguagem do negócio em código. Linguagem ubíqua e contextos delimitados não são buzzwords—são como você sobrevive a domínios complexos sem perder a sanidade.
+{{< book title="Implementing Domain-Driven Design" author="Vaughn Vernon" link="https://www.amazon.de/-/en/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577" type="book" featured="true" >}}
+O livro vermelho. Bem melhor e mais preciso que o azul, e é o que eu entrego hoje. Evans trouxe as ideias; Vernon mostra como construir com elas.
 {{< /book >}}
 
 {{< book title="Grokking Algorithms" author="Aditya Bhargava" link="https://amzn.to/3pvir0o" type="book" featured="true" >}}
@@ -49,6 +49,10 @@ DevOps embrulhado em romance. Parece cafona, mas funciona. Leia isso quando esti
 ## Mais livros
 
 Livros que mudaram como escrevo código, e os que me ajudaram a não ser ruim liderando pessoas.
+
+{{< book title="Domain-Driven Design" author="Eric Evans" link="https://amzn.to/32NQx63" type="book" >}}
+O livro azul, e ainda é de onde vêm as ideias. Foi ele que me ensinou a falar a linguagem do negócio em código. Linguagem ubíqua e contextos delimitados não são buzzwords—são como você sobrevive a domínios complexos sem perder a sanidade.
+{{< /book >}}
 
 {{< book title="Refactoring" author="Martin Fowler" link="https://amzn.to/3lDbNmG" type="book" >}}
 Catálogo do Martin Fowler de "como melhorar código sem quebrar". Ainda referencio padrões específicos deste livro ao revisar PRs.

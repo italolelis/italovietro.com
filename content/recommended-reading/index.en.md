@@ -26,8 +26,8 @@ The ones I hand over first.
 Read this five years into my career. Changed everything about how I approached readability, testing, and maintenance. Stop writing code for compilers; write it for humans.
 {{< /book >}}
 
-{{< book title="Domain-Driven Design" author="Eric Evans" link="https://amzn.to/32NQx63" type="book" featured="true" >}}
-The book that taught me to speak business language in code. Ubiquitous language and bounded contexts aren't buzzwords—they're how you survive complex domains without losing your mind.
+{{< book title="Implementing Domain-Driven Design" author="Vaughn Vernon" link="https://www.amazon.de/-/en/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577" type="book" featured="true" >}}
+The red book. Much nicer and more precise than the blue one, and the one I hand over now. Evans gave us the ideas; Vernon shows you how to actually build with them.
 {{< /book >}}
 
 {{< book title="Grokking Algorithms" author="Aditya Bhargava" link="https://amzn.to/3pvir0o" type="book" featured="true" >}}
@@ -49,6 +49,10 @@ DevOps wrapped in a novel. Sounds cheesy, but it works. Read this when you're st
 ## More Books
 
 Books that changed how I write code, and the ones that helped me not suck at leading people.
+
+{{< book title="Domain-Driven Design" author="Eric Evans" link="https://amzn.to/32NQx63" type="book" >}}
+The blue book, and still where the ideas come from. It taught me to speak business language in code. Ubiquitous language and bounded contexts aren't buzzwords—they're how you survive complex domains without losing your mind.
+{{< /book >}}
 
 {{< book title="Refactoring" author="Martin Fowler" link="https://amzn.to/3lDbNmG" type="book" >}}
 Martin Fowler's catalog of "how to improve code without breaking it." I still reference specific patterns from this book when reviewing PRs.
