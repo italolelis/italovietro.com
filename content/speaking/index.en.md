@@ -32,6 +32,10 @@ I learned about failure the hard way. Building high-load systems for the Brazili
 
 ## Podcast Appearances
 
+{{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" >}}
+We build AI agents for a living, so the interesting question was what happens when we point them at our own engineering. The part I keep coming back to: a high share of our code now comes out of agentic workflows, and that alone did nothing for cycle time. Code generation was never the slow part. The slow part is everything around it — specs, review, validation, safe rollout.
+{{< /talk >}}
+
 {{< talk title="Why You Shouldn't Encourage Heroism In Your Team" event="Yeka Exec Engineering Dialog" date="February 2026" type="podcast" video_url="https://yeka.substack.com/p/why-you-shouldnt-encourage-heroism" >}}
 A written interview that turned into one of the most honest conversations I've had publicly. We got into why heroism in engineering teams is a symptom of broken systems, not something to celebrate. If someone is always saving the day, something is fundamentally wrong with how work is structured.
 {{< /talk >}}

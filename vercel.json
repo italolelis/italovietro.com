@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "curl -sSL https://github.com/gohugoio/hugo/releases/download/v0.153.2/hugo_extended_0.153.2_linux-amd64.tar.gz | tar -xz hugo",
+  "buildCommand": "./hugo --gc --minify && ./scripts/check-build.sh public",
+  "outputDirectory": "public",
+  "trailingSlash": true,
+  "git": {
+    "deploymentEnabled": false
+  }
+}

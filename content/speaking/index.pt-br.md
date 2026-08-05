@@ -32,6 +32,10 @@ Aprendi sobre falhas do jeito dificil. Construindo sistemas de alta carga para o
 
 ## Participacoes em Podcasts
 
+{{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" >}}
+A gente constrói agentes de IA, então a pergunta interessante era: o que acontece quando a gente usa isso pra nossa própria engenharia? A parte que não sai da minha cabeça é essa: hoje uma boa parte do nosso código já é produzida via agentes, e isso sozinho não influenciou muito no cycle time. Gerar código nunca foi o gargalo. O gargalo é tudo em volta — spec, review, validação, rollout seguro.
+{{< /talk >}}
+
 {{< talk title="Why You Shouldn't Encourage Heroism In Your Team" event="Yeka Exec Engineering Dialog" date="February 2026" type="podcast" video_url="https://yeka.substack.com/p/why-you-shouldnt-encourage-heroism" >}}
 Uma entrevista escrita que virou uma das conversas mais honestas que eu tive publicamente. Falamos sobre por que heroismo em times de engenharia e um sintoma de sistemas quebrados, nao algo pra celebrar. Se alguem esta sempre salvando o dia, algo esta fundamentalmente errado com a forma como o trabalho e estruturado.
 {{< /talk >}}

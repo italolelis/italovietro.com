@@ -7,7 +7,15 @@
     margin-top: 13rem;
 }
 
-/* Logo styling */
+// Logo styling
+//
+// The mark carries its own amber (#c2680a), chosen to clear 3:1 non-text
+// contrast against both backgrounds -- 3.98:1 on white, 3.61:1 on the dark
+// surface. That removes the four rules that used to live here inverting a
+// monochrome mark per theme, plus the filter transition they animated.
+//
+// currentColor is not an option: the logo renders through an <img>, so the
+// host document's colour does not cascade into the SVG.
 .header-title .logo {
     height: 2.5em;
     min-height: 2.5em;
@@ -15,28 +23,6 @@
     width: auto;
     vertical-align: middle;
     margin-right: 0.5rem;
-    transition: filter 0.3s ease;
-}
-
-/* Default - dark logo on light background */
-.header-title .logo {
-    filter: none;
-}
-
-/* White logo for dark theme - invert the colors */
-[theme=dark] .header-title .logo {
-    filter: invert(1) brightness(1.2);
-}
-
-/* Handle auto theme with system preference */
-[theme=auto] .header-title .logo {
-    filter: none;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .header-title .logo {
-        filter: invert(1) brightness(1.2);
-    }
 }
 
 /* Mobile logo adjustment */
@@ -51,19 +37,20 @@
 // Homepage intro paragraph -- replaces inline style on <p class="home-intro">
 .home-intro {
     font-size: 1.25rem;
-    color: #666;
+    color: $muted-text-color;
     margin: 1.5rem 0 2.5rem;
 }
 
 [theme=dark] .home-intro {
-    color: #aaa;
+    color: $muted-text-color-dark;
 }
 
 @media (prefers-color-scheme: dark) {
     [theme=auto] .home-intro {
-        color: #aaa;
+        color: $muted-text-color-dark;
     }
 }
 
 @import "reading-list";
 @import "speaking";
+@import "interactions";

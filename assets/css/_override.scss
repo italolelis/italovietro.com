@@ -2,5 +2,71 @@
 // Override Variables
 // 覆盖变量
 // ==============================
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
-$code-font-family: Roboto, Source Code Pro, Menlo, Consolas, Monaco, monospace;
+//
+// The site's palette lives here. This file is imported after the theme's own
+// variables but before anything that consumes them, so a plain reassignment
+// wins over the theme's `!default` value and every component that already
+// reads these variables picks up the new value without being touched.
+//
+// Every ratio below was measured against the theme's actual background values
+// (#fff light, #292a2d dark), not assumed.
+
+// --- Accent -------------------------------------------------------------
+//
+// Amber/terracotta. Replaces the theme default #2d96bd, which measured
+// 3.38:1 on white and failed WCAG AA for body text -- light-theme links were
+// genuinely hard to read. All four values below clear AA.
+$single-link-color: #b45309; // 5.02:1 on #fff
+$single-link-color-dark: #f59e0b; // 6.68:1 on #292a2d
+
+// Hover derives from the accent -- a same-hue shift -- rather than the theme
+// default #ef3982, a hot pink unrelated to anything else in the palette.
+$single-link-hover-color: #92400e; // 7.09:1 on #fff
+$single-link-hover-color-dark: #fbbf24; // 8.60:1 on #292a2d
+
+// Three separate theme variables default to the old #2d96bd, not one. Missing
+// the other two left content links amber while global hovers, tag clouds,
+// archive items and pagination stayed blue -- the post-build check caught it.
+// Global link *rest* colour is left alone: it is a near-black used for body
+// links and reads correctly as text rather than as an accent.
+$global-link-hover-color: #b45309; // 5.02:1 on #fff
+$global-link-hover-color-dark: #f59e0b; // 6.68:1 on #292a2d
+$pagination-link-color: #b45309;
+$pagination-link-color-dark: #f59e0b;
+
+// --- Muted text ---------------------------------------------------------
+//
+// Warm neutrals, chosen to sit with the accent rather than against it.
+//
+// Deliberately NOT the theme's $global-font-secondary-color: that measures
+// 2.33:1 on white and 2.18:1 on the dark background, so reusing it for the
+// paragraph and metadata text these apply to would fail AA badly. The theme
+// variable stays untouched for the components that treat it as decoration.
+$muted-text-color: #57534e; // 7.63:1 on #fff
+$muted-text-color-dark: #a8a29e; // 5.69:1 on #292a2d
+
+// --- Entry type accents -------------------------------------------------
+//
+// Speaking-page entries are typed talk / podcast / host. Talk and host both
+// resolve to the link accent -- folding the former #e67e22 host orange into
+// the accent is why amber was chosen over the other candidates, since it
+// absorbs a colour already in use instead of adding a fifth.
+//
+// Podcast keeps a distinct hue so the three types stay tellable apart at a
+// glance. These are icon colours, so the applicable threshold is 3:1 for
+// non-text contrast; both values clear it comfortably.
+$entry-podcast-color: #9b59b6; // 4.67:1 on #fff
+$entry-podcast-color-dark: #bb8fce; // 5.42:1 on #292a2d
+
+// --- Motion -------------------------------------------------------------
+$transition-fast: 0.15s ease;
+$transition-base: 0.2s ease;
+
+// --- Code ---------------------------------------------------------------
+//
+// System monospace. The previous value named Roboto first -- a proportional
+// face -- so code blocks rendered without column alignment. The webfont
+// import that supplied it is gone: it pulled four files over a
+// render-blocking request, and one of its two families was referenced
+// nowhere in the codebase.
+$code-font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
