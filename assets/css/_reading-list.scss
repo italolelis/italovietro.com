@@ -52,14 +52,27 @@
 }
 
 // The line under each section heading.
-.single .content h2 + p {
+//
+// Scoped with :has(.book-entry) so it only applies on this page. Unscoped, it
+// matched `h2 + p` on every .single page -- which on the home page meant the
+// first body paragraph after each "What I've learned about..." heading rendered
+// at 15px and muted while the paragraphs below it stayed at the 16px default.
+// A one-pixel inconsistency, visible, and reported.
+//
+// If :has() is unavailable the rule simply does not apply and these lines render
+// as ordinary paragraphs, which is a safe way to fail.
+.single .content:has(.book-entry) h2 + p {
     font-size: 0.9375rem;
     color: $muted-text-color;
     margin: 0 0 2rem;
 }
 
 // --- Intro ---------------------------------------------------------------
-.single .content > p:first-of-type {
+//
+// Also scoped. It did not reach the home page, whose paragraphs sit inside a
+// .home-content wrapper rather than directly under .content, but it did apply to
+// the speaking page and to every blog post.
+.single .content:has(.book-entry) > p:first-of-type {
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 2rem;
