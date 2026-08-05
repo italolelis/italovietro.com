@@ -47,6 +47,16 @@ ignoreLogs = ['shortcode-twitter-getremote']
         url = "/speaking/"
         title = ""
         weight = 3
+      # The biography that used to run down the home page lives here now. Labels
+      # stay one word per item in both languages, so the row reads as a set.
+      [[languages.en.menu.main]]
+        identifier = "about"
+        pre = ""
+        post = ""
+        name = "About"
+        url = "/about/"
+        title = ""
+        weight = 4
     [languages.en.pagination]
       disableAliases = true
       pagerSize = 12
@@ -69,8 +79,14 @@ ignoreLogs = ['shortcode-twitter-getremote']
         [languages.en.params.home.profile]
           enable = true
           gravatarEmail = ""
-          # URL of avatar shown in home page
-          avatarURL = "/images/avatar.png"
+          # No portrait on the home page. Only 2 of the 14 sites surveyed in
+          # .planning/research/minimal-personal-site-patterns.md show a face on
+          # theirs, and both belong to people with something to sell. The photograph
+          # now opens /about/, where a reader has asked to see who is writing.
+          #
+          # Empty rather than profile.enable = false: the tagline and the social row
+          # come from this same block and both stay.
+          avatarURL = ""
           # title shown in home page (HTML format is supported)
           title = ""
           # subtitle shown in home page
@@ -117,6 +133,14 @@ ignoreLogs = ['shortcode-twitter-getremote']
         url = "/palestras/"
         title = ""
         weight = 3
+      [[languages.pt-br.menu.main]]
+        identifier = "about"
+        pre = ""
+        post = ""
+        name = "Sobre"
+        url = "/sobre/"
+        title = ""
+        weight = 4
     [languages.pt-br.pagination]
       disableAliases = true
       pagerSize = 12
@@ -135,7 +159,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
         [languages.pt-br.params.home.profile]
           enable = true
           gravatarEmail = ""
-          avatarURL = "/images/avatar.png"
+          # See the en block above: the portrait moved to /pt-br/sobre/.
+          avatarURL = ""
           title = ""
           subtitle = "Os problemas mais difíceis não são técnicos."
           typeit = true
@@ -323,7 +348,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
       # Publisher info
       [params.page.seo.publisher]
         name = "xxxx"
-        logoUrl = "/images/avatar.png"
+        # The portrait it used to point at is gone, and the mark is the right thing
+        # for a publisher logo anyway. Raster, not the SVG: the theme resolves this
+        # as an image resource and reads .Width off it, which an SVG cannot answer.
+        logoUrl = "/images/logo.png"
 
   # TypeIt config
   [params.typeit]
