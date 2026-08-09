@@ -330,9 +330,9 @@ same_count "$EN_ARCHIVE" 'archive-item__title' 'archive-item__date' 'every archi
 contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
 absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
 
-# The archive stopped in 2021 and says so, rather than leaving a visitor to work it
-# out from the dates. Two posts carry a star saying the ideas still hold; the count
-# is asserted exactly, because a marker that spreads to five posts marks nothing.
+# The durability marker is gone: with the notice removed there was nothing on the
+# page explaining what a star meant, and a marker nobody can decode is decoration.
+nowhere 'archive-item__mark' 'no unexplained marker remains on any page'
 # The dated notice is gone. It described a page that no longer exists -- one where
 # everything below it was old -- while the archive now opens on 2026. The dates do
 # the work the notice was doing, which is what 8 of the 14 surveyed sites rely on.
@@ -347,12 +347,6 @@ matches "$EN_ARCHIVE" 'group-title>2017<' 'the oldest year is still on the page 
 matches "$PT_ARCHIVE" 'group-title>2017<' 'and in pt-br'
 missing "$PUBLIC/scaling-parloa-when-the-platform-becomes-the-product/index.html" 'a link post renders no page of its own'
 contains "$PUBLIC/posts/index.xml" 'parloa.com/labs' 'the feed sends a link post to the piece, not to a stub'
-occurs "$EN_ARCHIVE" 'archive-item__mark' 2 'exactly two en posts carry the durability marker'
-occurs "$PT_ARCHIVE" 'archive-item__mark' 2 'exactly two pt-br posts carry it'
-matches "$EN_ARCHIVE" 'href=/do-job-titles-matter/.*</a></h3><span class=archive-item__mark' 'the job titles post is one of the two'
-matches "$EN_ARCHIVE" 'href=/5-ways-to-keep-coding-being-an-engineering-manager/.*</a></h3><span class=archive-item__mark' 'the keeping-up-with-code post is the other'
-contains "$EN_ARCHIVE" 'aria-label="Still holds up"' 'the marker has an accessible name, not a bare glyph'
-contains "$PT_ARCHIVE" 'aria-label="Ainda se sustenta"' 'the pt-br marker is named in Portuguese'
 
 # Talks and podcasts are separate groups on one page. Dates and venues are what
 # make a dormant talks list and a live podcast list tell themselves apart, so every

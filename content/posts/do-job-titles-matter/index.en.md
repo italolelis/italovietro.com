@@ -3,10 +3,6 @@ title: "Do job titles matter?"
 date: 2020-11-15T18:00:00.000Z
 lastmod: 2020-11-15T18:00:00.000Z
 draft: false
-# Marked on the archive index as a post whose ideas still hold. Two posts
-# carry this; the flag is what the marker keys off, so it lives with the post
-# rather than in a list somewhere else.
-enduring: true
 author: "Italo Vietro"
 authorLink: "https://italovietro.com"
 description: "I like to reflect on titles from time to time. Over the past years in my career, I always wondered if job titles matter. That's why I want to share my view on this subject."

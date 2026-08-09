@@ -3,10 +3,6 @@ title: "5 ways to keep up with code as an Engineering Manager"
 date: 2018-08-30T22:40:32.169Z
 lastmod: 2018-08-30T22:40:32.169Z
 draft: false
-# Marked on the archive index as a post whose ideas still hold. Two posts
-# carry this; the flag is what the marker keys off, so it lives with the post
-# rather than in a list somewhere else.
-enduring: true
 author: "Italo Vietro"
 authorLink: "https://italovietro.com"
 description: "I currently work as an Engineering Manager at N26. We are going through a hyper-growth phase that involves many different challenges. This is extremely exciting as I have the opportunity to help in shaping how the organization can grow but still maintain its principles and alignment."

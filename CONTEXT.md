@@ -32,10 +32,6 @@ _Avoid_: Item, card, row, listing
 The amber that marks links, link hover, pagination, the active navigation item and selected text. Five roles, deliberately counted — see [ADR-0001](./docs/adr/0001-amber-accent-colour.md). It does not mark section headings.
 _Avoid_: Brand colour, primary colour, highlight
 
-**Marker**:
-The ★ on the two archive posts whose ideas still hold. A symbol rather than a word, because the site is bilingual and a symbol needs no translation.
-_Avoid_: Badge, flag, star rating, featured
-
 **Featured**:
 The heavier of the two reading-list entry treatments, used for the "Start Here" set. A property of how an entry is displayed, not a score.
 _Avoid_: Highlighted, top pick, recommended
