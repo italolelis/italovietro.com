@@ -254,9 +254,11 @@
 
 // --- Dark ----------------------------------------------------------------
 @mixin reading-list-dark {
+    // Colour is not set here any more. Headings in dark take $heading-color-dark
+    // from _typography.scss, which is imported last so that one file decides it
+    // for every page rather than each component restating it.
     .single .content h2 {
         border-bottom-color: $global-border-color-dark;
-        color: $global-font-color-dark;
     }
 
     .single .content h2 + p,

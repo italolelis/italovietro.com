@@ -39,19 +39,27 @@
 }
 
 // Homepage intro paragraph -- replaces inline style on <p class="home-intro">
+//
+// Body colour, not muted. It was the largest block of text on the page and it was
+// deliberately greyed, which is a contradiction: the page dimmed its own substance
+// and then wondered why it read washed out. Muting is for metadata -- dates,
+// authors, section labels -- not for the paragraph a visitor is meant to read.
+//
+// Smaller too. At 1.25rem it outweighed the tagline above it; the tagline is now
+// the opening line and this sits a step below it.
 .home-intro {
-    font-size: 1.25rem;
-    color: $muted-text-color;
+    font-size: 1.125rem;
+    color: $global-font-color;
     margin: 1.5rem 0 2.5rem;
 }
 
 [theme=dark] .home-intro {
-    color: $muted-text-color-dark;
+    color: $global-font-color-dark;
 }
 
 @media (prefers-color-scheme: dark) {
     [theme=auto] .home-intro {
-        color: $muted-text-color-dark;
+        color: $global-font-color-dark;
     }
 }
 
@@ -84,3 +92,5 @@
 @import "reading-list";
 @import "speaking";
 @import "interactions";
+// Last: its heading rules win on cascade order. See the note in the file.
+@import "typography";

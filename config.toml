@@ -91,8 +91,11 @@ ignoreLogs = ['shortcode-twitter-getremote']
           title = ""
           # subtitle shown in home page
           subtitle = "The hardest problems aren't technical."
-          # whether to use typeit animation for subtitle
-          typeit = true
+          # No typing animation. The tagline is the first line a visitor sees and
+          # the only one above the fold, so it should be there at first paint
+          # rather than arriving character by character behind a cursor that the
+          # theme's `duration = -1` then left blinking forever.
+          typeit = false
           # whether to show social links
           social = true
           # disclaimer (HTML format is supported)
@@ -163,7 +166,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
           avatarURL = ""
           title = ""
           subtitle = "Os problemas mais difíceis não são técnicos."
-          typeit = true
+          # See the en block above.
+          typeit = false
           social = true
           disclaimer = ""
         [languages.pt-br.params.home.posts]

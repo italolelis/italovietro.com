@@ -60,6 +60,18 @@ $selection-color-dark: rgba(180, 83, 9, 0.45);
 $selection-text-color: #161209; // 13.70:1 on the light selection
 $selection-text-color-dark: #fff; // 9.32:1 on the dark selection
 
+// --- Headings -----------------------------------------------------------
+//
+// Dark mode only. Light mode needs nothing here: body text is a near-black at
+// 15.72:1, so a heading in the same colour already reads as the strongest thing
+// on the page. Dark inverted that -- headings took $global-font-color-dark, the
+// exact colour of the body text under them, so hierarchy rested on size alone and
+// every page read flat.
+//
+// This is not the bold-inside-prose case, which stays inherited on purpose (see
+// _custom.scss): a heading is a different element doing a different job.
+$heading-color-dark: #e7e5e4; // 11.90:1 on #292a2d, against body text at 6.16:1
+
 // --- Muted text ---------------------------------------------------------
 //
 // Warm neutrals, chosen to sit with the accent rather than against it.

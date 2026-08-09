@@ -28,8 +28,6 @@ Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parlo
   </a>
 </nav>
 
----
-
 ## Além do Código
 
 Quando não estou pensando em sistemas distribuídos, você me encontra gerenciando meu homelab (clusters Kubernetes, self-hosting de tudo), preparando café com uma precisão que minha família acha excessiva, bolando estratégias em campanhas de D&D e sendo pai dedicado e marido presente. O homelab é onde eu experimento. O café é onde eu foco. O D&D é onde eu aceito que até os melhores planos desmoronam.

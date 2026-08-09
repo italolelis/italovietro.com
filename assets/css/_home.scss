@@ -13,7 +13,19 @@
 // homepage now points at the work first, in the manner of yegge.ai's showcase
 // cards, and keeps the bio underneath for anyone who wants it.
 
+// One measure, one left edge.
+//
+// The theme's .page is `max-width: 1080px` centred, and the content inside it is
+// capped at 800px and centred again. The profile block sits outside that second
+// wrapper, so above roughly 1690px the tagline started 140px to the left of the
+// prose -- two left edges on a page whose whole point is that it commits to one.
+//
+// Matching the cap here rather than removing it from .content: 800px is about 90
+// characters at this body size, and 1080 would be 120. See docs/adr/0004.
 .home .home-profile {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: left;
     padding-top: 2rem;
     margin-bottom: 0;
@@ -26,31 +38,31 @@
     transform: none;
 }
 
-// Smaller, and no longer the largest thing on the page. It carries the human
-// signal without becoming the headline.
-//
-// The theme's .5rem padding on the wrapper pushed the avatar 8px right of the
-// text column, so nothing quite lined up on the left edge. Zeroing it puts the
-// portrait, the subtitle, the prose and the route rows on one axis.
-.home .home-avatar {
-    padding: 0;
-}
-
-.home .home-avatar img {
-    width: 88px;
-    height: 88px;
-    margin: 0;
-}
+// The avatar rules that used to live here are gone with the avatar itself: the
+// portrait moved to /about/ and `avatarURL` is empty, so the theme emits no
+// .home-avatar block at all on this page.
 
 .home .home-subtitle,
 .home .links {
     padding-left: 0;
 }
 
+// The opening line, and now the loudest thing on the page.
+//
+// It used to render at 1rem above a 1.25rem paragraph, so the site's one-sentence
+// thesis was the smallest text in the group and read as a stray fragment. The name
+// heading that used to sit here is not coming back -- the site header already
+// carries the name -- so the tagline is what gives the page an entry point.
+//
+// Takes the heading colour rather than the body colour, because that is what it is.
 .home .home-subtitle {
     text-align: left;
-    font-size: 1rem;
-    margin: 1rem 0 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: $global-font-color;
+    margin: 0.5rem 0 0;
 }
 
 // Social icons are the least interesting thing here and were the first
@@ -58,7 +70,7 @@
 // them, quiet and after the subtitle rather than beneath a centred portrait.
 .home .links {
     text-align: left;
-    margin-top: 0.75rem;
+    margin-top: 1rem;
 }
 
 .home .links a {
@@ -74,21 +86,32 @@
 
 // --- Route list ----------------------------------------------------------
 //
-// Three destinations, each with one line saying what is there. Rows rather than
-// cards: a card is a box drawn around text, and at three items the box earns
+// Four destinations, each with one line saying what is there. Rows rather than
+// cards: a card is a box drawn around text, and at four items the box earns
 // nothing that a rule and some space do not already do.
+//
+// A subgrid, not a flex row. Each route is its own element, so under flex every
+// description began wherever its own label ended -- four ragged start points down
+// the page. Subgrid lets all four rows share one column track, and `max-content`
+// sizes that track to the longest label in whichever language is rendering:
+// "Speaking" in English, "Palestras" in Portuguese. A fixed width would have to be
+// guessed once and would be wrong for one of them.
+//
+// Where subgrid is unavailable the inner grid falls back to a single column and
+// the rows stack, which is the mobile layout -- degraded, not broken.
 .home-routes {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: max-content 1fr;
     margin: 2.5rem 0 0;
     border-top: 1px solid $global-border-color;
 }
 
 .home-route {
-    display: flex;
-    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
     align-items: baseline;
-    gap: 0 0.75rem;
+    column-gap: 1.25rem;
     padding: 0.875rem 0.5rem 0.875rem 0;
     border-bottom: 1px solid $global-border-color;
     text-decoration: none;
@@ -128,6 +151,10 @@
 
 // --- Dark ----------------------------------------------------------------
 @mixin home-dark {
+    .home .home-subtitle {
+        color: $heading-color-dark;
+    }
+
     .home .links a {
         color: $muted-text-color-dark;
     }
@@ -176,13 +203,17 @@
 
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    .home .home-avatar img {
-        width: 72px;
-        height: 72px;
+    .home .home-subtitle {
+        font-size: 1.375rem;
+    }
+
+    // Stacking is done by collapsing the parent's tracks: the routes keep their
+    // subgrid, so there is one place that decides how many columns exist.
+    .home-routes {
+        grid-template-columns: 1fr;
     }
 
     .home-route {
-        flex-direction: column;
-        gap: 0.125rem;
+        row-gap: 0.125rem;
     }
 }

@@ -198,6 +198,28 @@ occurs "$PT_HOME" 'home-route__name>' 4 'pt-br home page offers four routes'
 absent_from "$EN_HOME" 'learned about people' 'the moved biography is not left behind on the en home page'
 absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left behind on the pt-br home page'
 
+# One measure, one left edge -- see docs/adr/0004. The profile block sits outside
+# the wrapper that carries the 800px cap, so without this rule the tagline drifts
+# 140px left of the prose on any screen wider than about 1690px. Invisible on a
+# laptop, which is exactly why it needs asserting rather than eyeballing.
+#
+# The route list is asserted as a grid because the alignment of the four
+# descriptions depends on it: under flex each description started wherever its own
+# label ended, and `max-content` is what sizes the label track to the longest label
+# in whichever language is rendering.
+matches "$CSS" '\.home \.home-profile\{max-width:800px' 'the profile block shares the 800px measure'
+matches "$CSS" '\.home-routes\{display:grid;grid-template-columns:max-content 1fr' 'route descriptions share one column track'
+absent_from "$EN_HOME" '<hr' 'no rule between the routes and the last section'
+absent_from "$PT_HOME" '<hr' 'nor on the pt-br home page'
+matches "$CSS" '\.home-intro\{font-size:1\.125rem;color:#161209' 'the intro paragraph is body colour, not muted'
+
+# Dark mode gave headings the same colour as the body text under them, so hierarchy
+# rested on size alone. Light mode never had the problem: its body text is a
+# near-black that already reads as the strongest thing on the page.
+echo 'Headings outrank body text in dark'
+matches "$CSS" '\[theme=dark\] \.single-title[^{]*\{color:#e7e5e4\}' 'dark headings take the brighter colour'
+matches "$CSS" '\[theme=dark\] \.home \.home-subtitle\{color:#e7e5e4\}' 'the tagline is treated as a heading, not body text'
+
 # About is where the biography went, and it is the only page that carries the
 # photograph. The two sizes exist for event organisers, who ask by email today.
 echo 'About page'
@@ -367,7 +389,12 @@ nowhere 'cdn.jsdelivr.net' 'nothing loads from jsDelivr'
 nowhere 'cdnjs.cloudflare.com' 'nothing loads from cdnjs'
 nowhere 'unpkg.com' 'nothing loads from unpkg'
 contains "$EN_HOME" '/lib/fontawesome-free/' 'icon CSS is served from this origin'
-contains "$EN_HOME" '/lib/typeit/' 'subtitle animation is served from this origin'
+# TypeIt used to type the tagline in and is now off in both languages, so the
+# assertion flips: it guards that no typing script comes back rather than that it
+# is self-hosted. The tagline is the first line above the fold and should be there
+# at first paint.
+absent_from "$EN_HOME" 'typeit' 'no typing animation script on the en home page'
+absent_from "$PT_HOME" 'typeit' 'nor on the pt-br home page'
 
 # Presence only. These assert the rules survive a refactor or a theme bump --
 # they say nothing about whether the result looks right, which is why the
