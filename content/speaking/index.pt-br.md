@@ -12,6 +12,8 @@ math:
   enable: false
 ---
 
+Nem tudo está aqui — algumas palestras nunca foram gravadas e de outras eu perdi o rastro. Esta é a parte que consegui confirmar.
+
 ## Palestras
 
 {{< talk title="From cost to impact: Hands-on strategies for cost management optimization" event="DevTalks Romania 2025" date="2025" type="talk" >}}
