@@ -184,6 +184,11 @@ contains "$EN_HOME" '>Reading<' 'nav uses the short parallel label, not the sent
 # so rewording the copy cannot break it and deleting a link cannot pass.
 contains "$EN_HOME" 'home-signpost' 'the home page routes in prose'
 contains "$PT_HOME" 'home-signpost' 'and so does the pt-br home page'
+# The opening line greets and stops. Asserted because it comes from config rather
+# than from the content file, which is the least likely place to look when the
+# first line of the site is wrong.
+matches "$EN_HOME" 'home-subtitle>Hey' 'the en home page opens with the greeting'
+matches "$PT_HOME" 'home-subtitle>Oi' 'the pt-br home page opens with the greeting'
 absent_from "$EN_HOME" 'home-route__name' 'the route list that mirrored the nav is gone'
 contains "$EN_HOME" 'href=/recommended-reading/' 'en home page reaches the reading list'
 contains "$EN_HOME" 'href=/speaking/' 'en home page reaches the speaking page'

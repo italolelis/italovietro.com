@@ -12,9 +12,9 @@ _Avoid_: Container, wrapper, content width, column width
 The sentence on the home page that links to each section and says which ones are still moving. It replaced a four-row list of labelled routes, which repeated the navigation one line below it. Routing is its job; the navigation's job is getting there from anywhere.
 _Avoid_: Route list, section cards, links block, secondary nav
 
-**Tagline**:
-The single sentence opening the home page — "The hardest problems aren't technical." It is the loudest text on the page and is styled as a heading, not as body text. It is not the site title, which lives in the header.
-_Avoid_: Subtitle, headline, strapline, hero text
+**Greeting**:
+The line opening the home page — "Hey 👋", "Oi 👋". It is the loudest text on the page and is styled as a heading, not as body text. It greets and nothing else; the paragraph beneath it does the introducing. It is not the site title, which lives in the header, and it is not a tagline — the aphorism that used to sit here read as a claim made before anything had been said.
+_Avoid_: Tagline, subtitle, headline, strapline, hero text
 
 **Entry**:
 One item in one of the three lists: a book, newsletter or podcast on the reading list; a talk or podcast appearance on the speaking page; a post on the writing archive. Entries share a treatment — title, muted metadata, description.

@@ -7,8 +7,11 @@
 // profile block down by translateY(16vh) -- two hacks cancelling each other, with
 // the result depending on viewport height. The transform is reset in _home.scss,
 // so this no longer needs to make room for anything.
+// Close to the line above it. The opening line is a greeting now rather than a
+// standalone thesis, and a greeting belongs to the sentence that follows it --
+// there was 3.5rem of air between "Hey" and the paragraph it introduces.
 .home-content {
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 }
 
 // Logo styling
@@ -90,7 +93,7 @@
 .home-intro {
     font-size: 1.125rem;
     color: $global-font-color;
-    margin: 1.5rem 0 2.5rem;
+    margin: 0.5rem 0 2.5rem;
 }
 
 [theme=dark] .home-intro {

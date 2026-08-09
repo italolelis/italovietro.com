@@ -89,8 +89,15 @@ ignoreLogs = ['shortcode-twitter-getremote']
           avatarURL = ""
           # title shown in home page (HTML format is supported)
           title = ""
-          # subtitle shown in home page
-          subtitle = "The hardest problems aren't technical."
+          # The opening line. A greeting rather than the aphorism that used to sit
+          # here -- "The hardest problems aren't technical" read as a slogan, and a
+          # slogan is a claim about yourself made before you have said anything.
+          # The paragraph under it does the introducing, which is why this can be
+          # two words.
+          #
+          # It renders through the theme's profile block, whose field is called
+          # subtitle; that is the slot, not the intent.
+          subtitle = "Hey 👋"
           # No typing animation. The tagline is the first line a visitor sees and
           # the only one above the fold, so it should be there at first paint
           # rather than arriving character by character behind a cursor that the
@@ -168,7 +175,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
           # See the en block above: the portrait moved to /pt-br/sobre/.
           avatarURL = ""
           title = ""
-          subtitle = "Os problemas mais difíceis não são técnicos."
+          # See the en block above.
+          subtitle = "Oi 👋"
           # See the en block above.
           typeit = false
           # See the en block above.
