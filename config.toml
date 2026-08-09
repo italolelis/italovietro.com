@@ -96,8 +96,11 @@ ignoreLogs = ['shortcode-twitter-getremote']
           # rather than arriving character by character behind a cursor that the
           # theme's `duration = -1` then left blinking forever.
           typeit = false
-          # whether to show social links
-          social = true
+          # Social links live in the footer now, as text. On the home page they
+          # were an icon row directly under the tagline -- the first interactive
+          # thing a visitor met, ahead of anything the site is about. 1 of the 14
+          # sites surveyed does that; 7 have none on the home page at all.
+          social = false
           # disclaimer (HTML format is supported)
           disclaimer = ""
         # Home page posts
@@ -168,7 +171,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
           subtitle = "Os problemas mais difíceis não são técnicos."
           # See the en block above.
           typeit = false
-          social = true
+          # See the en block above.
+          social = false
           disclaimer = ""
         [languages.pt-br.params.home.posts]
           enable = false

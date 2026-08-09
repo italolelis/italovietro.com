@@ -8,9 +8,9 @@ A personal site: writing, a reading list, speaking history, and an About page. T
 The single 800px column every page is laid out in. One number, one left edge, site-wide — see [ADR-0004](./docs/adr/0004-one-800px-measure.md).
 _Avoid_: Container, wrapper, content width, column width
 
-**Route**:
-A link on the home page pointing at one section of the site, carrying a label and a one-line description of what is there. There are four: Writing, Reading, Speaking, About.
-_Avoid_: Nav item, card, link block, section link
+**Signpost**:
+The sentence on the home page that links to each section and says which ones are still moving. It replaced a four-row list of labelled routes, which repeated the navigation one line below it. Routing is its job; the navigation's job is getting there from anywhere.
+_Avoid_: Route list, section cards, links block, secondary nav
 
 **Tagline**:
 The single sentence opening the home page — "The hardest problems aren't technical." It is the loudest text on the page and is styled as a heading, not as body text. It is not the site title, which lives in the header.

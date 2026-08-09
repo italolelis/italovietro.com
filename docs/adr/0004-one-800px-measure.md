@@ -35,7 +35,7 @@ The home page's profile block takes the same `max-width: 800px; margin: 0 auto` 
 
 ## Consequences
 
-- The tagline, social row, intro, route list and prose all begin on one x, at every width.
+- Everything on the page begins on one x, at every width. (At the time of writing that was the tagline, social row, intro, route list and prose. The social row has since moved to the footer and the route list has become a sentence — the elements changed, the measure did not.)
 - The measure is now a constraint, not an accident. A future page that renders outside `.single .content` inherits nothing and will drift unless it opts in.
 - A post-build assertion fails if `.home .home-profile` loses its `max-width: 800px`, because this is a defect no one sees on the machine they are most likely to be developing on.
 - The site keeps a ~90-character line. If that proves too long in practice, changing the measure is now a one-value change in two places rather than a per-page argument — but it will reflow every page at once.

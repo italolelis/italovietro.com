@@ -65,129 +65,36 @@
     margin: 0.5rem 0 0;
 }
 
-// Social icons are the least interesting thing here and were the first
-// interactive elements a visitor met. yegge.ai omits them outright; this keeps
-// them, quiet and after the subtitle rather than beneath a centred portrait.
-.home .links {
-    text-align: left;
-    margin-top: 1rem;
-}
+// The social icon rules that used to live here are gone with the icons. They were
+// the first interactive elements a visitor met, ahead of anything the site is
+// about, and an iconised social row appears on 1 of the 14 surveyed sites. The
+// links are text in the footer now -- see layouts/partials/footer.html.
 
-.home .links a {
-    color: $muted-text-color;
-    font-size: 1rem;
-    margin-right: 0.875rem;
-    transition: color $transition-base;
-}
-
-.home .links a:hover {
-    color: $single-link-color;
-}
-
-// --- Route list ----------------------------------------------------------
+// --- Signpost ------------------------------------------------------------
 //
-// Four destinations, each with one line saying what is there. Rows rather than
-// cards: a card is a box drawn around text, and at four items the box earns
-// nothing that a rule and some space do not already do.
+// Where a four-row route list used to be. The rows repeated the four words
+// already in the header, one line below it, in amber -- a second navigation
+// dressed as content. Nothing in the 14-site survey runs a compact nav and a
+// described mirror of it: the sites with described section lists (maggieappleton,
+// patrickcollison) use that list AS their navigation.
 //
-// A subgrid, not a flex row. Each route is its own element, so under flex every
-// description began wherever its own label ended -- four ragged start points down
-// the page. Subgrid lets all four rows share one column track, and `max-content`
-// sizes that track to the longest label in whichever language is rendering:
-// "Speaking" in English, "Palestras" in Portuguese. A fixed width would have to be
-// guessed once and would be wrong for one of them.
+// So the routing is a sentence instead, which carries what the nav cannot -- that
+// the writing stopped and the speaking page has not. brandur.org does the same
+// thing, and the survey called it the strongest precedent here for a site with one
+// dormant section.
 //
-// Where subgrid is unavailable the inner grid falls back to a single column and
-// the rows stack, which is the mobile layout -- degraded, not broken.
-.home-routes {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    margin: 2.5rem 0 0;
-    border-top: 1px solid $global-border-color;
-}
-
-.home-route {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: subgrid;
-    align-items: baseline;
-    column-gap: 1.25rem;
-    padding: 0.875rem 0.5rem 0.875rem 0;
-    border-bottom: 1px solid $global-border-color;
-    text-decoration: none;
-    transition:
-        background-color $transition-base,
-        padding-left $transition-base;
-}
-
-.home-route__name {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    color: $single-link-color;
-}
-
-.home-route__desc {
-    font-size: 0.9375rem;
-    color: $muted-text-color;
-}
-
-// Gated to real pointers so a tap does not leave a row stuck in hover state.
-@media (hover: hover) {
-    .home-route:hover {
-        background-color: rgba($single-link-color, 0.06);
-        padding-left: 0.5rem;
-    }
-
-    .home-route:hover .home-route__name {
-        color: $single-link-hover-color;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-    }
-}
-
-.home-route:focus-visible {
-    background-color: rgba($single-link-color, 0.06);
+// Links need no rules of their own: inside .single .content they already take the
+// accent.
+.home-signpost {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin: 0 0 2.5rem;
 }
 
 // --- Dark ----------------------------------------------------------------
 @mixin home-dark {
     .home .home-subtitle {
         color: $heading-color-dark;
-    }
-
-    .home .links a {
-        color: $muted-text-color-dark;
-    }
-
-    .home .links a:hover {
-        color: $single-link-color-dark;
-    }
-
-    .home-routes,
-    .home-route {
-        border-color: $global-border-color-dark;
-    }
-
-    .home-route__name {
-        color: $single-link-color-dark;
-    }
-
-    .home-route__desc {
-        color: $muted-text-color-dark;
-    }
-
-    @media (hover: hover) {
-        .home-route:hover {
-            background-color: rgba($single-link-color-dark, 0.1);
-        }
-
-        .home-route:hover .home-route__name {
-            color: $single-link-hover-color-dark;
-        }
-    }
-
-    .home-route:focus-visible {
-        background-color: rgba($single-link-color-dark, 0.1);
     }
 }
 
@@ -207,13 +114,7 @@
         font-size: 1.375rem;
     }
 
-    // Stacking is done by collapsing the parent's tracks: the routes keep their
-    // subgrid, so there is one place that decides how many columns exist.
-    .home-routes {
-        grid-template-columns: 1fr;
-    }
-
-    .home-route {
-        row-gap: 0.125rem;
+    .home-signpost {
+        font-size: 1.0625rem;
     }
 }

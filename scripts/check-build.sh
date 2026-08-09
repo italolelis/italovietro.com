@@ -174,8 +174,21 @@ contains "$EN_HOME" '/posts/' 'en homepage links to the writing archive'
 contains "$PT_HOME" '/pt-br/posts/' 'pt-br homepage links to the writing archive'
 contains "$EN_HOME" '>Writing<' 'Writing appears in the en nav'
 contains "$PT_HOME" '>Artigos<' 'Artigos appears in the pt-br nav'
-contains "$EN_HOME" 'home-route__name' 'the homepage route list renders'
 contains "$EN_HOME" '>Reading<' 'nav uses the short parallel label, not the sentence fragment'
+
+# The four-row route list is gone -- it repeated the four nav labels one line
+# below the nav, in amber, which is a second navigation dressed as content. A
+# sentence routes instead. What still has to hold is the thing the list existed
+# for: every section reachable from the domain root, in both languages. That is
+# asserted on the links themselves rather than on any markup the sentence uses,
+# so rewording the copy cannot break it and deleting a link cannot pass.
+contains "$EN_HOME" 'home-signpost' 'the home page routes in prose'
+contains "$PT_HOME" 'home-signpost' 'and so does the pt-br home page'
+absent_from "$EN_HOME" 'home-route__name' 'the route list that mirrored the nav is gone'
+contains "$EN_HOME" 'href=/recommended-reading/' 'en home page reaches the reading list'
+contains "$EN_HOME" 'href=/speaking/' 'en home page reaches the speaking page'
+contains "$PT_HOME" 'href=/pt-br/leituras-recomendadas/' 'pt-br home page reaches the reading list'
+contains "$PT_HOME" 'href=/pt-br/palestras/' 'pt-br home page reaches the speaking page'
 
 # The home page ran roughly 1,000 words of biography in each language, above four
 # routes nobody could see without scrolling past it. None of the 14 sites surveyed
@@ -193,8 +206,6 @@ absent_from "$PT_HOME" '<h1' 'pt-br home page has no heading repeating the name 
 absent_from "$EN_HOME" 'home-avatar' 'no portrait on the en home page'
 absent_from "$PT_HOME" 'home-avatar' 'no portrait on the pt-br home page'
 nowhere '/images/avatar.png' 'the 428KB portrait PNG is referenced nowhere'
-occurs "$EN_HOME" 'home-route__name>' 4 'en home page offers four routes'
-occurs "$PT_HOME" 'home-route__name>' 4 'pt-br home page offers four routes'
 absent_from "$EN_HOME" 'learned about people' 'the moved biography is not left behind on the en home page'
 absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left behind on the pt-br home page'
 
@@ -208,7 +219,6 @@ absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left 
 # label ended, and `max-content` is what sizes the label track to the longest label
 # in whichever language is rendering.
 matches "$CSS" '\.home \.home-profile\{max-width:800px' 'the profile block shares the 800px measure'
-matches "$CSS" '\.home-routes\{display:grid;grid-template-columns:max-content 1fr' 'route descriptions share one column track'
 absent_from "$EN_HOME" '<hr' 'no rule between the routes and the last section'
 absent_from "$PT_HOME" '<hr' 'nor on the pt-br home page'
 matches "$CSS" '\.home-intro\{font-size:1\.125rem;color:#161209' 'the intro paragraph is body colour, not muted'
