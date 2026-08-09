@@ -45,7 +45,7 @@
 // theme's two-class selector.
 .archive .archive-item {
     display: block;
-    margin: 0 0 1.75rem;
+    margin: 0 0 1rem;
 }
 
 .archive-item__header {
@@ -92,27 +92,18 @@
     cursor: help;
 }
 
+// Source and date sit against the right edge, the same column the reading list
+// and the speaking page use. With descriptions gone the rows are single lines, so
+// a left-packed date landed at a different x on every one of them -- the ragged
+// edge was the reason the page still looked unlike the Elsewhere entries above it.
 .archive-item__date {
+    margin-left: auto;
+    padding-left: 0.75rem;
     font-size: 0.8125rem;
     color: $muted-text-color;
+    white-space: nowrap;
     // Dates line up as a column when they are the same width.
     font-variant-numeric: tabular-nums;
-}
-
-.archive-item__desc,
-.archive-item__desc p {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: $global-font-color;
-    margin: 0.25rem 0 0;
-}
-
-.archive-item__desc a {
-    color: $single-link-color;
-}
-
-.archive-item__desc a:hover {
-    color: $single-link-hover-color;
 }
 
 // --- Dark ----------------------------------------------------------------
@@ -136,9 +127,6 @@
         color: $single-link-hover-color-dark;
     }
 
-    .archive-item__desc {
-        color: $global-font-color-dark;
-    }
 }
 
 [theme=dark] {
@@ -157,8 +145,15 @@
         margin-top: 2.5rem;
     }
 
+    // Stacked, and the meta drops its auto margin: on its own line it would
+    // otherwise sit against the right edge, reading as a stray date.
     .archive-item__header {
         flex-direction: column;
         gap: 0.125rem;
+    }
+
+    .archive-item__date {
+        margin-left: 0;
+        padding-left: 0;
     }
 }

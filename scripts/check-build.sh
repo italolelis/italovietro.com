@@ -312,7 +312,15 @@ fi
 # The archive page showed link-and-date rows and nothing else, while every post
 # already carried a description in front matter. These guard the substance.
 echo 'Writing archive has substance'
-contains "$EN_ARCHIVE" 'archive-item__desc' 'archive entries show their descriptions'
+# Descriptions are gone. The page lists fourteen things -- eight published
+# elsewhere, six here -- and a paragraph under only the six made it read as two
+# kinds of page stacked together. The invariant that replaced it: every row carries
+# its source and date in the right-hand column, the same one the reading list and
+# speaking page use, so the meta lines up instead of landing at a different x on
+# every row.
+absent_from "$EN_ARCHIVE" 'archive-item__desc' 'archive entries are rows, not write-ups'
+matches "$CSS" '\.archive-item__date\{margin-left:auto' 'archive meta sits in the right-hand column'
+same_count "$EN_ARCHIVE" 'archive-item__title' 'archive-item__date' 'every archive row carries a date, off-site ones included'
 contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
 absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
 
@@ -455,7 +463,12 @@ exists "$PUBLIC/pt-br/404.html" 'pt-br 404 page exists for the localized route'
 
 echo 'Logo'
 LOGO="$PUBLIC/images/logo.svg"
-contains "$LOGO" '#c2680a' 'logo carries its own accent, so no per-theme filter is needed'
+contains "$LOGO" '#c2680a' 'the standalone favicon copy carries a literal colour'
+# The header mark is inlined SVG so it can take the accent per theme -- no single
+# colour clears 3:1 on both headers (#f59e0b measures 2.02:1 on the light one).
+contains "$EN_HOME" 'logo-mark' 'the header mark is inlined, not an <img>'
+matches "$CSS" '\.header-title \.logo-mark\{[^}]*color:#b45309' 'the mark takes the light accent'
+matches "$CSS" '\[theme=dark\] \.header-title \.logo-mark\{color:#f59e0b\}' 'and the dark accent'
 # The mark was a 247KB traced bitmap masquerading as a vector. A hand-authored
 # version of it is well under 2KB, so this ceiling fails loudly if a traced
 # export ever replaces it again.

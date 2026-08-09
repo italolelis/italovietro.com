@@ -4,8 +4,17 @@
         <div class="header-title">
             <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
                 {{- with .Site.Params.header.title -}}
+                    {{- /* Inlined rather than served through <img>, so the mark can take the
+                           site accent per theme. It cannot do that as a file: the light accent
+                           measures 2.02:1 on the light header and the dark accent 3.02:1 on the
+                           dark one, so no single colour matches the site in both. Inline, CSS
+                           picks #b45309 or #f59e0b and both clear 3:1. See docs/adr/0003. */ -}}
                     {{- with .logo -}}
-                        {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                        {{- with resources.Get . -}}
+                            <span class="logo logo-mark">{{ .Content | safeHTML }}</span>
+                        {{- else -}}
+                            {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                        {{- end -}}
                     {{- end -}}
                     {{- with .pre -}}
                         <span class="header-title-pre">{{ . | safeHTML }}</span>
@@ -92,7 +101,11 @@
                 <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
                     {{- with .Site.Params.header.title -}}
                         {{- with .logo -}}
-                            {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                            {{- with resources.Get . -}}
+                                <span class="logo logo-mark">{{ .Content | safeHTML }}</span>
+                            {{- else -}}
+                                {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                            {{- end -}}
                         {{- end -}}
                         {{- with .pre -}}
                             <span class="header-title-pre">{{ . | safeHTML }}</span>

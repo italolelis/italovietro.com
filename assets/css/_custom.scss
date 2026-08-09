@@ -14,15 +14,11 @@
     margin-top: 0.5rem;
 }
 
-// Logo styling
+// Logo, <img> fallback only.
 //
-// The mark carries its own amber (#c2680a), chosen to clear 3:1 non-text
-// contrast against both backgrounds -- 3.98:1 on white, 3.61:1 on the dark
-// surface. That removes the four rules that used to live here inverting a
-// monochrome mark per theme, plus the filter transition they animated.
-//
-// currentColor is not an option: the logo renders through an <img>, so the
-// host document's colour does not cascade into the SVG.
+// The header inlines the SVG (see below), so this rule applies only if
+// resources.Get ever fails to resolve the mark and the theme's img partial takes
+// over. Kept so that path degrades to the right size rather than to none.
 .header-title .logo {
     height: 2.5em;
     min-height: 2.5em;
@@ -32,12 +28,50 @@
     margin-right: 0.5rem;
 }
 
+// The mark takes the site accent, per theme.
+//
+// It used to carry its own #c2680a, chosen so one file could clear 3:1 against
+// both backgrounds without a per-theme swap. That worked, and it meant the mark
+// was a near-miss of the accent everywhere -- duller than the amber beside it in
+// the nav, in both themes.
+//
+// No single colour fixes that: the light accent measures 2.02:1 on the light
+// header and the dark accent 3.02:1 on the dark one. So the mark is inlined SVG
+// now and CSS picks the matching accent, at 4.73:1 light and 7.06:1 dark. The
+// standalone file at static/images/logo.svg keeps a literal colour, because a
+// favicon has no document to inherit from.
+.header-title .logo-mark {
+    display: inline-block;
+    line-height: 0;
+    color: $single-link-color;
+}
+
+.header-title .logo-mark svg {
+    height: 2.5em;
+    width: auto;
+    vertical-align: middle;
+}
+
+[theme=dark] .header-title .logo-mark {
+    color: $single-link-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .header-title .logo-mark {
+        color: $single-link-color-dark;
+    }
+}
+
 /* Mobile logo adjustment */
 @media (max-width: 768px) {
     .header-title .logo {
         height: 2em;
         min-height: 2em;
         max-height: 2em;
+    }
+
+    .header-title .logo-mark svg {
+        height: 2em;
     }
 }
 

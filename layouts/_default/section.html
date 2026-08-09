@@ -92,14 +92,12 @@
                             </span>
                         </div>
                         {{- /*
-                            markdownify because at least one description contains
-                            a markdown link, which rendered as raw [text](url)
-                            syntax on the page. Descriptions still reach meta tags
-                            unprocessed, which is where plain text belongs.
+                            No description. The page lists fourteen things -- eight
+                            published elsewhere, six here -- and a paragraph under
+                            six of them made the list read as two different kinds of
+                            page. Titles carry the topic; descriptions still reach
+                            the meta tags, which is where they earn their keep.
                         */ -}}
-                        {{- with .Description -}}
-                            <div class="archive-item__desc">{{ . | emojify | markdownify }}</div>
-                        {{- end -}}
                     </article>
                 {{- end -}}
             {{- end -}}

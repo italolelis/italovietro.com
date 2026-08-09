@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="#c2680a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+<!-- Colour comes from CSS: inlined into the header so it can take the accent
+     per theme. The standalone favicon copy in static/images/logo.svg keeps a
+     literal colour, because a favicon has no document to inherit from. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
   <title>Italo Vietro</title>
   <polygon points="256,56 429.2,156 429.2,356 256,456 82.8,356 82.8,156"/>
   <g stroke-width="14">
@@ -7,7 +10,7 @@
     <path d="M284,224c-15-21 15-30 0-51c-15-21 15-30 0-51"/>
   </g>
   <path d="M160,164l32,24-32,24" stroke-width="18"/>
-  <g fill="#c2680a" stroke="none">
+  <g fill="currentColor" stroke="none">
     <path d="M334,254c64,0 64,76 0,76z"/>
     <path d="M154,230H342v42c0,58-42,104-94,104s-94-46-94-104z"/>
   </g>
