@@ -12,8 +12,6 @@ math:
   enable: false
 ---
 
-Not everything is here — some talks were never recorded and I've lost track of others. This is what I could verify.
-
 ## Conference Talks
 
 {{< talk title="From cost to impact: Hands-on strategies for cost management optimization" event="DevTalks Romania 2025" date="2025" type="talk" >}}

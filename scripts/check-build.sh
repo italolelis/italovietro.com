@@ -235,6 +235,12 @@ contains "$EN_HOME" '>About<' 'About appears in the en nav'
 contains "$PT_HOME" '>Sobre<' 'Sobre appears in the pt-br nav'
 contains "$EN_ABOUT" 'portrait__img' 'the portrait renders on About'
 contains "$EN_ABOUT" 'portrait__sizes' 'About offers the portrait at more than one resolution'
+# The size links are muted, not amber. They lost to the theme's own content-link
+# rule in dark mode -- three classes and a type against a bare class -- so the line
+# rendered as a grey label beside two amber links. The qualified selector is the
+# fix, and this asserts it stays qualified.
+matches "$CSS" '\.single \.content \.portrait__sizes a\{color:#57534e' 'the headshot line is one colour in light'
+matches "$CSS" '\[theme=dark\] \.single \.content \.portrait__sizes a[,{]' 'and one colour in dark'
 contains "$PT_ABOUT" 'portrait__img' 'the portrait renders on pt-br About too'
 
 # The photograph was a 428KB PNG of a 512x512 image -- 7x the bytes for no extra
@@ -274,13 +280,18 @@ contains "$PT_ARCHIVE" 'aria-label="Ainda se sustenta"' 'the pt-br marker is nam
 # make a dormant talks list and a live podcast list tell themselves apart, so every
 # entry must carry both -- asserted as a count match rather than a fixed number, so
 # adding a talk without a date fails but adding a complete one does not.
+#
+# The completeness hedge #303 asked for is deliberately absent. It was drafted,
+# approved and then rejected on sight by the owner, so the dates now carry the
+# whole job: a reader who sees a gap between 2019 and 2024 can read it as a gap
+# without being told to. The assertions below keep it from creeping back in.
 echo 'Speaking page separates talks from podcasts'
 contains "$EN_SPEAKING" 'Conference Talks' 'en talks have their own heading'
 contains "$EN_SPEAKING" 'Podcast Appearances' 'en podcast appearances have their own heading'
 contains "$PT_SPEAKING" '>Palestras<' 'pt-br talks have their own heading'
 contains "$PT_SPEAKING" 'Participacoes em Podcasts' 'pt-br podcast appearances have their own heading'
-contains "$EN_SPEAKING" 'Not everything is here' 'en page opens with the completeness hedge'
-contains "$PT_SPEAKING" 'Nem tudo está aqui' 'pt-br page opens with the completeness hedge'
+absent_from "$EN_SPEAKING" 'Not everything is here' 'the rejected completeness hedge stays off the en page'
+absent_from "$PT_SPEAKING" 'Nem tudo está aqui' 'and off the pt-br page'
 same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
 same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entry carries a venue'
 same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
