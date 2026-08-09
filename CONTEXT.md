@@ -40,10 +40,6 @@ _Avoid_: Badge, flag, star rating, featured
 The heavier of the two reading-list entry treatments, used for the "Start Here" set. A property of how an entry is displayed, not a score.
 _Avoid_: Highlighted, top pick, recommended
 
-**Read year**:
-The year an entry on the reading list was read, shown as a right-aligned column. Distinct from the year the book was published, which the site does not record.
-_Avoid_: Date, published date, year
-
 **Post-build assertion**:
 A check in `scripts/check-build.sh` run against the generated HTML and compiled CSS, not against source. It asserts what a browser receives, so it survives reorganisation of content and stylesheets.
 _Avoid_: Test, lint, smoke test

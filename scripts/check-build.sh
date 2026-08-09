@@ -411,15 +411,6 @@ contains "$EN_READING" 'Start Here' 'en has the featured section'
 contains "$PT_READING" 'Comece por aqui' 'pt-br has the featured section, translated'
 nowhere 'Must Read' 'the tier subheadings are gone from both languages'
 
-# Read years are supported by the shortcode and styled as a right-hand column, but
-# no entry carries one yet: the years are the owner's to supply, and a wrong date is
-# worse than an absent one. So this asserts the rule survives, the way the
-# interaction rules below are asserted -- presence, not appearance.
-#
-# When the first years land, add content assertions here for both languages, and a
-# line to the reading list intro saying the years are when it was read rather than
-# when it was published. A bare year beside a book title reads as the latter.
-contains "$CSS" 'book-entry__date' 'the read-year column rule is present in the stylesheet'
 
 # The site's job is inbound -- see docs/adr/0005. These guard the three things that
 # job depends on and that nothing on the page reveals when they break.

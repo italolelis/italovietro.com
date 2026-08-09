@@ -1,18 +1,15 @@
 {{- /* layouts/shortcodes/book.html */ -}}
 {{- /*
     Parameters: title, author, link (all required), type (book|newsletter|podcast),
-    featured (optional), read (optional).
+    featured (optional).
 
-    `read` is the year it was read, and it is named `read` rather than `date` because
-    a bare year beside a book title otherwise reads as the publication year. It is
-    display-only, so it needs no translation -- but the two language files must carry
-    the same value for the same entry, since it is a fact about the reader, not the
-    text.
-
-    Deliberately not a <time datetime="...">: a bare year is not one of the formats
-    that attribute accepts, and inventing a month to satisfy it would be inventing
-    data. An entry whose read year is unknown omits the parameter entirely and
-    renders exactly as it did before.
+    No read year. One was built -- an optional `read` param rendering a right-aligned
+    column of years -- and then never used: a third of this list is newsletters and
+    podcasts, which have no year you could honestly give, and the books' years were
+    not worth the recall. Being on this list is the recommendation; when it was read
+    changes nothing about that. Removed rather than left dormant, because a parameter
+    nobody passes is a parameter the next person has to work out. It is in the
+    history if it is ever wanted.
 
     No rating parameter any more. There was one, and every entry scored 4 or 5 out
     of 5 -- ten fives and nine fours. A scale whose values all sit in the top 40%
@@ -28,7 +25,6 @@
 {{- $link     := .Get "link" -}}
 {{- $type     := .Get "type" | default "book" -}}
 {{- $featured := .Get "featured" -}}
-{{- $read     := .Get "read" -}}
 {{- $inner    := trim .Inner "\n" | .Page.RenderString -}}
 <div class="book-entry book-entry--{{ $type }}{{ if $featured }} book-entry--featured{{ end }}">
     <div class="book-entry__header">
@@ -36,9 +32,6 @@
             <a href="{{ $link }}" target="_blank" rel="noopener noreferrer">{{ $title }}</a>
         </h3>
         <span class="book-entry__author">{{ $author }}</span>
-        {{- with $read }}
-        <span class="book-entry__date">{{ . }}</span>
-        {{- end }}
     </div>
     <div class="book-entry__description">
         {{- $inner -}}
