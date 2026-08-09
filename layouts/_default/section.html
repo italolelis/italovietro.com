@@ -28,80 +28,62 @@
         {{- end -}}
 
         {{- /*
-            One archive, in one order.
+            One archive, in one order: posts written here and pieces published
+            elsewhere, sorted together and grouped by year.
 
-            Posts written here and pieces published elsewhere used to sit in two
-            blocks -- "Elsewhere" above, then the year groups. That split asked the
-            reader to hold two timelines at once to answer one question: what has he
-            written, and when. Merged, the answer reads straight down the page.
+            The off-site pieces are pages rather than data, with `render: never` and
+            an `externalUrl`. That is the only shape Hugo can sort, group and
+            paginate in one collection -- a data file cannot be handed to .Paginate,
+            which is why the paginator had to come back with them.
 
-            The right-hand column already carries the source, so nothing else is
-            needed to tell the two apart: a row with a host was published elsewhere,
-            a row without one is here. Absence is the quietest possible marker and it
-            costs no words, which on a bilingual site is the whole game.
-
-            Both kinds are normalised into one slice of dicts before sorting, because
-            Hugo cannot group Pages and data entries together as they are. Dates are
-            formatted with the same site-level format either way, so a Medium piece
-            and a post from the same month line up.
-
-            No paginator any more: it can only page a Pages collection, and this list
-            is neither. At fourteen items against a page size of twenty it was never
-            paging anything -- if the archive ever outgrows one screen, this is the
-            thing to put back.
+            Nothing labels the two kinds. The right-hand column carries a source when
+            the writing ran somewhere else and nothing when it ran here, and absence
+            is the quietest marker available -- it costs no words, which on a
+            bilingual site is the whole game.
         */ -}}
-        {{- $fmt := .Site.Params.section.dateFormat | default "January 2" -}}
-        {{- $items := slice -}}
-        {{- range .Pages -}}
-            {{- $items = $items | append (dict
-                "title" .Title
-                "url" .RelPermalink
-                "date" .Date
-                "host" ""
-                "external" false
-                "enduring" .Params.enduring) -}}
+        {{- $pages := .Pages.GroupByDate "2006" -}}
+        {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
+            {{- $pages = $.Paginate $pages . -}}
+        {{- else -}}
+            {{- $pages = .Paginate $pages -}}
         {{- end -}}
-        {{- range site.Data.elsewhere -}}
-            {{- $items = $items | append (dict
-                "title" .title
-                "url" .url
-                "date" (time.AsTime .date)
-                "host" .host
-                "external" true
-                "enduring" false) -}}
-        {{- end -}}
-
-        {{- $year := "" -}}
-        {{- range sort $items "date" "desc" -}}
-            {{- $itemYear := .date.Format "2006" -}}
-            {{- if ne $itemYear $year -}}
-                <h2 class="group-title">{{ $itemYear }}</h2>
-                {{- $year = $itemYear -}}
-            {{- end -}}
-            <article class="archive-item">
-                <div class="archive-item__header">
-                    <h3 class="archive-item__title">
-                        <a href="{{ .url }}"{{ if .external }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .title | emojify }}</a>
-                    </h3>
-                    {{- /*
-                        The durability marker. A symbol rather than a word, because on
-                        a bilingual site every word costs double and a symbol costs
-                        nothing. Its accessible name comes from this section's front
-                        matter, per language, beside the sentence that explains it.
-                    */ -}}
-                    {{- if .enduring -}}
-                        {{- with $.Params.markLabel -}}
-                            <span class="archive-item__mark" role="img" aria-label="{{ . }}" title="{{ . }}">&#9733;</span>
-                        {{- else -}}
-                            <span class="archive-item__mark" aria-hidden="true">&#9733;</span>
+        {{- range $pages.PageGroups -}}
+            <h2 class="group-title">{{ .Key }}</h2>
+            {{- range .Pages -}}
+                {{- /* Bound because `with` below rebinds the dot, and `$` is the
+                       section page -- not this entry. */ -}}
+                {{- $item := . -}}
+                <article class="archive-item">
+                    <div class="archive-item__header">
+                        <h3 class="archive-item__title">
+                            {{- with .Params.externalUrl -}}
+                                <a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $item.Title | emojify }}</a>
+                            {{- else -}}
+                                <a href="{{ $item.RelPermalink }}">{{ $item.Title | emojify }}</a>
+                            {{- end -}}
+                        </h3>
+                        {{- /*
+                            The durability marker. A symbol rather than a word, because
+                            on a bilingual site every word costs double and a symbol
+                            costs nothing. Its accessible name comes from this
+                            section's front matter, per language, so the legend and the
+                            label are written in the same place.
+                        */ -}}
+                        {{- if .Params.enduring -}}
+                            {{- with $.Params.markLabel -}}
+                                <span class="archive-item__mark" role="img" aria-label="{{ . }}" title="{{ . }}">&#9733;</span>
+                            {{- else -}}
+                                <span class="archive-item__mark" aria-hidden="true">&#9733;</span>
+                            {{- end -}}
                         {{- end -}}
-                    {{- end -}}
-                    <span class="archive-item__date">
-                        {{- with .host }}{{ . }} &middot; {{ end -}}
-                        {{- .date.Format $fmt -}}
-                    </span>
-                </div>
-            </article>
+                        <span class="archive-item__date">
+                            {{- with .Params.host }}{{ . }} &middot; {{ end -}}
+                            {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
+                        </span>
+                    </div>
+                </article>
+            {{- end -}}
         {{- end -}}
+        {{- partial "paginator.html" . -}}
     </div>
 {{- end -}}

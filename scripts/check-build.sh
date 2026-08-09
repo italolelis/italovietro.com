@@ -55,6 +55,12 @@ exists() {
     if [ -f "$1" ]; then ok "$2"; else bad "$2 (no such file: $1)"; fi
 }
 
+# missing <file> <description> -- the inverse of exists, for output that must not
+# be generated.
+missing() {
+    if [ ! -f "$1" ]; then ok "$2"; else bad "$2 (exists: $1)"; fi
+}
+
 # matches <file> <regex> <description> -- for assertions about two things being
 # adjacent in the output, which a fixed-string search cannot express.
 matches() {
@@ -327,11 +333,20 @@ absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a des
 # The archive stopped in 2021 and says so, rather than leaving a visitor to work it
 # out from the dates. Two posts carry a star saying the ideas still hold; the count
 # is asserted exactly, because a marker that spreads to five posts marks nothing.
-echo 'Writing archive is honestly dated'
-contains "$EN_ARCHIVE" 'Nothing new on this site since March 2021' 'en archive opens with the dated notice'
-contains "$PT_ARCHIVE" 'Nada novo neste site desde março de 2021' 'pt-br archive opens with the dated notice'
-contains "$EN_ARCHIVE" 'an open question' 'the en notice states the position on resuming, not only the date'
-contains "$PT_ARCHIVE" 'uma pergunta em aberto' 'the pt-br notice states the position on resuming'
+# The dated notice is gone. It described a page that no longer exists -- one where
+# everything below it was old -- while the archive now opens on 2026. The dates do
+# the work the notice was doing, which is what 8 of the 14 surveyed sites rely on.
+#
+# What replaces it as the guard: the oldest year still renders. Off-site pieces are
+# pages with `render: never`, so a misconfigured paginator or a build option
+# regression would drop rows silently, and 2017 disappearing is the visible edge of
+# that.
+echo 'Writing archive'
+absent_from "$EN_ARCHIVE" 'archive-intro' 'the archive opens on the list, with no notice above it'
+matches "$EN_ARCHIVE" 'group-title>2017<' 'the oldest year is still on the page -- nothing truncated'
+matches "$PT_ARCHIVE" 'group-title>2017<' 'and in pt-br'
+missing "$PUBLIC/scaling-parloa-when-the-platform-becomes-the-product/index.html" 'a link post renders no page of its own'
+contains "$PUBLIC/posts/index.xml" 'parloa.com/labs' 'the feed sends a link post to the piece, not to a stub'
 occurs "$EN_ARCHIVE" 'archive-item__mark' 2 'exactly two en posts carry the durability marker'
 occurs "$PT_ARCHIVE" 'archive-item__mark' 2 'exactly two pt-br posts carry it'
 matches "$EN_ARCHIVE" 'href=/do-job-titles-matter/.*</a></h3><span class=archive-item__mark' 'the job titles post is one of the two'

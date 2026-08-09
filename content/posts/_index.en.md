@@ -1,9 +1,8 @@
 ---
 title: "Writing"
-description: "Posts from 2018 to 2021 on leadership, teams, and systems."
-# The accessible name for the ★ on marked posts. It lives here, per language,
-# beside the sentence that explains the symbol.
+description: "Everything I've written since 2017, here and elsewhere, on leadership, teams and systems."
+# The accessible name for the ★ on the posts that still hold up. There is no
+# visible legend on the page any more, so this is the only thing explaining the
+# symbol -- it reaches a hover and a screen reader, and nothing else.
 markLabel: "Still holds up"
 ---
-
-Nothing new on this site since March 2021 — the writing since then went out elsewhere, and whether it comes back here is an open question. Everything is below, newest first, with a source where it wasn't here. ★ marks the two I'd still hand to someone.
