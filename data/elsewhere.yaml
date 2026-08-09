@@ -12,56 +12,51 @@
 # cross-posted -- and listing it twice would inflate this list with something the
 # reader can already reach.
 #
-# Rendered by layouts/_default/section.html above the year groups. Language-neutral
-# on purpose: these are titles, hosts and dates, and the pieces are in English
-# regardless of which version of the site you are reading.
+# Rendered by layouts/_default/section.html, merged into the same year groups as
+# the posts written here and sorted with them. The `host` below is what tells the
+# two apart on the page: a row carrying one was published elsewhere, a row without
+# one is here. Language-neutral on purpose -- these are titles, hosts and dates, and
+# the pieces are in English regardless of which version of the site you are reading.
 #
-# `date` sorts; `display` is what a reader sees.
+# `date` both sorts and prints -- formatted with the same site-level format the
+# posts use, so a Medium piece and a post from the same month read identically.
 
 - title: "Scaling Parloa: When the platform becomes the product"
   host: "Parloa Labs"
   date: 2026-06-04
-  display: "June 2026"
   url: "https://www.parloa.com/labs/insights/scaling-parloa-when-the-platform-becomes-the-product/"
 
 - title: "Why You Shouldn't Encourage Heroism In Your Team"
   host: "Yeka"
   date: 2026-02-10
-  display: "February 2026"
   url: "https://yeka.substack.com/p/why-you-shouldnt-encourage-heroism"
 
 - title: "What is our technology stack, and how do we define it?"
   host: "Urban Sports Club Tech"
   date: 2022-11-18
-  display: "November 2022"
   url: "https://medium.com/urban-sports-club-tech/what-is-our-technology-stack-and-how-do-we-define-it-6098190f067b"
 
 - title: "Serverless Hackathon @N26"
   host: "InsideN26"
   date: 2019-02-04
-  display: "February 2019"
   url: "https://medium.com/insiden26/serverless-hackathon-n26-5c8d845cd446"
 
 - title: "Navigating the rough seas of environment scaling with Ahoy!"
   host: "HelloTech"
   date: 2018-02-07
-  display: "February 2018"
   url: "https://medium.com/hellofresh-dev/navigating-the-rough-seas-of-environment-scaling-with-ahoy-bfc2428f55b1"
 
 - title: "An Awesome Coffee Guide in Berlin"
   host: "Medium"
   date: 2017-09-17
-  display: "September 2017"
   url: "https://medium.com/@italovietro/an-awesome-coffee-guide-in-berlin-325202ee38f3"
 
 - title: "Scaling @ HelloFresh: Distributed Tracing"
   host: "HelloTech"
   date: 2017-05-08
-  display: "May 2017"
   url: "https://medium.com/hellofresh-dev/scaling-hellofresh-distributed-tracing-7b182928247d"
 
 - title: "Scaling @ HelloFresh: API Gateway"
   host: "HelloTech"
   date: 2017-02-15
-  display: "February 2017"
   url: "https://medium.com/hellofresh-dev/scaling-hellofresh-api-gateway-7d40be55450f"

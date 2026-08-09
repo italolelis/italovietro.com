@@ -28,80 +28,80 @@
         {{- end -}}
 
         {{- /*
-            Writing published elsewhere, from data/elsewhere.yaml.
+            One archive, in one order.
 
-            Above the year groups because it is the most recent work on the page,
-            and the page's problem was that its newest visible thing was five years
-            old while its author had published two months ago somewhere else.
+            Posts written here and pieces published elsewhere used to sit in two
+            blocks -- "Elsewhere" above, then the year groups. That split asked the
+            reader to hold two timelines at once to answer one question: what has he
+            written, and when. Merged, the answer reads straight down the page.
 
-            Same markup as an archive entry, so an off-site piece reads as writing
-            rather than as a link box. The label comes from this section's front
-            matter, per language, next to the sentence that explains the dormancy.
+            The right-hand column already carries the source, so nothing else is
+            needed to tell the two apart: a row with a host was published elsewhere,
+            a row without one is here. Absence is the quietest possible marker and it
+            costs no words, which on a bilingual site is the whole game.
+
+            Both kinds are normalised into one slice of dicts before sorting, because
+            Hugo cannot group Pages and data entries together as they are. Dates are
+            formatted with the same site-level format either way, so a Medium piece
+            and a post from the same month line up.
+
+            No paginator any more: it can only page a Pages collection, and this list
+            is neither. At fourteen items against a page size of twenty it was never
+            paging anything -- if the archive ever outgrows one screen, this is the
+            thing to put back.
         */ -}}
-        {{- with site.Data.elsewhere -}}
-            <h2 class="group-title">{{ $.Params.elsewhereLabel | default "Elsewhere" }}</h2>
-            {{- range sort . "date" "desc" -}}
-                <article class="archive-item">
-                    <div class="archive-item__header">
-                        <h3 class="archive-item__title">
-                            <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a>
-                        </h3>
-                        <span class="archive-item__date">{{ .host }} &middot; {{ .display }}</span>
-                    </div>
-                </article>
-            {{- end -}}
+        {{- $fmt := .Site.Params.section.dateFormat | default "January 2" -}}
+        {{- $items := slice -}}
+        {{- range .Pages -}}
+            {{- $items = $items | append (dict
+                "title" .Title
+                "url" .RelPermalink
+                "date" .Date
+                "host" ""
+                "external" false
+                "enduring" .Params.enduring) -}}
+        {{- end -}}
+        {{- range site.Data.elsewhere -}}
+            {{- $items = $items | append (dict
+                "title" .title
+                "url" .url
+                "date" (time.AsTime .date)
+                "host" .host
+                "external" true
+                "enduring" false) -}}
         {{- end -}}
 
-        {{- if .Pages -}}
-            {{- $pages := .Pages.GroupByDate "2006" -}}
-            {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
-                {{- $pages = $.Paginate $pages . -}}
-            {{- else -}}
-                {{- $pages = .Paginate $pages -}}
+        {{- $year := "" -}}
+        {{- range sort $items "date" "desc" -}}
+            {{- $itemYear := .date.Format "2006" -}}
+            {{- if ne $itemYear $year -}}
+                <h2 class="group-title">{{ $itemYear }}</h2>
+                {{- $year = $itemYear -}}
             {{- end -}}
-            {{- range $pages.PageGroups -}}
-                <h2 class="group-title">{{ .Key }}</h2>
-                {{- range .Pages -}}
-                    <article class="archive-item">
-                        <div class="archive-item__header">
-                            <h3 class="archive-item__title">
-                                <a href="{{ .RelPermalink }}">{{ .Title | emojify }}</a>
-                            </h3>
-                            {{- /*
-                                The durability marker. A symbol rather than a word,
-                                because on a bilingual site every word costs double
-                                and a symbol costs nothing.
-
-                                Its label comes from the section page's front matter
-                                rather than from a translation file: the legend that
-                                explains the symbol is already written per language
-                                in _index.<lang>.md, so the accessible name belongs
-                                beside it. With no label the glyph is decorative and
-                                is hidden from screen readers rather than read out
-                                as an unexplained star.
-                            */ -}}
-                            {{- if .Params.enduring -}}
-                                {{- with $.Params.markLabel -}}
-                                    <span class="archive-item__mark" role="img" aria-label="{{ . }}" title="{{ . }}">&#9733;</span>
-                                {{- else -}}
-                                    <span class="archive-item__mark" aria-hidden="true">&#9733;</span>
-                                {{- end -}}
-                            {{- end -}}
-                            <span class="archive-item__date">
-                                {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
-                            </span>
-                        </div>
-                        {{- /*
-                            No description. The page lists fourteen things -- eight
-                            published elsewhere, six here -- and a paragraph under
-                            six of them made the list read as two different kinds of
-                            page. Titles carry the topic; descriptions still reach
-                            the meta tags, which is where they earn their keep.
-                        */ -}}
-                    </article>
-                {{- end -}}
-            {{- end -}}
-            {{- partial "paginator.html" . -}}
+            <article class="archive-item">
+                <div class="archive-item__header">
+                    <h3 class="archive-item__title">
+                        <a href="{{ .url }}"{{ if .external }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .title | emojify }}</a>
+                    </h3>
+                    {{- /*
+                        The durability marker. A symbol rather than a word, because on
+                        a bilingual site every word costs double and a symbol costs
+                        nothing. Its accessible name comes from this section's front
+                        matter, per language, beside the sentence that explains it.
+                    */ -}}
+                    {{- if .enduring -}}
+                        {{- with $.Params.markLabel -}}
+                            <span class="archive-item__mark" role="img" aria-label="{{ . }}" title="{{ . }}">&#9733;</span>
+                        {{- else -}}
+                            <span class="archive-item__mark" aria-hidden="true">&#9733;</span>
+                        {{- end -}}
+                    {{- end -}}
+                    <span class="archive-item__date">
+                        {{- with .host }}{{ . }} &middot; {{ end -}}
+                        {{- .date.Format $fmt -}}
+                    </span>
+                </div>
+            </article>
         {{- end -}}
     </div>
 {{- end -}}

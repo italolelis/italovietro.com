@@ -328,8 +328,8 @@ absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a des
 # out from the dates. Two posts carry a star saying the ideas still hold; the count
 # is asserted exactly, because a marker that spreads to five posts marks nothing.
 echo 'Writing archive is honestly dated'
-contains "$EN_ARCHIVE" 'Nothing new on this page since March 2021' 'en archive opens with the dated notice'
-contains "$PT_ARCHIVE" 'Nada novo nesta página desde março de 2021' 'pt-br archive opens with the dated notice'
+contains "$EN_ARCHIVE" 'Nothing new on this site since March 2021' 'en archive opens with the dated notice'
+contains "$PT_ARCHIVE" 'Nada novo neste site desde março de 2021' 'pt-br archive opens with the dated notice'
 contains "$EN_ARCHIVE" 'an open question' 'the en notice states the position on resuming, not only the date'
 contains "$PT_ARCHIVE" 'uma pergunta em aberto' 'the pt-br notice states the position on resuming'
 occurs "$EN_ARCHIVE" 'archive-item__mark' 2 'exactly two en posts carry the durability marker'
@@ -439,8 +439,10 @@ contains "$EN_SPEAKING" '2020' 'and the years it ran'
 # Writing did not stop in 2021, it moved. The archive lists the off-site pieces so
 # a visitor can find the recent work from here.
 echo 'Writing elsewhere'
-contains "$EN_ARCHIVE" 'Elsewhere' 'the en archive groups the off-site writing'
-contains "$PT_ARCHIVE" 'Em outros lugares' 'the pt-br archive does too, translated'
+matches "$EN_ARCHIVE" 'group-title>2026<' 'the archive opens on the year of the newest piece, wherever it ran'
+absent_from "$EN_ARCHIVE" 'group-title>Elsewhere' 'off-site writing is not a separate block any more'
+contains "$EN_ARCHIVE" 'Parloa Labs' 'off-site rows name their source'
+contains "$PT_ARCHIVE" 'Parloa Labs' 'in both languages -- the source is a name, not prose'
 contains "$EN_ARCHIVE" 'Scaling Parloa' 'the Parloa Labs piece is listed'
 contains "$EN_ARCHIVE" 'parloa.com/labs' 'and links to it'
 contains "$EN_HOME" 'went out elsewhere' 'the en home page no longer says the writing simply stopped'

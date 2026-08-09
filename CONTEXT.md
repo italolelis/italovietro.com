@@ -21,7 +21,7 @@ A confirmed future appearance, held in `data/upcoming.yaml` and rendered above t
 _Avoid_: Events, calendar, schedule, next
 
 **Elsewhere**:
-Writing published on someone else's site, listed on the writing archive with its host and date. It is not a link roundup — these are his pieces, living at another URL.
+Writing published on someone else's site. It sits in the same chronological archive as the posts written here, told apart only by the source in its right-hand column — a row with a host ran elsewhere, a row without one ran here. Not a link roundup: these are his pieces, living at another URL.
 _Avoid_: External links, guest posts, links, press
 
 **Entry**:
