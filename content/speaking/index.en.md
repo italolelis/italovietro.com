@@ -18,7 +18,7 @@ Happy to talk at your event or on your podcast — [me@italovietro.com](mailto:m
 
 ## Conference Talks
 
-{{< talk title="Platform Engineering and Developer Experience Summit" event="London" date="2025" type="talk" >}}
+{{< talk title="Scaling Platform Engineering While Maintaining Reliability" event="Platform Engineering and Developer Experience Summit, London" date="2025" type="talk" >}}
 {{< /talk >}}
 
 {{< talk title="From cost to impact: Hands-on strategies for cost management optimization" event="DevTalks Romania 2025" date="2025" type="talk" >}}
