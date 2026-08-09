@@ -42,6 +42,26 @@
                             <h3 class="archive-item__title">
                                 <a href="{{ .RelPermalink }}">{{ .Title | emojify }}</a>
                             </h3>
+                            {{- /*
+                                The durability marker. A symbol rather than a word,
+                                because on a bilingual site every word costs double
+                                and a symbol costs nothing.
+
+                                Its label comes from the section page's front matter
+                                rather than from a translation file: the legend that
+                                explains the symbol is already written per language
+                                in _index.<lang>.md, so the accessible name belongs
+                                beside it. With no label the glyph is decorative and
+                                is hidden from screen readers rather than read out
+                                as an unexplained star.
+                            */ -}}
+                            {{- if .Params.enduring -}}
+                                {{- with $.Params.markLabel -}}
+                                    <span class="archive-item__mark" role="img" aria-label="{{ . }}" title="{{ . }}">&#9733;</span>
+                                {{- else -}}
+                                    <span class="archive-item__mark" aria-hidden="true">&#9733;</span>
+                                {{- end -}}
+                            {{- end -}}
                             <span class="archive-item__date">
                                 {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
                             </span>

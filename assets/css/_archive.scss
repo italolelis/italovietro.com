@@ -75,6 +75,23 @@
     text-underline-offset: 3px;
 }
 
+// The durability marker, on the two posts whose ideas still hold.
+//
+// Not amber. Titles on this page are already amber because they are the links,
+// and a second amber thing in the same row would make the marker compete with
+// them rather than annotate them. Shape carries it: a star is a star with colour
+// removed, which is also what makes it survive a greyscale print or a screen
+// reader that ignores CSS.
+//
+// Sized slightly under the title so it reads as an annotation on the row rather
+// than as part of the heading.
+.archive-item__mark {
+    font-size: 0.875rem;
+    line-height: 1;
+    color: $muted-text-color;
+    cursor: help;
+}
+
 .archive-item__date {
     font-size: 0.8125rem;
     color: $muted-text-color;
@@ -102,6 +119,7 @@
 @mixin archive-dark {
     .archive-intro p,
     .archive .group-title,
+    .archive-item__mark,
     .archive-item__date {
         color: $muted-text-color-dark;
     }
