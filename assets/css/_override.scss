@@ -34,6 +34,44 @@ $global-link-hover-color-dark: #f59e0b; // 6.68:1 on #292a2d
 $pagination-link-color: #b45309;
 $pagination-link-color-dark: #f59e0b;
 
+// The navigation item for the section you are in. Despite its name this variable
+// has exactly one consumer in the theme -- `a.active` in the header -- so it is
+// the active-item colour, not a hover colour.
+//
+// The theme already sets font-weight 900 on that item, so the section you are in
+// stays identifiable with colour removed. Amber makes an element already on the
+// page more legible rather than adding anything new to look at.
+$header-hover-color: #b45309; // 4.73:1 on the #f8f8f8 header
+$header-hover-color-dark: #f59e0b; // 7.06:1 on the #252627 header
+
+// Selected text. The theme default is a blue unrelated to anything else here.
+//
+// Measured as a composite, because a translucent background is only as readable
+// as what it lands on: 22% amber over #fff resolves to #eed9c9, and 45% over
+// #292a2d to #683c1d. The text colour on top is forced in _interactions.scss --
+// without it, selecting a paragraph that contains a link would leave that link
+// amber-on-amber at 3.68:1.
+$selection-color: rgba(180, 83, 9, 0.22);
+$selection-color-dark: rgba(180, 83, 9, 0.45);
+
+// The text sitting on it. Deliberately not $global-font-color-dark: that measures
+// 4.00:1 against the composited dark selection and misses AA, which is the reason
+// this pair exists rather than letting the text keep whatever colour it had.
+$selection-text-color: #161209; // 13.70:1 on the light selection
+$selection-text-color-dark: #fff; // 9.32:1 on the dark selection
+
+// --- Headings -----------------------------------------------------------
+//
+// Dark mode only. Light mode needs nothing here: body text is a near-black at
+// 15.72:1, so a heading in the same colour already reads as the strongest thing
+// on the page. Dark inverted that -- headings took $global-font-color-dark, the
+// exact colour of the body text under them, so hierarchy rested on size alone and
+// every page read flat.
+//
+// This is not the bold-inside-prose case, which stays inherited on purpose (see
+// _custom.scss): a heading is a different element doing a different job.
+$heading-color-dark: #e7e5e4; // 11.90:1 on #292a2d, against body text at 6.16:1
+
 // --- Muted text ---------------------------------------------------------
 //
 // Warm neutrals, chosen to sit with the accent rather than against it.
@@ -43,7 +81,17 @@ $pagination-link-color-dark: #f59e0b;
 // paragraph and metadata text these apply to would fail AA badly. The theme
 // variable stays untouched for the components that treat it as decoration.
 $muted-text-color: #57534e; // 7.63:1 on #fff
-$muted-text-color-dark: #a8a29e; // 5.69:1 on #292a2d
+//
+// Dark has one grey, not two. This was #a8a29e against body text at #a9a9b3 --
+// a 1% difference, which is to say no difference: the "muted" tier existed in the
+// stylesheet and nowhere on the screen. The headshot line on /about/ was where it
+// showed, a caption that was supposed to read quieter than the paragraph under it
+// and read exactly the same.
+//
+// So in dark the tier is carried by size and weight instead, which is what was
+// actually distinguishing metadata all along. Light keeps two values, where
+// #57534e against a near-black body is a difference you can see.
+$muted-text-color-dark: #a9a9b3; // 6.16:1 on #292a2d -- the body text colour
 
 // --- Entry type accents -------------------------------------------------
 //

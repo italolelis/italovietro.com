@@ -1,6 +1,4 @@
 ---
 title: "Writing"
-description: "Posts from 2018 to 2021 on leadership, teams, and systems."
+description: "Everything I've written since 2017, here and elsewhere, on leadership, teams and systems."
 ---
-
-Posts from 2018 to 2021 on leadership, teams, and systems.

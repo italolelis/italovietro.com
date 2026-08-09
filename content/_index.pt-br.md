@@ -1,6 +1,6 @@
 ---
 title: "Italo Vietro"
-description: "Senior Director of Engineering na Parloa. 18+ anos construindo software, liderando times, e aprendendo que os problemas mais difíceis não são técnicos."
+description: "Senior Director of Engineering na Parloa. 18+ anos construindo software e liderando times de engenharia no Brasil e na Europa."
 ---
 
 <div class="home-content">
@@ -9,26 +9,9 @@ description: "Senior Director of Engineering na Parloa. 18+ anos construindo sof
 Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parloa</a></strong>, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde "move fast and break things" não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.
 </p>
 
-<nav class="home-routes" aria-label="Seções">
-  <a class="home-route" href="/pt-br/posts/">
-    <span class="home-route__name">Artigos</span>
-    <span class="home-route__desc">Textos antigos sobre liderança, times e sistemas.</span>
-  </a>
-  <a class="home-route" href="/pt-br/leituras-recomendadas/">
-    <span class="home-route__name">Leituras</span>
-    <span class="home-route__desc">Os livros, newsletters e podcasts que ficaram.</span>
-  </a>
-  <a class="home-route" href="/pt-br/palestras/">
-    <span class="home-route__name">Palestras</span>
-    <span class="home-route__desc">Palestras, painéis e participações em podcasts.</span>
-  </a>
-  <a class="home-route" href="/pt-br/sobre/">
-    <span class="home-route__name">Sobre</span>
-    <span class="home-route__desc">Onde trabalhei, e o que isso me ensinou.</span>
-  </a>
-</nav>
-
----
+<p class="home-signpost">
+Os <a href="/pt-br/posts/">artigos</a> aqui pararam em 2021, mas o que veio depois saiu em outros lugares. A <a href="/pt-br/leituras-recomendadas/">lista de leituras</a> continua crescendo, e a página de <a href="/pt-br/palestras/">palestras</a> é a que ainda se mexe. O resto da biografia está em <a href="/pt-br/sobre/">Sobre</a>.
+</p>
 
 ## Além do Código
 

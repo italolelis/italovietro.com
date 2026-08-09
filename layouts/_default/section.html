@@ -27,38 +27,49 @@
             <div class="archive-intro">{{ . }}</div>
         {{- end -}}
 
-        {{- if .Pages -}}
-            {{- $pages := .Pages.GroupByDate "2006" -}}
-            {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
-                {{- $pages = $.Paginate $pages . -}}
-            {{- else -}}
-                {{- $pages = .Paginate $pages -}}
-            {{- end -}}
-            {{- range $pages.PageGroups -}}
-                <h2 class="group-title">{{ .Key }}</h2>
-                {{- range .Pages -}}
-                    <article class="archive-item">
-                        <div class="archive-item__header">
-                            <h3 class="archive-item__title">
-                                <a href="{{ .RelPermalink }}">{{ .Title | emojify }}</a>
-                            </h3>
-                            <span class="archive-item__date">
-                                {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
-                            </span>
-                        </div>
-                        {{- /*
-                            markdownify because at least one description contains
-                            a markdown link, which rendered as raw [text](url)
-                            syntax on the page. Descriptions still reach meta tags
-                            unprocessed, which is where plain text belongs.
-                        */ -}}
-                        {{- with .Description -}}
-                            <div class="archive-item__desc">{{ . | emojify | markdownify }}</div>
-                        {{- end -}}
-                    </article>
-                {{- end -}}
-            {{- end -}}
-            {{- partial "paginator.html" . -}}
+        {{- /*
+            One archive, in one order: posts written here and pieces published
+            elsewhere, sorted together and grouped by year.
+
+            The off-site pieces are pages rather than data, with `render: never` and
+            an `externalUrl`. That is the only shape Hugo can sort, group and
+            paginate in one collection -- a data file cannot be handed to .Paginate,
+            which is why the paginator had to come back with them.
+
+            Nothing labels the two kinds. The right-hand column carries a source when
+            the writing ran somewhere else and nothing when it ran here, and absence
+            is the quietest marker available -- it costs no words, which on a
+            bilingual site is the whole game.
+        */ -}}
+        {{- $pages := .Pages.GroupByDate "2006" -}}
+        {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
+            {{- $pages = $.Paginate $pages . -}}
+        {{- else -}}
+            {{- $pages = .Paginate $pages -}}
         {{- end -}}
+        {{- range $pages.PageGroups -}}
+            <h2 class="group-title">{{ .Key }}</h2>
+            {{- range .Pages -}}
+                {{- /* Bound because `with` below rebinds the dot, and `$` is the
+                       section page -- not this entry. */ -}}
+                {{- $item := . -}}
+                <article class="archive-item">
+                    <div class="archive-item__header">
+                        <h3 class="archive-item__title">
+                            {{- with .Params.externalUrl -}}
+                                <a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $item.Title | emojify }}</a>
+                            {{- else -}}
+                                <a href="{{ $item.RelPermalink }}">{{ $item.Title | emojify }}</a>
+                            {{- end -}}
+                        </h3>
+                        <span class="archive-item__date">
+                            {{- with .Params.host }}{{ . }} &middot; {{ end -}}
+                            {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
+                        </span>
+                    </div>
+                </article>
+            {{- end -}}
+        {{- end -}}
+        {{- partial "paginator.html" . -}}
     </div>
 {{- end -}}

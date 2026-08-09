@@ -1,0 +1,24 @@
+# Confirmed future appearances. Currently none.
+#
+# Read by layouts/shortcodes/upcoming.html, which renders nothing at all -- not
+# even the heading -- while this list is empty or every `until` date is past. That
+# is the point: an "Upcoming" heading with nothing under it reads worse than no
+# heading, and a list of appearances that turn out to be historical is the specific
+# failure this section exists to avoid.
+#
+# It has already caught one. The PENGDEX entry that lived here was added from an
+# IQPC speaker page, which is evergreen -- the same URL serves the current edition
+# regardless of which year someone spoke. The talk was 2025, not 2026, and it is
+# now in the past-talks list where it belongs.
+#
+# Format, when there is something to add:
+#
+#   - event: "Conference name"
+#     venue: "City"
+#     until: 2027-03-14   # last day, so a multi-day event stays listed while it runs
+#     display: "13-14 March 2027"
+#     url: "https://..."
+#
+# When one happens, move it into content/speaking/index.*.md and delete it here.
+# Nothing does that automatically -- the entry simply stops rendering, so the page
+# is never wrong, only quieter.

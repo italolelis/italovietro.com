@@ -131,6 +131,60 @@ button:focus-visible,
     }
 }
 
+// --- Selected text ------------------------------------------------------
+//
+// The background comes from $selection-color in _override.scss. What is set here
+// is the text colour on top of it, which the theme leaves to the browser.
+//
+// Without it, selection inherits whatever colour the text already had, and an
+// amber link inside a selected paragraph lands on an amber background at 3.68:1 --
+// legible until you highlight it, then not. Forcing one colour fixes links,
+// headings and muted metadata in a single rule: 13.70:1 in light, 9.32:1 in dark,
+// both measured against the composited background rather than the page beneath it.
+::selection {
+    color: $selection-text-color;
+}
+
+[theme=dark] ::selection {
+    color: $selection-text-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] ::selection {
+        color: $selection-text-color-dark;
+    }
+}
+
+// --- Active navigation item ---------------------------------------------
+//
+// The desktop header already styles `a.active` -- font-weight 900 plus the colour
+// token overridden in _override.scss. The mobile menu had neither: the template
+// never marked the current item, so on a phone nothing said which section you were
+// in. The class is now emitted there too (layouts/partials/header.html), and this
+// gives it the same two signals.
+//
+// Weight carries it if colour is unavailable, and the left rule is a third cue
+// that survives both -- it matches the edge the entry rows use on hover.
+#header-mobile .menu .menu-item.active {
+    font-weight: 700;
+    color: $header-hover-color;
+    border-left: 3px solid $header-hover-color;
+    padding-left: 0.75rem;
+    margin-left: -0.75rem;
+}
+
+[theme=dark] #header-mobile .menu .menu-item.active {
+    color: $header-hover-color-dark;
+    border-left-color: $header-hover-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] #header-mobile .menu .menu-item.active {
+        color: $header-hover-color-dark;
+        border-left-color: $header-hover-color-dark;
+    }
+}
+
 // --- Motion -------------------------------------------------------------
 //
 // Suppressed, not shortened. A visitor who asks for reduced motion gets the

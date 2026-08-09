@@ -4,8 +4,17 @@
         <div class="header-title">
             <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
                 {{- with .Site.Params.header.title -}}
+                    {{- /* Inlined rather than served through <img>, so the mark can take the
+                           site accent per theme. It cannot do that as a file: the light accent
+                           measures 2.02:1 on the light header and the dark accent 3.02:1 on the
+                           dark one, so no single colour matches the site in both. Inline, CSS
+                           picks #b45309 or #f59e0b and both clear 3:1. See docs/adr/0003. */ -}}
                     {{- with .logo -}}
-                        {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                        {{- with resources.Get . -}}
+                            <span class="logo logo-mark">{{ .Content | safeHTML }}</span>
+                        {{- else -}}
+                            {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                        {{- end -}}
                     {{- end -}}
                     {{- with .pre -}}
                         <span class="header-title-pre">{{ . | safeHTML }}</span>
@@ -92,7 +101,11 @@
                 <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
                     {{- with .Site.Params.header.title -}}
                         {{- with .logo -}}
-                            {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                            {{- with resources.Get . -}}
+                                <span class="logo logo-mark">{{ .Content | safeHTML }}</span>
+                            {{- else -}}
+                                {{- dict "Src" . "Class" "logo" | partial "plugin/img.html" -}}
+                            {{- end -}}
                         {{- end -}}
                         {{- with .pre -}}
                             <span class="header-title-pre">{{ . | safeHTML }}</span>
@@ -142,7 +155,11 @@
                 {{- with .Page -}}
                     {{- $url = .RelPermalink -}}
                 {{- end -}}
-                <a class="menu-item" href="{{ $url }}" title="{{ .Title }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                {{- /* Same active test the desktop header uses. Without it the
+                       mobile menu marked nothing, so on a phone -- where the menu
+                       is a list you have opened deliberately -- there was no sign
+                       of which section you were already in. */ -}}
+                <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active{{ end }}" href="{{ $url }}" title="{{ .Title }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
                     {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
                 </a>
             {{- end -}}

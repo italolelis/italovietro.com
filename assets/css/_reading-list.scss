@@ -149,26 +149,6 @@
     color: $muted-text-color;
 }
 
-// --- Read year -----------------------------------------------------------
-//
-// Pushed to the right edge of the header row rather than trailing the author, so
-// the years line up down the page and a reader can scan recency in one pass
-// instead of hunting for a number inside each row. margin-left: auto does that
-// without a grid, and without a wrapper element that would take the author's
-// freedom to wrap with it.
-//
-// tabular-nums so 1996 and 2011 occupy the same width -- proportional digits make
-// a right-aligned column of years look subtly ragged.
-//
-// Entries with no year emit no element at all, so nothing here can leave a gap.
-.single .content .book-entry__date {
-    margin-left: auto;
-    padding-left: 0.75rem;
-    color: $muted-text-color;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
 .single .content .book-entry__description {
     color: $global-font-color;
     margin: 0;
@@ -195,8 +175,7 @@
     line-height: 1.4;
 }
 
-.single .content .book-entry__author,
-.single .content .book-entry__date {
+.single .content .book-entry__author {
     font-size: 0.8125rem;
 }
 
@@ -222,26 +201,18 @@
     border-left: 2px solid $global-border-color;
 }
 
-// A wrapping flex row rather than a block: the title claims a full row of its own,
-// which leaves the author and the read year sharing the row beneath it -- author on
-// the left, year on the right, in the same column the compact entries use. Under
-// `display: block` the year would have been stranded on a third line by itself.
 .single .content .book-entry--featured .book-entry__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 0.5rem;
+    display: block;
 }
 
 .single .content .book-entry--featured .book-entry__title {
-    flex-basis: 100%;
     font-size: 1.3125rem;
     font-weight: 700;
     line-height: 1.3;
 }
 
-.single .content .book-entry--featured .book-entry__author,
-.single .content .book-entry--featured .book-entry__date {
+.single .content .book-entry--featured .book-entry__author {
+    display: block;
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
@@ -254,16 +225,17 @@
 
 // --- Dark ----------------------------------------------------------------
 @mixin reading-list-dark {
+    // Colour is not set here any more. Headings in dark take $heading-color-dark
+    // from _typography.scss, which is imported last so that one file decides it
+    // for every page rather than each component restating it.
     .single .content h2 {
         border-bottom-color: $global-border-color-dark;
-        color: $global-font-color-dark;
     }
 
     .single .content h2 + p,
     .single .content > ul:first-of-type li:not(:first-child)::before,
     .single .content > ul:first-of-type li a,
-    .single .content .book-entry__author,
-    .single .content .book-entry__date {
+    .single .content .book-entry__author {
         color: $muted-text-color-dark;
     }
 

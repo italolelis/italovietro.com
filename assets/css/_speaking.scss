@@ -20,16 +20,29 @@
     display: block;
 }
 
-// Talk entry base styles (per D-01, D-02)
+// A list, not a set of write-ups.
+//
+// Every entry used to carry a paragraph describing the session. Three of three
+// comparable sites in the survey keep talks as a plain date/venue/title list, and
+// the titles here already say what each talk was about -- "From cost to impact:
+// Leading through infrastructure investment decisions" needs no gloss. What the
+// paragraphs added was voice, and voice now sits once at the top of the page
+// instead of eight times, in two languages, where it was also the thing most
+// likely to rot in translation.
+//
+// So the entries are dense enough that all eight fit on one screen, which is what
+// someone deciding whether to book him is actually doing: scanning for recency and
+// venue, not reading.
 .talk-entry {
-    margin-bottom: 24px;
+    margin-bottom: 1rem;
 }
 
 .talk-entry__title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 4px;
-    line-height: 1.3;
+    margin: 0;
+    line-height: 1.4;
+    text-wrap: balance;
 }
 
 .talk-entry__type-icon {
@@ -38,24 +51,36 @@
     color: $muted-text-color;
 }
 
+// Venue on the left, date on the right, links between them. The date column is
+// the same right-aligned, tabular-figures treatment the reading list and the
+// archive use, so recency is scannable down the page rather than hunted for
+// inside each row.
 .talk-entry__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
     font-size: 0.8125rem;
     color: $muted-text-color;
-    margin-bottom: 8px;
-    display: block;
+    margin-top: 0.125rem;
 }
 
 .talk-entry__event {
     font-weight: 500;
 }
 
-.talk-entry__date::before {
-    content: " \00B7 ";
-    color: $muted-text-color;
+.talk-entry__date {
+    margin-left: auto;
+    padding-left: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
+// No separator glyph before the date any more: it sat mid-row when the date was
+// inline, and now the date is a column with space around it doing that job.
+
 .talk-entry__links {
-    margin-left: 8px;
+    margin-left: 0;
 }
 
 .talk-entry__links a {
@@ -69,10 +94,22 @@
     color: $single-link-hover-color;
 }
 
-.talk-entry__description {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: $global-font-color;
+// .talk-entry__description is gone with the descriptions themselves. The
+// shortcode still supports inner content, so a single entry can carry a note when
+// there is genuinely something to add -- it just is not the default any more.
+
+// --- Upcoming ------------------------------------------------------------
+//
+// Only the icon differs. Spacing is the base entry's now that no entry carries a
+// description, and the group is distinguished by position and heading rather than
+// by being painted differently. The icon takes the accent, which is the rule the
+// talk entries below already follow.
+.talk-entry--upcoming .talk-entry__type-icon {
+    color: $single-link-color;
+}
+
+[theme=dark] .talk-entry--upcoming .talk-entry__type-icon {
+    color: $single-link-color-dark;
 }
 
 // Type-based icon colors (light mode)
@@ -97,20 +134,12 @@
     color: $muted-text-color-dark;
 }
 
-[theme=dark] .talk-entry__date::before {
-    color: $muted-text-color-dark;
-}
-
 [theme=dark] .talk-entry__links a {
     color: $single-link-color-dark;
 }
 
 [theme=dark] .talk-entry__links a:hover {
     color: $single-link-hover-color-dark;
-}
-
-[theme=dark] .talk-entry__description {
-    color: $global-font-color-dark;
 }
 
 [theme=dark] .talk-entry--talk .talk-entry__type-icon {
@@ -135,20 +164,12 @@
         color: $muted-text-color-dark;
     }
 
-    [theme=auto] .talk-entry__date::before {
-        color: $muted-text-color-dark;
-    }
-
     [theme=auto] .talk-entry__links a {
         color: $single-link-color-dark;
     }
 
     [theme=auto] .talk-entry__links a:hover {
         color: $single-link-hover-color-dark;
-    }
-
-    [theme=auto] .talk-entry__description {
-        color: $global-font-color-dark;
     }
 
     [theme=auto] .talk-entry--talk .talk-entry__type-icon {
@@ -170,8 +191,16 @@
         font-size: 1rem;
     }
 
+    // Stacked, and the date drops its auto margin -- otherwise it right-aligns
+    // itself on its own line, which reads as a stray number.
     .talk-entry__meta {
         flex-direction: column;
+        gap: 0.125rem 0;
+    }
+
+    .talk-entry__date {
+        margin-left: 0;
+        padding-left: 0;
     }
 
     .featured-image img {

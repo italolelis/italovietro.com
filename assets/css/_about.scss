@@ -25,35 +25,47 @@
 
 // The two sizes are for event organisers, who currently ask for a headshot by
 // email. Small, because a visitor reading the page does not need them.
+//
+// One colour for the whole line, label and links alike, with the underline doing
+// the work of saying they are links. It read as two before: in dark mode the
+// theme's `[theme=dark] .single .content a` -- three classes and a type -- beat a
+// bare `.portrait__sizes a` and painted the two sizes amber next to a muted
+// "Headshot:". Light mode was fine by accident, the two rules tying on
+// specificity and this file being imported later.
+//
+// So the selectors below are qualified to outrank the theme's rather than left to
+// win on ordering, which only ever worked in one of the two themes.
 .portrait__sizes {
     margin-top: 0.625rem;
     font-size: 0.8125rem;
     color: $muted-text-color;
 }
 
-.portrait__sizes a {
+.single .content .portrait__sizes a {
     color: $muted-text-color;
     text-decoration: none;
     border-bottom: 1px solid $global-border-color;
     transition: color $transition-base;
 }
 
-.portrait__sizes a:hover {
+// Hover is a state, not a second resting colour: the accent appears when you
+// point at the link and goes away again.
+.single .content .portrait__sizes a:hover {
     color: $single-link-color;
 }
 
 // --- Dark ----------------------------------------------------------------
 @mixin about-dark {
     .portrait__sizes,
-    .portrait__sizes a {
+    .single .content .portrait__sizes a {
         color: $muted-text-color-dark;
     }
 
-    .portrait__sizes a {
+    .single .content .portrait__sizes a {
         border-bottom-color: $global-border-color-dark;
     }
 
-    .portrait__sizes a:hover {
+    .single .content .portrait__sizes a:hover {
         color: $single-link-color-dark;
     }
 }

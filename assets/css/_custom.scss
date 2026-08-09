@@ -7,19 +7,18 @@
 // profile block down by translateY(16vh) -- two hacks cancelling each other, with
 // the result depending on viewport height. The transform is reset in _home.scss,
 // so this no longer needs to make room for anything.
+// Close to the line above it. The opening line is a greeting now rather than a
+// standalone thesis, and a greeting belongs to the sentence that follows it --
+// there was 3.5rem of air between "Hey" and the paragraph it introduces.
 .home-content {
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 }
 
-// Logo styling
+// Logo, <img> fallback only.
 //
-// The mark carries its own amber (#c2680a), chosen to clear 3:1 non-text
-// contrast against both backgrounds -- 3.98:1 on white, 3.61:1 on the dark
-// surface. That removes the four rules that used to live here inverting a
-// monochrome mark per theme, plus the filter transition they animated.
-//
-// currentColor is not an option: the logo renders through an <img>, so the
-// host document's colour does not cascade into the SVG.
+// The header inlines the SVG (see below), so this rule applies only if
+// resources.Get ever fails to resolve the mark and the theme's img partial takes
+// over. Kept so that path degrades to the right size rather than to none.
 .header-title .logo {
     height: 2.5em;
     min-height: 2.5em;
@@ -29,6 +28,40 @@
     margin-right: 0.5rem;
 }
 
+// The mark takes the site accent, per theme.
+//
+// It used to carry its own #c2680a, chosen so one file could clear 3:1 against
+// both backgrounds without a per-theme swap. That worked, and it meant the mark
+// was a near-miss of the accent everywhere -- duller than the amber beside it in
+// the nav, in both themes.
+//
+// No single colour fixes that: the light accent measures 2.02:1 on the light
+// header and the dark accent 3.02:1 on the dark one. So the mark is inlined SVG
+// now and CSS picks the matching accent, at 4.73:1 light and 7.06:1 dark. The
+// standalone file at static/images/logo.svg keeps a literal colour, because a
+// favicon has no document to inherit from.
+.header-title .logo-mark {
+    display: inline-block;
+    line-height: 0;
+    color: $single-link-color;
+}
+
+.header-title .logo-mark svg {
+    height: 2.5em;
+    width: auto;
+    vertical-align: middle;
+}
+
+[theme=dark] .header-title .logo-mark {
+    color: $single-link-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .header-title .logo-mark {
+        color: $single-link-color-dark;
+    }
+}
+
 /* Mobile logo adjustment */
 @media (max-width: 768px) {
     .header-title .logo {
@@ -36,22 +69,74 @@
         min-height: 2em;
         max-height: 2em;
     }
+
+    .header-title .logo-mark svg {
+        height: 2em;
+    }
+}
+
+// Footer social links
+//
+// Text, not icons, and quiet: this is where someone goes deliberately to find you
+// elsewhere, so it does not need to compete with anything. The separator is a
+// middle dot rather than a border, because three links do not need furniture.
+.footer-social {
+    font-size: 0.875rem;
+}
+
+.footer-social a {
+    color: $muted-text-color;
+    text-decoration: none;
+    border-bottom: 1px solid $global-border-color;
+    transition: color $transition-base;
+}
+
+.footer-social a:hover {
+    color: $single-link-color;
+}
+
+[theme=dark] .footer-social a {
+    color: $muted-text-color-dark;
+    border-bottom-color: $global-border-color-dark;
+}
+
+[theme=dark] .footer-social a:hover {
+    color: $single-link-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .footer-social a {
+        color: $muted-text-color-dark;
+        border-bottom-color: $global-border-color-dark;
+    }
+
+    [theme=auto] .footer-social a:hover {
+        color: $single-link-color-dark;
+    }
 }
 
 // Homepage intro paragraph -- replaces inline style on <p class="home-intro">
+//
+// Body colour, not muted. It was the largest block of text on the page and it was
+// deliberately greyed, which is a contradiction: the page dimmed its own substance
+// and then wondered why it read washed out. Muting is for metadata -- dates,
+// authors, section labels -- not for the paragraph a visitor is meant to read.
+//
+// Smaller too. At 1.25rem it outweighed the tagline above it; the tagline is now
+// the opening line and this sits a step below it.
 .home-intro {
-    font-size: 1.25rem;
-    color: $muted-text-color;
-    margin: 1.5rem 0 2.5rem;
+    font-size: 1.125rem;
+    color: $global-font-color;
+    margin: 0.5rem 0 2.5rem;
 }
 
 [theme=dark] .home-intro {
-    color: $muted-text-color-dark;
+    color: $global-font-color-dark;
 }
 
 @media (prefers-color-scheme: dark) {
     [theme=auto] .home-intro {
-        color: $muted-text-color-dark;
+        color: $global-font-color-dark;
     }
 }
 
@@ -84,3 +169,5 @@
 @import "reading-list";
 @import "speaking";
 @import "interactions";
+// Last: its heading rules win on cascade order. See the note in the file.
+@import "typography";

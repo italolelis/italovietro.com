@@ -61,7 +61,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.en.params]
-      description = "My personal website"
+      description = "Senior Director of Engineering at Parloa. Talks, podcasts, a reading list, and older writing on leading engineering teams."
       keywords = ["italolelis", "personal", "software"]
       # App icon config
       [languages.en.params.app]
@@ -89,12 +89,25 @@ ignoreLogs = ['shortcode-twitter-getremote']
           avatarURL = ""
           # title shown in home page (HTML format is supported)
           title = ""
-          # subtitle shown in home page
-          subtitle = "The hardest problems aren't technical."
-          # whether to use typeit animation for subtitle
-          typeit = true
-          # whether to show social links
-          social = true
+          # The opening line. A greeting rather than the aphorism that used to sit
+          # here -- "The hardest problems aren't technical" read as a slogan, and a
+          # slogan is a claim about yourself made before you have said anything.
+          # The paragraph under it does the introducing, which is why this can be
+          # two words.
+          #
+          # It renders through the theme's profile block, whose field is called
+          # subtitle; that is the slot, not the intent.
+          subtitle = "Hey 👋"
+          # No typing animation. The tagline is the first line a visitor sees and
+          # the only one above the fold, so it should be there at first paint
+          # rather than arriving character by character behind a cursor that the
+          # theme's `duration = -1` then left blinking forever.
+          typeit = false
+          # Social links live in the footer now, as text. On the home page they
+          # were an icon row directly under the tagline -- the first interactive
+          # thing a visitor met, ahead of anything the site is about. 1 of the 14
+          # sites surveyed does that; 7 have none on the home page at all.
+          social = false
           # disclaimer (HTML format is supported)
           disclaimer = ""
         # Home page posts
@@ -145,7 +158,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.pt-br.params]
-      description = "Meu site pessoal"
+      description = "Senior Director of Engineering na Parloa. Palestras, podcasts, lista de leituras e artigos sobre liderança em engenharia."
       keywords = ["italolelis", "personal", "software"]
       [languages.pt-br.params.app]
         title = "Italo Vietro"
@@ -162,9 +175,12 @@ ignoreLogs = ['shortcode-twitter-getremote']
           # See the en block above: the portrait moved to /pt-br/sobre/.
           avatarURL = ""
           title = ""
-          subtitle = "Os problemas mais difíceis não são técnicos."
-          typeit = true
-          social = true
+          # See the en block above.
+          subtitle = "Oi 👋"
+          # See the en block above.
+          typeit = false
+          # See the en block above.
+          social = false
           disclaimer = ""
         [languages.pt-br.params.home.posts]
           enable = false
@@ -181,8 +197,18 @@ ignoreLogs = ['shortcode-twitter-getremote']
   fingerprint = "sha256"
   # date format
   dateFormat = "2006-01-02"
-  # website images for Open Graph and Twitter Cards
-  images = ["/images/logo.svg"]
+  # The card LinkedIn, Slack and X show when a page here is shared.
+  #
+  # It was the logo SVG, and no platform renders SVG in a link preview -- every
+  # share of this site showed a blank card. This is the portrait padded to the
+  # 1200x630 they all expect, on the site's own background. Name and title come
+  # from the preview text beside it, which every platform does render, so the card
+  # carries no baked-in words to go stale or need translating.
+  #
+  # It lives in static/ rather than assets/: Hugo's internal Open Graph template
+  # emits this path as a URL without resolving it as a resource, so an assets/ file
+  # would be referenced and never published.
+  images = ["/images/og-card.jpg"]
 
   # Header config
   [params.header]
@@ -297,6 +323,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
       # whether to add FullscreenControl (https://docs.mapbox.com/mapbox-gl-js/api/#fullscreencontrol)
       fullscreen = true
     # Social share links in post page
+    #
+    # Line and Weibo were theme defaults that arrived with the template rather than
+    # choices. Neither is plausible for a readership that reads in English and
+    # Portuguese, so a post page offered five buttons where three were meant.
     [params.page.share]
       enable = true
       Twitter = true
@@ -310,13 +340,13 @@ ignoreLogs = ['shortcode-twitter-getremote']
       VK = false
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Digg = false
       Stumbleupon = false
       Flipboard = false
-      Weibo = true
+      Weibo = false
       Renren = false
       Myspace = false
       Blogger = false
@@ -347,7 +377,9 @@ ignoreLogs = ['shortcode-twitter-getremote']
       images = []
       # Publisher info
       [params.page.seo.publisher]
-        name = "xxxx"
+        # Was "xxxx", the theme's placeholder, sitting in this site's structured
+        # data since the template was installed.
+        name = "Italo Vietro"
         # The portrait it used to point at is gone, and the mark is the right thing
         # for a publisher logo anyway. Raster, not the SVG: the theme resolves this
         # as an image resource and reads .Width off it, which an SVG cannot answer.
@@ -374,8 +406,11 @@ ignoreLogs = ['shortcode-twitter-getremote']
 
   # Site SEO config
   [params.seo]
-    image = "/images/Apple-Devices-Preview.png"
-    thumbnailUrl = "/images/screenshot.png"
+    # Both of these pointed at LoveIt's own marketing images -- a device mockup of
+    # the theme demo, cartoon avatar and all, and its screenshot. They shipped with
+    # the template and were never replaced.
+    image = "/images/og-card.jpg"
+    thumbnailUrl = "/images/og-card.jpg"
 
   # Analytics config
   [params.analytics]

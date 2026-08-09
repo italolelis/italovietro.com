@@ -1,0 +1,34 @@
+// ==============================
+// Typography
+// ==============================
+//
+// Headings, in dark mode. Nothing else belongs here yet.
+//
+// Imported last on purpose. The heading rules it overrides live in _reading-list
+// and in the theme, and several of them are two-class selectors of exactly this
+// specificity -- so this file wins by cascade order rather than by being written
+// more specifically than it needs to be. Keep it last in _custom.scss.
+//
+// Light mode is absent from this file by design: body text there is #161209 at
+// 15.72:1, so a heading in the same colour is already the strongest text on the
+// page. Only dark had headings and body sharing one colour.
+
+@mixin headings-dark {
+    .single-title,
+    .archive .single-title,
+    .single .content h1,
+    .single .content h2,
+    .single .content h3 {
+        color: $heading-color-dark;
+    }
+}
+
+[theme=dark] {
+    @include headings-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] {
+        @include headings-dark;
+    }
+}
