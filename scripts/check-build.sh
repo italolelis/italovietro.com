@@ -189,6 +189,12 @@ contains "$PT_HOME" 'home-signpost' 'and so does the pt-br home page'
 # first line of the site is wrong.
 matches "$EN_HOME" 'home-subtitle>Hey' 'the en home page opens with the greeting'
 matches "$PT_HOME" 'home-subtitle>Oi' 'the pt-br home page opens with the greeting'
+# Asserted at the theme's own specificity, which is the whole point: styling this
+# line from `.home .home-subtitle` is one class short of the theme's rule, so it
+# loses and the greeting silently renders at 1rem with 8px of padding. The
+# stylesheet said 1.75rem for two commits while the browser showed 16px.
+matches "$CSS" '\.home \.home-profile \.home-subtitle\{[^}]*font-size:2\.75rem' 'the greeting is styled at a specificity that beats the theme'
+matches "$CSS" '\.home \.home-profile \.home-subtitle\{[^}]*padding:0' 'and keeps the one left edge, with no padding of its own'
 absent_from "$EN_HOME" 'home-route__name' 'the route list that mirrored the nav is gone'
 contains "$EN_HOME" 'href=/recommended-reading/' 'en home page reaches the reading list'
 contains "$EN_HOME" 'href=/speaking/' 'en home page reaches the speaking page'
@@ -240,7 +246,7 @@ matches "$CSS" '\[theme=dark\][^{]*\.portrait__sizes[^{]*\{color:#a9a9b3' 'the h
 
 echo 'Headings outrank body text in dark'
 matches "$CSS" '\[theme=dark\] \.single-title[^{]*\{color:#e7e5e4\}' 'dark headings take the brighter colour'
-matches "$CSS" '\[theme=dark\] \.home \.home-subtitle\{color:#e7e5e4\}' 'the tagline is treated as a heading, not body text'
+matches "$CSS" '\[theme=dark\] \.home \.home-profile \.home-subtitle\{color:#e7e5e4\}' 'the greeting is treated as a heading, not body text'
 
 # About is where the biography went, and it is the only page that carries the
 # photograph. The two sizes exist for event organisers, who ask by email today.
