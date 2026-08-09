@@ -114,6 +114,31 @@ absent_from() {
     fi
 }
 
+# valid_utf8 -- asserts every generated page decodes as UTF-8.
+#
+# Not paranoia. The pt-br speaking page shipped a truncated multi-byte character
+# after an edit that changed nothing near it: Hugo's HTML minifier cut a character
+# in half at an internal buffer boundary, and which boundary that is depends on the
+# byte length of everything before it. So any edit anywhere on a page can trigger
+# it, on the page with the most accented characters -- which on a bilingual site is
+# always the Portuguese one, read by the half of the audience least likely to
+# report it.
+#
+# It survives a browser (they recover, showing a replacement glyph) and survives
+# every other assertion here, because grep matches the surrounding bytes fine.
+valid_utf8() {
+    local hits=0 f
+    while IFS= read -r f; do
+        if ! iconv -f UTF-8 -t UTF-8 "$f" >/dev/null 2>&1; then
+            bad "valid UTF-8 in every page (broken: ${f#"$PUBLIC"/})"
+            hits=$((hits + 1))
+        fi
+    done < <(find "$PUBLIC" -name '*.html' -type f)
+    if [ "$hits" -eq 0 ]; then
+        ok 'every generated page is valid UTF-8'
+    fi
+}
+
 if [ ! -d "$PUBLIC" ]; then
     printf 'error: "%s" does not exist -- build the site before running this\n' "$PUBLIC" >&2
     exit 2
@@ -319,7 +344,7 @@ echo 'Speaking page separates talks from podcasts'
 contains "$EN_SPEAKING" 'Conference Talks' 'en talks have their own heading'
 contains "$EN_SPEAKING" 'Podcast Appearances' 'en podcast appearances have their own heading'
 contains "$PT_SPEAKING" '>Palestras<' 'pt-br talks have their own heading'
-contains "$PT_SPEAKING" 'Participacoes em Podcasts' 'pt-br podcast appearances have their own heading'
+contains "$PT_SPEAKING" 'Participações em Podcasts' 'pt-br podcast appearances have their own heading'
 absent_from "$EN_SPEAKING" 'Not everything is here' 'the rejected completeness hedge stays off the en page'
 absent_from "$PT_SPEAKING" 'Nem tudo está aqui' 'and off the pt-br page'
 same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
@@ -421,6 +446,8 @@ absent_from "$PT_SPEAKING" 'versao' 'no unaccented "versao"'
 absent_from "$PT_SPEAKING" 'decisoes' 'no unaccented "decisoes"'
 absent_from "$PT_SPEAKING" 'lideranca' 'no unaccented "lideranca"'
 absent_from "$PT_SPEAKING" 'seguranca psicologica' 'no unaccented "seguranca psicologica"'
+
+valid_utf8
 
 echo 'Error pages'
 exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'

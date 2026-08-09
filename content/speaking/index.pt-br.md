@@ -18,6 +18,9 @@ Fico feliz em falar no seu evento ou no seu podcast — [me@italovietro.com](mai
 
 ## Palestras
 
+{{< talk title="Platform Engineering and Developer Experience Summit" event="London" date="2025" type="talk" >}}
+{{< /talk >}}
+
 {{< talk title="From cost to impact: Hands-on strategies for cost management optimization" event="DevTalks Romania 2025" date="2025" type="talk" >}}
 Uma versão mais prática da palestra sobre investimento em infraestrutura. SLOs, KPI Trees, e cultura de FinOps na prática. Menos sobre convencer o negócio e mais sobre dar aos engenheiros as ferramentas pra serem donos dos seus custos sem que isso vire um fardo.
 {{< /talk >}}
@@ -34,7 +37,7 @@ Painel no Spielfeld Digital Hub sobre como líderes de engenharia avaliam decis�
 Aprendi sobre falhas do jeito difícil. Construindo sistemas de alta carga para o governo brasileiro, escalando a HelloFresh de monolito para microsserviços, rodando sistemas bancários no N26. Quando seu sistema não pode cair, "deve estar ok" não é uma decisão de arquitetura. Essa palestra cobre os padrões que eu queria ter conhecido antes: circuit breakers, bulkheads, e como os princípios de SRE se traduzem em sistemas reais de produção.
 {{< /talk >}}
 
-## Participacoes em Podcasts
+## Participações em Podcasts
 
 {{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" >}}
 A gente constrói agentes de IA, então a pergunta interessante era: o que acontece quando a gente usa isso pra nossa própria engenharia? A parte que não sai da minha cabeça é essa: hoje uma boa parte do nosso código já é produzida via agentes, e isso sozinho não influenciou muito no cycle time. Gerar código nunca foi o gargalo. O gargalo é tudo em volta — spec, review, validação, rollout seguro.

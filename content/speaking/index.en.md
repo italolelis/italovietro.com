@@ -18,6 +18,9 @@ Happy to talk at your event or on your podcast — [me@italovietro.com](mailto:m
 
 ## Conference Talks
 
+{{< talk title="Platform Engineering and Developer Experience Summit" event="London" date="2025" type="talk" >}}
+{{< /talk >}}
+
 {{< talk title="From cost to impact: Hands-on strategies for cost management optimization" event="DevTalks Romania 2025" date="2025" type="talk" >}}
 A more hands-on version of the infrastructure investment talk. SLOs, KPI Trees, and FinOps culture in practice. Less about convincing the business and more about giving engineers the tools to own their costs without it feeling like a chore.
 {{< /talk >}}
