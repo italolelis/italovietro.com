@@ -297,6 +297,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
       # whether to add FullscreenControl (https://docs.mapbox.com/mapbox-gl-js/api/#fullscreencontrol)
       fullscreen = true
     # Social share links in post page
+    #
+    # Line and Weibo were theme defaults that arrived with the template rather than
+    # choices. Neither is plausible for a readership that reads in English and
+    # Portuguese, so a post page offered five buttons where three were meant.
     [params.page.share]
       enable = true
       Twitter = true
@@ -310,13 +314,13 @@ ignoreLogs = ['shortcode-twitter-getremote']
       VK = false
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Digg = false
       Stumbleupon = false
       Flipboard = false
-      Weibo = true
+      Weibo = false
       Renren = false
       Myspace = false
       Blogger = false
