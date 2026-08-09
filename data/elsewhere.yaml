@@ -1,0 +1,24 @@
+# Writing published on other people's sites.
+#
+# The archive here stops in March 2021, which for five years read as "stopped
+# writing". He did not -- the writing moved to employer blogs and interviews, and
+# none of it was reachable from this domain. A visitor checking whether he still
+# thinks about this stuff found a dormant list and no reason to believe otherwise.
+#
+# Rendered by layouts/_default/section.html above the year groups. Language-neutral
+# on purpose: these are titles, hosts and dates, and the pieces themselves are in
+# English regardless of which version of the site you are reading.
+#
+# `date` sorts; `display` is what a reader sees.
+
+- title: "Scaling Parloa: When the platform becomes the product"
+  host: "Parloa Labs"
+  date: 2026-06-04
+  display: "June 2026"
+  url: "https://www.parloa.com/labs/insights/scaling-parloa-when-the-platform-becomes-the-product/"
+
+- title: "Why You Shouldn't Encourage Heroism In Your Team"
+  host: "Yeka"
+  date: 2026-02-10
+  display: "February 2026"
+  url: "https://yeka.substack.com/p/why-you-shouldnt-encourage-heroism"

@@ -12,9 +12,12 @@
 {{- if eq $type "host" -}}{{- $icon = "fa-headphones" -}}{{- end -}}
 <div class="talk-entry talk-entry--{{ $type }}">
     <div class="talk-entry__header">
-        <h4 class="talk-entry__title">
+        {{- /* h3, not h4. The groups above these are h2 and have no subheadings,
+               so an h4 skipped a level and left the outline broken -- the same
+               defect the book shortcode fixed on the reading list. */ -}}
+        <h3 class="talk-entry__title">
             <span class="talk-entry__type-icon"><i class="fas {{ $icon }}"></i></span>{{ $title }}
-        </h4>
+        </h3>
         <div class="talk-entry__meta">
             <span class="talk-entry__event">{{ $event }}</span>
             <span class="talk-entry__date">{{ $date }}</span>

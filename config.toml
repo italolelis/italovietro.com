@@ -61,7 +61,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.en.params]
-      description = "My personal website"
+      description = "Senior Director of Engineering at Parloa. Talks, podcasts, a reading list, and older writing on leading engineering teams."
       keywords = ["italolelis", "personal", "software"]
       # App icon config
       [languages.en.params.app]
@@ -158,7 +158,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.pt-br.params]
-      description = "Meu site pessoal"
+      description = "Senior Director of Engineering na Parloa. Palestras, podcasts, lista de leituras e artigos sobre liderança em engenharia."
       keywords = ["italolelis", "personal", "software"]
       [languages.pt-br.params.app]
         title = "Italo Vietro"
@@ -197,8 +197,18 @@ ignoreLogs = ['shortcode-twitter-getremote']
   fingerprint = "sha256"
   # date format
   dateFormat = "2006-01-02"
-  # website images for Open Graph and Twitter Cards
-  images = ["/images/logo.svg"]
+  # The card LinkedIn, Slack and X show when a page here is shared.
+  #
+  # It was the logo SVG, and no platform renders SVG in a link preview -- every
+  # share of this site showed a blank card. This is the portrait padded to the
+  # 1200x630 they all expect, on the site's own background. Name and title come
+  # from the preview text beside it, which every platform does render, so the card
+  # carries no baked-in words to go stale or need translating.
+  #
+  # It lives in static/ rather than assets/: Hugo's internal Open Graph template
+  # emits this path as a URL without resolving it as a resource, so an assets/ file
+  # would be referenced and never published.
+  images = ["/images/og-card.jpg"]
 
   # Header config
   [params.header]
@@ -367,7 +377,9 @@ ignoreLogs = ['shortcode-twitter-getremote']
       images = []
       # Publisher info
       [params.page.seo.publisher]
-        name = "xxxx"
+        # Was "xxxx", the theme's placeholder, sitting in this site's structured
+        # data since the template was installed.
+        name = "Italo Vietro"
         # The portrait it used to point at is gone, and the mark is the right thing
         # for a publisher logo anyway. Raster, not the SVG: the theme resolves this
         # as an image resource and reads .Width off it, which an SVG cannot answer.
@@ -394,8 +406,11 @@ ignoreLogs = ['shortcode-twitter-getremote']
 
   # Site SEO config
   [params.seo]
-    image = "/images/Apple-Devices-Preview.png"
-    thumbnailUrl = "/images/screenshot.png"
+    # Both of these pointed at LoveIt's own marketing images -- a device mockup of
+    # the theme demo, cartoon avatar and all, and its screenshot. They shipped with
+    # the template and were never replaced.
+    image = "/images/og-card.jpg"
+    thumbnailUrl = "/images/og-card.jpg"
 
   # Analytics config
   [params.analytics]

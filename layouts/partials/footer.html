@@ -34,6 +34,14 @@
             {{- with $social.Linkedin -}}
                 {{- $links = $links | append (printf `<a href="https://linkedin.com/in/%v" target="_blank" rel="noopener noreferrer me">LinkedIn</a>` .) -}}
             {{- end -}}
+            {{- /* The only way to reach him from this site. It sat in
+                   [params.author] email and rendered on no page, while /about/
+                   offered a headshot "for event organisers" and the speaking page
+                   listed eight appearances -- an organiser who wanted to book him
+                   had nowhere to go. */ -}}
+            {{- with .Site.Params.author.email -}}
+                {{- $links = $links | append (printf `<a href="mailto:%v">Email</a>` .) -}}
+            {{- end -}}
             {{- if $social.RSS -}}
                 {{- $links = $links | append (printf `<a href="%v" target="_blank" rel="noopener noreferrer">RSS</a>` ("index.xml" | relLangURL)) -}}
             {{- end -}}

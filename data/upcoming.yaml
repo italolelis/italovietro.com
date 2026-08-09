@@ -1,0 +1,20 @@
+# Confirmed future appearances.
+#
+# Read by layouts/shortcodes/upcoming.html, which renders nothing at all once
+# every `until` date here is in the past. That is the point: an "Upcoming" heading
+# with nothing under it reads worse than no heading, and a list of appearances
+# that turn out to be historical is the specific failure this section exists to
+# avoid.
+#
+# When one of these happens, move it into the relevant group in
+# content/speaking/index.*.md and delete it here. Nothing does that automatically
+# -- the entry simply stops rendering, so the page is never wrong, only quieter.
+#
+# `until` is the last day of the event, so a two-day conference stays listed while
+# it is running. Language-neutral: these are venues and dates, not prose.
+
+- event: "Platform Engineering & Developer Experience Summit"
+  venue: "London"
+  until: 2026-10-22
+  display: "21–22 October 2026"
+  url: "https://www.iqpc.com/events-platform-engineering-summit/speakers/italo-vietro"

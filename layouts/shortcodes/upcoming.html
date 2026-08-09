@@ -1,0 +1,45 @@
+{{- /* layouts/shortcodes/upcoming.html */ -}}
+{{- /*
+    The next appearances, from data/upcoming.yaml.
+
+    Renders nothing -- not even the heading -- once every entry's `until` date has
+    passed. An empty "Upcoming" heading says the opposite of what it is there to
+    say, and a page that lists a conference three months after it happened is worse
+    than a page that never claimed to look forward at all.
+
+    Entries are dropped by date rather than by anyone remembering to delete them,
+    because the failure mode is silent: nobody visits their own speaking page the
+    week after a talk to check it aged correctly.
+
+    Markup matches the talk shortcode, so the group sits in the same visual language
+    as the two below it.
+
+    Parameters: heading (required -- passed per language, since the data file holds
+    venues and dates rather than prose).
+*/ -}}
+{{- $heading := .Get "heading" -}}
+{{- $future := slice -}}
+{{- range site.Data.upcoming -}}
+    {{- if (time.AsTime .until).After now -}}
+        {{- $future = $future | append . -}}
+    {{- end -}}
+{{- end -}}
+{{- with $future }}
+<h2 class="upcoming-title">{{ $heading }}</h2>
+{{- range . }}
+<div class="talk-entry talk-entry--upcoming">
+    <div class="talk-entry__header">
+        <h3 class="talk-entry__title">
+            <span class="talk-entry__type-icon"><i class="fas fa-calendar-day"></i></span>
+            {{- with .url }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ end -}}
+            {{ .event }}
+            {{- with .url }}</a>{{ end -}}
+        </h3>
+        <div class="talk-entry__meta">
+            {{- with .venue }}<span class="talk-entry__event">{{ . }}</span>{{ end }}
+            <span class="talk-entry__date">{{ .display }}</span>
+        </div>
+    </div>
+</div>
+{{- end }}
+{{- end -}}

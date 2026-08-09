@@ -75,6 +75,27 @@
     color: $global-font-color;
 }
 
+// --- Upcoming ------------------------------------------------------------
+//
+// Entries here carry no description -- there is nothing to say about a talk that
+// has not happened yet -- so they need their own bottom spacing rather than
+// inheriting a gap sized for a paragraph that is not there.
+//
+// The icon takes the accent, which is the same rule the talk entries below
+// already follow. No new colour, and the group is distinguished by position and
+// heading rather than by being painted differently.
+.talk-entry--upcoming {
+    margin-bottom: 16px;
+}
+
+.talk-entry--upcoming .talk-entry__type-icon {
+    color: $single-link-color;
+}
+
+[theme=dark] .talk-entry--upcoming .talk-entry__type-icon {
+    color: $single-link-color-dark;
+}
+
 // Type-based icon colors (light mode)
 .talk-entry--talk .talk-entry__type-icon {
     color: $single-link-color;

@@ -16,6 +16,14 @@ _Avoid_: Route list, section cards, links block, secondary nav
 The line opening the home page — "Hey 👋", "Oi 👋". It is the loudest text on the page and is styled as a heading, not as body text. It greets and nothing else; the paragraph beneath it does the introducing. It is not the site title, which lives in the header, and it is not a tagline — the aphorism that used to sit here read as a claim made before anything had been said.
 _Avoid_: Tagline, subtitle, headline, strapline, hero text
 
+**Upcoming**:
+A confirmed future appearance, held in `data/upcoming.yaml` and rendered above the past ones on the speaking page. It disappears by itself once its date passes; nothing has to remember to remove it. Distinct from an entry, which is something that already happened.
+_Avoid_: Events, calendar, schedule, next
+
+**Elsewhere**:
+Writing published on someone else's site, listed on the writing archive with its host and date. It is not a link roundup — these are his pieces, living at another URL.
+_Avoid_: External links, guest posts, links, press
+
 **Entry**:
 One item in one of the three lists: a book, newsletter or podcast on the reading list; a talk or podcast appearance on the speaking page; a post on the writing archive. Entries share a treatment — title, muted metadata, description.
 _Avoid_: Item, card, row, listing

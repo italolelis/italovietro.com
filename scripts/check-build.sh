@@ -146,8 +146,10 @@ contains "$PT_HOME" 'Senior Director of Engineering' 'pt-br homepage states the 
 nowhere 'Head of Engineering' 'superseded title appears nowhere'
 
 echo 'Speaking page'
-contains "$EN_SPEAKING" "Inside Parloa's AI Kitchen" 'en speaking page lists the Beyond Vibe Coding episode'
-contains "$PT_SPEAKING" "Inside Parloa's AI Kitchen" 'pt-br speaking page lists the Beyond Vibe Coding episode'
+# No apostrophe in the needle: the entry renders it as &#39; in the body and
+# literally in metadata, and this should assert the entry, not the encoding.
+contains "$EN_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'en speaking page lists the Beyond Vibe Coding episode'
+contains "$PT_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'pt-br speaking page lists the Beyond Vibe Coding episode'
 contains "$EN_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'en episode links to the episode page'
 contains "$PT_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'pt-br episode links to the episode page'
 
@@ -293,8 +295,8 @@ absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a des
 # out from the dates. Two posts carry a star saying the ideas still hold; the count
 # is asserted exactly, because a marker that spreads to five posts marks nothing.
 echo 'Writing archive is honestly dated'
-contains "$EN_ARCHIVE" 'Nothing new here since March 2021' 'en archive opens with the dated notice'
-contains "$PT_ARCHIVE" 'Nada novo por aqui desde março de 2021' 'pt-br archive opens with the dated notice'
+contains "$EN_ARCHIVE" 'Nothing new on this page since March 2021' 'en archive opens with the dated notice'
+contains "$PT_ARCHIVE" 'Nada novo nesta página desde março de 2021' 'pt-br archive opens with the dated notice'
 contains "$EN_ARCHIVE" 'an open question' 'the en notice states the position on resuming, not only the date'
 contains "$PT_ARCHIVE" 'uma pergunta em aberto' 'the pt-br notice states the position on resuming'
 occurs "$EN_ARCHIVE" 'archive-item__mark' 2 'exactly two en posts carry the durability marker'
@@ -370,6 +372,55 @@ nowhere 'Must Read' 'the tier subheadings are gone from both languages'
 # line to the reading list intro saying the years are when it was read rather than
 # when it was published. A bare year beside a book title reads as the latter.
 contains "$CSS" 'book-entry__date' 'the read-year column rule is present in the stylesheet'
+
+# The site's job is inbound -- see docs/adr/0005. These guard the three things that
+# job depends on and that nothing on the page reveals when they break.
+#
+# Contact: the address sat in [params.author] and rendered nowhere for the life of
+# the site, while /about/ offered a headshot "for event organisers".
+#
+# Preview card: og:image was the logo SVG, which no platform renders, so every
+# share showed a blank card. Asserted as a real file on disk too -- a URL in a meta
+# tag pointing at nothing looks identical in the HTML.
+#
+# Upcoming: renders only while data/upcoming.yaml holds a future date, so this
+# asserts the mechanism (the shortcode's output shape) rather than any one event,
+# which would fail the day the event passes.
+echo 'Inbound: contact, sharing, what is next'
+contains "$EN_HOME" 'mailto:me@italovietro.com' 'the email is reachable from the en home page'
+contains "$PT_HOME" 'mailto:me@italovietro.com' 'and from the pt-br home page'
+contains "$EN_SPEAKING" 'Happy to talk at your event' 'the en speaking page invites invitations'
+contains "$PT_SPEAKING" 'Fico feliz em falar no seu evento' 'the pt-br speaking page invites invitations'
+contains "$EN_HOME" '/images/og-card.jpg' 'the preview card is the og:image'
+exists "$PUBLIC/images/og-card.jpg" 'and the card is actually published'
+nowhere 'Apple-Devices-Preview' 'the theme demo mockup is referenced nowhere'
+nowhere '"xxxx"' 'the theme placeholder publisher name is gone'
+absent_from "$EN_HOME" 'images/logo.svg" />' 'og:image is not an SVG, which no platform renders'
+
+# The Critical Channel stopped in January 2023 and the page said "Ongoing" -- the
+# one untrue claim on a site whose redesign was about dating things honestly.
+nowhere 'date="Ongoing"' 'nothing on the site claims to be ongoing without a date'
+contains "$EN_SPEAKING" '23 episodes' 'the podcast carries its episode count'
+contains "$EN_SPEAKING" '2020' 'and the years it ran'
+
+# Writing did not stop in 2021, it moved. The archive lists the off-site pieces so
+# a visitor can find the recent work from here.
+echo 'Writing elsewhere'
+contains "$EN_ARCHIVE" 'Elsewhere' 'the en archive groups the off-site writing'
+contains "$PT_ARCHIVE" 'Em outros lugares' 'the pt-br archive does too, translated'
+contains "$EN_ARCHIVE" 'Scaling Parloa' 'the Parloa Labs piece is listed'
+contains "$EN_ARCHIVE" 'parloa.com/labs' 'and links to it'
+contains "$EN_HOME" 'went out elsewhere' 'the en home page no longer says the writing simply stopped'
+absent_from "$EN_SPEAKING" 'Encourage Heroism' 'the written interview is off the podcast list'
+
+# Portuguese with its diacritics intact. Asserted on the words that were wrong,
+# because a missing accent is invisible to anyone reading the page in English --
+# which is to say, to the person most likely to be editing it.
+echo 'Portuguese reads as Portuguese'
+absent_from "$PT_SPEAKING" 'versao' 'no unaccented "versao"'
+absent_from "$PT_SPEAKING" 'decisoes' 'no unaccented "decisoes"'
+absent_from "$PT_SPEAKING" 'lideranca' 'no unaccented "lideranca"'
+absent_from "$PT_SPEAKING" 'seguranca psicologica' 'no unaccented "seguranca psicologica"'
 
 echo 'Error pages'
 exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'

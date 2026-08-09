@@ -1,6 +1,6 @@
 ---
 title: "Italo Vietro"
-description: "Senior Director of Engineering na Parloa. 18+ anos construindo software, liderando times, e aprendendo que os problemas mais difíceis não são técnicos."
+description: "Senior Director of Engineering na Parloa. 18+ anos construindo software e liderando times de engenharia no Brasil e na Europa."
 ---
 
 <div class="home-content">
@@ -10,7 +10,7 @@ Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parlo
 </p>
 
 <p class="home-signpost">
-Os <a href="/pt-br/posts/">artigos</a> aqui pararam em 2021. A <a href="/pt-br/leituras-recomendadas/">lista de leituras</a> continua crescendo, e a página de <a href="/pt-br/palestras/">palestras</a> é a que ainda se mexe. O resto da biografia está em <a href="/pt-br/sobre/">Sobre</a>.
+Os <a href="/pt-br/posts/">artigos</a> aqui pararam em 2021, mas o que veio depois saiu em outros lugares. A <a href="/pt-br/leituras-recomendadas/">lista de leituras</a> continua crescendo, e a página de <a href="/pt-br/palestras/">palestras</a> é a que ainda se mexe. O resto da biografia está em <a href="/pt-br/sobre/">Sobre</a>.
 </p>
 
 ## Além do Código

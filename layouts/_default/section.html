@@ -27,6 +27,31 @@
             <div class="archive-intro">{{ . }}</div>
         {{- end -}}
 
+        {{- /*
+            Writing published elsewhere, from data/elsewhere.yaml.
+
+            Above the year groups because it is the most recent work on the page,
+            and the page's problem was that its newest visible thing was five years
+            old while its author had published two months ago somewhere else.
+
+            Same markup as an archive entry, so an off-site piece reads as writing
+            rather than as a link box. The label comes from this section's front
+            matter, per language, next to the sentence that explains the dormancy.
+        */ -}}
+        {{- with site.Data.elsewhere -}}
+            <h2 class="group-title">{{ $.Params.elsewhereLabel | default "Elsewhere" }}</h2>
+            {{- range sort . "date" "desc" -}}
+                <article class="archive-item">
+                    <div class="archive-item__header">
+                        <h3 class="archive-item__title">
+                            <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a>
+                        </h3>
+                        <span class="archive-item__date">{{ .host }} &middot; {{ .display }}</span>
+                    </div>
+                </article>
+            {{- end -}}
+        {{- end -}}
+
         {{- if .Pages -}}
             {{- $pages := .Pages.GroupByDate "2006" -}}
             {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
