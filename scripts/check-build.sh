@@ -55,6 +55,37 @@ exists() {
     if [ -f "$1" ]; then ok "$2"; else bad "$2 (no such file: $1)"; fi
 }
 
+# matches <file> <regex> <description> -- for assertions about two things being
+# adjacent in the output, which a fixed-string search cannot express.
+matches() {
+    local file=$1 pattern=$2 desc=$3
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+    elif grep -qE -- "$pattern" "$file"; then
+        ok "$desc"
+    else
+        bad "$desc"
+    fi
+}
+
+# same_count <file> <literalA> <literalB> <description> -- asserts two things occur
+# equally often. Better than a fixed number for "every entry has one of these": it
+# keeps passing when entries are added and fails when one is added without.
+same_count() {
+    local file=$1 a=$2 b=$3 desc=$4 na nb
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+        return
+    fi
+    na=$(grep -oF -- "$a" "$file" | wc -l | tr -d ' ')
+    nb=$(grep -oF -- "$b" "$file" | wc -l | tr -d ' ')
+    if [ "$na" = "$nb" ]; then
+        ok "$desc"
+    else
+        bad "$desc ($a x$na, $b x$nb)"
+    fi
+}
+
 # occurs <file> <literal> <count> <description> -- exact occurrence count, for
 # assertions about how many of a thing a page has rather than whether it has any.
 occurs() {
@@ -97,6 +128,10 @@ EN_READING="$PUBLIC/recommended-reading/index.html"
 PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
 EN_ABOUT="$PUBLIC/about/index.html"
 PT_ABOUT="$PUBLIC/pt-br/sobre/index.html"
+PT_ARCHIVE="$PUBLIC/pt-br/posts/index.html"
+# Any post page would do for the share buttons; this one is also the older of the
+# two carrying the durability marker, so it is the page most likely to be read.
+EN_POST="$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
 # hardcoding a hash that changes on every style edit.
 CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
@@ -197,6 +232,65 @@ echo 'Writing archive has substance'
 contains "$EN_ARCHIVE" 'archive-item__desc' 'archive entries show their descriptions'
 contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
 absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
+
+# The archive stopped in 2021 and says so, rather than leaving a visitor to work it
+# out from the dates. Two posts carry a star saying the ideas still hold; the count
+# is asserted exactly, because a marker that spreads to five posts marks nothing.
+echo 'Writing archive is honestly dated'
+contains "$EN_ARCHIVE" 'Nothing new here since March 2021' 'en archive opens with the dated notice'
+contains "$PT_ARCHIVE" 'Nada novo por aqui desde março de 2021' 'pt-br archive opens with the dated notice'
+contains "$EN_ARCHIVE" 'an open question' 'the en notice states the position on resuming, not only the date'
+contains "$PT_ARCHIVE" 'uma pergunta em aberto' 'the pt-br notice states the position on resuming'
+occurs "$EN_ARCHIVE" 'archive-item__mark' 2 'exactly two en posts carry the durability marker'
+occurs "$PT_ARCHIVE" 'archive-item__mark' 2 'exactly two pt-br posts carry it'
+matches "$EN_ARCHIVE" 'href=/do-job-titles-matter/.*</a></h3><span class=archive-item__mark' 'the job titles post is one of the two'
+matches "$EN_ARCHIVE" 'href=/5-ways-to-keep-coding-being-an-engineering-manager/.*</a></h3><span class=archive-item__mark' 'the keeping-up-with-code post is the other'
+contains "$EN_ARCHIVE" 'aria-label="Still holds up"' 'the marker has an accessible name, not a bare glyph'
+contains "$PT_ARCHIVE" 'aria-label="Ainda se sustenta"' 'the pt-br marker is named in Portuguese'
+
+# Talks and podcasts are separate groups on one page. Dates and venues are what
+# make a dormant talks list and a live podcast list tell themselves apart, so every
+# entry must carry both -- asserted as a count match rather than a fixed number, so
+# adding a talk without a date fails but adding a complete one does not.
+echo 'Speaking page separates talks from podcasts'
+contains "$EN_SPEAKING" 'Conference Talks' 'en talks have their own heading'
+contains "$EN_SPEAKING" 'Podcast Appearances' 'en podcast appearances have their own heading'
+contains "$PT_SPEAKING" '>Palestras<' 'pt-br talks have their own heading'
+contains "$PT_SPEAKING" 'Participacoes em Podcasts' 'pt-br podcast appearances have their own heading'
+contains "$EN_SPEAKING" 'Not everything is here' 'en page opens with the completeness hedge'
+contains "$PT_SPEAKING" 'Nem tudo está aqui' 'pt-br page opens with the completeness hedge'
+same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
+same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entry carries a venue'
+same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
+same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every pt-br entry carries a venue'
+
+# Two new jobs for amber: the nav item for the section you are in, and selected
+# text. Both were measured against the theme's real backgrounds -- 4.73:1 for the
+# active item on the #f8f8f8 header, and 13.70:1 / 9.32:1 for text on the
+# composited selection background.
+#
+# The last two assert what amber must NOT do. Section headings and year groups stay
+# uncoloured: entry titles are amber because they are links, and if the headings
+# above them took the accent too, nothing on the page would read as more important
+# than anything else. That is the state this site had to undo once already.
+echo 'Accent in its new roles'
+contains "$CSS" 'rgba(180,83,9,0.22)' 'selected text takes the accent in light'
+contains "$CSS" 'rgba(180,83,9,0.45)' 'selected text takes the accent in dark'
+absent_from "$CSS" 'rgba(53,166,247' 'theme default selection blue is gone'
+matches "$CSS" 'a\.active\{font-weight:900;color:#b45309\}' 'the active nav item takes the accent, and keeps a weight cue'
+occurs "$EN_ABOUT" 'menu-item active' 2 'the current section is marked in both the desktop and mobile navs'
+occurs "$PT_ABOUT" 'menu-item active' 2 'and in pt-br too'
+matches "$CSS" '\.archive \.group-title\{[^}]*color:#57534e' 'archive year headings stay muted rather than accented'
+matches "$CSS" '\.single \.content h2\{[^}]*color:#161209' 'reading list section headings stay uncoloured'
+
+# Line and Weibo were theme defaults, not choices, and neither is plausible for a
+# readership reading in English and Portuguese.
+echo 'Share buttons'
+contains "$EN_POST" 'data-sharer=twitter' 'Twitter is still offered'
+contains "$EN_POST" 'data-sharer=facebook' 'Facebook is still offered'
+contains "$EN_POST" 'data-sharer=hackernews' 'Hacker News is still offered'
+nowhere 'data-sharer=line ' 'Line is offered on no page'
+nowhere 'data-sharer=weibo ' 'Weibo is offered on no page'
 
 echo 'Reading list'
 nowhere '[Book Title]' 'the placeholder entry appears nowhere'
