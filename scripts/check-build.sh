@@ -55,6 +55,22 @@ exists() {
     if [ -f "$1" ]; then ok "$2"; else bad "$2 (no such file: $1)"; fi
 }
 
+# occurs <file> <literal> <count> <description> -- exact occurrence count, for
+# assertions about how many of a thing a page has rather than whether it has any.
+occurs() {
+    local file=$1 needle=$2 want=$3 desc=$4 got
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+        return
+    fi
+    got=$(grep -oF -- "$needle" "$file" | wc -l | tr -d ' ')
+    if [ "$got" = "$want" ]; then
+        ok "$desc"
+    else
+        bad "$desc (wanted $want, got $got)"
+    fi
+}
+
 # absent_from <file> <literal> <description>
 absent_from() {
     local file=$1 needle=$2 desc=$3
@@ -79,6 +95,8 @@ PT_SPEAKING="$PUBLIC/pt-br/palestras/index.html"
 EN_ARCHIVE="$PUBLIC/posts/index.html"
 EN_READING="$PUBLIC/recommended-reading/index.html"
 PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
+EN_ABOUT="$PUBLIC/about/index.html"
+PT_ABOUT="$PUBLIC/pt-br/sobre/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
 # hardcoding a hash that changes on every style edit.
 CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
@@ -124,6 +142,55 @@ contains "$PT_HOME" '>Artigos<' 'Artigos appears in the pt-br nav'
 contains "$EN_HOME" 'home-route__name' 'the homepage route list renders'
 contains "$EN_HOME" '>Reading<' 'nav uses the short parallel label, not the sentence fragment'
 
+# The home page ran roughly 1,000 words of biography in each language, above four
+# routes nobody could see without scrolling past it. None of the 14 sites surveyed
+# in .planning/research/minimal-personal-site-patterns.md runs essay-length
+# biography on a home page. The prose is now at /about/, and these guard the three
+# ways it could creep back: the portrait, the duplicate name heading, and a route
+# list that quietly loses its fourth item.
+#
+# Asserted on '<h1' rather than the heading text because the failure is structural:
+# the site header already carries the name, so a second first-level heading on the
+# home page is wrong whatever it says.
+echo 'Home page is contents, not biography'
+absent_from "$EN_HOME" '<h1' 'en home page has no heading repeating the name in the header'
+absent_from "$PT_HOME" '<h1' 'pt-br home page has no heading repeating the name either'
+absent_from "$EN_HOME" 'home-avatar' 'no portrait on the en home page'
+absent_from "$PT_HOME" 'home-avatar' 'no portrait on the pt-br home page'
+nowhere '/images/avatar.png' 'the 428KB portrait PNG is referenced nowhere'
+occurs "$EN_HOME" 'home-route__name>' 4 'en home page offers four routes'
+occurs "$PT_HOME" 'home-route__name>' 4 'pt-br home page offers four routes'
+absent_from "$EN_HOME" 'learned about people' 'the moved biography is not left behind on the en home page'
+absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left behind on the pt-br home page'
+
+# About is where the biography went, and it is the only page that carries the
+# photograph. The two sizes exist for event organisers, who ask by email today.
+echo 'About page'
+exists "$EN_ABOUT" 'en About page is built'
+exists "$PT_ABOUT" 'pt-br About page is built at its localized path'
+contains "$EN_ABOUT" "What I&rsquo;ve learned about people" 'en About carries the moved sections'
+contains "$PT_ABOUT" 'O que aprendi sobre pessoas' 'pt-br About carries the moved sections'
+contains "$EN_ABOUT" 'What 18+ years of building software' 'en About has its own description for indexing'
+contains "$PT_ABOUT" 'O que 18+ anos construindo software' 'pt-br About has its own description'
+contains "$EN_HOME" '/about/' 'en home page routes to About'
+contains "$PT_HOME" '/pt-br/sobre/' 'pt-br home page routes to About'
+contains "$EN_HOME" '>About<' 'About appears in the en nav'
+contains "$PT_HOME" '>Sobre<' 'Sobre appears in the pt-br nav'
+contains "$EN_ABOUT" 'portrait__img' 'the portrait renders on About'
+contains "$EN_ABOUT" 'portrait__sizes' 'About offers the portrait at more than one resolution'
+contains "$PT_ABOUT" 'portrait__img' 'the portrait renders on pt-br About too'
+
+# The photograph was a 428KB PNG of a 512x512 image -- 7x the bytes for no extra
+# pixels. This ceiling fails loudly if an unoptimised export replaces it.
+PORTRAIT="$PUBLIC/images/portrait.jpg"
+if [ ! -f "$PORTRAIT" ]; then
+    bad "portrait is materially smaller than the 428KB it replaced (no such file: $PORTRAIT)"
+elif [ "$(wc -c < "$PORTRAIT")" -lt 120000 ]; then
+    ok 'portrait is materially smaller than the 428KB it replaced'
+else
+    bad "portrait is materially smaller than the 428KB it replaced (got $(wc -c < "$PORTRAIT") bytes, ceiling 120000)"
+fi
+
 # The archive page showed link-and-date rows and nothing else, while every post
 # already carried a description in front matter. These guard the substance.
 echo 'Writing archive has substance'
@@ -138,6 +205,16 @@ absent_from "$EN_READING" '<h4' 'entry titles are h3, leaving no gap in the head
 contains "$EN_READING" 'Start Here' 'en has the featured section'
 contains "$PT_READING" 'Comece por aqui' 'pt-br has the featured section, translated'
 nowhere 'Must Read' 'the tier subheadings are gone from both languages'
+
+# Read years are supported by the shortcode and styled as a right-hand column, but
+# no entry carries one yet: the years are the owner's to supply, and a wrong date is
+# worse than an absent one. So this asserts the rule survives, the way the
+# interaction rules below are asserted -- presence, not appearance.
+#
+# When the first years land, add content assertions here for both languages, and a
+# line to the reading list intro saying the years are when it was read rather than
+# when it was published. A bare year beside a book title reads as the latter.
+contains "$CSS" 'book-entry__date' 'the read-year column rule is present in the stylesheet'
 
 echo 'Error pages'
 exists "$PUBLIC/404.html" 'en 404 page exists for the catch-all route'
