@@ -81,7 +81,17 @@ $heading-color-dark: #e7e5e4; // 11.90:1 on #292a2d, against body text at 6.16:1
 // paragraph and metadata text these apply to would fail AA badly. The theme
 // variable stays untouched for the components that treat it as decoration.
 $muted-text-color: #57534e; // 7.63:1 on #fff
-$muted-text-color-dark: #a8a29e; // 5.69:1 on #292a2d
+//
+// Dark has one grey, not two. This was #a8a29e against body text at #a9a9b3 --
+// a 1% difference, which is to say no difference: the "muted" tier existed in the
+// stylesheet and nowhere on the screen. The headshot line on /about/ was where it
+// showed, a caption that was supposed to read quieter than the paragraph under it
+// and read exactly the same.
+//
+// So in dark the tier is carried by size and weight instead, which is what was
+// actually distinguishing metadata all along. Light keeps two values, where
+// #57534e against a near-black body is a difference you can see.
+$muted-text-color-dark: #a9a9b3; // 6.16:1 on #292a2d -- the body text colour
 
 // --- Entry type accents -------------------------------------------------
 //

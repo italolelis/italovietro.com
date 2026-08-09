@@ -216,6 +216,13 @@ matches "$CSS" '\.home-intro\{font-size:1\.125rem;color:#161209' 'the intro para
 # Dark mode gave headings the same colour as the body text under them, so hierarchy
 # rested on size alone. Light mode never had the problem: its body text is a
 # near-black that already reads as the strongest thing on the page.
+# Dark carries one grey. The muted tier used to be #a8a29e against body text at
+# #a9a9b3 -- 1% apart, so a caption that was meant to read quieter than the
+# paragraph under it read identically. Two tokens, one visible colour, and no way
+# to tell from a screenshot which rule had won.
+absent_from "$CSS" '#a8a29e' 'the second dark grey is gone'
+matches "$CSS" '\[theme=dark\][^{]*\.portrait__sizes[^{]*\{color:#a9a9b3' 'the headshot line uses the same grey as the prose'
+
 echo 'Headings outrank body text in dark'
 matches "$CSS" '\[theme=dark\] \.single-title[^{]*\{color:#e7e5e4\}' 'dark headings take the brighter colour'
 matches "$CSS" '\[theme=dark\] \.home \.home-subtitle\{color:#e7e5e4\}' 'the tagline is treated as a heading, not body text'
