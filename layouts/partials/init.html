@@ -26,6 +26,15 @@
 {{- end -}}
 
 {{- .Scratch.Set "params" $params -}}
-{{- .Scratch.Set "this" dict -}}
+{{- /* Seeded with an empty `config`, and it must stay non-nil.
+       The theme builds window.config from `(.Scratch.Get "this").config`, and every
+       feature that contributes to it -- search, twemoji, lightgallery, typeit, math,
+       echarts, mapbox, cookieconsent -- is off on this site. That left the key unset,
+       so the page emitted `window.config=null`, and the theme's constructor opens
+       with `this.data = this.config.data`.
+       Every piece of theme JS died on that line: the mobile menu never bound its
+       toggle, the light/dark switch stopped working, and nothing said so -- the
+       error sat in a console nobody had open. */ -}}
+{{- .Scratch.Set "this" (dict "config" dict) -}}
 
 {{- partial "plugin/compatibility.html" . -}}
