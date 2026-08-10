@@ -32,7 +32,7 @@ Mostly about what platforms cost, what reliability takes, and the parts of engin
 {{< talk title="Panel: Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="talk" >}}
 {{< /talk >}}
 
-{{< talk title="Designing for failure" event="GoLab 2019, Florence" date="October 2019" type="talk" video_url="https://www.youtube.com/watch?v=BOn3R41UrV8" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
+{{< talk title="Designing for failure" event="GoLab, Golang Piter and GoDays" date="2019" type="talk" recordings="Florence=https://youtu.be/BOn3R41UrV8|Saint Petersburg=https://youtu.be/QWRPWb1Tzqs|Berlin=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
 {{< /talk >}}
 
 ## Podcast Appearances
