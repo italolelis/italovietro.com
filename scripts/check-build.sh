@@ -445,7 +445,7 @@ contains "$EN_ARCHIVE" 'Parloa Labs' 'off-site rows name their source'
 contains "$PT_ARCHIVE" 'Parloa Labs' 'in both languages -- the source is a name, not prose'
 contains "$EN_ARCHIVE" 'Scaling Parloa' 'the Parloa Labs piece is listed'
 contains "$EN_ARCHIVE" 'parloa.com/labs' 'and links to it'
-contains "$EN_HOME" 'went out elsewhere' 'the en home page no longer says the writing simply stopped'
+contains "$EN_HOME" 'I write from time to time' 'the en home page routes in first person, not in a status report'
 absent_from "$EN_SPEAKING" 'Encourage Heroism' 'the written interview is off the podcast list'
 
 # Portuguese with its diacritics intact. Asserted on the words that were wrong,

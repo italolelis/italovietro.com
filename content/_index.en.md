@@ -10,7 +10,7 @@ I'm Senior Director of Engineering at <strong><a href="https://parloa.com">Parlo
 </p>
 
 <p class="home-signpost">
-The <a href="/posts/">writing</a> here stopped in 2021, though newer pieces went out elsewhere. The <a href="/recommended-reading/">reading list</a> still grows, and <a href="/speaking/">speaking</a> is the page that moves. The rest of the biography is on <a href="/about/">About</a>.
+I write from time to time, and those thoughts end up in <a href="/posts/">writing</a>. I read a good deal more than I write, and the books that stuck are in <a href="/recommended-reading/">reading</a>. I also like talking about what I have had to figure out the hard way, which is <a href="/speaking/">speaking</a>. If you want the longer version of all this, it is in <a href="/about/">about</a>.
 </p>
 
 ## Beyond the Code

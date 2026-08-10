@@ -19,7 +19,10 @@
             page title and h3 for year groups, leaving no h1 on the page at all.
     */ -}}
     <div class="page archive">
-        <h1 class="single-title">
+        {{- /* Same classes the theme puts on every other page title, so this one
+               arrives the same way. The reduced-motion guard in _interactions.scss
+               suppresses it for anyone who asks. */ -}}
+        <h1 class="single-title animate__animated animate__pulse animate__faster">
             {{- .Title | default (T .Section) | default .Section | emojify -}}
         </h1>
 
