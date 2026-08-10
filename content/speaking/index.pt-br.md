@@ -32,7 +32,7 @@ Geralmente sobre o custo das plataformas, o que confiabilidade exige, e as parte
 {{< talk title="Panel: Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="talk" >}}
 {{< /talk >}}
 
-{{< talk title="Designing for failure" event="GoLab 2019, Florence" date="October 2019" type="talk" video_url="https://www.youtube.com/watch?v=BOn3R41UrV8" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
+{{< talk title="Designing for failure" event="GoLab, Golang Piter e GoDays" date="2019" type="talk" recordings="Florença=https://youtu.be/BOn3R41UrV8|São Petersburgo=https://youtu.be/QWRPWb1Tzqs|Berlim=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
 {{< /talk >}}
 
 ## Participações em Podcasts

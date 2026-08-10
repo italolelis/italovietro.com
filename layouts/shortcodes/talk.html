@@ -1,11 +1,24 @@
 {{- /* layouts/shortcodes/talk.html */ -}}
-{{- /* Parameters: title (required), event (required), date (required), type (required), video_url (optional), slides_url (optional) */ -}}
+{{- /*
+    Parameters: title (required), event (required), date (required), type (required),
+    video_url (optional), slides_url (optional), recordings (optional).
+
+    `recordings` is for a talk given more than once: pipe-separated `Label=URL`
+    pairs, rendered as one link per label. One entry with three recordings rather
+    than three entries with the same title -- the talk is the thing, and repeating
+    it three times down the page would say the opposite of what it means, which is
+    that a conference asked for it again.
+
+    Labels are written per language in the content file, so a city can be Florence
+    in one and Florença in the other.
+*/ -}}
 {{- $title     := .Get "title" -}}
 {{- $event     := .Get "event" -}}
 {{- $date      := .Get "date" -}}
 {{- $type      := .Get "type" | default "talk" -}}
 {{- $videoUrl  := .Get "video_url" | default "" -}}
 {{- $slidesUrl := .Get "slides_url" | default "" -}}
+{{- $recordings := .Get "recordings" | default "" -}}
 {{- $inner     := trim .Inner "\n" | .Page.RenderString -}}
 {{- $icon := "fa-microphone" -}}
 {{- if eq $type "podcast" -}}{{- $icon = "fa-podcast" -}}{{- end -}}
@@ -20,14 +33,25 @@
         </h3>
         <div class="talk-entry__meta">
             <span class="talk-entry__event">{{ $event }}</span>
-            <span class="talk-entry__date">{{ $date }}</span>
-            {{- if or $videoUrl $slidesUrl }}
+            {{- if or $videoUrl $slidesUrl $recordings }}
             <span class="talk-entry__links">
                 {{- if $videoUrl }}<a href="{{ $videoUrl }}" target="_blank" rel="noopener noreferrer">Watch</a>{{- end }}
-                {{- if and $videoUrl $slidesUrl }} &middot; {{- end }}
+                {{- with $recordings }}
+                    {{- range $i, $pair := split . "|" }}
+                        {{- if $i }} &middot; {{ end -}}
+                        {{- $parts := split $pair "=" -}}
+                        <a href="{{ index $parts 1 }}" target="_blank" rel="noopener noreferrer">{{ index $parts 0 }}</a>
+                    {{- end }}
+                {{- end }}
+                {{- if and (or $videoUrl $recordings) $slidesUrl }} &middot; {{ end }}
                 {{- if $slidesUrl }}<a href="{{ $slidesUrl }}" target="_blank" rel="noopener noreferrer">Slides</a>{{- end }}
             </span>
             {{- end }}
+            {{- /* Last in the row: its auto margin pins it to the right edge, which
+                   is the same date column the archive and reading list use. With the
+                   links after it, a talk with three recordings pushed the date into
+                   the middle of the row. */ -}}
+            <span class="talk-entry__date">{{ $date }}</span>
         </div>
     </div>
     {{- if $inner }}

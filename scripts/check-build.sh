@@ -366,6 +366,14 @@ absent_from "$EN_SPEAKING" 'Not everything is here' 'the rejected completeness h
 absent_from "$PT_SPEAKING" 'Nem tudo está aqui' 'and off the pt-br page'
 same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
 same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entry carries a venue'
+# One talk given three times is one entry with three recordings, not three entries
+# with the same title. These assert both halves: the entry appears once, and every
+# stage it was given on is reachable.
+occurs "$EN_SPEAKING" 'Designing for failure</h3>' 1 'the repeated talk is a single entry, not three rows'
+contains "$EN_SPEAKING" 'youtu.be/BOn3R41UrV8' 'the GoLab recording is linked'
+contains "$EN_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'the Golang Piter recording is linked'
+contains "$EN_SPEAKING" 'youtu.be/DKhC_XH8fDs' 'the GoDays recording is linked'
+contains "$PT_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'and all three in pt-br, with localized city names'
 same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
 same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every pt-br entry carries a venue'
 
