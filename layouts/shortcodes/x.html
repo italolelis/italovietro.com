@@ -1,0 +1,15 @@
+{{- /*
+    Shadows the theme's {{< x >}} shortcode with nothing.
+
+    The theme's version delegates to Hugo's embedded `internal/x.html` partial,
+    which in Hugo 0.164 still references `_internal/shortcodes/x.html` -- a
+    template Hugo itself no longer ships. Hugo parses every shortcode template in
+    the project whether or not a page calls one, so the theme upgrade would not
+    build at all until this chain stopped being reachable.
+
+    Nothing here uses it: there is no embedded X post anywhere in the content, and
+    the site dropped X from its share buttons on the grounds that this audience does
+    not use it. If an embed is ever wanted, paste the blockquote X provides rather
+    than restoring a shortcode that depends on a template Hugo has removed.
+*/ -}}
+{{- errorf "The %q shortcode is not available on this site -- see layouts/shortcodes/x.html" "x" -}}

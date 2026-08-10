@@ -391,11 +391,15 @@ matches "$CSS" '\.single \.content h2\{[^}]*color:#161209' 'reading list section
 # Line and Weibo were theme defaults, not choices, and neither is plausible for a
 # readership reading in English and Portuguese.
 echo 'Share buttons'
-contains "$EN_POST" 'data-sharer=twitter' 'Twitter is still offered'
+contains "$EN_POST" 'data-sharer=x' 'the Twitter button is still offered, under its new name'
 contains "$EN_POST" 'data-sharer=facebook' 'Facebook is still offered'
 contains "$EN_POST" 'data-sharer=hackernews' 'Hacker News is still offered'
 nowhere 'data-sharer=line ' 'Line is offered on no page'
 nowhere 'data-sharer=weibo ' 'Weibo is offered on no page'
+# The 2025 theme bump switched these two on by default, which is how Line and Weibo
+# got here in the first place.
+nowhere 'data-sharer=threads ' 'Threads arrived with a theme bump and is off'
+nowhere 'data-sharer=diaspora ' 'so did Diaspora'
 
 echo 'Reading list'
 nowhere '[Book Title]' 'the placeholder entry appears nowhere'
