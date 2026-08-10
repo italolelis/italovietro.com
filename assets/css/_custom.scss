@@ -91,6 +91,32 @@
     margin-right: auto;
 }
 
+// The footer sizes to its contents.
+//
+// The theme sets `footer { height: 2rem }` -- a fixed height, written when the
+// footer held one line. It holds two now, the social row and the copyright, and
+// the second one overflowed the declared box: the copyright sat flush against the
+// bottom edge of the page with nothing under it.
+//
+// It also made short pages scroll. The sticky-footer arrangement above it is
+// correct -- .wrapper is min-height: 100vh with main at flex: 1 0 auto -- but that
+// only holds while every child's declared height matches what it renders. The
+// footer claiming 2rem and drawing more pushed the document past the viewport, so
+// the home page, which is barely half a screen of text, had a scrollbar and a
+// footer you had to go looking for.
+//
+// Auto height, and enough padding underneath that the last line has somewhere to
+// sit. Padding rather than margin: it belongs to the footer's own box, so the flex
+// maths above still adds up and short pages stay exactly one screen.
+footer {
+    height: auto;
+    padding: 2rem 0 2.5rem;
+}
+
+.footer-container .footer-line + .footer-line {
+    margin-top: 0.5rem;
+}
+
 // Footer social links
 //
 // Text, not icons, and quiet: this is where someone goes deliberately to find you
