@@ -497,6 +497,14 @@ absent_from "$EN_HOME" '#1aa3ff' 'theme default banner blue is gone'
 
 # Analytics is the one thing on the site with no visible symptom when it breaks:
 # a dropped script means silently zero data, discovered weeks later.
+# The theme's entire JS bundle hangs off window.config: its constructor reads
+# `this.config.data` before doing anything else, so a null config kills the mobile
+# menu, the theme switch and every scroll handler at once. The failure is silent --
+# no visual change on a desktop, nothing in the HTML, an error only in a console.
+echo 'Theme JS has a config to boot from'
+nowhere 'window.config=null' 'window.config is never null'
+contains "$EN_HOME" 'window.config=' 'the config script is emitted at all'
+
 echo 'Analytics'
 contains "$EN_HOME" '/_vercel/insights/script.js' 'Vercel Web Analytics script is present'
 contains "$EN_HOME" '/_vercel/speed-insights/script.js' 'Vercel Speed Insights script is present'
