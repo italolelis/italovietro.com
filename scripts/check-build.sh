@@ -369,7 +369,7 @@ same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entr
 # One talk given three times is one entry with three recordings, not three entries
 # with the same title. These assert both halves: the entry appears once, and every
 # stage it was given on is reachable.
-occurs "$EN_SPEAKING" 'Designing for failure' 1 'the repeated talk is a single entry'
+occurs "$EN_SPEAKING" 'Designing for failure</h3>' 1 'the repeated talk is a single entry, not three rows'
 contains "$EN_SPEAKING" 'youtu.be/BOn3R41UrV8' 'the GoLab recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'the Golang Piter recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/DKhC_XH8fDs' 'the GoDays recording is linked'
