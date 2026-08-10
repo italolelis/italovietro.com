@@ -327,6 +327,12 @@ ignoreLogs = ['shortcode-twitter-getremote']
     # Line and Weibo were theme defaults that arrived with the template rather than
     # choices. Neither is plausible for a readership that reads in English and
     # Portuguese, so a post page offered five buttons where three were meant.
+    #
+    # The 2025 theme bump did it again, switching on Threads and Diaspora, and
+    # renamed Twitter to X. Both new ones are off for the same reason as before: a
+    # network nobody chose is not a choice. `Twitter = true` still drives the
+    # button, which now renders as X -- same decision, the theme's key just kept
+    # its old name.
     [params.page.share]
       enable = true
       Twitter = true
@@ -341,6 +347,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
       Buffer = false
       Xing = false
       Line = false
+      Threads = false
+      Diaspora = false
       Instapaper = false
       Pocket = false
       Digg = false

@@ -1,0 +1,9 @@
+{{- /*
+    Shadows the theme's internal/x_simple.html, which is a one-line delegation to Hugo's
+    embedded `_internal/shortcodes/x_simple.html`. Hugo no longer ships that template, and
+    it parses every partial in the project whether or not anything calls one -- so
+    the theme could not build at all with this file present.
+
+    Empty rather than a replacement embed: nothing on this site embeds an X post,
+    and layouts/shortcodes/x_simple.html errors loudly if anything ever tries.
+*/ -}}

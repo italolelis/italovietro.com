@@ -1,0 +1,10 @@
+{{- /*
+    Shadows the theme's {{< instagram >}} shortcode.
+
+    Same problem as x.html: it delegates to Hugo's embedded
+    `_internal/shortcodes/instagram.html`, which Hugo no longer ships, and Hugo
+    parses every shortcode template whether or not a page calls one.
+
+    Nothing on this site embeds Instagram.
+*/ -}}
+{{- errorf "The %q shortcode is not available on this site -- see layouts/shortcodes/instagram.html" "instagram" -}}
