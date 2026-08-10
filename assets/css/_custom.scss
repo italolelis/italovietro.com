@@ -75,6 +75,22 @@
     }
 }
 
+// Page titles share the measure with the text under them.
+//
+// The theme puts .single-title outside .content, so it took the full width of
+// .page while the prose sat in the 800px column centred inside it -- the title
+// started roughly 140px to its left on a wide screen. Exactly the defect
+// docs/adr/0004 records for the home page, on every other page, found by
+// comparing the writing archive (which constrains its own wrapper, so it was
+// right) against the reading and speaking pages (which did not).
+//
+// Same numbers as .content rather than a new value: one measure, one left edge.
+.single .single-title {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 // Footer social links
 //
 // Text, not icons, and quiet: this is where someone goes deliberately to find you

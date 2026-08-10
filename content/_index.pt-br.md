@@ -10,7 +10,7 @@ Sou Senior Director of Engineering na <strong><a href="https://parloa.com">Parlo
 </p>
 
 <p class="home-signpost">
-Os <a href="/pt-br/posts/">artigos</a> aqui pararam em 2021, mas o que veio depois saiu em outros lugares. A <a href="/pt-br/leituras-recomendadas/">lista de leituras</a> continua crescendo, e a página de <a href="/pt-br/palestras/">palestras</a> é a que ainda se mexe. O resto da biografia está em <a href="/pt-br/sobre/">Sobre</a>.
+Escrevo de vez em quando, e esses textos acabam em <a href="/pt-br/posts/">artigos</a>. Leio bem mais do que escrevo, e os livros que ficaram estão em <a href="/pt-br/leituras-recomendadas/">leituras</a>. Também gosto de falar sobre o que tive que descobrir na marra, e isso está em <a href="/pt-br/palestras/">palestras</a>. Se quiser a versão mais longa de tudo isso, está em <a href="/pt-br/sobre/">sobre</a>.
 </p>
 
 ## Além do Código
