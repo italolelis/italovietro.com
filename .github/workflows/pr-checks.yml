@@ -47,7 +47,7 @@ jobs:
           fi
 
       - name: Cache Hugo resources
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: resources
           key: ${{ runner.os }}-hugo-resources-${{ hashFiles('**/*.md') }}
