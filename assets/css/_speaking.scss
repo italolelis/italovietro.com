@@ -117,6 +117,10 @@
     color: $single-link-color;
 }
 
+.talk-entry--panel .talk-entry__type-icon {
+    color: $entry-panel-color;
+}
+
 .talk-entry--podcast .talk-entry__type-icon {
     color: $entry-podcast-color;
 }
@@ -144,6 +148,10 @@
 
 [theme=dark] .talk-entry--talk .talk-entry__type-icon {
     color: $single-link-color-dark;
+}
+
+[theme=dark] .talk-entry--panel .talk-entry__type-icon {
+    color: $entry-panel-color-dark;
 }
 
 [theme=dark] .talk-entry--podcast .talk-entry__type-icon {
@@ -174,6 +182,10 @@
 
     [theme=auto] .talk-entry--talk .talk-entry__type-icon {
         color: $single-link-color-dark;
+    }
+
+    [theme=auto] .talk-entry--panel .talk-entry__type-icon {
+        color: $entry-panel-color-dark;
     }
 
     [theme=auto] .talk-entry--podcast .talk-entry__type-icon {

@@ -1,510 +1,120 @@
 # AGENTS.md
 
-This document provides AI agents with essential context about the italovietro.com project for effective code assistance, modifications, and maintenance.
+Context for AI agents working on italovietro.com — a bilingual Hugo site (writing, reading list, speaking record, About), built by GitHub Actions and hosted on Vercel.
 
-## Project Overview
+The unusual thing about this repo: **a post-build assertion script decides whether anything ships**, and most non-obvious decisions are already recorded. Read before changing.
 
-**Type:** Personal Website / Portfolio + Blog  
-**Framework:** Hugo (Static Site Generator)  
-**Theme:** LoveIt v0.2.X  
-**Primary Language:** Go (Hugo), Markdown (content), SCSS (styling)  
-**Hosting:** GitHub Pages  
-**URL:** https://italovietro.com  
-**Repository:** https://github.com/italolelis/italovietro.com
+## Commands
 
-### Purpose
-Professional portfolio and blog for Italo Vietro showcasing:
-- Engineering leadership experience and career journey
-- Technical blog posts on management and technology
-- Consulting services
-- Curated reading lists (books, newsletters, podcasts)
-- Public talks and presentations
+```bash
+# Clone with the theme submodule
+git clone --recurse-submodules https://github.com/italolelis/italovietro.com.git
 
-## Architecture
+# Dev server, drafts included
+hugo server -D               # http://localhost:1313
 
-### Technology Stack
-- **Hugo Extended:** v0.2.X+ (required for SCSS compilation)
-- **LoveIt Theme:** Git submodule from https://github.com/dillonzq/LoveIt.git
-- **Markdown Parser:** Goldmark (with footnotes, tables, task lists, strikethrough)
-- **CSS Preprocessor:** SCSS/SASS
-- **Analytics:** Google Analytics (G-KYX115R541)
-- **Deployment:** GitHub Actions → GitHub Pages
+# Production build + the gate -- RUN THIS BEFORE CALLING ANY CHANGE DONE
+hugo --gc --minify && ./scripts/check-build.sh public
 
-### Key Directories
+# Theme submodule repair / update
+git submodule update --init --recursive
+git submodule update --remote
 
-```
-italovietro.com/
-├── .devcontainer/       # VS Code DevContainer config (Go 1.20)
-├── .github/             # GitHub Actions workflows + issue templates
-├── archetypes/          # Content templates for new posts
-├── assets/              
-│   ├── css/            # Custom SCSS (_custom.scss, _override.scss)
-│   ├── images/         # Site images, screenshots, photos
-│   └── music/          # Audio files (Wavelength.mp3)
-├── content/             # Markdown content (multilingual)
-│   ├── posts/          # Blog posts (page bundles)
-│   ├── consulting/     # Consulting services page
-│   ├── my-reading-list/# Reading recommendations
-│   └── talks/          # Public speaking engagements
-├── layouts/             # Theme overrides
-│   └── partials/       
-│       ├── header.html # Custom header
-│       └── plugin/     
-│           └── analytics.html  # Custom analytics
-├── resources/           # Generated SCSS (DO NOT EDIT)
-├── static/              # Static assets (favicons, _redirects)
-├── themes/              # Git submodule (LoveIt theme)
-└── config.toml          # Main configuration (450+ lines)
+# Clear SCSS cache if styles look stale
+rm -rf resources/ && hugo server -D
 ```
 
-## Configuration (config.toml)
+Hugo must be the **extended** build; the standard one cannot compile the theme's SCSS. There is no test suite, linter, or formatter — `scripts/check-build.sh` is the only automated check, and it is the one that matters.
 
-### Critical Settings
+## Hard rules
 
-**Base Configuration:**
-```toml
-baseURL = "https://italovietro.com"
-defaultContentLanguage = "en"
-theme = "LoveIt"
-title = "Italo Vietro"
-googleAnalytics = "G-KYX115R541"
-```
+- **Never edit `themes/LoveIt/`** — it's a submodule. Mirror the path under `layouts/` instead.
+- **Never add a webfont or Google Fonts import** — ADR-0002.
+- **Never add a third-party asset host** — the gate fails on jsDelivr, cdnjs, unpkg.
+- **Never reintroduce Google Analytics or the cookie banner** without asking first.
+- **Never delete `aliases`** on renamed pages — they are live inbound links.
+- **Never strip the long "why" comments** from `config.toml`, `scripts/check-build.sh`, or the overrides. They record what was tried and rejected; they are the project's memory.
+- **Never reverse an ADR silently.** If a change contradicts one, say so explicitly.
+- **Both languages, every time.** A change to `index.en.md` needs the matching `index.pt-br.md`. Portuguese is written with correct diacritics.
+- **Never commit** `public/`, `resources/`, `.vercel/`, `.env*` (all gitignored).
+- **Don't claim a change is done** without running the gate.
 
-**Multilingual Support:**
-- Primary: English (en) - weight: 1
-- Secondary: Portuguese (pt-br) - weight: 2
-- All content should have both translations
+## Read these first
 
-**Navigation Menu (English):**
-1. Consulting (/consulting/)
-2. My reading list (/my-reading-list/)
-3. Talks (/talks/)
+This repo documents its own decisions. Before anything non-trivial:
 
-**Important Feature Toggles:**
-- `enableRobotsTXT = true` - SEO enabled
-- `enableGitInfo = true` - Git metadata in pages
-- `enableEmoji = true` - Emoji support in content
-- Theme mode: auto/light/dark switching enabled
-- Cookie consent: enabled (GDPR compliance)
-- Social sharing: Twitter, Facebook, HackerNews, Line, Weibo
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Post-build assertion.
+- **`docs/adr/`** — five accepted decisions. Read the ones touching your area:
+  - `0001-amber-accent-colour.md` — the accent, and its counted roles
+  - `0002-no-webfonts.md` — why no webfont is loaded
+  - `0003-logo-redrawn-as-vector.md`
+  - `0004-one-800px-measure.md` — one column width, site-wide
+  - `0005-the-site-serves-inbound.md` — **read this before any content or layout work.** It decides what the site is for, and therefore what wins: contact is first-class, sharing is part of the product, **what is next outranks what happened**, and every claim about currency must be true because the audience is checking.
+- **`docs/agents/architecture.md`** — directory map, content and routing map, stylesheets, shortcode contracts, deployment, analytics. Split out of this file to keep it small; read it when you need the layout of things.
+- **Source comments** — `config.toml`, `scripts/check-build.sh` and the layout overrides carry long comments explaining why each non-obvious choice was made, including rejected alternatives. They are the most reliable source in the repo. Read them before "simplifying" anything.
 
-**Output Formats:**
-- HTML (primary)
-- RSS
-- Markdown
-- JSON (search index)
+**This file is the single source of agent context.** There is deliberately no `CLAUDE.md`; it was removed after drifting badly. If tooling recreates it, delete it again or reduce it to a pointer here. Do not maintain two descriptions of this repo.
 
-## Content Guidelines
+## The build gate
 
-### Blog Post Structure
+`scripts/check-build.sh` runs ~593 lines of assertions against the generated `public/` directory and gates both PR checks and production deploys. If it fails, nothing deploys.
 
-All blog posts use **page bundles** (directory-based organization):
+It asserts on **compiled output** — what a browser actually receives — not on how the source is authored, so it survives file reorganisation and only fails when something a visitor experiences has regressed. A *Post-build assertion* is deliberately not called a test; see `CONTEXT.md`.
 
-```
-content/posts/my-post-title/
-├── index.en.md          # English version (REQUIRED)
-├── index.pt-br.md       # Portuguese version (REQUIRED)
-├── featured-image.jpg   # Featured image
-└── other-images.jpg     # Additional images
-```
+Many assertions are **negative** (`nowhere`, `absent_from`), guarding against regressions a theme bump or careless revert could reintroduce invisibly — a superseded job title, a returning cookie banner, a third-party host, a re-added `"Panel: "` prefix.
 
-### Front Matter Template
+**When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
+
+Helpers available: `contains`, `contains_re`/`matches`, `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
+
+Two documented footguns:
+
+- Goldmark's typographer renders `I've` as `I&rsquo;ve`, so a needle containing a straight apostrophe matches nothing and makes an `absent_from` assertion pass **vacuously**. Use an apostrophe-free substring or the generated heading id. The same applies to `&` in headings.
+- `--minify` changes attribute shape (`data-sharer=line` vs `data-sharer="line"`). Use the regex variants where that matters.
+
+## Content conventions
+
+Blog posts and pages are **page bundles** — a directory holding `index.en.md`, `index.pt-br.md`, and that page's images, referenced relatively (`![alt](image.jpg)`).
 
 ```yaml
 ---
 title: "Post Title"
-date: 2024-01-15T10:00:00+00:00
-lastmod: 2024-01-15T10:00:00+00:00
+date: 2026-01-15T10:00:00+00:00
+lastmod: 2026-01-15T10:00:00+00:00
 draft: false
 author: "Italo Vietro"
-authorLink: "https://italovietro.com"
 description: "Brief description for SEO"
-resources:
-- name: "featured-image"
-  src: "featured-image.jpg"
-tags: ["Engineering", "Management", "Leadership"]
+tags: ["Engineering", "Leadership"]
 categories: ["Engineering"]
-lightgallery: true
 ---
 ```
 
-### Content Best Practices
+Non-post pages also carry `slug`, and `aliases` where a path changed. Every page needs its own `description`. Posts published elsewhere carry `host:` — see *Elsewhere* in `CONTEXT.md`.
 
-1. **Always create bilingual content** (en + pt-br)
-2. **Use page bundles** for posts with images
-3. **Reference images relatively:** `![Alt text](image.jpg)`
-4. **Follow existing post structure** in `content/posts/`
-5. **Use semantic line breaks** in markdown
-6. **Include descriptive alt text** for accessibility
-7. **Add appropriate tags and categories** for discoverability
+**The speaking page is a list, not a set of write-ups.** Entries are title + venue + date + links, with no description. Voice lives once at the top of the page, next to the invitation. Don't re-add a paragraph per entry.
 
-### Existing Content Structure
+Where prose does exist (home page, About, reading list, post bodies) it is first person and takes positions. If a position isn't known, **ask rather than invent one.**
 
-**Blog Posts (6 total):**
-- 5 ways to keep up with code as an Engineering Manager
-- CTO's reading list (editions 1, 2, 3)
-- Do job titles matter
-- How do we manage our GitHub organization at Lyko
+## Agent skills
 
-**Pages:**
-- Consulting services
-- My reading list (books, newsletters, podcasts)
-- Talks/presentations
+**Issue tracker** — GitHub Issues on `italolelis/italovietro.com` via the `gh` CLI; conventions in `docs/agents/issue-tracker.md`. Artifacts under `.planning/` are *not* issues; don't mirror them.
 
-## Development Workflow
+**Triage labels** — `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
 
-### Local Development
+**Domain docs** — single-context repo: one `CONTEXT.md`, one `docs/adr/`. See `docs/agents/domain.md`.
 
-**Using DevContainers (Recommended):**
-```bash
-# Open in VS Code and reopen in container
-hugo server -D
-# Visit http://localhost:1313
-```
+**GSD workflow** — `.planning/` holds GSD artifacts (`PROJECT.md`, `ROADMAP.md`, `STATE.md`, phases, milestones). No GSD slash commands are installed in this checkout; if you have them, confirm with the owner whether planning work should route through them.
 
-**Manual Setup:**
-```bash
-git clone --recurse-submodules https://github.com/italolelis/italovietro.com.git
-cd italovietro.com
-hugo server -D
-```
+## Pre-flight checklist
 
-**Important Commands:**
-```bash
-# Run dev server with drafts
-hugo server -D
-
-# Production build
-hugo --minify
-
-# Update theme submodule
-git submodule update --remote
-
-# Create new post
-hugo new posts/my-new-post/index.en.md
-```
-
-### Theme Customization
-
-**NEVER modify theme files directly.** Use overrides:
-
-1. **CSS Customization:**
-   - `assets/css/_custom.scss` - Custom styles
-   - `assets/css/_override.scss` - Font overrides (currently: Roboto)
-
-2. **Layout Overrides:**
-   - Place custom layouts in `layouts/` (mirrors theme structure)
-   - Example: `layouts/partials/header.html` overrides theme header
-
-3. **Partial Overrides:**
-   - `layouts/partials/plugin/analytics.html` - Custom analytics
-
-### Git Workflow
-
-**Important:**
-- Theme is a git submodule - update with `git submodule update --remote`
-- Never commit `public/` directory (auto-generated)
-- Never commit `resources/_gen/` (auto-generated SCSS)
-- Only `master` branch triggers deployment
-
-## Deployment
-
-### GitHub Actions Workflow
-
-**Location:** `.github/workflows/pages.yml`
-
-**Triggers:**
-- Push to `master` branch
-- Manual dispatch
-
-**Build Process:**
-1. Checkout repository with submodules
-2. Setup Hugo extended (latest version)
-3. Build: `hugo --minify` with production env vars
-4. Upload artifacts from `./public`
-5. Deploy to GitHub Pages
-
-**Environment Variables:**
-```bash
-HUGO_ENVIRONMENT=production
-HUGO_ENV=production
-```
-
-**Deployment Time:** ~1-2 minutes
-
-### Dependabot Configuration
-
-Automated dependency updates (monthly):
-- GitHub Actions
-- Docker images
-- Git submodules (theme)
-
-## Styling and Design
-
-### Typography
-- **Primary Font:** Roboto (Google Fonts)
-- **Secondary Font:** Open Sans (fallback)
-- Override in: `assets/css/_override.scss`
-
-### Theme Features
-- Responsive design (mobile + desktop)
-- Auto/light/dark mode toggle
-- Code syntax highlighting with copy button
-- Table of contents auto-generation
-- Light gallery for images
-- TypeIt animation for subtitles
-- Social sharing buttons
-
-### Custom Styles
-- Home content margin adjustments: `assets/css/_custom.scss`
-- Font family overrides: `assets/css/_override.scss`
-
-## SEO and Analytics
-
-### Google Analytics
-- Tracking ID: `G-KYX115R541`
-- Privacy features enabled:
-  - IP anonymization
-  - Cookie consent required
-  - DNT (Do Not Track) respected
-- Custom implementation: `layouts/partials/plugin/analytics.html`
-
-### SEO Features
-- Sitemap generation enabled
-- robots.txt enabled
-- Open Graph tags for social sharing
-- Structured data for publisher info
-- Gravatar integration (me@italovietro.com)
-
-## Common Tasks for AI Agents
-
-### Creating a New Blog Post
-
-```bash
-# 1. Create post bundle
-mkdir -p content/posts/my-new-post
-touch content/posts/my-new-post/index.en.md
-touch content/posts/my-new-post/index.pt-br.md
-
-# 2. Add front matter to both files (see template above)
-# 3. Write content in markdown
-# 4. Add images to the same directory
-# 5. Test locally: hugo server -D
-# 6. Remove draft: false when ready
-```
-
-### Updating Navigation Menu
-
-Edit `config.toml` under `[languages.en.menu.main]` or `[languages.pt-br.menu.main]`:
-
-```toml
-[[languages.en.menu.main]]
-  identifier = "unique-id"
-  name = "Display Name"
-  url = "/url-path/"
-  weight = 4  # Order in menu
-```
-
-### Adding Custom CSS
-
-Edit `assets/css/_custom.scss`:
-
-```scss
-.my-custom-class {
-  property: value;
-}
-```
-
-Hugo will automatically compile SCSS to CSS.
-
-### Modifying Theme Behavior
-
-1. Identify the theme file in `themes/LoveIt/layouts/`
-2. Copy structure to `layouts/` (same path)
-3. Modify your copy (theme original remains untouched)
-
-### Adding Analytics or Tracking
-
-Modify `layouts/partials/plugin/analytics.html` or update config.toml analytics settings.
-
-## Troubleshooting
-
-### Common Issues
-
-**Theme not loading:**
-```bash
-git submodule update --init --recursive
-```
-
-**CSS changes not appearing:**
-```bash
-# Clear resources cache
-rm -rf resources/_gen/
-hugo server -D
-```
-
-**Build fails on GitHub Actions:**
-- Check Hugo version compatibility
-- Verify all submodules are properly referenced
-- Check for markdown syntax errors
-
-**Images not displaying:**
-- Ensure images are in same directory as index.md (page bundle)
-- Use relative paths: `![alt](image.jpg)` not `![alt](/image.jpg)`
-- Check image file names match exactly (case-sensitive)
-
-## File Locations Reference
-
-### Configuration
-- Main config: `config.toml`
-- Theme submodule: `.gitmodules`
-- DevContainer: `.devcontainer/devcontainer.json`
-
-### Custom Overrides
-- Custom CSS: `assets/css/_custom.scss`
-- Font overrides: `assets/css/_override.scss`
-- Header: `layouts/partials/header.html`
-- Analytics: `layouts/partials/plugin/analytics.html`
-
-### Content
-- Blog posts: `content/posts/*/index.{en,pt-br}.md`
-- Consulting: `content/consulting/index.{en,pt-br}.md`
-- Reading list: `content/my-reading-list/index.{en,pt-br}.md`
-- Talks: `content/talks/index.{en,pt-br}.md`
-
-### Static Assets
-- Favicons: `static/*.{ico,png,svg}`
-- Redirects: `static/_redirects`
-- Web manifest: `static/site.webmanifest`
-
-### Generated (DO NOT EDIT)
-- SCSS output: `resources/_gen/assets/scss/`
-- Build output: `public/` (gitignored)
-
-## Code Style and Conventions
-
-### Markdown
-- Use semantic line breaks
-- Headers: Title case
-- Code blocks: Always specify language
-- Lists: Consistent bullet style (-) 
-- Links: Descriptive anchor text
-
-### SCSS
-- Follow BEM naming convention where applicable
-- Keep specificity low
-- Comment non-obvious styles
-- Use variables from theme when possible
-
-### Configuration
-- TOML format
-- Group related settings
-- Comment complex configurations
-- Maintain alphabetical order where logical
-
-## Security and Privacy
-
-### GDPR Compliance
-- Cookie consent banner enabled
-- Analytics requires user consent
-- Privacy policy considerations in analytics config
-
-### Analytics Privacy Settings
-- `anonymizeIP = true`
-- `respectDoNotTrack = true`
-- `useSessionStorage = false`
-- Consent management enabled
-
-### Social Media Privacy
-- Twitter privacy mode enabled
-- YouTube privacy-enhanced mode enabled
-
-## Performance Considerations
-
-### Build Optimization
-- Minification enabled in production
-- Asset fingerprinting for cache busting
-- Resource optimization via Hugo Pipes
-
-### Image Optimization
-- Use appropriate formats (WebP where possible)
-- Include multiple sizes for responsive images
-- Compress images before committing
-
-### Caching Strategy
-- Static assets cached aggressively
-- HTML pages cached with revalidation
-- Use Hugo's resource fingerprinting
-
-## Testing
-
-### Pre-deployment Checklist
-1. Run `hugo server -D` - verify locally
-2. Test both languages (en, pt-br)
-3. Check responsive design (mobile + desktop)
-4. Verify all images load
-5. Test internal links
-6. Check console for errors
-7. Validate HTML/CSS
-8. Test in multiple browsers
-
-### Production Build Test
-```bash
-hugo --minify
-# Check public/ directory for output
-# Verify no errors in console
-```
-
-## Resources
-
-### Documentation
-- Hugo: https://gohugo.io/documentation/
-- LoveIt Theme: https://hugoloveit.com/
-- Goldmark: https://github.com/yuin/goldmark
-
-### Tools
-- Hugo Extended: https://github.com/gohugoio/hugo/releases
-- DevContainers: https://code.visualstudio.com/docs/devcontainers/containers
-- GitHub Actions: https://docs.github.com/en/actions
-
-### Theme Repository
-- LoveIt GitHub: https://github.com/dillonzq/LoveIt
-- Theme docs: https://hugoloveit.com/theme-documentation-basics/
-
-## Notes for AI Agents
-
-### What to Preserve
-- Bilingual content structure (always maintain both en and pt-br)
-- Page bundle organization for posts
-- Git submodule for theme (never modify theme directly)
-- Existing navigation structure
-- SEO and analytics configuration
-
-### What to Watch Out For
-- Never commit `public/` or `resources/_gen/`
-- Always use page bundles for posts with images
-- Maintain consistent front matter across translations
-- Test both languages when making changes
-- Respect theme override patterns (don't edit theme files)
-
-### Common Requests
-- Adding new blog posts (remember bilingual requirement)
-- Updating reading list
-- Modifying navigation menu
-- Adding new pages (consulting, talks, etc.)
-- CSS/styling adjustments
-- Analytics or tracking updates
-
-### Decision-Making Guidance
-- **Adding Features:** Check if theme supports it first, then override if needed
-- **Content Changes:** Always maintain bilingual parity
-- **Style Changes:** Prefer `_custom.scss` over theme overrides
-- **Configuration:** Document changes in comments
-- **Dependencies:** Use Dependabot for updates
+1. `hugo --gc --minify && ./scripts/check-build.sh public` — all assertions pass
+2. New visible behaviour has a new assertion
+3. Both languages updated, Portuguese correctly accented
+4. New colours measured for contrast; all three theme selectors covered
+5. Relevant ADRs read, none silently contradicted; `CONTEXT.md` vocabulary used
+6. No new third-party host, webfont, or tracking script
+7. `git status` clean of `public/`, `resources/`, `.vercel/`
 
 ---
 
-**Last Updated:** 2025-12-26  
-**Hugo Version:** 0.2.X+ Extended  
-**Theme Version:** LoveIt (latest from submodule)  
-**Maintainer:** Italo Vietro
+**Hugo:** 0.153.2 extended (CI and Vercel) · **Theme:** LoveIt 0.2.11 (submodule) · **Maintainer:** Italo Vietro

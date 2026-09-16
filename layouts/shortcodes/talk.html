@@ -1,7 +1,15 @@
 {{- /* layouts/shortcodes/talk.html */ -}}
 {{- /*
     Parameters: title (required), event (required), date (required), type (required),
-    video_url (optional), slides_url (optional), recordings (optional).
+    video_url (optional), slides_url (optional), recordings (optional),
+    event_url (optional).
+
+    type is talk | panel | podcast | host.
+
+    `event_url` is the panel case. A panel usually leaves no recording and no
+    slides, but the event that hosted it has a page -- so without this a panel
+    entry is the only kind with nothing to click, which reads as less real than
+    the talks above it.
 
     `recordings` is for a talk given more than once: pipe-separated `Label=URL`
     pairs, rendered as one link per label. One entry with three recordings rather
@@ -19,8 +27,10 @@
 {{- $videoUrl  := .Get "video_url" | default "" -}}
 {{- $slidesUrl := .Get "slides_url" | default "" -}}
 {{- $recordings := .Get "recordings" | default "" -}}
+{{- $eventUrl  := .Get "event_url" | default "" -}}
 {{- $inner     := trim .Inner "\n" | .Page.RenderString -}}
 {{- $icon := "fa-microphone" -}}
+{{- if eq $type "panel" -}}{{- $icon = "fa-users" -}}{{- end -}}
 {{- if eq $type "podcast" -}}{{- $icon = "fa-podcast" -}}{{- end -}}
 {{- if eq $type "host" -}}{{- $icon = "fa-headphones" -}}{{- end -}}
 <div class="talk-entry talk-entry--{{ $type }}">
@@ -33,19 +43,26 @@
         </h3>
         <div class="talk-entry__meta">
             <span class="talk-entry__event">{{ $event }}</span>
-            {{- if or $videoUrl $slidesUrl $recordings }}
-            <span class="talk-entry__links">
-                {{- if $videoUrl }}<a href="{{ $videoUrl }}" target="_blank" rel="noopener noreferrer">Watch</a>{{- end }}
-                {{- with $recordings }}
-                    {{- range $i, $pair := split . "|" }}
-                        {{- if $i }} &middot; {{ end -}}
-                        {{- $parts := split $pair "=" -}}
-                        <a href="{{ index $parts 1 }}" target="_blank" rel="noopener noreferrer">{{ index $parts 0 }}</a>
-                    {{- end }}
+            {{- /* Collected into one slice and joined, rather than emitted inline
+                   with a separator before each optional part. Four optional link
+                   kinds means the inline form needs a condition per boundary, and
+                   the previous three-kind version had already lost one: a talk with
+                   both `video_url` and `recordings` ran "Watch" straight into the
+                   first city with no separator. Joining a list cannot have that
+                   bug, whatever combination an entry carries. */ -}}
+            {{- $links := slice -}}
+            {{- $anchor := `<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>` -}}
+            {{- if $videoUrl }}{{- $links = $links | append (printf $anchor $videoUrl "Watch") -}}{{- end }}
+            {{- with $recordings }}
+                {{- range split . "|" }}
+                    {{- $parts := split . "=" -}}
+                    {{- $links = $links | append (printf $anchor (index $parts 1) (index $parts 0)) -}}
                 {{- end }}
-                {{- if and (or $videoUrl $recordings) $slidesUrl }} &middot; {{ end }}
-                {{- if $slidesUrl }}<a href="{{ $slidesUrl }}" target="_blank" rel="noopener noreferrer">Slides</a>{{- end }}
-            </span>
+            {{- end }}
+            {{- if $slidesUrl }}{{- $links = $links | append (printf $anchor $slidesUrl "Slides") -}}{{- end }}
+            {{- if $eventUrl }}{{- $links = $links | append (printf $anchor $eventUrl "Event") -}}{{- end }}
+            {{- with $links }}
+            <span class="talk-entry__links">{{ delimit . " &middot; " | safeHTML }}</span>
             {{- end }}
             {{- /* Last in the row: its auto margin pins it to the right edge, which
                    is the same date column the archive and reading list use. With the
