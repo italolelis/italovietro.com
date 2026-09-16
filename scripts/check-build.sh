@@ -377,6 +377,29 @@ contains "$PT_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'and all three in pt-br, with loc
 same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
 same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every pt-br entry carries a venue'
 
+# Panels are their own group rather than talks with "Panel:" typed into the title.
+# The negative assertion is the load-bearing one: the prefix is what the entries
+# looked like before the group existed, and re-adding one by hand is the likely
+# way this regresses -- it reads as fine in a diff and quietly makes the heading
+# above it redundant.
+#
+# The panel type is asserted through its own modifier class, not the icon, because
+# the icon is a Font Awesome name that a theme bump could rename.
+echo 'Panels are a group, not a title prefix'
+# "Roundtables" rather than the full heading: the ampersand survives as a bare
+# `&` here but there is no guarantee it stays unescaped through a Goldmark or
+# minifier change, and a needle that stops matching would make this pass
+# vacuously. Same reasoning as the apostrophe-free needles above.
+contains "$EN_SPEAKING" 'Roundtables' 'en panels have their own heading'
+contains "$PT_SPEAKING" 'Painéis e Mesas Redondas' 'pt-br panels have their own heading'
+occurs "$EN_SPEAKING" 'talk-entry--panel' 2 'both en panels are typed as panels'
+occurs "$PT_SPEAKING" 'talk-entry--panel' 2 'both pt-br panels are typed as panels'
+nowhere '>Panel: ' 'no entry carries the superseded title prefix'
+# A panel leaves no recording, so the event page is the only thing to click. If
+# this link goes, the entry becomes the one row on the page with no destination.
+contains "$EN_SPEAKING" 'luma.com/ywjxiy8b' 'the en panel links to the event that hosted it'
+contains "$PT_SPEAKING" 'luma.com/ywjxiy8b' 'the pt-br panel links to it too'
+
 # Two new jobs for amber: the nav item for the section you are in, and selected
 # text. Both were measured against the theme's real backgrounds -- 4.73:1 for the
 # active item on the #f8f8f8 header, and 13.70:1 / 9.32:1 for text on the

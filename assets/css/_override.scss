@@ -100,11 +100,17 @@ $muted-text-color-dark: #a9a9b3; // 6.16:1 on #292a2d -- the body text colour
 // the accent is why amber was chosen over the other candidates, since it
 // absorbs a colour already in use instead of adding a fifth.
 //
-// Podcast keeps a distinct hue so the three types stay tellable apart at a
-// glance. These are icon colours, so the applicable threshold is 3:1 for
-// non-text contrast; both values clear it comfortably.
+// Podcast and panel each keep a distinct hue so the types stay tellable apart
+// at a glance. These are icon colours, so the applicable threshold is 3:1 for
+// non-text contrast; every value clears it comfortably.
 $entry-podcast-color: #9b59b6; // 4.67:1 on #fff
 $entry-podcast-color-dark: #bb8fce; // 5.42:1 on #292a2d
+
+// Panel is teal rather than a fourth warm hue: it has to be separable from both
+// the amber accent the talks take and the podcast purple, and the cool side of
+// the wheel is the only place left that manages both at icon size.
+$entry-panel-color: #0f766e; // 5.28:1 on #fff
+$entry-panel-color-dark: #5eead4; // 9.86:1 on #292a2d
 
 // --- Motion -------------------------------------------------------------
 $transition-fast: 0.15s ease;

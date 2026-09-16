@@ -29,10 +29,15 @@ Mostly about what platforms cost, what reliability takes, and the parts of engin
 {{< talk title="From cost to impact: Leading through infrastructure investment decisions" event="LeadingEng Berlin 2024" date="November 2024" type="talk" video_url="https://leaddev.com/leadership/from-cost-to-impact-leading-through-infrastructure-investment-decisions" >}}
 {{< /talk >}}
 
-{{< talk title="Panel: Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="talk" >}}
+{{< talk title="Designing for failure" event="GoLab, Golang Piter and GoDays" date="2019" type="talk" recordings="Florence=https://youtu.be/BOn3R41UrV8|Saint Petersburg=https://youtu.be/QWRPWb1Tzqs|Berlin=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
 {{< /talk >}}
 
-{{< talk title="Designing for failure" event="GoLab, Golang Piter and GoDays" date="2019" type="talk" recordings="Florence=https://youtu.be/BOn3R41UrV8|Saint Petersburg=https://youtu.be/QWRPWb1Tzqs|Berlin=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
+## Panels & Roundtables
+
+{{< talk title="Taming AI sprawl" event="Agents Gone Rogue, Berlin" date="August 2026" type="panel" event_url="https://luma.com/ywjxiy8b" >}}
+{{< /talk >}}
+
+{{< talk title="Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="panel" >}}
 {{< /talk >}}
 
 ## Podcast Appearances

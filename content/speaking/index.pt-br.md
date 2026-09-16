@@ -29,10 +29,15 @@ Geralmente sobre o custo das plataformas, o que confiabilidade exige, e as parte
 {{< talk title="From cost to impact: Leading through infrastructure investment decisions" event="LeadingEng Berlin 2024" date="November 2024" type="talk" video_url="https://leaddev.com/leadership/from-cost-to-impact-leading-through-infrastructure-investment-decisions" >}}
 {{< /talk >}}
 
-{{< talk title="Panel: Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="talk" >}}
+{{< talk title="Designing for failure" event="GoLab, Golang Piter e GoDays" date="2019" type="talk" recordings="Florença=https://youtu.be/BOn3R41UrV8|São Petersburgo=https://youtu.be/QWRPWb1Tzqs|Berlim=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
 {{< /talk >}}
 
-{{< talk title="Designing for failure" event="GoLab, Golang Piter e GoDays" date="2019" type="talk" recordings="Florença=https://youtu.be/BOn3R41UrV8|São Petersburgo=https://youtu.be/QWRPWb1Tzqs|Berlim=https://youtu.be/DKhC_XH8fDs" slides_url="https://github.com/italolelis/talks/tree/master/talks/designing-for-failure" >}}
+## Painéis e Mesas Redondas
+
+{{< talk title="Taming AI sprawl" event="Agents Gone Rogue, Berlim" date="August 2026" type="panel" event_url="https://luma.com/ywjxiy8b" >}}
+{{< /talk >}}
+
+{{< talk title="Assessing key tech leadership topics" event="CTO Craft Con Berlin 2024" date="September 2024" type="panel" >}}
 {{< /talk >}}
 
 ## Participações em Podcasts
