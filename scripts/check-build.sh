@@ -135,6 +135,46 @@ absent_from() {
     fi
 }
 
+# The three below ask the compiled stylesheet "what does this selector set?",
+# which grep over one minified line cannot: `.single .single-title,.archive
+# .single-title{font-family:...}` is one rule for two selectors, and an assertion
+# that has to match that comma-separated list as text breaks the day someone adds a
+# third selector to it. These split a rule's selector list and test each one whole.
+#
+# Both arguments are regexes (awk ERE). The selector is anchored: it matches one
+# selector in a rule's list completely, so `.single .content` does not also match
+# `.single .content h2`. Rules inside @media are included, their at-rule header
+# being dropped by the match. Commas inside a selector (:is(a,b), :not(a,b)) would
+# split wrongly; no selector on this site has one.
+
+# css_rules -- every rule in the compiled stylesheet, `selectors{body}`, one a line.
+css_rules() { grep -oE '[^{}]+\{[^{}]*\}' "$CSS"; }
+
+# rules_with <selector-regex> <declaration-regex> -- how many rules have a selector
+# matching the first and a body matching the second.
+rules_with() {
+    css_rules | SEL="$1" DECL="$2" awk '
+        BEGIN { sel = "^(" ENVIRON["SEL"] ")$"; decl = ENVIRON["DECL"] }
+        {
+            i = index($0, "{"); body = substr($0, i + 1)
+            n = split(substr($0, 1, i - 1), a, ",")
+            for (k = 1; k <= n; k++) if (a[k] ~ sel && body ~ decl) { hits++; break }
+        }
+        END { print hits + 0 }'
+}
+
+# rule_sets <selector-regex> <declaration-regex> <description>
+rule_sets() {
+    if [ "$(rules_with "$1" "$2")" -gt 0 ]; then ok "$3"; else bad "$3"; fi
+}
+
+# rule_lacks <selector-regex> <declaration-regex> <description> -- the inverse.
+# Passes vacuously for a selector nothing styles, so pair it with a rule_sets on
+# the same selector wherever that would hide a real regression.
+rule_lacks() {
+    if [ "$(rules_with "$1" "$2")" -eq 0 ]; then ok "$3"; else bad "$3"; fi
+}
+
 # valid_utf8 -- asserts every generated page decodes as UTF-8.
 #
 # Not paranoia. The pt-br speaking page shipped a truncated multi-byte character
@@ -552,7 +592,7 @@ matches "$CSS" 'a\.active\{font-weight:900;color:#b45309\}' 'the active nav item
 occurs "$EN_ABOUT" 'menu-item active' 2 'the current section is marked in both the desktop and mobile navs'
 occurs "$PT_ABOUT" 'menu-item active' 2 'and in pt-br too'
 matches "$CSS" '\.archive \.group-title\{[^}]*color:#57534e' 'archive year headings stay muted rather than accented'
-matches "$CSS" '\.single \.content h2\{[^}]*color:#161209' 'reading list section headings stay uncoloured'
+rule_sets '\.single \.content>h2' 'color:#161209' 'section headings stay uncoloured'
 
 # Line and Weibo were theme defaults, not choices, and neither is plausible for a
 # readership reading in English and Portuguese.
@@ -574,6 +614,92 @@ absent_from "$EN_READING" '<h4' 'entry titles are h3, leaving no gap in the head
 contains "$EN_READING" 'Start Here' 'en has the featured section'
 contains "$PT_READING" 'Comece por aqui' 'pt-br has the featured section, translated'
 nowhere 'Must Read' 'the tier subheadings are gone from both languages'
+
+# The reading list's in-page nav (the four anchor links under the intro) was styled
+# through `.single .content > ul:first-of-type`, which names no page: it matched the
+# first top-level list on every page that renders through .single. In "Do job titles
+# matter?" that is the five-step job ladder, and it rendered as one muted, dotted,
+# inline strip instead of a list. Every other top-level list lost its bullets to the
+# `> ul` reset beside it. A page's rules reach only that page, through the markup
+# the page itself declares -- here, the Entry (`.book-entry`), which only the
+# reading list renders.
+echo 'Reading-list styles stay on the reading list'
+absent_from "$CSS" '.single .content>ul:first-of-type' 'no rule styles the first top-level list of every page'
+rule_lacks '\.single \.content>ul' 'list-style:none' 'top-level lists keep their bullets site-wide'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
+rule_sets '\[theme=dark\] \.single \.content:has\(\.book-entry\)>ul:first-of-type li a' 'color:#a9a9b3' 'and in dark, still scoped to the reading list'
+rule_sets '\[theme=dark\] \.single \.content:has\(\.book-entry\) h2\+p' 'color:#a9a9b3' 'the dark section lines carry the guard the light ones have'
+# What the CSS is aimed away from: the ladder is a plain list in the page, in both
+# languages, on a page that renders no Entry.
+for post in "$PUBLIC/do-job-titles-matter/index.html" "$PUBLIC/pt-br/do-job-titles-matter/index.html"; do
+    matches "$post" '<ul><li>Junior Software Developer/Engineer</li>' "the job ladder is a list (${post#"$PUBLIC"/})"
+    absent_from "$post" 'book-entry' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
+done
+
+# One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
+#
+# The serif existed on the two Episode pages and nowhere else, declared in the last
+# stylesheet imported, so no other page could reach it; a post's title was the
+# theme's 1.6rem sans while the Episode title above a near-identical masthead was a
+# 60px serif. These assert the rule rather than any one page: every headline takes
+# the one stack, running text takes it, and what you navigate by does not.
+#
+# The stack is a custom property, written once, and every use is `var(--font-serif)`.
+# That is what makes "a post title, the archive title and an Episode title compile
+# to the same serif" assertable at all: a stack pasted into each rule can drift by
+# one family name in one place, and look identical in a diff. The sans is the
+# theme's own `--global-font-family`.
+echo 'One type voice: serif to read, sans to navigate'
+occurs "$CSS" 'Bitstream Charter' 1 'the serif stack is written once'
+rule_sets ':root' '--font-serif: ?Charter' 'and named as a custom property, for every use to read'
+absent_from "$CSS" 'font-family:system-ui,-apple-system,Segoe UI,Roboto,Emoji' 'no page stylesheet spells out the sans stack either'
+# Headlines: a post, the archive and an Episode page each say `var(--font-serif)`,
+# and that is one stack, so the three cannot disagree.
+rule_sets '\.single \.single-title' 'font-family:var\(--font-serif\)' 'a post title is set in the serif'
+rule_sets '\.archive \.single-title' 'font-family:var\(--font-serif\)' 'so is the archive title'
+rule_sets '\.episode \.single-title\.ep-title' 'font-family:var\(--font-serif\)' 'and so is an Episode page title, from the same stack'
+rule_sets '\.home \.home-profile \.home-subtitle' 'font-family:var\(--font-serif\)' 'the Greeting is a headline, so it is serif too'
+rule_sets '\.single \.content>h2' 'font-family:var\(--font-serif\)' 'article section headings are serif'
+rule_sets '\.single \.content>h3' 'font-family:var\(--font-serif\)' 'and so are its subheadings'
+# Not the headings inside a shortcode: an Entry title is an h3 too, and it is a title
+# in a list, not a subhead. An article rule that reached it would also outrank the
+# Entry's own, which is how the speaking page's titles once grew to 1.375rem.
+rule_lacks '\.single \.content h[1-6]' 'font-family:var\(--font-serif\)' 'no article heading rule reaches into the markup of an Entry'
+rule_sets '\.episode \.ep-dek' 'font-family:var\(--font-serif\)' 'a dek is serif'
+# Running text. The paragraph has no rule of its own: it inherits from the column,
+# so a post, About and an Episode page read in the same face.
+rule_sets '\.single \.content' 'font-family:var\(--font-serif\)' 'running text on posts, About and Episode pages is serif'
+rule_lacks '\.single \.content p' 'font-family' 'a paragraph inherits it rather than choosing'
+# Furniture. The page itself is sans, so the header, nav, footer and every
+# post-meta line are without a declaration; what is asserted is that no rule
+# reaching them takes the serif, and that what sits inside the serif column but is
+# not prose opts back out.
+rule_sets 'html' 'font-family:var\(--global-font-family\)' 'the page is sans, so the header and footer are'
+rule_lacks '.*(header|footer|menu|toc|post-meta|post-footer).*' 'font-family:var\(--font-serif\)' 'nothing that navigates takes the serif'
+rule_sets '.*\.ep-kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
+rule_sets '.*\.book-entry' 'font-family:var\(--global-font-family\)' 'reading-list Entries are sans'
+rule_sets '.*\.talk-entry' 'font-family:var\(--global-font-family\)' 'speaking Entries are sans'
+rule_sets '\.single \.content table' 'font-family:var\(--global-font-family\)' 'tables are sans'
+rule_sets '\.single \.content figcaption' 'font-family:var\(--global-font-family\)' 'and so are figure captions'
+# What the theme decorates, undone. A blockquote was a blue box with a thick blue bar
+# -- a second accent unrelated to the palette (docs/adr/0001) -- and every heading
+# carried an amber "#" or "|" before it. A quote is set in italic behind a quiet rule;
+# a heading is just the words. An Episode page's quotes are its own, set upright.
+rule_sets '\.single \.content blockquote' 'background:none' 'a blockquote is not the theme blue box'
+rule_sets '\.single \.content blockquote' 'font-style:italic' 'it is italic, behind a rule'
+rule_sets '\[theme=dark\] \.single \.content blockquote' 'background-color:transparent' 'and in dark, where the theme tints it again'
+rule_sets '\.episode \.content \.ep-moment blockquote' 'font-style:normal' 'an Episode quote stays upright'
+rule_sets '\.single \.content \.header-mark' 'display:none' 'headings carry no accent mark'
+# One measure, one number (docs/adr/0004): the column and the title above it.
+rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measure'
+rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
+# The module comes first. With the headings' rules in it, and none of them
+# restated later, which file was imported last no longer decides a heading.
+for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
+    in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
+done
 
 
 # The site's job is inbound -- see docs/adr/0005. These guard the three things that

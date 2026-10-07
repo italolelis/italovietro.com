@@ -3,16 +3,15 @@
 // ==============================
 //
 // A podcast episode, chapter by chapter, with the lessons pulled out
-// (layouts/episodes/single.html). The only page on the site with its own
-// typographic voice, so everything here is scoped under `.episode` and nothing
-// leaks to the other posts.
+// (layouts/episodes/single.html). Everything here is scoped under `.episode`, so
+// nothing leaks to the other pages.
 //
-// Two families, the way a newspaper feature does it: a serif for the reading
-// and the headline, the site's system sans for everything that is furniture --
-// kickers, captions, the timeline, the chapter list. Both are system stacks. No
-// webfont is loaded (ADR-0002): Charter ships with macOS and iOS, Sitka and
-// Cambria with Windows, Bitstream Charter with most Linux desktops, and Georgia
-// is everywhere else.
+// This page used to be the only one with a typographic voice of its own, and it
+// declared it here. The voice is the whole site's now and lives in _typography.scss
+// (docs/adr/0006): a serif for the reading and the headline, the system sans for
+// everything that is furniture -- kickers, captions, the timeline, the chapter
+// list. What stays in this file is what only an Episode page has: the timeline, the
+// chapter list, the quotes, the figures, and the masthead's one step up in size.
 //
 // One measure (ADR-0004). The masthead and the hero plate sit outside
 // `.content`, so they take the same 800px cap and the same left edge explicitly.
@@ -30,7 +29,6 @@
 //   #3d4f7a  8.08:1 on #fff
 //   #9db0e0  6.64:1 on #292a2d
 
-$ep-serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, "Iowan Old Style", Georgia, serif;
 $ep-ink: #3d4f7a;
 $ep-ink-dark: #9db0e0;
 $ep-rule: #d6d3d1;
@@ -42,26 +40,15 @@ $ep-fill-dark: (#3a3b40, #44464b, #4e5056, #575a60);
 $ep-ink-text-dark: #1c1d20; // on $ep-ink-dark: 7.80:1
 $ep-heading-dark: $heading-color-dark;
 
-@mixin ep-kicker {
-    font-family: $global-font-family;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $muted-text-color;
-}
-
 // ---- Masthead ------------------------------------------------------------
 
 .episode .ep-masthead,
 .episode > .ep-plate--hero {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    @include measure;
 }
 
 .episode .ep-kicker {
-    @include ep-kicker;
+    @include kicker;
     margin: 2.5rem 0 0.875rem;
 }
 
@@ -73,27 +60,17 @@ $ep-heading-dark: $heading-color-dark;
     margin: 0 0.4em;
 }
 
-// The theme sizes .single-title at 1.6rem with 140% leading, set for one-line
-// post titles. This one is a headline: large, and at the regular weight, which
-// is what lets a serif look set rather than shouted.
+// A post's title is the headline step; this page is the feature, so it takes the
+// step above, `display`: larger, and at the regular weight, which is what lets a
+// serif look set rather than shouted.
 .episode .single-title.ep-title {
-    font-family: $ep-serif;
-    font-size: 3.75rem;
-    font-weight: 400;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
+    @include display;
     margin: 0 0 1.1rem;
-    text-wrap: balance;
 }
 
 .episode .ep-dek {
-    font-family: $ep-serif;
-    font-size: 1.375rem;
-    font-style: italic;
-    line-height: 1.45;
+    @include dek;
     margin: 0 0 1.25rem;
-    color: $global-font-color;
-    text-wrap: pretty;
 }
 
 .episode .ep-meta {
@@ -143,31 +120,26 @@ $ep-heading-dark: $heading-color-dark;
 
 // ---- Prose ----------------------------------------------------------------
 
-.episode .content {
-    font-family: $ep-serif;
-    font-size: 1.1875rem;
-    line-height: 1.65;
-}
-
+// The column's face, size and leading are the site's (_typography.scss), and so
+// are its h2s. Paragraphs are spaced here for every one inside the column, not
+// only the ones Markdown writes at its top level: a chapter's summary is
+// rendered Markdown inside a section.
 .episode .content p {
     margin: 0 0 1.1em;
 }
 
-.episode .content > h2:not(.ep-chapter) {
-    font-family: $ep-serif;
-    font-size: 1.875rem;
-    line-height: 1.15;
-    margin: 3.5rem 0 1rem;
-}
-
+// A chapter is the page's unit, so it keeps a hairline under its heading: the
+// divider between two chapters. It used to come from the site-wide h2 rule, which
+// every page shared; it is this page's own now that the site's h2 carries none.
 .episode .content .ep-chapter {
-    font-family: $ep-serif;
     margin: 3.75rem 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $global-border-color;
     scroll-margin-top: 5rem;
 }
 
 .episode .content .ep-chapter__kicker {
-    @include ep-kicker;
+    @include kicker;
     display: block;
     margin-bottom: 0.4rem;
 }
@@ -195,6 +167,7 @@ $ep-heading-dark: $heading-color-dark;
     padding: 0;
     border: 0;
     background: none;
+    font-style: normal;
     font-size: 1.25rem;
     line-height: 1.5;
 }
@@ -204,7 +177,6 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .content .ep-moment figcaption {
-    font-family: $global-font-family;
     font-size: 0.8125rem;
     color: $muted-text-color;
     margin-top: 0.4rem;
@@ -272,7 +244,6 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .ep-plate figcaption {
-    font-family: $global-font-family;
     font-size: 0.875rem;
     line-height: 1.45;
     color: $muted-text-color;
@@ -300,7 +271,7 @@ $ep-heading-dark: $heading-color-dark;
 // ---- Episode map -------------------------------------------------------------
 
 .episode .content .ep-map {
-    font-family: $global-font-family;
+    @include sans;
     margin: 2.25rem 0 2.75rem;
 }
 
@@ -315,7 +286,7 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .content .ep-map__heading {
-    @include ep-kicker;
+    @include kicker;
     color: $global-font-color;
 }
 
@@ -406,7 +377,6 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     position: sticky;
     top: $header-height;
     z-index: 90;
-    font-family: $global-font-family;
     background: $header-background-color;
     box-shadow: 0 0 0 100vmax $header-background-color;
     clip-path: inset(0 -100vmax);
@@ -554,7 +524,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-hl__lesson-kicker {
-    @include ep-kicker;
+    @include kicker;
     display: block;
     margin-bottom: 0.35rem;
     color: $ep-ink;
@@ -569,7 +539,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 // or the thing that changed.
 
 .episode .content .ep-viz {
-    font-family: $global-font-family;
+    @include sans;
     margin: 2.25rem 0 2.5rem;
     padding: 1.15rem 0 1.4rem;
     border-top: 2px solid $global-font-color;
@@ -582,14 +552,14 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-viz__kicker {
-    @include ep-kicker;
+    @include kicker;
     display: block;
     margin-bottom: 0.35rem;
 }
 
 .episode .content .ep-viz__title {
     display: block;
-    font-family: $ep-serif;
+    @include serif;
     font-size: 1.375rem;
     line-height: 1.3;
     font-weight: 700;
@@ -666,7 +636,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-ask__verdict {
-    font-family: $ep-serif;
+    @include serif;
     font-size: 1.1875rem;
     line-height: 1.45;
     margin: 1rem 0 0;
@@ -678,7 +648,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-ask__play {
-    font-family: $global-font-family;
+    @include sans;
     font-size: 0.875rem;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -714,7 +684,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-guess__readout {
-    font-family: $ep-serif;
+    @include serif;
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0.75rem 0 0.9rem;
@@ -896,7 +866,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-model__readout {
-    font-family: $ep-serif;
+    @include serif;
     font-size: 1.1875rem;
     font-weight: 700;
     margin: 1rem 0 0;
@@ -1062,7 +1032,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 // ---- Colophon ------------------------------------------------------------------
 
 .episode .content .ep-colophon {
-    font-family: $global-font-family;
+    @include sans;
     margin: 3.5rem 0 1rem;
     padding-top: 1.1rem;
     border-top: 2px solid $global-font-color;
@@ -1072,7 +1042,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-colophon__title {
-    @include ep-kicker;
+    @include kicker;
     color: $global-font-color;
     margin: 0 0 0.5rem;
 }
@@ -1112,6 +1082,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
         color: $muted-text-color-dark;
     }
 
+    .episode .content .ep-chapter { border-bottom-color: $global-border-color-dark; }
     .episode .content .ep-moment { border-left-color: $ep-rule-dark; }
     .episode .content .ep-moment--pull { border-left: 0; }
     .episode .content .ep-moment--pull blockquote::before { color: $ep-rule-dark; }
@@ -1189,10 +1160,6 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 // ---- Small screens -----------------------------------------------------------------
 
 @media (max-width: 680px) {
-    .episode .single-title.ep-title {
-        font-size: 2.5rem;
-    }
-
     // The mobile header slides away on scroll, so the timeline pins to the very
     // top and the header covers it when it slides back.
     .episode .ep-timeline {
@@ -1228,14 +1195,6 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     // At this width the quote dots and the minute labels share the same pixels.
     .episode .ep-timeline__moment {
         display: none;
-    }
-
-    .episode .ep-dek {
-        font-size: 1.1875rem;
-    }
-
-    .episode .content {
-        font-size: 1.125rem;
     }
 
     .episode .content .ep-chapter__title {

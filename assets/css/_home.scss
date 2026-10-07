@@ -20,11 +20,10 @@
 // prose -- two left edges on a page whose whole point is that it commits to one.
 //
 // Matching the cap here rather than removing it from .content: 800px is about 90
-// characters at this body size, and 1080 would be 120. See docs/adr/0004.
+// characters at this body size, and 1080 would be 120. See docs/adr/0004. The
+// number is `$measure` in _typography.scss, which owns it.
 .home .home-profile {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    @include measure;
     text-align: left;
     padding-top: 2rem;
     margin-bottom: 0;
@@ -51,22 +50,19 @@
 // right of the paragraph below, breaking the one left edge on the one element
 // that opens the page.
 //
-// 2.75rem is deliberate. This is the only thing above the fold that is not prose,
-// and at anything smaller it read as a caption to the paragraph rather than as an
-// opening. It outsizes the section headings, which is the correct order: the
-// greeting is the page's h1 in everything but markup.
+// 2.75rem is deliberate (the headline step in _typography.scss, which also gives
+// it the serif and the phone size). This is the only thing above the fold that is
+// not prose, and at anything smaller it read as a caption to the paragraph rather
+// than as an opening. It outsizes the section headings, which is the correct
+// order: the greeting is the page's h1 in everything but markup.
 //
 // Takes the heading colour rather than the body colour, because that is what it
 // is doing.
 .home .home-profile .home-subtitle {
+    @include headline;
     text-align: left;
     padding: 0;
     margin: 0;
-    font-size: 2.75rem;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
     color: $global-font-color;
 }
 
@@ -115,10 +111,6 @@
 
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    .home .home-profile .home-subtitle {
-        font-size: 2rem;
-    }
-
     .home-signpost {
         font-size: 1.0625rem;
     }
