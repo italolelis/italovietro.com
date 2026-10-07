@@ -4,7 +4,7 @@ Detail split out of `AGENTS.md` so the always-loaded file stays small. Read this
 
 ## Stack
 
-- **Hugo extended** — 0.153.2 pinned in both workflows and in `vercel.json`. The standard (non-extended) build cannot compile the theme's SCSS.
+- **Hugo extended** — pinned once, in `.hugo-version`, which both workflows and `vercel.json` read; `scripts/check-build.sh` notes when the Hugo that built the output differs. Every build goes through `scripts/build.sh`: it empties `public/` first and fails on any Hugo warning (`--panicOnWarning`, with missing translations and duplicate paths reported). The standard (non-extended) build cannot compile the theme's SCSS. **0.158 is the floor**: the templates use `hugo.Sites`, `hugo.Data`, `.Site.Language.Locale` and `.Language.Label`, and `config.toml` uses the `locale`/`label` language keys, all of which replaced deprecated names in 0.156–0.158. A new warning now fails the build rather than waiting to be noticed.
 - **LoveIt theme** — git submodule at `themes/LoveIt`, currently `v0.2.11-219-gc8b65127`. Never edit it; override instead.
 - **Goldmark** markdown, **SCSS** via Hugo Pipes, **TOML** config (~570 lines, heavily commented).
 - **No npm dependencies at the site root.** The workflows run `npm ci` only if a root `package-lock.json` exists; it doesn't. The lockfile under `themes/LoveIt/` is the theme's own tooling and plays no part in building this site.

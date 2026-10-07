@@ -35,7 +35,7 @@ You need **Hugo extended**. The standard build cannot compile the theme's SCSS.
 ```bash
 git clone --recurse-submodules https://github.com/italolelis/italovietro.com.git
 cd italovietro.com
-hugo server -D
+hugo server -D --renderToMemory
 ```
 
 Then open <http://localhost:1313>. The `-D` flag includes drafts.
@@ -53,7 +53,7 @@ Open the project in VS Code and accept the "Reopen in Container" prompt, or run 
 ### Building for production
 
 ```bash
-hugo --gc --minify && ./scripts/check-build.sh public
+./scripts/build.sh && ./scripts/check-build.sh public
 ```
 
 `scripts/check-build.sh` runs a few hundred assertions against the generated site — checking what a browser actually receives, such as the current job title being present, tracking scripts being absent, and contrast-critical styles surviving. **It gates every deploy**, so run it before opening a pull request.
@@ -116,7 +116,7 @@ Agent-facing context lives in [`AGENTS.md`](AGENTS.md), following the [AGENTS.md
 
 Spotted a typo, a broken link, or something factually wrong? Open an issue or a pull request — both welcome.
 
-Pull requests get a Vercel preview deployment automatically, so you can see your change rendered before it merges. Please check that `hugo --gc --minify && ./scripts/check-build.sh public` passes, and if you touch content, update both the `.en.md` and `.pt-br.md` files.
+Pull requests get a Vercel preview deployment automatically, so you can see your change rendered before it merges. Please check that `./scripts/build.sh && ./scripts/check-build.sh public` passes, and if you touch content, update both the `.en.md` and `.pt-br.md` files.
 
 For anything larger, open an issue first so we can talk about it before you spend time on it.
 

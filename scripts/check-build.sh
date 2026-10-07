@@ -165,11 +165,24 @@ PT_ARCHIVE="$PUBLIC/pt-br/posts/index.html"
 EN_POST="$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
 # hardcoding a hash that changes on every style edit.
-CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
-if [ -z "$CSS" ]; then
+#
+# Exactly one, or stop. Hugo never deletes what it stops producing, so a public/
+# that has seen several builds holds one stylesheet per build, and picking the
+# first would assert against whichever one `find` happened to return -- a stale
+# file passes or fails for reasons unrelated to the change. scripts/build.sh
+# empties public/ first; this catches an output directory that was not built
+# that way.
+CSS_ALL=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' 2>/dev/null)
+CSS_COUNT=$(printf '%s' "$CSS_ALL" | grep -c . || true)
+if [ "$CSS_COUNT" -eq 0 ]; then
     printf 'error: no compiled stylesheet found under %s/css\n' "$PUBLIC" >&2
     exit 2
+elif [ "$CSS_COUNT" -gt 1 ]; then
+    printf 'error: %s stylesheets under %s/css -- stale output from earlier builds.\n' "$CSS_COUNT" "$PUBLIC" >&2
+    printf '       Build fresh with ./scripts/build.sh, which empties public/ first.\n' >&2
+    exit 2
 fi
+CSS=$CSS_ALL
 
 echo 'Job title'
 contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
@@ -584,6 +597,18 @@ echo 'Interaction rules present'
 contains "$CSS" ':focus-visible' 'keyboard focus styling is present'
 contains "$CSS" 'prefers-reduced-motion' 'reduced-motion guard is present'
 contains "$CSS" '(hover: hover)' 'hover styling is gated to real pointers'
+
+# Which Hugo built this, against the one pinned in .hugo-version for CI and
+# Vercel. A note, not a failure: CI always builds with the pin, and a local build
+# on a newer Hugo is how an upgrade gets tried. But it is how two versions drift
+# apart unnoticed, which is what made a deprecation fix need a pinned-version
+# bump nobody had planned.
+PINNED=$(cat "$(dirname "$0")/../.hugo-version" 2>/dev/null || true)
+BUILT=$(grep -o 'name=generator content="Hugo [0-9.]*"' "$EN_HOME" 2>/dev/null | grep -o '[0-9][0-9.]*' || true)
+if [ -n "$PINNED" ] && [ -n "$BUILT" ] && [ "$PINNED" != "$BUILT" ]; then
+    echo
+    printf 'note: built with Hugo %s; .hugo-version pins %s for CI and Vercel\n' "$BUILT" "$PINNED"
+fi
 
 echo
 if [ "$failures" -gt 0 ]; then

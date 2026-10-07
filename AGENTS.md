@@ -10,21 +10,22 @@ The unusual thing about this repo: **a post-build assertion script decides wheth
 # Clone with the theme submodule
 git clone --recurse-submodules https://github.com/italolelis/italovietro.com.git
 
-# Dev server, drafts included
-hugo server -D               # http://localhost:1313
+# Dev server, drafts included. In memory: by default it writes into public/,
+# which is where the gate reads.
+hugo server -D --renderToMemory   # http://localhost:1313
 
 # Production build + the gate -- RUN THIS BEFORE CALLING ANY CHANGE DONE
-hugo --gc --minify && ./scripts/check-build.sh public
+./scripts/build.sh && ./scripts/check-build.sh public
 
 # Theme submodule repair / update
 git submodule update --init --recursive
 git submodule update --remote
 
 # Clear SCSS cache if styles look stale
-rm -rf resources/ && hugo server -D
+rm -rf resources/ && hugo server -D --renderToMemory
 ```
 
-Hugo must be the **extended** build; the standard one cannot compile the theme's SCSS. There is no test suite, linter, or formatter — `scripts/check-build.sh` is the only automated check, and it is the one that matters.
+Hugo must be the **extended** build, at the version in `.hugo-version` (CI and Vercel read it; the gate notes a mismatch). `scripts/build.sh` is the only build: it starts from an empty `public/` and fails on any Hugo warning, including a deprecation or a translation missing from one language. There is no test suite, linter, or formatter — `scripts/check-build.sh` is the only automated check, and it is the one that matters.
 
 ## Hard rules
 
@@ -107,7 +108,7 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 
 ## Pre-flight checklist
 
-1. `hugo --gc --minify && ./scripts/check-build.sh public` — all assertions pass
+1. `./scripts/build.sh && ./scripts/check-build.sh public` — no warnings, all assertions pass
 2. New visible behaviour has a new assertion
 3. Both languages updated, Portuguese correctly accented
 4. New colours measured for contrast; all three theme selectors covered
@@ -117,4 +118,4 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 
 ---
 
-**Hugo:** 0.153.2 extended (CI and Vercel) · **Theme:** LoveIt 0.2.11 (submodule) · **Maintainer:** Italo Vietro
+**Hugo:** extended, pinned in `.hugo-version`; 0.158 or later is required · **Theme:** LoveIt 0.2.11 (submodule) · **Maintainer:** Italo Vietro
