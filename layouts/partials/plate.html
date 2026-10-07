@@ -1,0 +1,40 @@
+{{- /* One watercolour plate.
+
+       The master in the bundle is 1600px wide, twice the measure, and carries a
+       deckled edge as alpha -- so it reads as a sheet of paper on either theme
+       rather than as a rectangle. Hugo derives the smaller widths here; WebP keeps
+       the alpha, which JPEG would flatten onto a background colour that is wrong
+       for one of the two themes.
+
+       Spot plates sit at three fifths of the measure beside their caption, so they
+       tell the browser so, and a phone is not sent the full-width file for them.
+
+       Used by the episode pages and the home page, each with its own class prefix
+       (`base`, default "ep-plate"), so each page styles its plates in its own
+       stylesheet without one page's rules reaching the other.
+
+       Params: img (resource), alt, base (optional), class (optional), eager (optional; the hero is
+       above the fold, so lazy-loading it would only delay the first thing seen),
+       caption (optional, already rendered HTML). */ -}}
+{{- $img := .img -}}
+{{- $base := .base | default "ep-plate" -}}
+{{- $widths := slice 640 960 1280 -}}
+{{- $srcset := slice -}}
+{{- range $widths -}}
+    {{- if lt . $img.Width -}}
+        {{- $r := $img.Resize (printf "%dx webp q82" .) -}}
+        {{- $srcset = $srcset | append (printf "%s %dw" $r.RelPermalink .) -}}
+    {{- end -}}
+{{- end -}}
+{{- $srcset = $srcset | append (printf "%s %dw" $img.RelPermalink $img.Width) -}}
+<figure class="{{ $base }} {{ .class }}">
+    <img src="{{ $img.RelPermalink }}"
+         srcset="{{ delimit $srcset ", " }}"
+         sizes="{{ if eq .class (printf "%s--spot" $base) }}(min-width: 840px) 480px, (min-width: 681px) 60vw, 100vw{{ else }}(min-width: 840px) 800px, 100vw{{ end }}"
+         width="{{ $img.Width }}" height="{{ $img.Height }}"
+         alt="{{ .alt }}"
+         {{ if .eager }}fetchpriority="high"{{ else }}loading="lazy"{{ end }} decoding="async">
+    {{- with .caption }}
+    <figcaption>{{ . }}</figcaption>
+    {{- end }}
+</figure>

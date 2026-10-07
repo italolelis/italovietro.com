@@ -17,4 +17,6 @@ Escrevo de vez em quando, e esses textos acabam em <a href="/pt-br/posts/">artig
 
 Quando não estou pensando em sistemas distribuídos, você me encontra gerenciando meu homelab (clusters Kubernetes, self-hosting de tudo), preparando café com uma precisão que minha família acha excessiva, bolando estratégias em campanhas de D&D e sendo pai dedicado e marido presente. O homelab é onde eu experimento. O café é onde eu foco. O D&D é onde eu aceito que até os melhores planos desmoronam.
 
+{{< home-plate src="images/plates/desk.webp" alt="Uma aquarela de uma escrivaninha em Berlim ao entardecer: um pequeno homelab com luzes piscando, uma chaleira e um coador sobre uma balança, um dado de vinte lados e um caderno. Na parede, um desenho infantil de uma família de três e um cartão-postal de uma praia tropical; pela janela, a Fernsehturm contra um céu alaranjado." >}}
+
 </div>

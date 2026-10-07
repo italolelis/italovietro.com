@@ -15,3 +15,9 @@ resources/
 
 # Never commit env files -- appended by `vercel link`, kept deliberately
 .env*
+
+# Watercolour masters -- 2MB PNGs; only the WebP exports are committed
+scripts/watercolour/out/
+
+# Claude Code agent worktrees -- full repo copies that pollute searches
+.claude/worktrees/

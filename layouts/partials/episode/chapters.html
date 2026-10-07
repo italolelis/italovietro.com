@@ -1,0 +1,22 @@
+{{- /* The chapter list: number, title, start time, each a link to its heading.
+       The table of contents for both formats, and the reader's map on a phone,
+       where the ruler above is too narrow to name anything. */ -}}
+{{- if .chapters }}
+<nav class="ep-map" id="episode-map" aria-label="{{ T "episode.mapLabel" }}" data-duration="{{ .duration }}">
+    <p class="ep-map__title">
+        <span class="ep-map__heading">{{ T "episode.mapHeading" }}</span>
+        <span class="ep-map__length">{{ T "episode.minutes" (math.Round (div .duration 60.0) | int) }}</span>
+    </p>
+    <ol class="ep-map__legend">
+        {{- range .chapters }}
+        <li>
+            <a href="#{{ .id }}" data-chapter="{{ .id }}" data-t="{{ .t }}">
+                <span class="ep-map__num">{{ .n }}</span>
+                <span class="ep-map__name">{{ .title }}</span>
+                <span class="ep-map__clock">{{ partial "episode/clock.html" (.t | int) }}</span>
+            </a>
+        </li>
+        {{- end }}
+    </ol>
+</nav>
+{{- end }}

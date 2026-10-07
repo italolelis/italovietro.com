@@ -36,6 +36,18 @@ _Avoid_: Brand colour, primary colour, highlight
 The heavier of the two reading-list entry treatments, used for the "Start Here" set. A property of how an entry is displayed, not a score.
 _Avoid_: Highlighted, top pick, recommended
 
+**Episode page**:
+A podcast appearance on its own page under `/episodes/`: the episode chapter by chapter, each with a short summary, the quotes that carry it, and the lesson pulled out. Written by Claude from the transcript, in the third person, and it says so at the top; only the quotes are Italo's. Not writing -- it stays out of the archive, the feeds and the tags -- and not show notes or a transcript. Linked from its entry on the speaking page as "Highlights".
+_Avoid_: Recap, write-up, episode notes, retold episode, post
+
+**Moment**:
+A quote on an episode page, verbatim and linked to the second it was said. The timeline marks each one.
+_Avoid_: Quote card, clip, highlight, timestamp
+
+**Plate**:
+A watercolour on an episode page or the home page, painted by `scripts/watercolour/`. Full-width or spot, never wider than the measure. Objects, never a face.
+_Avoid_: Illustration, image, hero image, graphic
+
 **Post-build assertion**:
 A check in `scripts/check-build.sh` run against the generated HTML and compiled CSS, not against source. It asserts what a browser receives, so it survives reorganisation of content and stylesheets.
 _Avoid_: Test, lint, smoke test

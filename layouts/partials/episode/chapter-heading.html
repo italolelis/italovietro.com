@@ -1,0 +1,9 @@
+{{- /* A chapter heading: number, start time linked into the recording, title.
+       Params: page, c (one entry of the page's `chapters`). */ -}}
+{{- $c := .c -}}
+{{- $t := $c.t | int -}}
+{{- $clock := partial "episode/clock.html" $t -}}
+<h2 id="{{ $c.id }}" class="ep-chapter" data-chapter="{{ $c.id }}" data-t="{{ $t }}">
+    <span class="ep-chapter__kicker">{{ T "episode.chapter" }} {{ $c.n }} <span aria-hidden="true">·</span> <a href="{{ printf .page.Params.episode.at $t }}" title="{{ T "episode.playFrom" (dict "Clock" $clock "Where" .page.Params.episode.at_label) }}">{{ $clock }}</a></span>
+    <span class="ep-chapter__title">{{ $c.title }}</span>
+</h2>

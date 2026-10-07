@@ -74,6 +74,21 @@ matches() {
     fi
 }
 
+# in_order <file> <regex> <description> -- `matches` over the whole file as one
+# line. The minifier keeps some newlines (Hugo's shortcode output brings its own),
+# so two elements far apart on a page can sit on different lines, where a
+# line-based grep can never see them in sequence.
+in_order() {
+    local file=$1 pattern=$2 desc=$3
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+    elif tr -d '\n' < "$file" | grep -qE -- "$pattern"; then
+        ok "$desc"
+    else
+        bad "$desc"
+    fi
+}
+
 # same_count <file> <literalA> <literalB> <description> -- asserts two things occur
 # equally often. Better than a fixed number for "every entry has one of these": it
 # keeps passing when entries are added and fails when one is added without.
@@ -165,11 +180,24 @@ PT_ARCHIVE="$PUBLIC/pt-br/posts/index.html"
 EN_POST="$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html"
 # The stylesheet name carries a content fingerprint, so resolve it rather than
 # hardcoding a hash that changes on every style edit.
-CSS=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' -print -quit 2>/dev/null)
-if [ -z "$CSS" ]; then
+#
+# Exactly one, or stop. Hugo never deletes what it stops producing, so a public/
+# that has seen several builds holds one stylesheet per build, and picking the
+# first would assert against whichever one `find` happened to return -- a stale
+# file passes or fails for reasons unrelated to the change. scripts/build.sh
+# empties public/ first; this catches an output directory that was not built
+# that way.
+CSS_ALL=$(find "$PUBLIC/css" -maxdepth 1 -name 'style.min.*.css' ! -name '*.map' 2>/dev/null)
+CSS_COUNT=$(printf '%s' "$CSS_ALL" | grep -c . || true)
+if [ "$CSS_COUNT" -eq 0 ]; then
     printf 'error: no compiled stylesheet found under %s/css\n' "$PUBLIC" >&2
     exit 2
+elif [ "$CSS_COUNT" -gt 1 ]; then
+    printf 'error: %s stylesheets under %s/css -- stale output from earlier builds.\n' "$CSS_COUNT" "$PUBLIC" >&2
+    printf '       Build fresh with ./scripts/build.sh, which empties public/ first.\n' >&2
+    exit 2
 fi
+CSS=$CSS_ALL
 
 echo 'Job title'
 contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
@@ -283,6 +311,16 @@ matches "$CSS" '\[theme=dark\] \.home \.home-profile \.home-subtitle\{color:#e7e
 
 # About is where the biography went, and it is the only page that carries the
 # photograph. The two sizes exist for event organisers, who ask by email today.
+# The desk: a watercolour of the "Beyond the Code" paragraph, closing the page.
+# Last and lazy, so the greeting stays the first thing painted; a still life, so
+# the no-portrait decision above still holds.
+echo 'Home page plate'
+contains "$EN_HOME" 'class=home-plate' 'the en home page carries its plate'
+contains "$PT_HOME" 'class=home-plate' 'and so does the pt-br home page'
+in_order "$EN_HOME" 'Beyond the Code.*class=home-plate' 'the plate closes the page, after the paragraph it illustrates'
+in_order "$PT_HOME" 'Além do Código.*class=home-plate' 'in pt-br too'
+matches "$EN_HOME" 'class=home-plate><img [^>]*loading=lazy' 'the plate is lazy-loaded, behind the text'
+
 echo 'About page'
 exists "$EN_ABOUT" 'en About page is built'
 exists "$PT_ABOUT" 'pt-br About page is built at its localized path'
@@ -399,6 +437,103 @@ nowhere '>Panel: ' 'no entry carries the superseded title prefix'
 # this link goes, the entry becomes the one row on the page with no destination.
 contains "$EN_SPEAKING" 'luma.com/ywjxiy8b' 'the en panel links to the event that hosted it'
 contains "$PT_SPEAKING" 'luma.com/ywjxiy8b' 'the pt-br panel links to it too'
+
+# Podcast appearances on their own pages, by layouts/episodes/single.html: chapter by
+# chapter, a summary, the quotes and the lesson. Claude writes them from the
+# transcript; the quotes are the only words on them that are Italo's. Most of what
+# such a page promises is invisible when it breaks -- a quote whose link goes
+# nowhere still reads fine, and a missing disclaimer leaves a page that reads as
+# his.
+#
+# One entry per episode page: its slug and the id of its first chapter. A new
+# episode page is a new line here, and gets every assertion below.
+EPISODES=(
+    "shipping-more-not-faster platform"
+    "show-people-their-impact career"
+)
+echo 'Episode pages'
+for entry in "${EPISODES[@]}"; do
+    read -r slug first <<< "$entry"
+    EN_EPISODE="$PUBLIC/episodes/$slug/index.html"
+    PT_EPISODE="$PUBLIC/pt-br/episodes/$slug/index.html"
+    exists "$EN_EPISODE" "$slug: the episode page is built"
+    exists "$PT_EPISODE" "$slug: and its pt-br translation"
+    contains "$EN_SPEAKING" "href=/episodes/$slug/>Highlights<" "$slug: its speaking entry links to it"
+    contains "$PT_SPEAKING" "href=/pt-br/episodes/$slug/>Destaques<" "$slug: and the pt-br entry to the translation"
+    # Said before anything else on the page, in both languages: Claude wrote it,
+    # and only the quotes are his.
+    contains "$EN_EPISODE" 'Written by Claude, not by Italo.' "$slug: the page says who wrote it"
+    contains "$PT_EPISODE" 'Escrito pelo Claude, não pelo Italo.' "$slug: and so does the pt-br page"
+    in_order "$EN_EPISODE" 'class=ep-disclaimer.*class=ep-map ' "$slug: before the first chapter, not in a colophon"
+    # Not writing, so not where the writing is: the archive, the feeds, the tags.
+    absent_from "$EN_ARCHIVE" "/episodes/$slug/" "$slug: the writing archive does not list it"
+    absent_from "$PUBLIC/index.xml" "/episodes/$slug/" "$slug: the site feed does not carry it"
+    absent_from "$PUBLIC/posts/index.xml" "/episodes/$slug/" "$slug: nor does the writing feed"
+    absent_from "$EN_EPISODE" 'href=/tags/' "$slug: and it is filed under no tag"
+    # The intro, then the chapter list, then the chapters. An earlier layout drew
+    # the list into a slot the content marked; when the marker did not survive
+    # rendering, the list landed after the last chapter. Asserted on order.
+    in_order "$EN_EPISODE" "class=ep-map .*<h2 id=$first " "$slug: the chapter list sits above the first chapter"
+    in_order "$PT_EPISODE" "class=ep-map .*<h2 id=$first " "$slug: and in pt-br"
+    # The timeline pinned under the header is drawn from the same chapters as the
+    # headings, one band each.
+    same_count "$EN_EPISODE" 'class=ep-timeline__seg' 'class=ep-chapter data-chapter' "$slug: the timeline has one band per chapter"
+    # Every quote can be heard: each names its speaker and links into the
+    # recording. A count match, so a quote added without its link fails.
+    same_count "$EN_EPISODE" 'class=ep-moment__who' 'class=ep-moment__play href="https://' "$slug: every en quote links to the moment it was said"
+    same_count "$PT_EPISODE" 'class=ep-moment__who' 'class=ep-moment__play href="https://' "$slug: every pt-br quote does too"
+    # Linked, not embedded. A player is a third-party host that loads on every
+    # visit whether or not anyone presses play.
+    absent_from "$EN_EPISODE" '<iframe' "$slug: the recording is linked, not embedded"
+    absent_from "$EN_EPISODE" '<audio' "$slug: and no third-party audio player loads with the page"
+    # The page's own words come from i18n/, and it still renders without them. It
+    # has happened: a `hugo server` started before i18n/ existed renders every
+    # string empty. A clean build is fine; this keeps such a page from shipping.
+    contains "$EN_EPISODE" '>The lesson<' "$slug: the lessons carry their en label"
+    contains "$PT_EPISODE" '>A lição<' "$slug: and their pt-br one, accented"
+    contains "$PT_EPISODE" 'Capítulo' "$slug: pt-br chapter headings keep their accent"
+    # Questions put to the reader (partials/episode/ask.html) arrive answered
+    # without JavaScript, and every answer links to the moment in the recording
+    # that gives it. Count matches, so they hold for a page with no questions too.
+    same_count "$EN_EPISODE" 'class="ep-viz ep-ask' 'class=ep-ask__play' "$slug: every question's answer links into the recording"
+    same_count "$PT_EPISODE" 'class="ep-viz ep-ask' 'class=ep-ask__play' "$slug: in pt-br too"
+    same_count "$EN_EPISODE" 'data-ask=guess' 'class=ep-ask__controls hidden' "$slug: guess controls start hidden"
+    same_count "$EN_EPISODE" 'data-ask=choice' 'ep-choice__option is-correct' "$slug: every choice arrives answered without JavaScript"
+    matches "$EN_EPISODE" 'src=/js/episode\.[0-9a-f]+\.js integrity=' "$slug: the page script is served from this origin, with SRI"
+    # The share card is the episode's own plate, not the site card, and a file.
+    contains "$EN_EPISODE" "og:image\" content=\"https://italovietro.com/episodes/$slug/cover.jpg" "$slug: the preview card is the episode plate"
+    exists "$PUBLIC/episodes/$slug/cover.jpg" "$slug: and the card is published"
+    contains "$EN_EPISODE" 'fetchpriority=high' "$slug: the hero plate is not lazy-loaded"
+done
+# The toy model's days are invented, and the figure has to say so where the
+# numbers are: the episode gives no breakdown of Parloa's cycle time, and a reader
+# must not come away thinking it did.
+contains "$PUBLIC/episodes/shipping-more-not-faster/index.html" 'The days are invented' 'the toy model says its numbers are made up'
+contains "$PUBLIC/pt-br/episodes/shipping-more-not-faster/index.html" 'Os dias são inventados' 'in both languages'
+# The timeline's full-width background is a painted shadow. A pseudo-element
+# positioned out to the window's edges once drew its hairline, and gave every
+# episode page a sideways scroll on every screen.
+absent_from "$CSS" 'left:-100vmax' 'nothing on an episode page is laid out past the window'
+
+# One measure (docs/adr/0004). The masthead and hero sit outside .content and
+# take the cap explicitly; without it the title starts 140px left of the prose.
+matches "$CSS" '\.episode \.ep-masthead,\.episode>\.ep-plate--hero\{max-width:800px' 'the masthead and hero share the 800px measure'
+# The plates are watercolours with an alpha edge, saved as WebP at twice the
+# measure. A PNG export is ten times the size and looks the same.
+oversized=0
+plates=("$PUBLIC"/images/plates/*.webp)
+for entry in "${EPISODES[@]}"; do
+    read -r slug _ <<< "$entry"
+    plates+=("$PUBLIC/episodes/$slug"/*.webp)
+done
+for plate in "${plates[@]}"; do
+    [ -f "$plate" ] || continue
+    if [ "$(wc -c < "$plate")" -ge 160000 ]; then
+        bad "every plate is under 160KB (${plate#"$PUBLIC"/} is $(wc -c < "$plate") bytes)"
+        oversized=1
+    fi
+done
+[ "$oversized" -eq 0 ] && ok 'every plate is under 160KB'
 
 # Two new jobs for amber: the nav item for the section you are in, and selected
 # text. Both were measured against the theme's real backgrounds -- 4.73:1 for the
@@ -584,6 +719,18 @@ echo 'Interaction rules present'
 contains "$CSS" ':focus-visible' 'keyboard focus styling is present'
 contains "$CSS" 'prefers-reduced-motion' 'reduced-motion guard is present'
 contains "$CSS" '(hover: hover)' 'hover styling is gated to real pointers'
+
+# Which Hugo built this, against the one pinned in .hugo-version for CI and
+# Vercel. A note, not a failure: CI always builds with the pin, and a local build
+# on a newer Hugo is how an upgrade gets tried. But it is how two versions drift
+# apart unnoticed, which is what made a deprecation fix need a pinned-version
+# bump nobody had planned.
+PINNED=$(cat "$(dirname "$0")/../.hugo-version" 2>/dev/null || true)
+BUILT=$(grep -o 'name=generator content="Hugo [0-9.]*"' "$EN_HOME" 2>/dev/null | grep -o '[0-9][0-9.]*' || true)
+if [ -n "$PINNED" ] && [ -n "$BUILT" ] && [ "$PINNED" != "$BUILT" ]; then
+    echo
+    printf 'note: built with Hugo %s; .hugo-version pins %s for CI and Vercel\n' "$BUILT" "$PINNED"
+fi
 
 echo
 if [ "$failures" -gt 0 ]; then
