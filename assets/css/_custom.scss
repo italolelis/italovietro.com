@@ -4,7 +4,10 @@
 // ==============================
 /* assets/css/custom.css */
 
-// The type module first: it owns the voice and the Measure, and every stylesheet
+// The colour tokens first: every colour below is `var(--token)`, set once for light
+// and once for dark. See the note at the top of _tokens.scss.
+@import "tokens";
+// Then the type module: it owns the voice and the Measure, and every stylesheet
 // below reads from it. See the note at the top of _typography.scss.
 @import "typography";
 // Was margin-top: 13rem. That existed to compensate for the theme pushing the
@@ -41,29 +44,19 @@
 //
 // No single colour fixes that: the light accent measures 2.02:1 on the light
 // header and the dark accent 3.02:1 on the dark one. So the mark is inlined SVG
-// now and CSS picks the matching accent, at 4.73:1 light and 7.06:1 dark. The
-// standalone file at static/images/logo.svg keeps a literal colour, because a
-// favicon has no document to inherit from.
+// now and takes the Accent token, which is the matching one in each mode, at
+// 4.73:1 light and 7.06:1 dark. The standalone file at static/images/logo.svg keeps
+// a literal colour, because a favicon has no document to inherit from.
 .header-title .logo-mark {
     display: inline-block;
     line-height: 0;
-    color: $single-link-color;
+    color: var(--accent);
 }
 
 .header-title .logo-mark svg {
     height: 2.5em;
     width: auto;
     vertical-align: middle;
-}
-
-[theme=dark] .header-title .logo-mark {
-    color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .header-title .logo-mark {
-        color: $single-link-color-dark;
-    }
 }
 
 /* Mobile logo adjustment */
@@ -115,34 +108,14 @@ footer {
 }
 
 .footer-social a {
-    color: $muted-text-color;
+    color: var(--muted);
     text-decoration: none;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
     transition: color $transition-base;
 }
 
 .footer-social a:hover {
-    color: $single-link-color;
-}
-
-[theme=dark] .footer-social a {
-    color: $muted-text-color-dark;
-    border-bottom-color: $global-border-color-dark;
-}
-
-[theme=dark] .footer-social a:hover {
-    color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .footer-social a {
-        color: $muted-text-color-dark;
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    [theme=auto] .footer-social a:hover {
-        color: $single-link-color-dark;
-    }
+    color: var(--accent);
 }
 
 // Homepage intro paragraph -- replaces inline style on <p class="home-intro">
@@ -156,18 +129,8 @@ footer {
 // the opening line and this sits a step below it.
 .home-intro {
     font-size: 1.125rem;
-    color: $global-font-color;
+    color: var(--ink);
     margin: 0.5rem 0 2.5rem;
-}
-
-[theme=dark] .home-intro {
-    color: $global-font-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .home-intro {
-        color: $global-font-color-dark;
-    }
 }
 
 // Bold text carries emphasis by weight, not by a second colour.
@@ -181,16 +144,12 @@ footer {
 // Body text already clears AA at 6.16:1, so bold comes down to match rather than
 // prose going up. The theme's more specific rule for bold inside links is left
 // intact, so a bolded link still takes the accent.
+//
+// One of the few rules left under [theme=dark], and it sets no value: it undoes the
+// theme's, which has to be matched at the theme's own specificity to win.
 [theme=dark] .single .content b,
 [theme=dark] .single .content strong {
     color: inherit;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .single .content b,
-    [theme=auto] .single .content strong {
-        color: inherit;
-    }
 }
 
 @import "home";

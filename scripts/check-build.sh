@@ -175,6 +175,95 @@ rule_lacks() {
     if [ "$(rules_with "$1" "$2")" -eq 0 ]; then ok "$3"; else bad "$3"; fi
 }
 
+# The colour tokens are custom properties: set on :root for light, and set again on
+# [theme=dark] for the ones that change. A component reads `var(--ink)` and never says
+# which mode it is in, so what to assert about colour is the token's value per mode,
+# and that no component restates one.
+
+# token_value <light|dark> <name> -- the value a token has in a mode. Dark falls back
+# to :root for a token that [theme=dark] does not set, which is the cascade's own
+# answer: a token that does not change is inherited unchanged. (The minifier keeps the
+# space a custom property's value starts with, so it is trimmed here.)
+token_value() {
+    local mode=$1 name=$2 v=''
+    if [ "$mode" = dark ]; then
+        v=$(css_rules | grep -E '^\[theme=dark\]\{' | grep -oE -- "[{;]--$name:[^;}]*" | head -1)
+    fi
+    if [ -z "$v" ]; then
+        v=$(css_rules | grep -E '^:root\{' | grep -oE -- "[{;]--$name:[^;}]*" | head -1)
+    fi
+    v=${v#*:}
+    printf '%s' "${v# }"
+}
+
+# token <name> <light> <dark> <description> -- a token has these two values, and the
+# dark one comes from the [theme=dark] rule, not from a copy of the light one.
+token() {
+    local name=$1 light=$2 dark=$3 desc=$4 got
+    got=$(token_value light "$name")
+    if [ "$got" = "$light" ]; then ok "$desc: light $light"; else bad "$desc: light wanted $light, got '${got:-nothing}'"; fi
+    got=$(token_value dark "$name")
+    if [ "$got" = "$dark" ] && [ "$(rules_with '\[theme=dark\]' "--$name:")" -gt 0 ]; then
+        ok "$desc: dark $dark"
+    else
+        bad "$desc: dark wanted $dark from [theme=dark], got '${got:-nothing}'"
+    fi
+}
+
+# token_constant <name> <value> <description> -- a token that is the same in both
+# modes, so [theme=dark] must not set it.
+token_constant() {
+    local name=$1 value=$2 desc=$3 got
+    got=$(token_value light "$name")
+    if [ "$got" = "$value" ] && [ "$(rules_with '\[theme=dark\]' "--$name:")" -eq 0 ]; then
+        ok "$desc: $value in both modes"
+    else
+        bad "$desc: wanted $value, set once on :root (got '${got:-nothing}')"
+    fi
+}
+
+# contrast <hex> <hex> -- the WCAG 2 contrast ratio of two colours, to two places.
+contrast() {
+    awk -v a="$1" -v b="$2" '
+        function h2d(c) { return index("0123456789abcdef", tolower(c)) - 1 }
+        function chan(s, k,   v) {
+            v = (h2d(substr(s, 2 * k, 1)) * 16 + h2d(substr(s, 2 * k + 1, 1))) / 255
+            return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ^ 2.4
+        }
+        function lum(s) {
+            if (length(s) == 4) s = "#" substr(s,2,1) substr(s,2,1) substr(s,3,1) substr(s,3,1) substr(s,4,1) substr(s,4,1)
+            return 0.2126 * chan(s, 1) + 0.7152 * chan(s, 2) + 0.0722 * chan(s, 3)
+        }
+        BEGIN {
+            x = lum(a); y = lum(b)
+            if (x < y) { t = x; x = y; y = t }
+            printf "%.2f", (x + 0.05) / (y + 0.05)
+        }'
+}
+
+# contrast_of <foreground-token> <background-token> <minimum> <description> -- checks
+# the pair in both modes, against the token values the browser will actually resolve.
+# The ratios the comments in the stylesheets quote are measured once, by hand; this is
+# what stops a later edit to a value from quietly dropping one under its threshold.
+contrast_of() {
+    local fg=$1 bg=$2 min=$3 desc=$4 mode f b r line=''
+    for mode in light dark; do
+        f=$(token_value "$mode" "$fg"); b=$(token_value "$mode" "$bg")
+        if [[ ! $f =~ ^#[0-9a-fA-F]{3,6}$ || ! $b =~ ^#[0-9a-fA-F]{3,6}$ ]]; then
+            bad "$desc ($mode: --$fg is '$f', --$bg is '$b', neither can be measured)"
+            return
+        fi
+        r=$(contrast "$f" "$b")
+        if awk -v r="$r" -v m="$min" 'BEGIN { exit !(r + 0 >= m + 0) }'; then
+            line="$line $mode $r:1"
+        else
+            bad "$desc ($mode measures $r:1, needs $min:1)"
+            return
+        fi
+    done
+    ok "$desc (${line# })"
+}
+
 # valid_utf8 -- asserts every generated page decodes as UTF-8.
 #
 # Not paranoia. The pt-br speaking page shipped a truncated multi-byte character
@@ -333,7 +422,7 @@ absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left 
 matches "$CSS" '\.home \.home-profile\{max-width:800px' 'the profile block shares the 800px measure'
 absent_from "$EN_HOME" '<hr' 'no rule between the routes and the last section'
 absent_from "$PT_HOME" '<hr' 'nor on the pt-br home page'
-matches "$CSS" '\.home-intro\{font-size:1\.125rem;color:#161209' 'the intro paragraph is body colour, not muted'
+rule_sets '\.home-intro' 'color:var\(--ink\)' 'the intro paragraph is body colour, not muted'
 
 # Dark mode gave headings the same colour as the body text under them, so hierarchy
 # rested on size alone. Light mode never had the problem: its body text is a
@@ -343,11 +432,17 @@ matches "$CSS" '\.home-intro\{font-size:1\.125rem;color:#161209' 'the intro para
 # paragraph under it read identically. Two tokens, one visible colour, and no way
 # to tell from a screenshot which rule had won.
 absent_from "$CSS" '#a8a29e' 'the second dark grey is gone'
-matches "$CSS" '\[theme=dark\][^{]*\.portrait__sizes[^{]*\{color:#a9a9b3' 'the headshot line uses the same grey as the prose'
+rule_sets '\.portrait__sizes' 'color:var\(--muted\)' 'the headshot line is muted text, which in dark is the grey of the prose'
 
 echo 'Headings outrank body text in dark'
-matches "$CSS" '\[theme=dark\] \.single-title[^{]*\{color:#e7e5e4\}' 'dark headings take the brighter colour'
-matches "$CSS" '\[theme=dark\] \.home \.home-profile \.home-subtitle\{color:#e7e5e4\}' 'the greeting is treated as a heading, not body text'
+rule_sets '\.single-title' 'color:var\(--heading\)' 'a title takes the heading colour, which dark makes the brighter one'
+rule_sets '\.single \.content h2' 'color:var\(--heading\)' 'and so does a section heading, wherever it sits in the column'
+rule_sets '\.home \.home-profile \.home-subtitle' 'color:var\(--heading\)' 'the greeting is treated as a heading, not body text'
+if awk -v h="$(contrast "$(token_value dark heading)" "$(token_value dark paper)")" -v i="$(contrast "$(token_value dark ink)" "$(token_value dark paper)")" 'BEGIN { exit !(h + 0 > i + 0) }'; then
+    ok 'in dark a heading is brighter than the body text under it'
+else
+    bad 'in dark a heading is brighter than the body text under it'
+fi
 
 # About is where the biography went, and it is the only page that carries the
 # photograph. The two sizes exist for event organisers, who ask by email today.
@@ -378,8 +473,7 @@ contains "$EN_ABOUT" 'portrait__sizes' 'About offers the portrait at more than o
 # rule in dark mode -- three classes and a type against a bare class -- so the line
 # rendered as a grey label beside two amber links. The qualified selector is the
 # fix, and this asserts it stays qualified.
-matches "$CSS" '\.single \.content \.portrait__sizes a\{color:#57534e' 'the headshot line is one colour in light'
-matches "$CSS" '\[theme=dark\] \.single \.content \.portrait__sizes a[,{]' 'and one colour in dark'
+rule_sets '\.single \.content \.portrait__sizes a' 'color:var\(--muted\)' 'the headshot line is one colour, label and links alike'
 contains "$PT_ABOUT" 'portrait__img' 'the portrait renders on pt-br About too'
 
 # The photograph was a 428KB PNG of a 512x512 image -- 7x the bytes for no extra
@@ -591,8 +685,8 @@ absent_from "$CSS" 'rgba(53,166,247' 'theme default selection blue is gone'
 matches "$CSS" 'a\.active\{font-weight:900;color:#b45309\}' 'the active nav item takes the accent, and keeps a weight cue'
 occurs "$EN_ABOUT" 'menu-item active' 2 'the current section is marked in both the desktop and mobile navs'
 occurs "$PT_ABOUT" 'menu-item active' 2 'and in pt-br too'
-matches "$CSS" '\.archive \.group-title\{[^}]*color:#57534e' 'archive year headings stay muted rather than accented'
-rule_sets '\.single \.content>h2' 'color:#161209' 'section headings stay uncoloured'
+rule_sets '\.archive \.group-title' 'color:var\(--muted\)' 'archive year headings stay muted rather than accented'
+rule_lacks '\.single \.content h2' 'color:var\(--accent' 'section headings stay uncoloured'
 
 # Line and Weibo were theme defaults, not choices, and neither is plausible for a
 # readership reading in English and Portuguese.
@@ -628,8 +722,8 @@ absent_from "$CSS" '.single .content>ul:first-of-type' 'no rule styles the first
 rule_lacks '\.single \.content>ul' 'list-style:none' 'top-level lists keep their bullets site-wide'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
-rule_sets '\[theme=dark\] \.single \.content:has\(\.book-entry\)>ul:first-of-type li a' 'color:#a9a9b3' 'and in dark, still scoped to the reading list'
-rule_sets '\[theme=dark\] \.single \.content:has\(\.book-entry\) h2\+p' 'color:#a9a9b3' 'the dark section lines carry the guard the light ones have'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a' 'color:var\(--muted\)' 'its links are muted text, in both modes, still scoped to the reading list'
+rule_sets '\.single \.content:has\(\.book-entry\) h2\+p' 'color:var\(--muted\)' 'and so are its section lines, which have one rule and so one guard'
 # What the CSS is aimed away from: the ladder is a plain list in the page, in both
 # languages, on a page that renders no Entry.
 for post in "$PUBLIC/do-job-titles-matter/index.html" "$PUBLIC/pt-br/do-job-titles-matter/index.html"; do
@@ -690,6 +784,8 @@ rule_sets '\.single \.content figcaption' 'font-family:var\(--global-font-family
 rule_sets '\.single \.content blockquote' 'background:none' 'a blockquote is not the theme blue box'
 rule_sets '\.single \.content blockquote' 'font-style:italic' 'it is italic, behind a rule'
 rule_sets '\[theme=dark\] \.single \.content blockquote' 'background-color:transparent' 'and in dark, where the theme tints it again'
+rule_sets '\[theme=dark\] \.single \.content blockquote' 'border-left-color:var\(--rule\)' 'and recolours its bar, which the theme draws again in dark'
+rule_sets '\.single \.content blockquote' 'border-left:2px solid var\(--rule\)' 'the bar is the rule colour, a grey and not an accent'
 rule_sets '\.episode \.content \.ep-moment blockquote' 'font-style:normal' 'an Episode quote stays upright'
 rule_sets '\.single \.content \.header-mark' 'display:none' 'headings carry no accent mark'
 # One measure, one number (docs/adr/0004): the column and the title above it.
@@ -699,6 +795,241 @@ rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it st
 # restated later, which file was imported last no longer decides a heading.
 for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
+done
+
+# Colour is a set of tokens, switched once -- see docs/agents/architecture.md.
+#
+# Every colour the site chooses is a custom property on :root, overridden once on
+# [theme=dark] (the theme sets that attribute on <body>, from the visitor's choice or
+# their OS). A component reads `var(--ink)` and does not know which mode it is in, so
+# there is no dark copy of it to forget, and no value written twice. Before this, about
+# a seventh of the stylesheet restated colours per mode, three selectors to a rule, and
+# one of the three (`[theme=auto]`) never matched: nothing sets that attribute.
+#
+# What is asserted is the token's value in each mode. The ratios beside the values in
+# the stylesheet were measured by hand, once; contrast_of measures them again from the
+# compiled values, so changing one cannot quietly take a pair under its threshold.
+echo 'Colour tokens: one value per mode'
+token paper '#fff' '#292a2d' 'the page'
+token header '#f8f8f8' '#252627' 'the header bar'
+token ink '#161209' '#a9a9b3' 'body text'
+token heading '#161209' '#e7e5e4' 'headlines'
+token muted '#57534e' '#a9a9b3' 'muted text'
+token hairline '#f0f0f0' '#363636' 'the faint divider'
+token rule '#d6d3d1' '#4b4d52' 'a visible rule'
+token accent '#b45309' '#f59e0b' 'the Accent'
+token accent-hover '#92400e' '#fbbf24' 'the Accent on hover'
+token accent-wash 'rgba(180,83,9,0.06)' 'rgba(245,158,11,0.1)' 'the tint under a hovered Entry'
+token selection-ink '#161209' '#fff' 'text over a selection'
+token entry-podcast '#9b59b6' '#bb8fce' 'the podcast icon'
+token entry-panel '#0f766e' '#5eead4' 'the panel icon'
+token ep-ink '#3d4f7a' '#9db0e0' 'the Episode ink'
+token on-ink '#fff' '#1c1d20' 'text on a filled ink'
+token ep-fill-1 '#e7e5e4' '#3a3b40' 'figure fill 1'
+token ep-fill-2 '#d6d3d1' '#44464b' 'figure fill 2'
+token ep-fill-3 '#cfcac4' '#4e5056' 'figure fill 3'
+token ep-fill-4 '#c4beb7' '#575a60' 'figure fill 4'
+token ep-lesson '#f7f2e7' 'rgba(255,255,255,0.045)' 'the lesson box'
+token ep-tip '#fffdf7' '#34353a' 'the timeline preview'
+token ep-bar '#78716c' '#8a8c93' 'the guess bar'
+token ep-paper '#efe7d4' '#cfc5ae' 'the timeline ruler'
+token plate-filter 'none' 'brightness(0.9)' 'plate dimming'
+# The ruler is a printed object, in both themes: the ink on it does not follow the mode.
+token_constant ep-ruler-ink '#3d4f7a' 'the ink printed on the ruler'
+# Dark carries one grey for text. It was #a8a29e against body text at #a9a9b3, 1% apart,
+# so a caption meant to read quieter than a paragraph read identically.
+if [ "$(token_value dark muted)" = "$(token_value dark ink)" ]; then
+    ok 'in dark, muted text is the body grey: the tier is carried by size and weight'
+else
+    bad 'in dark, muted text is the body grey: the tier is carried by size and weight'
+fi
+
+echo 'Colour tokens: every pair clears its threshold in both modes'
+contrast_of ink paper 4.5 'body text on the page'
+contrast_of heading paper 4.5 'headlines on the page'
+contrast_of muted paper 4.5 'muted text on the page'
+contrast_of accent paper 4.5 'the Accent on the page (ADR-0001)'
+contrast_of accent-hover paper 4.5 'the Accent on hover'
+contrast_of accent header 4.5 'the Accent on the header, for the active nav item'
+contrast_of entry-podcast paper 3 'the podcast icon, which is not text'
+contrast_of entry-panel paper 3 'the panel icon'
+contrast_of ep-ink paper 4.5 'the Episode ink on the page'
+contrast_of on-ink ep-ink 4.5 'text on a filled Episode ink'
+contrast_of ep-bar paper 3 'the guess bar, which is not text'
+contrast_of heading ep-fill-1 4.5 'text on figure fill 1'
+contrast_of heading ep-fill-2 4.5 'text on figure fill 2'
+contrast_of heading ep-fill-3 4.5 'text on figure fill 3'
+contrast_of heading ep-fill-4 4.5 'text on figure fill 4'
+contrast_of heading ep-tip 4.5 'text on the timeline preview'
+contrast_of ep-ruler-ink ep-paper 4.5 'the ink printed on the ruler'
+
+# A component takes a token and says nothing about dark. Each rule below is the one rule
+# for its element, in both modes; the checks under 'no dark copies' assert there is no second.
+echo 'Colour tokens: components read them'
+rule_sets '\.footer-social a' 'color:var\(--muted\)' 'footer links are muted text'
+rule_sets '\.footer-social a' 'border-bottom:1px solid var\(--hairline\)' 'on a hairline'
+rule_sets '\.footer-social a:hover' 'color:var\(--accent\)' 'that takes the Accent when pointed at'
+rule_sets '\.episode \.ep-dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
+rule_sets '\.single \.content>hr' 'border-top:1px solid var\(--hairline\)' 'a rule across the column is the hairline'
+rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairline\)' 'and is recoloured in dark, where the theme draws its own'
+rule_sets '\.home \.home-content \.home-plate img' 'filter:var\(--plate-filter\)' 'the home plate is dimmed by the token, not by a dark rule'
+rule_sets '\.single \.content \.portrait__sizes a' 'border-bottom:1px solid var\(--hairline\)' 'the headshot links are underlined in the hairline'
+rule_sets '\.single \.content \.portrait__sizes a:hover' 'color:var\(--accent\)' 'and take the Accent when pointed at'
+rule_sets '\.archive-item__title a' 'color:var\(--accent\)' 'archive titles are links, so the Accent'
+rule_sets '\.archive-item__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.archive-item__date' 'color:var\(--muted\)' 'archive dates are muted'
+rule_sets '\.archive-intro p' 'color:var\(--muted\)' 'and so is the line under the archive title'
+rule_sets '\.archive \.group-title' 'border-bottom:1px solid var\(--hairline\)' 'year headings sit on a hairline'
+rule_sets '\.single \.content:has\(\.book-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'a reading-list section heading sits on a hairline'
+rule_sets '\.single \.content:has\(\.talk-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'so does a speaking-page one'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
+rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
+rule_sets '\.single \.content \.book-entry__title a' 'color:var\(--accent\)' 'a book title is a link, so the Accent'
+rule_sets '\.single \.content \.book-entry__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.single \.content \.book-entry__author' 'color:var\(--muted\)' 'an author is muted'
+rule_sets '\.single \.content \.book-entry__description' 'color:var\(--ink\)' 'a description is body text'
+rule_sets '\[theme=dark\] \.single \.content \.book-entry--featured' 'border-left-color:var\(--hairline\)' 'a featured Entry has a hairline edge in dark, which is how it renders, and not in light'
+rule_sets '\.talk-entry__type-icon' 'color:var\(--muted\)' 'a speaking icon is muted until its type says otherwise'
+rule_sets '\.talk-entry__meta' 'color:var\(--muted\)' 'the venue and date are muted'
+rule_sets '\.talk-entry__links a' 'color:var\(--accent\)' 'speaking links are links, so the Accent'
+rule_sets '\.talk-entry__links a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.talk-entry--talk \.talk-entry__type-icon' 'color:var\(--accent\)' 'a talk is the Accent'
+rule_sets '\.talk-entry--host \.talk-entry__type-icon' 'color:var\(--accent\)' 'so is a hosted show'
+rule_sets '\.talk-entry--upcoming \.talk-entry__type-icon' 'color:var\(--accent\)' 'and so is what is next, in both modes'
+rule_sets '\.talk-entry--panel \.talk-entry__type-icon' 'color:var\(--entry-panel\)' 'a panel is teal'
+rule_sets '\.talk-entry--podcast \.talk-entry__type-icon' 'color:var\(--entry-podcast\)' 'a podcast is purple'
+rule_sets '\.talk-entry:hover' 'background-color:var\(--accent-wash\)' 'a hovered Entry is washed with the Accent'
+rule_sets '\.single \.content \.book-entry:hover' 'border-left-color:var\(--accent\)' 'and gains an Accent edge'
+rule_sets '\.talk-entry:focus-within' 'background-color:var\(--accent-wash\)' 'a focused one gets the same'
+rule_sets 'a:focus-visible' 'outline:2px solid var\(--accent\)' 'the focus ring is the Accent'
+rule_sets '::selection' 'color:var\(--selection-ink\)' 'selected text takes its colour from the token'
+rule_sets '#header-mobile \.menu \.menu-item\.active' 'color:var\(--accent\)' 'the active mobile nav item takes the Accent'
+rule_sets '#header-mobile \.menu \.menu-item\.active' 'border-left:3px solid var\(--accent\)' 'and its edge'
+
+# The Episode pages, the largest single user of colour. Each is one rule for both modes.
+# The ruler is printed paper in both, so its ink is a constant, and its ticks are that
+# ink at an alpha.
+rule_sets '\.episode \.ep-kicker__show' 'color:var\(--heading\)' 'the show name in a kicker is a heading colour'
+rule_sets '\.episode \.ep-meta' 'color:var\(--muted\)' 'the meta line is muted'
+rule_sets '\.episode \.ep-meta strong' 'color:var\(--heading\)' 'with its figures a step up'
+rule_sets '\.episode \.ep-disclaimer' 'color:var\(--ink\)' 'the disclaimer is body text, not fine print'
+rule_sets '\.episode \.ep-disclaimer' 'border:1px solid var\(--rule\)' 'outlined in the rule colour'
+rule_sets '\.episode \.ep-disclaimer strong' 'color:var\(--ep-ink\)' 'its emphasis in the Episode ink'
+rule_sets '\.episode \.ep-disclaimer a' 'color:var\(--accent\)' 'and its link, being a link, in the Accent'
+rule_sets '\.episode \.content \.ep-chapter' 'border-bottom:1px solid var\(--hairline\)' 'a chapter sits on a hairline'
+rule_sets '\.episode \.content \.ep-moment' 'border-left:2px solid var\(--rule\)' 'a quote has a rule beside it'
+rule_sets '\.episode \.content \.ep-moment--pull blockquote::before' 'color:var\(--rule\)' 'a pull quote hangs a quotation mark in the same grey'
+rule_sets '\.episode \.ep-plate img' 'filter:var\(--plate-filter\)' 'an episode plate is dimmed by the token'
+rule_sets '\.episode \.content \.ep-map__heading' 'color:var\(--heading\)' 'the map heading is a heading colour'
+rule_sets '\.episode \.content \.ep-map__legend' 'border-top:1px solid var\(--rule\)' 'the legend sits between two rules'
+rule_sets '\.episode \.content \.ep-map__legend a' 'border-bottom:1px solid var\(--rule\)' 'one under each row'
+rule_sets '\.episode \.content \.ep-map__legend \.ep-map__num' 'color:var\(--muted\)' 'with muted numbers'
+rule_sets '\.episode \.content \.ep-map__legend a\.is-current \.ep-map__num' 'color:var\(--ep-ink\)' 'the current one in the Episode ink'
+rule_sets '\.episode \.ep-timeline' 'background:var\(--header\)' 'the timeline bar is the header colour'
+rule_sets '\.episode \.ep-timeline' 'box-shadow:0 0 0 100vmax var\(--header\)' 'out to the edge of the window'
+rule_sets '\.episode \.ep-timeline__clock b' 'color:var\(--heading\)' 'its clock is a heading colour'
+rule_sets '\.episode \.ep-timeline__ruler' 'background-color:var\(--ep-paper\)' 'the ruler is the paper token'
+rule_sets '\.episode \.ep-timeline__label' 'color:var\(--ep-ruler-ink\)' 'and is printed in the ruler ink, which is the same in both modes'
+rule_sets '\.episode \.ep-timeline__head' 'background:var\(--ep-ruler-ink\)' 'as is the playhead'
+contains "$CSS" 'rgba(61,79,122,0.55)' 'its ticks are that ink at an alpha, computed from the one value'
+rule_sets '\.episode \.content \.ep-hl__lesson' 'background:var\(--ep-lesson\)' 'the lesson box is the lesson token'
+rule_sets '\.episode \.content \.ep-hl__lesson' 'border-left:3px solid var\(--ep-ink\)' 'with an ink edge'
+rule_sets '\.episode \.content \.ep-hl__lesson-kicker' 'color:var\(--ep-ink\)' 'and an ink kicker'
+rule_sets '\.episode \.content \.ep-viz' 'border-top:2px solid var\(--heading\)' 'a figure opens on a heavy rule'
+rule_sets '\.episode \.content \.ep-viz' 'border-bottom:1px solid var\(--rule\)' 'and closes on a hairline'
+rule_sets '\.episode \.content \.ep-viz__title' 'color:var\(--heading\)' 'its title is a heading colour'
+rule_sets '\.episode \.content \.ep-viz__kicker' 'color:var\(--muted\)' 'its kicker is muted'
+rule_sets '\.episode \.content \.ep-viz__button' 'background:var\(--heading\)' 'a button is a solid of the heading colour'
+rule_sets '\.episode \.content \.ep-viz__button' 'color:var\(--on-ink\)' 'with the text that goes on one'
+rule_sets '\.episode \.content \.ep-viz__toggle' 'color:var\(--ink\)' 'a toggle is body text'
+rule_sets '\.episode \.content \.ep-viz__toggle' 'border:1px solid var\(--rule\)' 'in a box'
+rule_sets '\.episode \.content \.ep-viz__toggle-box' 'border:1\.5px solid var\(--muted\)' 'its checkbox is muted until pressed'
+rule_sets '\.episode \.content \.ep-viz__toggle\[aria-pressed="true"\] \.ep-viz__toggle-box' 'background:var\(--ep-ink\)' 'and the Episode ink when pressed'
+rule_sets '\.episode \.content \.ep-viz__toggle\[aria-pressed="true"\] \.ep-viz__toggle-box::after' 'border:solid var\(--on-ink\)' 'with a tick the ink can carry'
+rule_sets '\.episode \.content \.ep-guess input\[type="range"\]' 'accent-color:var\(--ep-ink\)' 'a slider takes the ink'
+rule_sets '\.episode \.content \.ep-guess__bar' 'background:var\(--ep-fill-1\)' 'a guess track is the first fill'
+rule_sets '\.episode \.content \.ep-guess__bar>span' 'background:var\(--ep-bar\)' 'the reader bar is its own token'
+rule_sets '\.episode \.content \.ep-guess__row--real \.ep-guess__bar>span' 'background:var\(--ep-ink\)' 'and the answer is the ink'
+rule_sets '\.episode \.content \.ep-choice__option' 'color:var\(--ink\)' 'a choice is body text'
+rule_sets '\.episode \.content \.ep-choice__option' 'border:1px solid var\(--rule\)' 'in a box'
+rule_sets '\.episode \.content \.ep-choice__option\.is-correct' 'background:var\(--ep-ink\)' 'the right one is filled with the ink'
+rule_sets '\.episode \.content \.ep-choice__option\.is-correct' 'color:var\(--on-ink\)' 'and its text is the colour for that'
+rule_sets '\.episode \.content \.ep-choice__option\.is-wrong' 'color:var\(--muted\)' 'the wrong one steps back'
+for n in 1 2 3 4; do
+    rule_sets "\.episode \.content \.ep-model__seg--$n" "background:var\(--ep-fill-$n\)" "stage band $n is fill $n"
+done
+rule_sets '\.episode \.content \.ep-model__seg' 'color:var\(--heading\)' 'the text on a band is a heading colour'
+rule_sets '\.episode \.content \.ep-model__seg--accent' 'background:var\(--ep-ink\)' 'the highlighted band is the ink'
+rule_sets '\.episode \.content \.ep-model__seg--accent' 'color:var\(--on-ink\)' 'with the text that goes on it'
+rule_sets '\.episode \.content \.ep-flow__steps::before' 'background:var\(--rule\)' 'the rail is the rule colour'
+rule_sets '\.episode \.content \.ep-flow__step::before' 'background:var\(--paper\)' 'a station is the page until lit'
+rule_sets '\.episode \.content \.ep-flow__branch' 'border:1px solid var\(--rule\)' 'a branch is boxed'
+rule_sets '\.episode \.content \.ep-flow \.ep-flow__branch\.is-taken' 'border-color:var\(--ep-ink\)' 'the one taken in the ink'
+absent_from "$CSS" 'ep-station-dark' 'a lit station has one animation, whose colours are tokens'
+rule_sets '\.episode \.ep-timeline__tip' 'background:var\(--ep-tip\)' 'the preview is its own token'
+rule_sets '\.episode \.ep-timeline__tip' 'color:var\(--heading\)' 'with heading-coloured text'
+rule_sets '\.episode \.ep-timeline__tip-clock' 'color:var\(--ep-ink\)' 'and an ink clock'
+rule_sets '\.episode \.ep-timeline__moment\.is-hot' 'background:var\(--ep-ink\)' 'a hovered quote dot is the ink'
+rule_sets '\.episode \.content \.ep-colophon' 'border-top:2px solid var\(--heading\)' 'the colophon opens on a heavy rule'
+rule_sets '\.episode \.content \.ep-colophon' 'color:var\(--muted\)' 'in muted text'
+rule_sets '\.episode \.content \.ep-colophon__title' 'color:var\(--heading\)' 'under a heading-coloured title'
+
+echo 'Colour tokens: no dark copies'
+# No [theme=dark] rule restates a colour of ours. A rule that did would be a second place
+# to change one, and the one place that drifts. What is allowed under [theme=dark] is a
+# token block, and the rules that fight the theme's own dark rules at a specificity a
+# light rule cannot reach (a quotation's bar, a rule across the column, bold text), none
+# of which has a value of its own. The theme's rules are its own and are not asserted.
+COLOUR_DECL='(color|background|border|outline|filter|shadow|animation)'
+dark_copy() { # dark_copy <description> <selector-regex>
+    rule_lacks "\\[theme=dark\\] .*($2).*" "$COLOUR_DECL" "no dark copy of $1"
+}
+dark_copy 'the footer, the logo and the home intro' '\.footer-social|\.logo-mark|\.home-intro'
+dark_copy 'the Greeting, a title or a heading' '\.home-subtitle|\.single-title|\.single \.content h[1-6]'
+dark_copy 'the home plate' '\.home-plate'
+dark_copy 'the headshot line' '\.portrait'
+dark_copy 'the archive' '\.archive-item__|\.archive-intro|\.group-title'
+# (The featured Entry's edge is the one dark rule here, kept as it renders and counted below.)
+dark_copy 'a reading-list Entry or its nav' '\.book-entry__|\.book-entry:|:has\(\.book-entry\)'
+dark_copy 'a speaking Entry' '\.talk-entry|:has\(\.talk-entry\)'
+dark_copy 'the focus ring or the active nav item' ':focus-visible|\.menu-item\.active'
+dark_copy 'an Episode page' '\.episode|\.ep-'
+# The theme paints the selection's background itself, under [theme=dark]; what is ours is
+# the text on it.
+rule_lacks '\[theme=dark\] ::selection' '(^|;)color:' 'no dark copy of the selected text colour'
+
+echo 'Colour tokens: switched once'
+# `[theme=auto]` was the third copy of every rule, and it never matched: nothing sets that
+# attribute. The theme sets `dark` on <body> from the visitor's choice or, by default, from
+# the OS, in baseof.html, once, before first paint. So the stylesheet never waits on the OS
+# itself, and there is no media query to write a rule under.
+absent_from "$CSS" 'theme=auto' 'no rule waits on [theme=auto], which nothing sets'
+absent_from "$CSS" 'prefers-color-scheme' 'and the stylesheet never reads the OS preference: the page does, once'
+# What is left under [theme=dark] reads a token and nothing else: the two rules the theme
+# draws again in dark at a specificity a light rule cannot reach (a quotation, and the
+# rule across the column), and the featured Entry's edge, which is more specific than the
+# Entry row's and so shows in dark only (see _reading-list.scss). A fourth would be a
+# place to restate a value, so adding one is a decision, and this is where it is counted.
+if [ "$(rules_with '\[theme=dark\] .*' 'var\(--')" -eq 3 ]; then
+    ok 'only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders'
+else
+    bad "only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders (got $(rules_with '\[theme=dark\] .*' 'var\(--'))"
+fi
+# Everything after the token blocks is ours. None of it spells a hex colour: a component
+# takes a token, so the value exists in one place and is read from there. (What it may
+# spell is a translucent black for a shadow, and the ruler's ink at an alpha, which is the
+# same in both modes and so has no mode to switch.)
+hex_in_ours=$(css_rules | awk '/^\[theme=dark\]\{--paper/ { f = 1; next } f' | grep -cE '#[0-9a-fA-F]{3,8}\b' || true)
+if [ "$hex_in_ours" -eq 0 ]; then
+    ok 'no rule of ours spells a hex colour: each is a token'
+else
+    bad "no rule of ours spells a hex colour: each is a token ($hex_in_ours rules do)"
+fi
+# And a value only this site uses is written once. These were each written in the light
+# stylesheet and again for dark, and again for the dead [theme=auto] copy, up to 36 times.
+for value in '#9db0e0' '#bb8fce' '#5eead4' '#8a8c93' '#34353a' '#1c1d20' '#cfc5ae' '#4b4d52' '#3a3b40' '#44464b' '#4e5056' '#575a60' \
+             '#57534e' '#9b59b6' '#0f766e' '#f7f2e7' '#fffdf7' '#78716c' '#efe7d4' '#cfcac4' '#c4beb7'; do
+    occurs "$CSS" "$value" 1 "$value is written once"
 done
 
 
@@ -765,8 +1096,7 @@ contains "$LOGO" '#c2680a' 'the standalone favicon copy carries a literal colour
 # The header mark is inlined SVG so it can take the accent per theme -- no single
 # colour clears 3:1 on both headers (#f59e0b measures 2.02:1 on the light one).
 contains "$EN_HOME" 'logo-mark' 'the header mark is inlined, not an <img>'
-matches "$CSS" '\.header-title \.logo-mark\{[^}]*color:#b45309' 'the mark takes the light accent'
-matches "$CSS" '\[theme=dark\] \.header-title \.logo-mark\{color:#f59e0b\}' 'and the dark accent'
+rule_sets '\.header-title \.logo-mark' 'color:var\(--accent\)' 'the mark takes the Accent, whichever mode it is in'
 # The mark was a 247KB traced bitmap masquerading as a vector. A hand-authored
 # version of it is well under 2KB, so this ceiling fails loudly if a traced
 # export ever replaces it again.
