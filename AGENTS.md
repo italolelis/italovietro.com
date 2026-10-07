@@ -44,7 +44,7 @@ Hugo must be the **extended** build, at the version in `.hugo-version` (CI and V
 
 This repo documents its own decisions. Before anything non-trivial:
 
-- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Post-build assertion.
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Moment, Plate, Post-build assertion.
 - **`docs/adr/`** — five accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
@@ -58,7 +58,7 @@ This repo documents its own decisions. Before anything non-trivial:
 
 ## The build gate
 
-`scripts/check-build.sh` runs ~593 lines of assertions against the generated `public/` directory and gates both PR checks and production deploys. If it fails, nothing deploys.
+`scripts/check-build.sh` runs ~670 lines of assertions against the generated `public/` directory and gates both PR checks and production deploys. If it fails, nothing deploys.
 
 It asserts on **compiled output** — what a browser actually receives — not on how the source is authored, so it survives file reorganisation and only fails when something a visitor experiences has regressed. A *Post-build assertion* is deliberately not called a test; see `CONTEXT.md`.
 
@@ -66,7 +66,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
 
 Two documented footguns:
 
@@ -91,6 +91,8 @@ categories: ["Engineering"]
 ```
 
 Non-post pages also carry `slug`, and `aliases` where a path changed. Every page needs its own `description`. Posts published elsewhere carry `host:` — see *Elsewhere* in `CONTEXT.md`.
+
+**What goes in Writing (`content/posts/`) comes from Italo.** A podcast appearance can get an **episode page** in `content/episodes/` instead: chapter by chapter, a summary, the quotes and the lesson, all from front matter. Claude writes those, in the third person, under a disclaimer that says so; the quotes are verbatim from the recording, lightly trimmed with brackets and ellipses, and linked to their second. Never write in Italo's first person anywhere he did not write it. Quotes are transcribed, not remembered; a claim the recording does not support does not go in. Contract in `docs/agents/architecture.md`.
 
 **The speaking page is a list, not a set of write-ups.** Entries are title + venue + date + links, with no description. Voice lives once at the top of the page, next to the invitation. Don't re-add a paragraph per entry.
 

@@ -1,0 +1,108 @@
+{{- /*
+    A podcast appearance on its own page: the episode chapter by chapter, with a
+    short summary, the quotes that carry it and the lesson pulled out. The pages
+    live in content/episodes/ and are reached from their entries on the speaking
+    page.
+
+    Claude writes them, from a transcript of the recording, and the page says so
+    before anything else: a disclaimer under the masthead, the author in the
+    metadata, the summaries in the third person. The quotes are the only words on
+    the page that are Italo's. That is also why they are not in content/posts/ --
+    the writing section is only what he writes -- and why they are not in the
+    feeds or the tag pages.
+
+    Everything below the masthead comes from front matter (`chapters[].summary`,
+    `.moments`, `.lesson`, `.plate`); the Markdown body is only the short intro. A
+    full long-read format was built for the first episode and dropped in favour
+    of this: ten times the words to maintain in two languages, for a page most
+    readers skim for the lessons.
+
+    On top of the chapters: a masthead, the chapter list, a colophon, and the
+    timeline pinned under the header, which marks every quote on the page.
+
+    A chapter can also ask the reader something before it answers it (`ask`,
+    partials/episode/ask.html) and carry an explanatory figure after its summary
+    (`figures`, partials/episode/figure.html). Both are declared in front matter,
+    so the interactive parts of a new episode are data, not code.
+*/ -}}
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    {{- $ep := .Params.episode -}}
+    {{- $duration := $ep.duration | int -}}
+    {{- $chapters := .Params.chapters -}}
+
+    {{- $moments := slice -}}
+    {{- range $chapters }}{{ range .moments -}}
+        {{- $t := partial "episode/seconds.html" .t -}}
+        {{- $moments = $moments | append (dict "t" $t "text" (.text | plainify | htmlUnescape | truncate 140)) -}}
+    {{- end }}{{ end -}}
+
+    <article class="page single episode">
+        {{- partial "episode/timeline.html" (dict "page" . "chapters" $chapters "duration" $duration "moments" $moments) -}}
+
+        <div class="ep-masthead">
+            <p class="ep-kicker">
+                <span class="ep-kicker__show">{{ $ep.show }}</span>
+                <span class="ep-kicker__sep" aria-hidden="true">·</span>
+                <span>{{ $ep.number }}</span>
+            </p>
+            <h1 class="single-title ep-title">{{ .Title }}</h1>
+            {{- with .Params.subtitle }}
+            <p class="ep-dek">{{ . | markdownify }}</p>
+            {{- end }}
+            <p class="ep-meta">
+                <span>{{ T "episode.basedOn" (dict "Title" $ep.title "Hosts" (delimit $ep.hosts (T "episode.and"))) | safeHTML }}</span>
+                <span>
+                    {{- with $ep.released }}{{ T "episode.released" (time.Format ":date_long" (time.AsTime .)) }}<span class="ep-meta__sep" aria-hidden="true">·</span>{{ end -}}
+                    {{ T "episode.length" (math.Round (div $duration 60.0) | int) }}<span class="ep-meta__sep" aria-hidden="true">·</span>
+                    {{- T "episode.writtenUp" (.Date | time.Format ":date_long") -}}
+                </span>
+            </p>
+            <p class="ep-disclaimer">{{ T "episode.disclaimer" (dict "Writing" ("posts/" | relLangURL)) | markdownify }}</p>
+        </div>
+
+        {{- with $ep.hero }}{{ with $.Resources.GetMatch .src }}
+        {{- partial "plate.html" (dict "img" . "alt" $ep.hero.alt "class" "ep-plate--hero" "eager" true) }}
+        {{- end }}{{ end }}
+
+        <div class="content" id="content">
+            {{- .Content -}}
+            {{- partial "episode/chapters.html" (dict "chapters" $chapters "duration" $duration) -}}
+            {{- range $chapters }}
+            <section class="ep-hl">
+                {{- partial "episode/chapter-heading.html" (dict "page" $ "c" .) -}}
+                {{- with .ask }}{{ partial "episode/ask.html" (dict "page" $ "ask" .) }}{{ end -}}
+                {{- with .summary }}<div class="ep-hl__summary">{{ $.RenderString (dict "display" "block") . }}</div>{{ end -}}
+                {{- with .plate }}{{ $p := . }}{{ with $.Resources.GetMatch $p.src }}
+                    {{- partial "plate.html" (dict "img" . "alt" $p.alt "class" (cond (eq $p.size "spot") "ep-plate--spot" "") "caption" ($p.caption | default "" | $.RenderString)) }}
+                {{- end }}{{ end -}}
+                {{- range .figures }}{{ partial "episode/figure.html" (dict "page" $ "f" .) }}{{ end -}}
+                {{- range .moments }}
+                    {{- partial "episode/moment.html" (dict "page" $ "t" .t "text" .text "size" .size) }}
+                {{- end -}}
+                {{- with .lesson }}
+                <p class="ep-hl__lesson"><span class="ep-hl__lesson-kicker">{{ T "episode.lesson" }}</span> {{ $.RenderString . }}</p>
+                {{- end }}
+            </section>
+            {{- end }}
+
+            <aside class="ep-colophon">
+                <h2 class="ep-colophon__title">{{ T "episode.listenHeading" }}</h2>
+                <p class="ep-colophon__listen">
+                    {{- $links := slice -}}
+                    {{- range $ep.listen }}{{ $links = $links | append (printf `<a href="%s">%s</a>` .url .label) }}{{ end -}}
+                    {{- delimit $links " · " | safeHTML -}}
+                </p>
+                <p class="ep-colophon__note">{{ T "episode.colophon" | safeHTML }}</p>
+            </aside>
+        </div>
+
+        {{- partial "single/footer.html" . -}}
+    </article>
+
+    {{- with resources.Get "js/episode.js" }}
+    {{- $js := . | js.Build (dict "minify" true "target" "es2018") | fingerprint "sha256" }}
+    <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+    {{- end }}
+{{- end -}}

@@ -1,0 +1,10 @@
+{{- /* "mm:ss" (or "h:mm:ss") to seconds.
+
+       Through float, not int: `int "08"` parses with base 0, reads the leading
+       zero as octal, and fails on 08 and 09 -- which is every timestamp from
+       eight to ten minutes past any minute. */ -}}
+{{- $total := 0 -}}
+{{- range split (string .) ":" -}}
+    {{- $total = add (mul $total 60) (int (float .)) -}}
+{{- end -}}
+{{- return $total -}}

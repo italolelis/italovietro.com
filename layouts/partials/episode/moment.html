@@ -1,0 +1,25 @@
+{{- /* A quote, linked to the second it was said -- two seconds early, so a
+       listener lands at the start of the sentence rather than mid-word. A link
+       rather than an embedded player: a player is a third-party host that loads
+       on every visit whether or not anyone presses play.
+
+       Where the link goes is the episode's `at`: a URL with a %d for the second,
+       because each platform spells a timestamp differently -- YouTube `&t=90s`,
+       Spotify `?t=90`.
+
+       Params: page, t ("mm:ss"), text (Markdown), size ("pull" or empty),
+       who (optional; defaults to the site's author, Italo). */ -}}
+{{- $t := partial "episode/seconds.html" .t -}}
+{{- $clock := partial "episode/clock.html" $t -}}
+{{- /* The speaker, not the page's author: Claude writes the page, the quotes
+       are Italo's. */ -}}
+{{- $who := .who | default site.Params.author.name -}}
+{{- $ep := .page.Params.episode -}}
+{{- $href := printf $ep.at (math.Max 0 (sub $t 2) | int) -}}
+<figure class="ep-moment{{ with .size }} ep-moment--{{ . }}{{ end }}" id="m-{{ $t }}" data-t="{{ $t }}">
+    <blockquote>{{ .page.RenderString (dict "display" "block") (trim .text "\n ") }}</blockquote>
+    <figcaption>
+        <span class="ep-moment__who">{{ $who }}</span>
+        <a class="ep-moment__play" href="{{ $href }}" title="{{ T "episode.playFrom" (dict "Clock" $clock "Where" $ep.at_label) }}"><span aria-hidden="true">▶</span> {{ $clock }}</a>
+    </figcaption>
+</figure>

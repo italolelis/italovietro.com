@@ -42,10 +42,10 @@ Mostly about what platforms cost, what reliability takes, and the parts of engin
 
 ## Podcast Appearances
 
-{{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" >}}
+{{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" highlights_url="/episodes/shipping-more-not-faster/" >}}
 {{< /talk >}}
 
-{{< talk title="Building an Elite Engineering Culture" event="The Ventellect Podcast" date="2023" type="podcast" video_url="https://open.spotify.com/episode/2QwC5SWr7UoPCdLXCFzfUQ?si=383ff6c465c645e8" >}}
+{{< talk title="Building an Elite Engineering Culture" event="The Ventellect Podcast" date="2023" type="podcast" video_url="https://open.spotify.com/episode/2QwC5SWr7UoPCdLXCFzfUQ?si=383ff6c465c645e8" highlights_url="/episodes/show-people-their-impact/" >}}
 {{< /talk >}}
 
 ## The Critical Channel

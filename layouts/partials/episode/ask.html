@@ -1,0 +1,86 @@
+{{- /* A question put to the reader before the chapter answers it -- the New York
+       Times habit of asking for a guess first, because an answer you committed
+       against lands in a way a sentence does not.
+
+       Declared per chapter in front matter as `ask`, and rendered straight after
+       the chapter heading, before the summary that would give it away:
+
+         type: guess   -- a slider. scale (log|linear), min, max, start, ticks,
+                          unit ("%s× faster"), zero (label for the minimum, if it
+                          means "none"), answer, you/real (row labels, optional)
+         type: choice  -- buttons. options (list), answer (index from 0)
+
+       Both take question, verdict, t ("mm:ss", where the recording answers it)
+       and an optional kicker.
+
+       Without JavaScript the figure renders answered: the real value or the right
+       option marked, and the verdict shown. The controls stay `hidden` until the
+       script takes over, so nothing is a button that does nothing.
+
+       Params: page, ask. */ -}}
+{{- $a := .ask -}}
+{{- $ep := .page.Params.episode -}}
+{{- $t := partial "episode/seconds.html" $a.t -}}
+{{- $clock := partial "episode/clock.html" $t -}}
+{{- $href := printf $ep.at (math.Max 0 (sub $t 2) | int) -}}
+{{- $play := printf `<a class="ep-ask__play" href="%s" title="%s"><span aria-hidden="true">▶</span> %s</a>` $href (T "episode.playFrom" (dict "Clock" $clock "Where" $ep.at_label)) $clock -}}
+{{- $kicker := $a.kicker | default (T "episode.askKicker") -}}
+
+{{- if eq $a.type "guess" -}}
+    {{- $log := ne $a.scale "linear" -}}
+    {{- $min := float $a.min -}}
+    {{- $max := float $a.max -}}
+    {{- /* Position on the track, 0-100: the same arithmetic the script uses. */ -}}
+    {{- $pos := 0.0 -}}
+    {{- if $log }}{{ $pos = mul 100 (div (sub (math.Log (float $a.answer)) (math.Log $min)) (sub (math.Log $max) (math.Log $min))) }}{{ else }}{{ $pos = mul 100 (div (sub (float $a.answer) $min) (sub $max $min)) }}{{ end -}}
+    {{- $answerLabel := cond (and $a.zero (eq (float $a.answer) $min)) $a.zero (printf $a.unit (string $a.answer)) -}}
+<figure class="ep-viz ep-ask ep-guess" data-ask="guess" data-scale="{{ cond $log "log" "linear" }}"
+        data-min="{{ $a.min }}" data-max="{{ $a.max }}" data-start="{{ $a.start | default $a.min }}"
+        data-unit="{{ $a.unit }}" data-zero="{{ $a.zero }}">
+    <figcaption class="ep-viz__head">
+        <span class="ep-viz__kicker">{{ $kicker }}</span>
+        <span class="ep-viz__title">{{ $a.question }}</span>
+    </figcaption>
+    <div class="ep-ask__controls" hidden>
+        <input type="range" min="0" max="1000" step="1" aria-label="{{ $a.question }}">
+        <div class="ep-guess__scale" aria-hidden="true">
+            {{- range $a.ticks -}}
+            {{- $p := 0.0 -}}
+            {{- if $log }}{{ $p = mul 100 (div (sub (math.Log (float .)) (math.Log $min)) (sub (math.Log $max) (math.Log $min))) }}{{ else }}{{ $p = mul 100 (div (sub (float .) $min) (sub $max $min)) }}{{ end }}
+            <span style="left: {{ printf "%.2f" $p }}%">{{ cond (and $a.zero (eq (float .) $min)) $a.zero (printf $a.unit (string .)) }}</span>
+            {{- end }}
+        </div>
+        <p class="ep-guess__readout"><output></output></p>
+        <button type="button" class="ep-viz__button" data-reveal>{{ T "episode.reveal" }}</button>
+    </div>
+    <div class="ep-ask__answer" data-answer aria-live="polite">
+        <div class="ep-guess__row ep-guess__row--you" hidden>
+            <span class="ep-guess__label">{{ $a.you | default (T "episode.guessYou") }}</span>
+            <span class="ep-guess__bar"><span data-you-bar></span></span>
+            <span class="ep-guess__val" data-you-val></span>
+        </div>
+        <div class="ep-guess__row ep-guess__row--real">
+            <span class="ep-guess__label">{{ $a.real | default (T "episode.guessReal") }}</span>
+            <span class="ep-guess__bar"><span style="width: {{ printf "%.2f" $pos }}%"></span></span>
+            <span class="ep-guess__val">{{ $answerLabel }}</span>
+        </div>
+        <p class="ep-ask__verdict">{{ $a.verdict | markdownify }} {{ $play | safeHTML }}</p>
+    </div>
+</figure>
+
+{{- else if eq $a.type "choice" -}}
+<figure class="ep-viz ep-ask ep-choice" data-ask="choice" data-answer-index="{{ $a.answer }}">
+    <figcaption class="ep-viz__head">
+        <span class="ep-viz__kicker">{{ $kicker }}</span>
+        <span class="ep-viz__title">{{ $a.question }}</span>
+    </figcaption>
+    <ol class="ep-choice__options" role="list">
+        {{- range $i, $o := $a.options }}
+        <li><button type="button" class="ep-choice__option{{ if eq $i (int $a.answer) }} is-correct{{ end }}" data-index="{{ $i }}" disabled>{{ $o }}</button></li>
+        {{- end }}
+    </ol>
+    <div class="ep-ask__answer" data-answer aria-live="polite">
+        <p class="ep-ask__verdict">{{ $a.verdict | markdownify }} {{ $play | safeHTML }}</p>
+    </div>
+</figure>
+{{- end -}}
