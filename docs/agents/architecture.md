@@ -30,7 +30,7 @@ italovietro.com/
 ├── data/upcoming.yaml           # confirmed future appearances
 ├── i18n/                        # strings for the episode layout, merged over the theme's
 ├── docs/
-│   ├── adr/                     # 5 architecture decision records
+│   ├── adr/                     # 6 architecture decision records
 │   └── agents/                  # agent-facing conventions (incl. this file)
 ├── layouts/                     # theme overrides only
 ├── scripts/
@@ -122,15 +122,17 @@ layouts/
 | File | Scope |
 | --- | --- |
 | `_override.scss` | Theme variable overrides: accent, muted text, entry type accents, code font, motion |
-| `_typography.scss` | Type scale and the 800px measure |
-| `_custom.scss` | General custom rules |
-| `_home.scss` | Home page intro and signpost |
+| `_typography.scss` | **The site's voice** (ADR-0006), imported first. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
+| `_custom.scss` | Logo, footer, the home intro; imports `_typography.scss`, then every page stylesheet below |
+| `_home.scss` | Home page: the Greeting, the signpost, the plate |
 | `_about.scss` | About page + portrait |
-| `_speaking.scss` | Speaking page entries |
-| `_episode.scss` | Episode pages: serif reading face, timeline, chapter list, lessons, plates. Everything scoped under `.episode` |
-| `_reading-list.scss` | Reading list entries |
+| `_speaking.scss` | Speaking page entries; the hairline under its section headings |
+| `_episode.scss` | Episode pages: the timeline, chapter list, quotes, lessons, figures, plates. Everything scoped under `.episode` |
+| `_reading-list.scss` | Reading list entries and its in-page nav. Scoped through `.single .content:has(.book-entry)`, so none of it reaches another page |
 | `_archive.scss` | Post archive |
 | `_interactions.scss` | Shared hover/focus/underline rules, focus rings |
+
+**A page stylesheet styles only its own page**, through markup the page declares: a class on its wrapper, or the Entry (`.book-entry`, `.talk-entry`). A selector that names no page (`.single .content > ul:first-of-type`) matches every page that renders through `.single`; that is how a post's job ladder once rendered as the reading list's nav strip. Rules that are true of every page belong in `_typography.scss`.
 
 Every colour override in `_override.scss` carries its **measured contrast ratio** in a comment, with the threshold it targets (4.5:1 text, 3:1 non-text). Match that when adding one — ADR-0001 and the build gate both depend on it.
 
