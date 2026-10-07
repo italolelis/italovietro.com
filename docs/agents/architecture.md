@@ -117,13 +117,14 @@ layouts/
 
 ## Stylesheets
 
-`assets/css/` — ten partials:
+`assets/css/` — eleven partials:
 
 | File | Scope |
 | --- | --- |
-| `_override.scss` | Theme variable overrides: accent, muted text, entry type accents, code font, motion |
-| `_typography.scss` | **The site's voice** (ADR-0006), imported first. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
-| `_custom.scss` | Logo, footer, the home intro; imports `_typography.scss`, then every page stylesheet below |
+| `_override.scss` | Theme variable overrides, the Sass inputs the theme reads at compile time: accent, muted text, entry type accents, code font, motion |
+| `_tokens.scss` | **The site's colour** (see *Colour is tokens* below), imported first of all. Every colour as a custom property, set on `:root` and overridden once on `[theme=dark]`, with its measured contrast beside it. Components read `var(--ink)` and never say which mode they are in |
+| `_typography.scss` | **The site's voice** (ADR-0006), imported right after the tokens. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
+| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then every page stylesheet below |
 | `_home.scss` | Home page: the Greeting, the signpost, the plate |
 | `_about.scss` | About page + portrait |
 | `_speaking.scss` | Speaking page entries; the hairline under its section headings |
@@ -134,15 +135,34 @@ layouts/
 
 **A page stylesheet styles only its own page**, through markup the page declares: a class on its wrapper, or the Entry (`.book-entry`, `.talk-entry`). A selector that names no page (`.single .content > ul:first-of-type`) matches every page that renders through `.single`; that is how a post's job ladder once rendered as the reading list's nav strip. Rules that are true of every page belong in `_typography.scss`.
 
-Every colour override in `_override.scss` carries its **measured contrast ratio** in a comment, with the threshold it targets (4.5:1 text, 3:1 non-text). Match that when adding one — ADR-0001 and the build gate both depend on it.
+### Colour is tokens
 
-Theme modes need three selectors, all updated together:
+Every colour the site chooses is a custom property in `_tokens.scss`: set on `:root` for light, overridden once on `[theme=dark]` for dark. A rule reads the token and says nothing about the mode:
 
 ```scss
-.thing              { }   // light
-[theme=dark] .thing { }   // dark
-@media (prefers-color-scheme: dark) { [theme=auto] .thing { } }
+.thing { color: var(--muted); border-bottom: 1px solid var(--hairline); }   // both themes
 ```
+
+There is no `[theme=dark] .thing`, and there is never a `[theme=auto]`: nothing sets that attribute. `baseof.html` sets `theme=dark` on `<body>` once, before first paint, from the visitor's saved choice or else their OS (`defaultTheme = "auto"`), and the theme's own script toggles light and dark. Light is the default and has no selector of its own. The stylesheet never reads the OS preference.
+
+| Token | What it is | Token | What it is |
+| --- | --- | --- | --- |
+| `--paper` | the page | `--accent` | **the Accent** (ADR-0001): one token, so its roles are countable with `grep -o 'var(--accent)'` |
+| `--header` | the header's own bar | `--accent-hover` | the Accent, hovered |
+| `--ink` | body text | `--accent-wash` | the tint under a hovered Entry |
+| `--heading` | headlines, brighter than `--ink` in dark | `--selection-ink` | text over a selection |
+| `--muted` | dates, labels, captions | `--entry-podcast`, `--entry-panel` | the two Entry types that are not the Accent |
+| `--hairline` | the faint divider under a heading | `--ep-ink`, `--on-ink` | the Episode ink, and text on a fill of it |
+| `--rule` | a visible rule: a quote's bar, a box | `--ep-fill-1..4`, `--ep-lesson`, `--ep-tip`, `--ep-bar` | Episode figures |
+| `--plate-filter` | how a watercolour plate is dimmed | `--ep-paper`, `--ep-ruler-ink` | the timeline's ruler: paper, and the ink on it, which is the same in both modes |
+
+Adding or changing a colour:
+
+1. **A new colour is a new token** in both blocks of `_tokens.scss`, light and dark, with its **measured contrast** in a comment beside it (4.5:1 for text, 3:1 for anything that is not). Do not write a literal in a component. Not even a one-off: a literal is how a colour ends up written three times.
+2. **Assert it**: a `token` line (its value in each mode) and, if it is text or an icon, a `contrast_of` line in `scripts/check-build.sh`. The gate measures every pair again from the compiled values, in both modes, so editing a value cannot quietly take one under its threshold.
+3. **Do not add a `[theme=dark]` rule** to switch a colour: change the token. The only dark rules besides the token block are the ones that undo something the *theme* draws again under `[theme=dark]` at a specificity a light rule cannot reach (a quotation's box, the rule across the column, bold text). They read tokens, set no value, and the gate counts them; a new one is a decision. (The one other is the featured Entry's edge, which shows in dark only because its rule is more specific than the Entry row's: kept as it renders, and commented where it is.) The gate also fails if any rule of ours spells a hex colour instead of reading a token.
+4. A token that is the same in both modes (`--ep-ruler-ink`) is set on `:root` only; the gate asserts `[theme=dark]` does not set it.
+5. A value the theme's own stylesheet also reads (the accent, the greys, the borders) stays in `_override.scss`, because the theme consumes it at compile time. The token is wired to that variable, so the value is still chosen once.
 
 Mobile breakpoint is 680px, aligned with LoveIt's own.
 
