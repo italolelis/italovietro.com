@@ -106,6 +106,7 @@ layouts/
 │       └── img.html
 ├── shortcodes/
 │   ├── talk.html                 # speaking entries
+│   ├── home-plate.html           # the home page's watercolour, from assets/
 │   ├── upcoming.html             # future appearances from data/upcoming.yaml
 │   ├── book.html                 # reading list entries
 │   ├── portrait.html             # About page headshot + downloads

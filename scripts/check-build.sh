@@ -311,6 +311,16 @@ matches "$CSS" '\[theme=dark\] \.home \.home-profile \.home-subtitle\{color:#e7e
 
 # About is where the biography went, and it is the only page that carries the
 # photograph. The two sizes exist for event organisers, who ask by email today.
+# The desk: a watercolour of the "Beyond the Code" paragraph, closing the page.
+# Last and lazy, so the greeting stays the first thing painted; a still life, so
+# the no-portrait decision above still holds.
+echo 'Home page plate'
+contains "$EN_HOME" 'class=home-plate' 'the en home page carries its plate'
+contains "$PT_HOME" 'class=home-plate' 'and so does the pt-br home page'
+in_order "$EN_HOME" 'Beyond the Code.*class=home-plate' 'the plate closes the page, after the paragraph it illustrates'
+in_order "$PT_HOME" 'Além do Código.*class=home-plate' 'in pt-br too'
+matches "$EN_HOME" 'class=home-plate><img [^>]*loading=lazy' 'the plate is lazy-loaded, behind the text'
+
 echo 'About page'
 exists "$EN_ABOUT" 'en About page is built'
 exists "$PT_ABOUT" 'pt-br About page is built at its localized path'
