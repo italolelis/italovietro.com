@@ -18,37 +18,22 @@
 // in dark -- both well under AA -- which is why the old tier labels and author
 // names looked washed out rather than merely subtle.
 
-// --- Column --------------------------------------------------------------
-.single .content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-// The theme right-aligns the title on "special" pages via
-// `.special .single-title`, which reads as a mistake on a content page. Matching
-// that selector's specificity is required -- a bare `.single-title` rule loses
-// even though it is declared later. Blog posts are unaffected: they are not
-// .special, so their titles were never right-aligned.
-.special .single-title {
-    text-align: left;
-}
+// The seam. Everything on this page that is not an Entry is scoped through the
+// Entry, because `.book-entry` is the one thing only this page renders -- see the
+// note at the nav, below, for what went wrong when a rule was not.
+$reading-list: ".single .content:has(.book-entry)";
 
 // --- Section headings ----------------------------------------------------
-.single .content h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    text-wrap: balance;
+//
+// The heading itself -- face, size, weight, margins, colour -- is the site's, in
+// _typography.scss. What belongs here is the rule under it: on this page an h2 heads
+// a list of Entries, and the hairline is what makes the list read as a section.
+// Everywhere else an h2 is an article's subhead and carries no rule.
+#{$reading-list} h2 {
     margin-top: 4rem;
     margin-bottom: 0.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid $global-border-color;
-    color: $global-font-color;
-}
-
-// The theme's JS injects a "#" before each h2, inheriting the link colour. It
-// reads as markdown that failed to render, and it was one of amber's four jobs.
-.single .content > h2 > .header-mark {
-    display: none;
 }
 
 // The line under each section heading.
@@ -61,39 +46,37 @@
 //
 // If :has() is unavailable the rule simply does not apply and these lines render
 // as ordinary paragraphs, which is a safe way to fail.
-.single .content:has(.book-entry) h2 + p {
+//
+// Sans: it labels the list under it, it is not part of the reading.
+#{$reading-list} h2 + p {
+    @include sans;
     font-size: 0.9375rem;
     color: $muted-text-color;
     margin: 0 0 2rem;
 }
 
-// --- Intro ---------------------------------------------------------------
-//
-// Also scoped. It did not reach the home page, whose paragraphs sit inside a
-// .home-content wrapper rather than directly under .content, but it did apply to
-// the speaking page and to every blog post.
-.single .content:has(.book-entry) > p:first-of-type {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-}
-
-.single .content > hr {
-    margin: 2.5rem 0;
-    border: none;
-    border-top: 1px solid $global-border-color;
-}
+// The intro paragraph used to be sized up here (1.1rem against the sans page's 1rem)
+// to stand apart from what followed. It is running text now, set at the site's body
+// size with the rest (_typography.scss), and needs no rule of its own.
 
 // --- Section nav ---------------------------------------------------------
 //
 // Quiet by default. Four amber links in a row was a stripe of colour competing
 // with the entry titles for no reason -- these are wayfinding, not destinations.
-.single .content > ul {
-    padding-left: 0;
-    list-style: none;
-}
-
-.single .content > ul:first-of-type {
+//
+// Scoped to this page, through the Entry. It was `.single .content >
+// ul:first-of-type`, which names no page: it matched the first top-level list on
+// every page that renders through .single, so the five-step job ladder in "Do job
+// titles matter?" rendered as one muted, dotted, inline strip, and a `> ul` reset
+// beside it took the bullets off every other top-level list on the site. A page's
+// rules reach only that page, through markup the page itself declares, and
+// `.book-entry` is the one thing only this page renders. It is the same `:has()`
+// guard the rules above carry; where it is unsupported the nav falls back to an
+// ordinary list, which is a safe way to fail.
+//
+// Sans, because it is navigation: the column around it is serif.
+#{$reading-list} > ul:first-of-type {
+    @include sans;
     display: flex;
     flex-wrap: wrap;
     list-style: none;
@@ -101,18 +84,18 @@
     margin: 0 0 3rem 0;
 }
 
-.single .content > ul:first-of-type li {
+#{$reading-list} > ul:first-of-type li {
     margin: 0;
     padding: 0;
 }
 
-.single .content > ul:first-of-type li:not(:first-child)::before {
+#{$reading-list} > ul:first-of-type li:not(:first-child)::before {
     content: "\00B7";
     color: $muted-text-color;
     padding: 0 6px;
 }
 
-.single .content > ul:first-of-type li a {
+#{$reading-list} > ul:first-of-type li a {
     font-size: 0.875rem;
     color: $muted-text-color;
     text-decoration: none;
@@ -123,7 +106,7 @@
     transition: color $transition-base;
 }
 
-.single .content > ul:first-of-type li a:hover {
+#{$reading-list} > ul:first-of-type li a:hover {
     color: $single-link-color;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -159,6 +142,7 @@
 // Title and author share a line, which is where the density comes from. Long
 // author lists wrap naturally rather than being pushed out of the row.
 .single .content .book-entry {
+    @include sans;
     margin-bottom: 1.75rem;
 }
 
@@ -225,26 +209,25 @@
 
 // --- Dark ----------------------------------------------------------------
 @mixin reading-list-dark {
-    // Colour is not set here any more. Headings in dark take $heading-color-dark
-    // from _typography.scss, which is imported last so that one file decides it
-    // for every page rather than each component restating it.
-    .single .content h2 {
+    // Colour is not set here. Headings in dark take $heading-color-dark from
+    // _typography.scss, so that one file decides it for every page rather than each
+    // component restating it.
+    #{$reading-list} h2 {
         border-bottom-color: $global-border-color-dark;
     }
 
-    .single .content h2 + p,
-    .single .content > ul:first-of-type li:not(:first-child)::before,
-    .single .content > ul:first-of-type li a,
+    // The first three carry the `:has()` guard their light copies have. The dark
+    // `h2 + p` lost it once and styled that pair on every page in dark mode; it
+    // went unseen only because the muted and body greys are the same value there.
+    #{$reading-list} h2 + p,
+    #{$reading-list} > ul:first-of-type li:not(:first-child)::before,
+    #{$reading-list} > ul:first-of-type li a,
     .single .content .book-entry__author {
         color: $muted-text-color-dark;
     }
 
-    .single .content > ul:first-of-type li a:hover {
+    #{$reading-list} > ul:first-of-type li a:hover {
         color: $single-link-color-dark;
-    }
-
-    .single .content > hr {
-        border-top-color: $global-border-color-dark;
     }
 
     .single .content .book-entry__title a {
@@ -276,21 +259,20 @@
 
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    .single .content h2 {
-        font-size: 1.5rem;
+    #{$reading-list} h2 {
         margin-top: 3rem;
     }
 
-    .single .content > ul:first-of-type {
+    #{$reading-list} > ul:first-of-type {
         flex-direction: column;
         gap: 0;
     }
 
-    .single .content > ul:first-of-type li:not(:first-child)::before {
+    #{$reading-list} > ul:first-of-type li:not(:first-child)::before {
         display: none;
     }
 
-    .single .content > ul:first-of-type li a {
+    #{$reading-list} > ul:first-of-type li a {
         display: block;
         padding: 4px 0;
         text-align: left;

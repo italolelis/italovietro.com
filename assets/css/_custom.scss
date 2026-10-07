@@ -3,6 +3,10 @@
 // 自定义样式
 // ==============================
 /* assets/css/custom.css */
+
+// The type module first: it owns the voice and the Measure, and every stylesheet
+// below reads from it. See the note at the top of _typography.scss.
+@import "typography";
 // Was margin-top: 13rem. That existed to compensate for the theme pushing the
 // profile block down by translateY(16vh) -- two hacks cancelling each other, with
 // the result depending on viewport height. The transform is reset in _home.scss,
@@ -73,22 +77,6 @@
     .header-title .logo-mark svg {
         height: 2em;
     }
-}
-
-// Page titles share the measure with the text under them.
-//
-// The theme puts .single-title outside .content, so it took the full width of
-// .page while the prose sat in the 800px column centred inside it -- the title
-// started roughly 140px to its left on a wide screen. Exactly the defect
-// docs/adr/0004 records for the home page, on every other page, found by
-// comparing the writing archive (which constrains its own wrapper, so it was
-// right) against the reading and speaking pages (which did not).
-//
-// Same numbers as .content rather than a new value: one measure, one left edge.
-.single .single-title {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 // The footer sizes to its contents.
@@ -212,5 +200,3 @@ footer {
 @import "speaking";
 @import "episode";
 @import "interactions";
-// Last: its heading rules win on cascade order. See the note in the file.
-@import "typography";

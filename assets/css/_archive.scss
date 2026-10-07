@@ -8,16 +8,11 @@
 // and no descriptions at all -- which is why it had no presence next to the other
 // two.
 
+// The Measure, taken explicitly: the archive does not render through `.single`, so
+// it gets none of the column rules in _typography.scss for free. Its title is a
+// `.single-title` and takes the headline from there too.
 .archive {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-// The theme right-aligns the archive title through `.archive .single-title`.
-// Matching that specificity is required; a bare `.single-title` rule loses.
-.archive .single-title {
-    text-align: left;
-    text-wrap: balance;
+    @include measure;
 }
 
 .archive-intro p {
@@ -44,6 +39,7 @@
 // Block stacking is what this markup needs, and the specificity has to match the
 // theme's two-class selector.
 .archive .archive-item {
+    @include sans;
     display: block;
     margin: 0 0 1rem;
 }

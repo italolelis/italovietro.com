@@ -45,12 +45,13 @@ Hugo must be the **extended** build, at the version in `.hugo-version` (CI and V
 This repo documents its own decisions. Before anything non-trivial:
 
 - **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Moment, Plate, Post-build assertion.
-- **`docs/adr/`** — five accepted decisions. Read the ones touching your area:
+- **`docs/adr/`** — six accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
   - `0003-logo-redrawn-as-vector.md`
   - `0004-one-800px-measure.md` — one column width, site-wide
   - `0005-the-site-serves-inbound.md` — **read this before any content or layout work.** It decides what the site is for, and therefore what wins: contact is first-class, sharing is part of the product, **what is next outranks what happened**, and every claim about currency must be true because the audience is checking.
+  - `0006-serif-to-read-sans-to-navigate.md` — **read this before touching type.** Serif for headlines, the dek and running text; sans for the header, footer, nav, kickers, meta lines, Entry lists, tables and captions. One module, `_typography.scss`, owns the stacks, the scale and the Measure, and no page stylesheet sets a `font-family` of its own.
 - **`docs/agents/architecture.md`** — directory map, content and routing map, stylesheets, shortcode contracts, deployment, analytics. Split out of this file to keep it small; read it when you need the layout of things.
 - **Source comments** — `config.toml`, `scripts/check-build.sh` and the layout overrides carry long comments explaining why each non-obvious choice was made, including rejected alternatives. They are the most reliable source in the repo. Read them before "simplifying" anything.
 
@@ -66,7 +67,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script). There is no `nowhere_re`.
 
 Two documented footguns:
 

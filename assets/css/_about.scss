@@ -36,6 +36,7 @@
 // So the selectors below are qualified to outrank the theme's rather than left to
 // win on ordering, which only ever worked in one of the two themes.
 .portrait__sizes {
+    @include sans;
     margin-top: 0.625rem;
     font-size: 0.8125rem;
     color: $muted-text-color;

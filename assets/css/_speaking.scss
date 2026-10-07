@@ -34,6 +34,7 @@
 // someone deciding whether to book him is actually doing: scanning for recency and
 // venue, not reading.
 .talk-entry {
+    @include sans;
     margin-bottom: 1rem;
 }
 
@@ -97,6 +98,29 @@
 // .talk-entry__description is gone with the descriptions themselves. The
 // shortcode still supports inner content, so a single entry can carry a note when
 // there is genuinely something to add -- it just is not the default any more.
+
+// --- Section headings ----------------------------------------------------
+//
+// The heading is the site's (_typography.scss). The rule under it is this page's: an
+// h2 here heads a list of Entries, and the hairline is what makes the list read as a
+// section. The seam is the Entry, as on the reading list -- an h2 in an article has no
+// rule, and a page's rules reach only that page.
+.single .content:has(.talk-entry) h2 {
+    margin-top: 4rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $global-border-color;
+}
+
+[theme=dark] .single .content:has(.talk-entry) h2 {
+    border-bottom-color: $global-border-color-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .single .content:has(.talk-entry) h2 {
+        border-bottom-color: $global-border-color-dark;
+    }
+}
 
 // --- Upcoming ------------------------------------------------------------
 //
@@ -199,6 +223,10 @@
 
 // Mobile breakpoint (aligned with LoveIt 680px breakpoint)
 @media (max-width: 680px) {
+    .single .content:has(.talk-entry) h2 {
+        margin-top: 3rem;
+    }
+
     .talk-entry__title {
         font-size: 1rem;
     }
