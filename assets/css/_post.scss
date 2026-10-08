@@ -1,0 +1,245 @@
+// ==============================
+// A post's furniture
+// ==============================
+//
+// What sits around a post's text rather than in it: the Contents box above, and the
+// foot below it (tags, the share links, the post before and the post after). The
+// masthead is in _masthead.scss; the column, the headings and the lists are the type
+// module's (_typography.scss, ADR-0006). All of this is the system sans, because it is
+// there to navigate by, and every colour is a token, so there is nothing to switch for
+// dark.
+//
+// The theme drew all of it in a second voice of its own: a grey box with a darker title
+// bar for the Contents, an amber "|" before every entry in it, a thick pale bar down the
+// side of the floating one, a tag icon, and a pair of arrows for the neighbouring posts.
+// None of that is on the page now.
+//
+// Specificity, once, here. The theme draws the Contents box's fills at `[theme=dark]`
+// specificity, and the rules for them are its own. Ours cannot restate a colour under
+// `[theme=dark]` (the gate fails on one), so each rule below that has to beat one of
+// them names `.single` and the box's id as well, which ties it, and ours is the later
+// stylesheet.
+
+// --- The Contents box ------------------------------------------------------
+//
+// The theme's script moves one list between two boxes by the width of the window: a
+// floating one in the margin beside the article on a wide screen, and a collapsible
+// one above the text on a narrow one. They are styled alike, as a quiet list: the
+// title in the kicker voice, the entries muted, and the one you are reading in the
+// Accent while the floating box tracks it, as the active item of a navigation is
+// (ADR-0001).
+
+.toc .toc-title {
+    @include kicker;
+    font-size: $text-kicker;
+    font-weight: 600;
+}
+
+.toc .toc-content {
+    font-size: $text-ui;
+    line-height: 1.45;
+}
+
+// The theme starts every entry with an amber "|". It is the mark ADR-0006 took off the
+// headings, and a use of the Accent on this page for nothing. With it goes the hanging
+// indent it needed, so the entries start on the same edge as the title above them, and
+// a sub-list steps in by one plain indent.
+.toc .toc-content ul a:first-child::before {
+    content: none;
+}
+
+.toc .toc-content ul {
+    text-indent: 0;
+    padding-left: 0;
+}
+
+.toc .toc-content ul ul {
+    padding-left: 1rem;
+}
+
+.toc .toc-content a {
+    color: var(--muted);
+}
+
+.toc .toc-content a:hover {
+    color: var(--accent);
+}
+
+// The floating box. A hairline down its side, where the theme drew a 4px bar.
+#toc-auto {
+    border-left: 1px solid var(--rule);
+}
+
+#toc-auto .toc-title {
+    margin: 0.8rem 0 0.4rem;
+}
+
+#toc-auto .toc-content a.active {
+    color: var(--accent);
+}
+
+// The box inside the article. Ruled above and below instead of filled, and the title
+// is the row you press to open it.
+.single #toc-static {
+    margin: 0 0 2rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+
+.single #toc-static.toc .toc-title {
+    padding: 0.75rem 0;
+    line-height: 1.4;
+    background: none;
+    color: var(--muted);
+}
+
+.single #toc-static .toc-content {
+    background: none;
+}
+
+.single #toc-static .toc-content > nav > ul {
+    padding: 0 0 0.75rem;
+}
+
+// --- The foot of a post ------------------------------------------------------
+//
+// A rule across the Measure, then the tags and the share links on one line, then the
+// posts either side of this one. The Episode page keeps only the share links, which
+// sit directly under its article and take the same rule.
+
+.single .post-footer,
+.single > .post-share {
+    @include measure;
+    margin-top: 3.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+}
+
+.single .post-footer {
+    margin-bottom: 1rem;
+}
+
+.post-footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    font-size: $text-ui;
+}
+
+// Tags: muted links with a middle dot between them, which three words do not need a
+// border for. The theme's icon is gone with the rest of them, and so is its 65% cap on
+// the row, which was there to leave room for the "Back | Home" beside it.
+.single .post-footer .post-tags {
+    max-width: none;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+// The dot follows its tag rather than leading the next, so a row that wraps ends a line
+// on one and never starts a line with one.
+.post-tags li:not(:last-child)::after {
+    content: "\00B7";
+    margin: 0 0.45em;
+    color: var(--muted);
+}
+
+.post-tags a,
+.post-share__links a {
+    color: var(--muted);
+    transition: color $transition-base;
+}
+
+.post-tags a:hover,
+.post-share__links a:hover {
+    color: var(--accent);
+}
+
+// The share links: a label in the kicker voice and the theme's buttons, quiet until
+// pointed at. The row is the same on a post and on an Episode page.
+.post-share {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+}
+
+.single > .post-share {
+    font-size: $text-ui;
+}
+
+.post-share__label {
+    @include kicker;
+}
+
+.post-share__links a + a {
+    margin-left: 0.4rem;
+}
+
+// The post before and the post after. The theme floats the two links and clears them
+// with a pair of empty pseudo-elements, which a flex row would take for items.
+.post-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
+}
+
+// Named as the theme names them (`.post-footer .post-nav`), which is the more specific
+// selector and would otherwise win.
+.single .post-footer .post-nav::before,
+.single .post-footer .post-nav::after {
+    content: none;
+}
+
+.post-nav a {
+    display: block;
+    flex: 0 1 48%;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--heading);
+}
+
+.post-nav a.prev,
+.post-nav a.next {
+    float: none;
+}
+
+.post-nav a:hover {
+    color: var(--accent);
+}
+
+.post-nav .next {
+    margin-left: auto;
+    text-align: right;
+}
+
+.post-nav__label {
+    @include kicker;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+@media (max-width: 680px) {
+    .post-nav {
+        flex-direction: column;
+    }
+
+    .post-nav a {
+        flex-basis: auto;
+    }
+
+    .post-nav .next {
+        margin-left: 0;
+        text-align: left;
+    }
+}

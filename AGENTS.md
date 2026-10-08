@@ -44,7 +44,7 @@ Hugo must be the **extended** build, at the version in `.hugo-version` (CI and V
 
 This repo documents its own decisions. Before anything non-trivial:
 
-- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Moment, Plate, Post-build assertion.
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Masthead, Moment, Plate, Post-build assertion.
 - **`docs/adr/`** — six accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
@@ -92,6 +92,8 @@ categories: ["Engineering"]
 ```
 
 Non-post pages also carry `slug`, and `aliases` where a path changed. Every page needs its own `description`. Posts published elsewhere carry `host:` — see *Elsewhere* in `CONTEXT.md`.
+
+A post's **Masthead** is made from its front matter: the first `categories` entry is the kicker, the `title` the headline, and the dek is the `subtitle` if there is one, else the `description` (which is also the SEO text, so write a `subtitle` rather than bending the description into a dek, and never leave the description as a copy of the first paragraph: it prints straight above it). "Updated" shows only when `lastmod` is a later day than `date`, and it reads the front matter, not the commit history: bump `lastmod` when you change what a post says, and not otherwise. See *The masthead* in `docs/agents/architecture.md`.
 
 **What goes in Writing (`content/posts/`) comes from Italo.** A podcast appearance can get an **episode page** in `content/episodes/` instead: chapter by chapter, a summary, the quotes and the lesson, all from front matter. Claude writes those, in the third person, under a disclaimer that says so; the quotes are verbatim from the recording, lightly trimmed with brackets and ellipses, and linked to their second. Never write in Italo's first person anywhere he did not write it. Quotes are transcribed, not remembered; a claim the recording does not support does not go in. Contract in `docs/agents/architecture.md`.
 
