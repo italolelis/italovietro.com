@@ -539,8 +539,8 @@ contains "$PT_SPEAKING" '>Palestras<' 'pt-br talks have their own heading'
 contains "$PT_SPEAKING" 'Participações em Podcasts' 'pt-br podcast appearances have their own heading'
 absent_from "$EN_SPEAKING" 'Not everything is here' 'the rejected completeness hedge stays off the en page'
 absent_from "$PT_SPEAKING" 'Nem tudo está aqui' 'and off the pt-br page'
-same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
-same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entry carries a venue'
+same_count "$EN_SPEAKING" 'entry__title' 'entry__date' 'every en entry carries a date'
+same_count "$EN_SPEAKING" 'entry__title' 'entry__meta' 'every en entry carries a venue'
 # One talk given three times is one entry with three recordings, not three entries
 # with the same title. These assert both halves: the entry appears once, and every
 # stage it was given on is reachable.
@@ -549,8 +549,8 @@ contains "$EN_SPEAKING" 'youtu.be/BOn3R41UrV8' 'the GoLab recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'the Golang Piter recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/DKhC_XH8fDs' 'the GoDays recording is linked'
 contains "$PT_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'and all three in pt-br, with localized city names'
-same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
-same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every pt-br entry carries a venue'
+same_count "$PT_SPEAKING" 'entry__title' 'entry__date' 'every pt-br entry carries a date'
+same_count "$PT_SPEAKING" 'entry__title' 'entry__meta' 'every pt-br entry carries a venue'
 
 # Panels are their own group rather than talks with "Panel:" typed into the title.
 # The negative assertion is the load-bearing one: the prefix is what the entries
@@ -567,8 +567,8 @@ echo 'Panels are a group, not a title prefix'
 # vacuously. Same reasoning as the apostrophe-free needles above.
 contains "$EN_SPEAKING" 'Roundtables' 'en panels have their own heading'
 contains "$PT_SPEAKING" 'Painéis e Mesas Redondas' 'pt-br panels have their own heading'
-occurs "$EN_SPEAKING" 'talk-entry--panel' 2 'both en panels are typed as panels'
-occurs "$PT_SPEAKING" 'talk-entry--panel' 2 'both pt-br panels are typed as panels'
+occurs "$EN_SPEAKING" 'entry--panel' 2 'both en panels are typed as panels'
+occurs "$PT_SPEAKING" 'entry--panel' 2 'both pt-br panels are typed as panels'
 nowhere '>Panel: ' 'no entry carries the superseded title prefix'
 # A panel leaves no recording, so the event page is the only thing to click. If
 # this link goes, the entry becomes the one row on the page with no destination.
@@ -764,6 +764,50 @@ for tag in "$EN_TAG" "$PT_TAG"; do
     in_order "$tag" '<h1 class="single-title[^>]*>[^<]*</h1>.*<h2 class=entry__title>' 'its Entries are h2s below it, leaving no gap in the outline'
 done
 
+# The speaking page's Entries are the same shape: a title, a venue on the muted line,
+# a date, links on that line, and no note. A talk's title is plain text, and its links
+# (Highlights, Watch, a recording per city, Slides, Event) sit on the meta line, so
+# there is one more thing here than on the writing lists and it is the links, not a
+# different shape.
+for page in "$EN_SPEAKING" "$PT_SPEAKING"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--(talk|panel|podcast|host)"' "the speaking page renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__date' "and a date ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__meta' "and a venue on the muted line ($name)"
+    absent_from "$page" 'entry__note' "and none a note: the speaking page is a list, not a set of write-ups ($name)"
+    absent_from "$page" '<h4' "titles are h3s under the group's h2, leaving no gap in the outline ($name)"
+done
+# What links is written per language. The links' words were hard-coded English in the
+# shortcode, so the Portuguese page said "Watch", "Slides" and "Event" between
+# Portuguese cities and a Portuguese heading, and a visitor reading it in Portuguese
+# was the only one who noticed. The language's words now come from i18n/, and a missing
+# one fails the build (build.sh prints missing translations and panics on a warning).
+contains "$EN_SPEAKING" '>Watch<' 'en: a recording says Watch'
+contains "$EN_SPEAKING" '>Slides<' 'en: a talk with slides says Slides'
+contains "$EN_SPEAKING" '>Event<' 'en: a panel with an event page says Event'
+contains "$PT_SPEAKING" '>Assistir<' 'pt-br: a recording says Assistir'
+contains "$PT_SPEAKING" '>Apresentação<' 'pt-br: a talk with slides says Apresentação'
+contains "$PT_SPEAKING" '>Evento<' 'pt-br: a panel with an event page says Evento'
+absent_from "$PT_SPEAKING" '>Watch<' 'pt-br has no English Watch'
+absent_from "$PT_SPEAKING" '>Slides<' 'pt-br has no English Slides'
+absent_from "$PT_SPEAKING" '>Event<' 'pt-br has no English Event'
+# Upcoming is a list of Entries too, rendered through the same partial. It renders
+# nothing -- not even its heading -- while data/upcoming.yaml has no future date, which
+# is most of the time, so this asserts whichever half the data allows: with none, no
+# heading and no Entry; with one, the heading opens a list of Entries that carry a
+# calendar icon, a title and a date. (The general count matches above already require
+# each Upcoming Entry to have a title, a date and a venue.)
+for page in "$EN_SPEAKING" "$PT_SPEAKING"; do
+    if grep -qF 'entry--upcoming' "$page"; then
+        in_order "$page" '<h2 class=upcoming-title>[^<]+</h2><div class="entry entry--upcoming">' "an Upcoming heading opens its Entries (${page#"$PUBLIC"/})"
+        contains "$page" 'fa-calendar-day' 'and each carries the calendar icon'
+    else
+        absent_from "$page" 'upcoming-title' "with nothing upcoming there is no heading either (${page#"$PUBLIC"/})"
+    fi
+done
+
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
 # The serif existed on the two Episode pages and nowhere else, declared in the last
@@ -807,7 +851,7 @@ rule_lacks '.*(header|footer|menu|toc|post-meta|post-footer).*' 'font-family:var
 rule_sets '.*\.ep-kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
 rule_sets '.*\.book-entry' 'font-family:var\(--global-font-family\)' 'reading-list Entries are sans'
-rule_sets '.*\.talk-entry' 'font-family:var\(--global-font-family\)' 'speaking Entries are sans'
+rule_sets '\.entry' 'font-family:var\(--global-font-family\)' 'Entries are sans, on every list: the speaking page, the writing lists, and the reading list'
 rule_sets '\.single \.content table' 'font-family:var\(--global-font-family\)' 'tables are sans'
 rule_sets '\.single \.content figcaption' 'font-family:var\(--global-font-family\)' 'and so are figure captions'
 # What the theme decorates, undone. A blockquote was a blue box with a thick blue bar
@@ -826,7 +870,7 @@ rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measur
 rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
 # The module comes first. With the headings' rules in it, and none of them
 # restated later, which file was imported last no longer decides a heading.
-for marker in 'home-signpost' 'portrait__img' 'entry__head' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
+for marker in 'home-signpost' 'portrait__img' 'entry__head' 'book-entry__header' 'entry__meta' 'ep-masthead'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
 done
 
@@ -914,7 +958,7 @@ rule_sets '\.entry \.entry__date' 'color:var\(--muted\)' 'Entry dates are muted'
 rule_sets '\.archive-intro p' 'color:var\(--muted\)' 'and so is the line under the archive title'
 rule_sets '\.archive \.group-title' 'border-bottom:1px solid var\(--hairline\)' 'year headings sit on a hairline'
 rule_sets '\.single \.content:has\(\.book-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'a reading-list section heading sits on a hairline'
-rule_sets '\.single \.content:has\(\.talk-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'so does a speaking-page one'
+rule_sets '\.single \.content>h2:has\(~\.entry\)' 'border-bottom:1px solid var\(--hairline\)' 'and so does a heading above any list of Entries, the speaking page included: found by the Entries after it, not by a page'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
 rule_sets '\.single \.content \.book-entry__title a' 'color:var\(--accent\)' 'a book title is a link, so the Accent'
@@ -922,18 +966,18 @@ rule_sets '\.single \.content \.book-entry__title a:hover' 'color:var\(--accent-
 rule_sets '\.single \.content \.book-entry__author' 'color:var\(--muted\)' 'an author is muted'
 rule_sets '\.single \.content \.book-entry__description' 'color:var\(--ink\)' 'a description is body text'
 rule_sets '\[theme=dark\] \.single \.content \.book-entry--featured' 'border-left-color:var\(--hairline\)' 'a featured Entry has a hairline edge in dark, which is how it renders, and not in light'
-rule_sets '\.talk-entry__type-icon' 'color:var\(--muted\)' 'a speaking icon is muted until its type says otherwise'
-rule_sets '\.talk-entry__meta' 'color:var\(--muted\)' 'the venue and date are muted'
-rule_sets '\.talk-entry__links a' 'color:var\(--accent\)' 'speaking links are links, so the Accent'
-rule_sets '\.talk-entry__links a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.talk-entry--talk \.talk-entry__type-icon' 'color:var\(--accent\)' 'a talk is the Accent'
-rule_sets '\.talk-entry--host \.talk-entry__type-icon' 'color:var\(--accent\)' 'so is a hosted show'
-rule_sets '\.talk-entry--upcoming \.talk-entry__type-icon' 'color:var\(--accent\)' 'and so is what is next, in both modes'
-rule_sets '\.talk-entry--panel \.talk-entry__type-icon' 'color:var\(--entry-panel\)' 'a panel is teal'
-rule_sets '\.talk-entry--podcast \.talk-entry__type-icon' 'color:var\(--entry-podcast\)' 'a podcast is purple'
-rule_sets '\.talk-entry:hover' 'background-color:var\(--accent-wash\)' 'a hovered Entry is washed with the Accent'
-rule_sets '\.single \.content \.book-entry:hover' 'border-left-color:var\(--accent\)' 'and gains an Accent edge'
-rule_sets '\.talk-entry:focus-within' 'background-color:var\(--accent-wash\)' 'a focused one gets the same'
+rule_sets '\.entry \.entry__icon' 'color:var\(--muted\)' 'an Entry icon is muted until its kind says otherwise'
+rule_sets '\.entry \.entry__meta' 'color:var\(--muted\)' 'the venue and the author are muted'
+rule_sets '\.entry \.entry__links a' 'color:var\(--accent\)' 'links on the meta line are links, so the Accent'
+rule_sets '\.entry \.entry__links a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.entry--talk \.entry__icon' 'color:var\(--accent\)' 'a talk is the Accent'
+rule_sets '\.entry--host \.entry__icon' 'color:var\(--accent\)' 'so is a hosted show'
+rule_sets '\.entry--upcoming \.entry__icon' 'color:var\(--accent\)' 'and so is what is next, in both modes'
+rule_sets '\.entry--panel \.entry__icon' 'color:var\(--entry-panel\)' 'a panel is teal'
+rule_sets '\.entry--podcast \.entry__icon' 'color:var\(--entry-podcast\)' 'a podcast is purple'
+rule_sets '\.entry:hover' 'background-color:var\(--accent-wash\)' 'a hovered Entry is washed with the Accent, on every list'
+rule_sets '\.entry:hover' 'border-left-color:var\(--accent\)' 'and gains an Accent edge'
+rule_sets '\.entry:focus-within' 'background-color:var\(--accent-wash\)' 'a focused one gets the same'
 rule_sets 'a:focus-visible' 'outline:2px solid var\(--accent\)' 'the focus ring is the Accent'
 rule_sets '::selection' 'color:var\(--selection-ink\)' 'selected text takes its colour from the token'
 rule_sets '#header-mobile \.menu \.menu-item\.active' 'color:var\(--accent\)' 'the active mobile nav item takes the Accent'
@@ -1024,7 +1068,7 @@ dark_copy 'the headshot line' '\.portrait'
 dark_copy 'the archive' '\.archive-item__|\.archive-intro|\.group-title'
 # (The featured Entry's edge is the one dark rule here, kept as it renders and counted below.)
 dark_copy 'a reading-list Entry or its nav' '\.book-entry__|\.book-entry:|:has\(\.book-entry\)'
-dark_copy 'a speaking Entry' '\.talk-entry|:has\(\.talk-entry\)'
+dark_copy 'an Entry, on any list' '\.entry'
 dark_copy 'the focus ring or the active nav item' ':focus-visible|\.menu-item\.active'
 dark_copy 'an Episode page' '\.episode|\.ep-'
 # The theme paints the selection's background itself, under [theme=dark]; what is ours is

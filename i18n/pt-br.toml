@@ -59,3 +59,15 @@ other = "A etapa mais longa é %s."
 other = "Etapas a automatizar"
 ["episode.tipHint"]
 other = "Clique para ler"
+
+# As palavras dos links de uma Entry na página de palestras (layouts/shortcodes/talk.html).
+# Ver i18n/en.toml. "Apresentação" e não "Slides": o link leva ao material, e a página
+# toda é lida em português.
+["entry.highlights"]
+other = "Destaques"
+["entry.watch"]
+other = "Assistir"
+["entry.slides"]
+other = "Apresentação"
+["entry.event"]
+other = "Evento"

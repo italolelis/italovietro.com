@@ -63,3 +63,16 @@ other = "The longest stage is %s."
 other = "Stages to automate"
 ["episode.tipHint"]
 other = "Click to read it"
+
+# The words an Entry's links carry on the speaking page (layouts/shortcodes/talk.html).
+# They were hard-coded English in the shortcode, so the Portuguese page said "Watch"
+# and "Slides" between Portuguese cities. A talk may still pass its own label for
+# Highlights, but the default is here.
+["entry.highlights"]
+other = "Highlights"
+["entry.watch"]
+other = "Watch"
+["entry.slides"]
+other = "Slides"
+["entry.event"]
+other = "Event"

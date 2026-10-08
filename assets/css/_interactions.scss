@@ -35,13 +35,11 @@
         border-left-color $transition-base;
 }
 
-.talk-entry,
 .single .content .book-entry {
     @extend %entry-row;
 }
 
 @media (hover: hover) {
-    .talk-entry:hover,
     .single .content .book-entry:hover {
         background-color: var(--accent-wash);
         border-left-color: var(--accent);
@@ -50,7 +48,6 @@
 
 // A row containing the focused link is highlighted too, so tabbing through
 // the list moves the same visual marker a mouse user gets.
-.talk-entry:focus-within,
 .single .content .book-entry:focus-within {
     background-color: var(--accent-wash);
     border-left-color: var(--accent);
@@ -62,16 +59,12 @@
 // Revealing one on hover and focus means the affordance is not carried by
 // colour alone.
 @media (hover: hover) {
-    .talk-entry__links a:hover,
-    .talk-entry__title a:hover,
     .single .content .book-entry__title a:hover {
         text-decoration: underline;
         text-underline-offset: 3px;
     }
 }
 
-.talk-entry__links a:focus-visible,
-.talk-entry__title a:focus-visible,
 .single .content .book-entry__title a:focus-visible {
     text-decoration: underline;
     text-underline-offset: 3px;
