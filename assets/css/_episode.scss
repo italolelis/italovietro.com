@@ -24,21 +24,11 @@
 // Colour. The accent keeps its five roles (ADR-0001) and gains none: links here
 // are amber because they are links -- the timestamps, the chapter names -- and
 // nothing is amber for decoration. Everything else that marks something uses one
-// ink, the indigo the watercolours are painted in, so the furniture and the
-// plates read as one set:
-//   #3d4f7a  8.08:1 on #fff
-//   #9db0e0  6.64:1 on #292a2d
-
-$ep-ink: #3d4f7a;
-$ep-ink-dark: #9db0e0;
-$ep-rule: #d6d3d1;
-$ep-rule-dark: #4b4d52;
-// Figure fills: grey bands under their own labels (12.5:1 and up for body text in
-// light, 6.4:1 and up in dark), so telling them apart never rests on the fill.
-$ep-fill: (#e7e5e4, #d6d3d1, #cfcac4, #c4beb7);
-$ep-fill-dark: (#3a3b40, #44464b, #4e5056, #575a60);
-$ep-ink-text-dark: #1c1d20; // on $ep-ink-dark: 7.80:1
-$ep-heading-dark: $heading-color-dark;
+// ink, the indigo the watercolours are painted in (`--ep-ink`), so the furniture and
+// the plates read as one set. Every colour on this page is a token from _tokens.scss,
+// which holds the values for both modes and the contrast each was measured at, so
+// there is nothing in this file to switch for dark. The paper of the timeline's ruler
+// is the one exception to "follows the mode", and it says so where it is used.
 
 // ---- Masthead ------------------------------------------------------------
 
@@ -53,7 +43,7 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .ep-kicker__show {
-    color: $global-font-color;
+    color: var(--heading);
 }
 
 .episode .ep-kicker__sep {
@@ -76,7 +66,7 @@ $ep-heading-dark: $heading-color-dark;
 .episode .ep-meta {
     font-size: 0.875rem;
     line-height: 1.6;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 0 0 2rem;
 }
 
@@ -85,7 +75,7 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .ep-meta strong {
-    color: $global-font-color;
+    color: var(--heading);
     font-weight: 600;
 }
 
@@ -101,21 +91,21 @@ $ep-heading-dark: $heading-color-dark;
 .episode .ep-disclaimer {
     font-size: 0.875rem;
     line-height: 1.55;
-    color: $global-font-color;
+    color: var(--ink);
     margin: -0.75rem 0 2rem;
     padding: 0.7rem 0.95rem 0.75rem;
-    border: 1px solid $ep-rule;
+    border: 1px solid var(--rule);
     border-radius: 4px;
 }
 
 .episode .ep-disclaimer strong {
-    color: $ep-ink;
+    color: var(--ep-ink);
 }
 
 // The masthead sits outside .content, where the theme's link colour does not
 // reach; this link is amber because it is a link (ADR-0001), nothing more.
 .episode .ep-disclaimer a {
-    color: $single-link-color;
+    color: var(--accent);
 }
 
 // ---- Prose ----------------------------------------------------------------
@@ -134,7 +124,7 @@ $ep-heading-dark: $heading-color-dark;
 .episode .content .ep-chapter {
     margin: 3.75rem 0 1.25rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
     scroll-margin-top: 5rem;
 }
 
@@ -157,7 +147,7 @@ $ep-heading-dark: $heading-color-dark;
 .episode .content .ep-moment {
     margin: 1.75rem 0;
     padding-left: 1.25rem;
-    border-left: 2px solid $ep-rule;
+    border-left: 2px solid var(--rule);
     scroll-margin-top: 5rem;
 }
 
@@ -178,7 +168,7 @@ $ep-heading-dark: $heading-color-dark;
 
 .episode .content .ep-moment figcaption {
     font-size: 0.8125rem;
-    color: $muted-text-color;
+    color: var(--muted);
     margin-top: 0.4rem;
 }
 
@@ -215,7 +205,7 @@ $ep-heading-dark: $heading-color-dark;
     position: absolute;
     left: -0.55em;
     top: -0.05em;
-    color: $ep-rule;
+    color: var(--rule);
     font-size: 1.75rem;
 }
 
@@ -241,12 +231,15 @@ $ep-heading-dark: $heading-color-dark;
     display: block;
     width: 100%;
     height: auto;
+    // The plates are paper, and paper does not glow: dimmed slightly in dark so a
+    // white sheet does not become the brightest thing on the screen.
+    filter: var(--plate-filter);
 }
 
 .episode .ep-plate figcaption {
     font-size: 0.875rem;
     line-height: 1.45;
-    color: $muted-text-color;
+    color: var(--muted);
     margin-top: 0.6rem;
 }
 
@@ -287,11 +280,11 @@ $ep-heading-dark: $heading-color-dark;
 
 .episode .content .ep-map__heading {
     @include kicker;
-    color: $global-font-color;
+    color: var(--heading);
 }
 
 .episode .content .ep-map__length {
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-map ol {
@@ -305,7 +298,7 @@ $ep-heading-dark: $heading-color-dark;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 2rem;
     margin-top: 0.9rem;
-    border-top: 1px solid $ep-rule;
+    border-top: 1px solid var(--rule);
 }
 
 .episode .content .ep-map__legend a {
@@ -313,7 +306,7 @@ $ep-heading-dark: $heading-color-dark;
     align-items: baseline;
     gap: 0.6rem;
     padding: 0.45rem 0;
-    border-bottom: 1px solid $ep-rule;
+    border-bottom: 1px solid var(--rule);
     font-size: 0.9375rem;
     text-decoration: none;
 }
@@ -322,7 +315,7 @@ $ep-heading-dark: $heading-color-dark;
     flex: 0 0 2.1rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-map__name {
@@ -331,7 +324,7 @@ $ep-heading-dark: $heading-color-dark;
 
 .episode .content .ep-map__clock {
     font-size: 0.8125rem;
-    color: $muted-text-color;
+    color: var(--muted);
     font-variant-numeric: tabular-nums;
 }
 
@@ -340,7 +333,7 @@ $ep-heading-dark: $heading-color-dark;
 }
 
 .episode .content .ep-map__legend a.is-current .ep-map__num {
-    color: $ep-ink;
+    color: var(--ep-ink);
 }
 
 .episode .content .visually-hidden {
@@ -366,19 +359,19 @@ $ep-heading-dark: $heading-color-dark;
 // header's.
 //
 // The ruler is paper, like the plates: a physical object on the page, in both
-// themes. Ticks are two repeating gradients sized from the episode's length, one
-// a minute and a taller one every ten, so they land on the right minute at any
-// width without a tick element per minute.
-
-$ep-paper: #efe7d4; // the ruler; the ink labels on it measure 6.56:1
-$ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
+// themes. The paper is dimmed in dark (`--ep-paper`) so it does not glare, and the
+// ink printed on it does not change at all (`--ep-ruler-ink`, and the Sass `$ep-ink`
+// behind the ticks' alphas): 6.56:1 on the light paper, 4.72:1 on the dark. Ticks are
+// two repeating gradients sized from the episode's length, one a minute and a taller
+// one every ten, so they land on the right minute at any width without a tick element
+// per minute.
 
 .episode .ep-timeline {
     position: sticky;
     top: $header-height;
     z-index: 90;
-    background: $header-background-color;
-    box-shadow: 0 0 0 100vmax $header-background-color;
+    background: var(--header);
+    box-shadow: 0 0 0 100vmax var(--header);
     clip-path: inset(0 -100vmax);
 }
 
@@ -401,19 +394,19 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     font-size: 1.125rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    color: $global-font-color;
+    color: var(--heading);
 }
 
 .episode .ep-timeline__of {
     font-size: 0.75rem;
-    color: $muted-text-color;
+    color: var(--muted);
     font-variant-numeric: tabular-nums;
 }
 
 .episode .ep-timeline__chapter {
     display: block;
     font-size: 0.75rem;
-    color: $muted-text-color;
+    color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -424,7 +417,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     flex: 1 1 auto;
     height: 2.4rem;
     border-radius: 3px;
-    background-color: $ep-paper;
+    background-color: var(--ep-paper);
     background-image:
         linear-gradient(90deg, rgba($ep-ink, 0.55) 1px, transparent 1px),
         linear-gradient(90deg, rgba($ep-ink, 0.8) 1px, transparent 1px);
@@ -459,7 +452,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     transform: translateX(-50%);
     font-size: 0.625rem;
     font-weight: 600;
-    color: $ep-ink;
+    color: var(--ep-ruler-ink);
     font-variant-numeric: tabular-nums;
     pointer-events: none;
 }
@@ -482,7 +475,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     left: 0;
     width: 2px;
     margin-left: -1px;
-    background: $ep-ink;
+    background: var(--ep-ruler-ink);
     pointer-events: none;
     transition: left 0.15s linear;
 }
@@ -495,7 +488,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     width: 8px;
     height: 8px;
     border-radius: 0 0 50% 50%;
-    background: $ep-ink;
+    background: var(--ep-ruler-ink);
 }
 
 // Anchors land below the header and the timeline both.
@@ -517,8 +510,8 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 .episode .content .ep-hl__lesson {
     margin: 1.75rem 0 0;
     padding: 0.95rem 1.15rem 1rem;
-    background: #f7f2e7; // body text on it 16.73:1, the ink kicker 7.24:1
-    border-left: 3px solid $ep-ink;
+    background: var(--ep-lesson);
+    border-left: 3px solid var(--ep-ink);
     font-size: 1.0625rem;
     line-height: 1.55;
 }
@@ -527,7 +520,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     @include kicker;
     display: block;
     margin-bottom: 0.35rem;
-    color: $ep-ink;
+    color: var(--ep-ink);
 }
 
 // ---- Figures -------------------------------------------------------------------
@@ -542,8 +535,8 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     @include sans;
     margin: 2.25rem 0 2.5rem;
     padding: 1.15rem 0 1.4rem;
-    border-top: 2px solid $global-font-color;
-    border-bottom: 1px solid $ep-rule;
+    border-top: 2px solid var(--heading);
+    border-bottom: 1px solid var(--rule);
 }
 
 .episode .content .ep-viz__head {
@@ -563,14 +556,14 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     font-size: 1.375rem;
     line-height: 1.3;
     font-weight: 700;
-    color: $global-font-color;
+    color: var(--heading);
     text-wrap: balance;
 }
 
 .episode .content .ep-viz__note {
     font-size: 0.8125rem;
     line-height: 1.45;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 1rem 0 0;
 }
 
@@ -581,8 +574,8 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     padding: 0.55rem 1.4rem;
     border: 0;
     border-radius: 999px;
-    background: $global-font-color;
-    color: #fff;
+    background: var(--heading);
+    color: var(--on-ink);
     cursor: pointer;
 }
 
@@ -597,10 +590,10 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     line-height: 1.3;
     text-align: left;
     padding: 0.45rem 0.8rem 0.45rem 0.6rem;
-    border: 1px solid $ep-rule;
+    border: 1px solid var(--rule);
     border-radius: 6px;
     background: transparent;
-    color: $global-font-color;
+    color: var(--ink);
     cursor: pointer;
     transition: border-color $transition-fast, background-color $transition-fast;
 }
@@ -609,18 +602,18 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     flex: 0 0 auto;
     width: 0.95rem;
     height: 0.95rem;
-    border: 1.5px solid $muted-text-color;
+    border: 1.5px solid var(--muted);
     border-radius: 3px;
     position: relative;
 }
 
 .episode .content .ep-viz__toggle[aria-pressed="true"] {
-    border-color: $ep-ink;
+    border-color: var(--ep-ink);
 }
 
 .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box {
-    background: $ep-ink;
-    border-color: $ep-ink;
+    background: var(--ep-ink);
+    border-color: var(--ep-ink);
 }
 
 .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box::after {
@@ -630,7 +623,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     top: 0.08rem;
     width: 0.28rem;
     height: 0.55rem;
-    border: solid #fff;
+    border: solid var(--on-ink);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
@@ -659,14 +652,14 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 .episode .content .ep-guess input[type="range"] {
     width: 100%;
     margin: 0.5rem 0 0;
-    accent-color: $ep-ink;
+    accent-color: var(--ep-ink);
 }
 
 .episode .content .ep-guess__scale {
     position: relative;
     height: 1.2rem;
     font-size: 0.75rem;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-guess__scale span {
@@ -713,7 +706,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 .episode .content .ep-guess__bar {
     position: relative;
     height: 1.4rem;
-    background: nth($ep-fill, 1);
+    background: var(--ep-fill-1);
 }
 
 .episode .content .ep-guess__bar > span {
@@ -722,12 +715,12 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     top: 0;
     bottom: 0;
     width: 0;
-    background: #78716c; // 4.80:1 on #fff
+    background: var(--ep-bar);
     transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .episode .content .ep-guess__row--real .ep-guess__bar > span {
-    background: $ep-ink;
+    background: var(--ep-ink);
 }
 
 // A bar of length zero draws nothing at all. A hairline at the origin says the
@@ -739,12 +732,12 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     top: -3px;
     bottom: -3px;
     width: 3px;
-    background: $ep-ink;
+    background: var(--ep-ink);
 }
 
 .episode .content .ep-guess__row--real .ep-guess__val {
     font-weight: 700;
-    color: $ep-ink;
+    color: var(--ep-ink);
 }
 
 // ---- A choice: buttons, then the right one marked ------------------------------------
@@ -765,10 +758,10 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     line-height: 1.35;
     text-align: left;
     padding: 0.7rem 0.9rem;
-    border: 1px solid $ep-rule;
+    border: 1px solid var(--rule);
     border-radius: 6px;
     background: transparent;
-    color: $global-font-color;
+    color: var(--ink);
     cursor: pointer;
     transition: border-color $transition-fast, background-color $transition-fast, opacity $transition-base;
 }
@@ -781,15 +774,15 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 // wrong pick struck through, the rest stepping back. Without JavaScript the page
 // arrives answered, so the right option is marked from the start.
 .episode .content .ep-choice__option.is-correct {
-    background: $ep-ink;
-    border-color: $ep-ink;
-    color: #fff;
+    background: var(--ep-ink);
+    border-color: var(--ep-ink);
+    color: var(--on-ink);
     font-weight: 600;
 }
 
 .episode .content .ep-choice__option.is-wrong {
     text-decoration: line-through;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-choice.is-answered .ep-choice__option:not(.is-correct):not(.is-wrong) {
@@ -812,7 +805,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-model__label {
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-model__total {
@@ -837,17 +830,17 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     padding: 0 0.4rem;
     overflow: hidden;
     white-space: nowrap;
-    color: $global-font-color;
+    color: var(--heading);
     transition: flex-grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @for $i from 1 through 4 {
-    .episode .content .ep-model__seg--#{$i} { background: nth($ep-fill, $i); }
+    .episode .content .ep-model__seg--#{$i} { background: var(--ep-fill-#{$i}); }
 }
 
 .episode .content .ep-model__seg--accent {
-    background: $ep-ink;
-    color: #fff;
+    background: var(--ep-ink);
+    color: var(--on-ink);
 }
 
 .episode .content .ep-model__seg.is-narrow > span {
@@ -899,7 +892,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     top: 0.5rem;
     bottom: 0.9rem;
     width: 2px;
-    background: $ep-rule;
+    background: var(--rule);
 }
 
 .episode .content .ep-flow__step {
@@ -916,8 +909,8 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     width: 0.9rem;
     height: 0.9rem;
     border-radius: 50%;
-    border: 2px solid $muted-text-color;
-    background: $global-background-color;
+    border: 2px solid var(--muted);
+    background: var(--paper);
     box-sizing: border-box;
 }
 
@@ -931,7 +924,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 .episode .content .ep-flow__items {
     display: block;
     font-size: 0.875rem;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-flow__items {
@@ -945,7 +938,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 }
 
 .episode .content .ep-flow__items strong {
-    color: $global-font-color;
+    color: var(--heading);
     font-weight: 600;
 }
 
@@ -957,7 +950,7 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 
 .episode .content .ep-flow__branch {
     padding: 0.6rem 0.8rem;
-    border: 1px solid $ep-rule;
+    border: 1px solid var(--rule);
     border-radius: 6px;
     transition: opacity $transition-base, border-color $transition-base;
 }
@@ -974,18 +967,16 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 
 .episode .content .ep-flow .ep-flow__branch.is-taken {
     opacity: 1;
-    border-color: $ep-ink;
-    box-shadow: inset 3px 0 0 $ep-ink;
+    border-color: var(--ep-ink);
+    box-shadow: inset 3px 0 0 var(--ep-ink);
 }
 
+// Tokens inside a keyframe are resolved on the element being animated, so one animation
+// is right in both modes. There used to be a second, `ep-station-dark`, for the same
+// reason a second dark rule existed everywhere else.
 @keyframes ep-station {
-    from { background: $global-background-color; border-color: $muted-text-color; }
-    to { background: $ep-ink; border-color: $ep-ink; }
-}
-
-@keyframes ep-station-dark {
-    from { background: $global-background-color-dark; border-color: $muted-text-color-dark; }
-    to { background: $ep-ink-dark; border-color: $ep-ink-dark; }
+    from { background: var(--paper); border-color: var(--muted); }
+    to { background: var(--ep-ink); border-color: var(--ep-ink); }
 }
 
 // ---- The timeline's quote preview ------------------------------------------------------
@@ -1002,13 +993,13 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     width: 20rem;
     max-width: 90vw;
     padding: 0.6rem 0.8rem 0.65rem;
-    background: #fffdf7; // body text on it: 18.36:1
-    border: 1px solid $ep-rule;
+    background: var(--ep-tip);
+    border: 1px solid var(--rule);
     border-radius: 6px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     font-size: 0.8125rem;
     line-height: 1.45;
-    color: $global-font-color;
+    color: var(--heading);
     pointer-events: none;
 }
 
@@ -1020,12 +1011,12 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     display: block;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    color: $ep-ink;
+    color: var(--ep-ink);
     margin-bottom: 0.15rem;
 }
 
 .episode .ep-timeline__moment.is-hot {
-    background: $ep-ink;
+    background: var(--ep-ink);
     transform: scale(1.6);
 }
 
@@ -1035,15 +1026,15 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
     @include sans;
     margin: 3.5rem 0 1rem;
     padding-top: 1.1rem;
-    border-top: 2px solid $global-font-color;
+    border-top: 2px solid var(--heading);
     font-size: 0.875rem;
     line-height: 1.55;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .episode .content .ep-colophon__title {
     @include kicker;
-    color: $global-font-color;
+    color: var(--heading);
     margin: 0 0 0.5rem;
 }
 
@@ -1053,108 +1044,6 @@ $ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
 
 .episode .content .ep-colophon__listen {
     font-size: 0.9375rem;
-}
-
-// ---- Dark ---------------------------------------------------------------------
-//
-// The plates are paper, and paper does not glow. Dimmed slightly so a white
-// sheet does not become the brightest thing on a dark screen.
-
-@mixin episode-dark {
-    .episode .ep-kicker__show,
-    .episode .ep-dek,
-    .episode .ep-meta strong,
-    .episode .ep-timeline__clock b,
-    .episode .content .ep-map__heading,
-    .episode .content .ep-colophon__title {
-        color: $ep-heading-dark;
-    }
-
-    .episode .ep-kicker,
-    .episode .ep-meta,
-    .episode .content .ep-chapter__kicker,
-    .episode .content .ep-moment figcaption,
-    .episode .ep-plate figcaption,
-    .episode .content .ep-map__length,
-    .episode .content .ep-map__clock,
-    .episode .content .ep-map__legend .ep-map__num,
-    .episode .content .ep-colophon {
-        color: $muted-text-color-dark;
-    }
-
-    .episode .content .ep-chapter { border-bottom-color: $global-border-color-dark; }
-    .episode .content .ep-moment { border-left-color: $ep-rule-dark; }
-    .episode .content .ep-moment--pull { border-left: 0; }
-    .episode .content .ep-moment--pull blockquote::before { color: $ep-rule-dark; }
-    .episode .ep-plate img { filter: brightness(0.9); }
-
-    .episode .content .ep-map__legend,
-    .episode .content .ep-map__legend a { border-color: $ep-rule-dark; }
-    .episode .content .ep-map__legend a.is-current .ep-map__num { color: $ep-ink-dark; }
-
-    .episode .ep-timeline {
-        background: $header-background-color-dark;
-        box-shadow: 0 0 0 100vmax $header-background-color-dark;
-    }
-    .episode .ep-timeline__of,
-    .episode .ep-timeline__chapter { color: $muted-text-color-dark; }
-    .episode .ep-timeline__ruler { background-color: $ep-paper-dark; }
-    .episode .content .ep-hl__lesson { background: rgba(255, 255, 255, 0.045); border-left-color: $ep-ink-dark; } // #333436: 5.35:1 text, 5.77:1 kicker
-    .episode .content .ep-hl__lesson-kicker { color: $ep-ink-dark; }
-
-    .episode .content .ep-viz { border-top-color: $ep-heading-dark; border-bottom-color: $ep-rule-dark; }
-    .episode .content .ep-viz__title { color: $ep-heading-dark; }
-    .episode .content .ep-viz__kicker,
-    .episode .content .ep-viz__note,
-    .episode .content .ep-guess__scale,
-    .episode .content .ep-model__label,
-    .episode .content .ep-flow__note,
-    .episode .content .ep-flow__items { color: $muted-text-color-dark; }
-    .episode .content .ep-flow__items strong { color: $ep-heading-dark; }
-    .episode .content .ep-viz__button { background: $ep-heading-dark; color: $ep-ink-text-dark; }
-    .episode .content .ep-viz__toggle,
-    .episode .content .ep-choice__option { border-color: $ep-rule-dark; color: $global-font-color-dark; }
-    .episode .content .ep-viz__toggle-box { border-color: $muted-text-color-dark; }
-    .episode .content .ep-viz__toggle[aria-pressed="true"] { border-color: $ep-ink-dark; }
-    .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box { background: $ep-ink-dark; border-color: $ep-ink-dark; }
-    .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box::after { border-color: $ep-ink-text-dark; }
-    .episode .content .ep-guess input[type="range"] { accent-color: $ep-ink-dark; }
-    .episode .content .ep-guess__bar { background: nth($ep-fill-dark, 1); }
-    .episode .content .ep-guess__bar > span { background: #8a8c93; } // 4.27:1 on #292a2d
-    .episode .content .ep-guess__row--real .ep-guess__bar > span,
-    .episode .content .ep-guess__row--real .ep-guess__bar::before { background: $ep-ink-dark; }
-    .episode .content .ep-guess__row--real .ep-guess__val { color: $ep-ink-dark; }
-    .episode .content .ep-choice__option.is-correct { background: $ep-ink-dark; border-color: $ep-ink-dark; color: $ep-ink-text-dark; }
-    .episode .content .ep-choice__option.is-wrong { color: $muted-text-color-dark; }
-    @for $i from 1 through 4 {
-        .episode .content .ep-model__seg--#{$i} { background: nth($ep-fill-dark, $i); color: $ep-heading-dark; }
-    }
-    .episode .content .ep-model__seg--accent { background: $ep-ink-dark; color: $ep-ink-text-dark; }
-    .episode .content .ep-flow__steps::before { background: $ep-rule-dark; }
-    .episode .content .ep-flow__step::before { border-color: $muted-text-color-dark; background: $global-background-color-dark; }
-    .episode .content .ep-flow__branch { border-color: $ep-rule-dark; }
-    .episode .content .ep-flow .ep-flow__branch.is-taken { border-color: $ep-ink-dark; box-shadow: inset 3px 0 0 $ep-ink-dark; }
-    .episode .content .ep-flow:not([data-path="none"]) .ep-flow__step::before { animation-name: ep-station-dark; }
-    .episode .ep-timeline__tip { background: #34353a; border-color: $ep-rule-dark; color: $ep-heading-dark; } // 9.74:1
-    .episode .ep-timeline__tip-clock { color: $ep-ink-dark; }
-    .episode .ep-timeline__moment.is-hot { background: $ep-ink-dark; }
-
-    .episode .ep-disclaimer { color: $global-font-color-dark; border-color: $ep-rule-dark; }
-    .episode .ep-disclaimer strong { color: $ep-ink-dark; }
-    .episode .ep-disclaimer a { color: $single-link-color-dark; }
-
-    .episode .content .ep-colophon { border-color: $ep-rule-dark; }
-    .episode .content .ep-colophon { border-top-color: $ep-heading-dark; }
-}
-
-[theme=dark] {
-    @include episode-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include episode-dark;
-    }
 }
 
 // ---- Small screens -----------------------------------------------------------------

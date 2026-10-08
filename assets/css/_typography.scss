@@ -127,7 +127,7 @@ $measure: 800px;
     font-size: $text-subsection;
     font-style: italic;
     line-height: 1.45;
-    color: $global-font-color;
+    color: var(--heading);
     text-wrap: pretty;
 
     @media (max-width: 680px) {
@@ -143,7 +143,7 @@ $measure: 800px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 // Running text. Set on `.content`, so a paragraph has no rule of its own and a post,
@@ -209,16 +209,14 @@ $measure: 800px;
 // belongs to nothing else here (docs/adr/0001 counts the accent's roles, and this is
 // not one of them). Set it as a newspaper does: italic, behind a quiet rule, in the
 // colour of the text around it. The rule is decoration, not information, so it has
-// no contrast to meet; it is the same grey the Episode page rules its quotes with.
-$rule-color: #d6d3d1;
-$rule-color-dark: #4b4d52;
-
+// no contrast to meet; it is the same grey the Episode page rules its quotes with
+// (`--rule`).
 .single .content blockquote {
     display: block;
     margin: 1.75rem 0;
     padding: 0 0 0 1.25rem;
     border: 0;
-    border-left: 2px solid $rule-color;
+    border-left: 2px solid var(--rule);
     background: none;
     font-style: italic;
 }
@@ -261,7 +259,6 @@ $rule-color-dark: #4b4d52;
 .single .content > h6 {
     @include serif;
     font-weight: 700;
-    color: $global-font-color;
     text-wrap: balance;
 }
 
@@ -297,44 +294,43 @@ $rule-color-dark: #4b4d52;
 .single .content > hr {
     margin: 2.5rem 0;
     border: none;
-    border-top: 1px solid $global-border-color;
+    border-top: 1px solid var(--hairline);
+}
+
+// --- Heading colour ------------------------------------------------------
+//
+// One token, `--heading`, for every headline: a title, an article's headings, and the
+// headings inside what a shortcode renders. Dark mode gives it a brighter value than
+// the body text under it. It used to share the body colour there, so hierarchy rested
+// on size alone and every page read flat; light never had the problem, its body text
+// being a near-black that is already the strongest thing on the page.
+//
+// Every heading in the column, not only the column's direct children, because that is
+// how far the dark rule always reached: an Entry's title is an h3 inside its header and
+// the home page's section heading is inside a wrapper, and in light both inherited the
+// body colour, which is the same value. Colour is the one thing this reaches in to set.
+// Face, size and margin stay the Entry's own (see above).
+.single-title,
+.single .content h1,
+.single .content h2,
+.single .content h3,
+.single .content h4,
+.single .content h5,
+.single .content h6 {
+    color: var(--heading);
 }
 
 // --- Dark ----------------------------------------------------------------
 //
-// Headings, in dark mode. Body text and a heading shared one colour there, so
-// hierarchy rested on size alone and every page read flat; light mode never had the
-// problem, its body text being a near-black that is already the strongest thing on
-// the page.
-@mixin typography-dark {
-    .single-title,
-    .archive .single-title,
-    .single .content h1,
-    .single .content h2,
-    .single .content h3,
-    .single .content h4,
-    .single .content h5,
-    .single .content h6 {
-        color: $heading-color-dark;
-    }
-
-    // The theme tints a blockquote again in dark, at the same specificity.
-    .single .content blockquote {
-        border-left-color: $rule-color-dark;
-        background-color: transparent;
-    }
-
-    .single .content > hr {
-        border-top-color: $global-border-color-dark;
-    }
+// The two things the theme draws again under [theme=dark], at a specificity a light rule
+// cannot reach: a quotation's tinted box and blue bar, and the dashed rule across the
+// column. They are restated here, and they have no value of their own. The token
+// block in _tokens.scss is what switches the rest of the page.
+[theme=dark] .single .content blockquote {
+    border-left-color: var(--rule);
+    background-color: transparent;
 }
 
-[theme=dark] {
-    @include typography-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include typography-dark;
-    }
+[theme=dark] .single .content > hr {
+    border-top-color: var(--hairline);
 }

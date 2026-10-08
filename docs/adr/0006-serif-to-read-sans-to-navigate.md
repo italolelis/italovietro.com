@@ -58,5 +58,5 @@ Four alternatives were considered:
 - **The hairline under an h2 belongs to the pages whose h2 heads a list of Entries** (the reading list and the speaking page) and to an Episode chapter. In an article it was ornament, and it is gone.
 - **Two theme decorations go.** The amber `#` and `|` before every heading, and the blue box and bar on a blockquote: a second accent that belongs to nothing else here (ADR-0001 counts the accent's roles). A quote is italic behind a quiet grey rule; an Episode page's own quotes stay upright.
 - **The Measure is one number** (`$measure`), where ADR-0004 recorded it as one value in two places. Changing it reflows every page at once, as that ADR said it would.
-- **Colour is untouched.** The dark heading colour keeps its three-selector copies, as the rest of the site does, until the colour tokens are reworked. This ADR is about faces, sizes and the Measure.
+- **Colour is untouched.** The dark heading colour keeps its three-selector copies, as the rest of the site does, until the colour tokens are reworked. This ADR is about faces, sizes and the Measure. *Since then:* colour is tokens (`_tokens.scss`), and a headline's colour is `--heading`, set once for each mode, with no copy.
 - **What it does not decide:** the post masthead (kicker, meta line, share links), which will be built from the mixins above, and the Entry's markup.

@@ -63,7 +63,7 @@
     text-align: left;
     padding: 0;
     margin: 0;
-    color: $global-font-color;
+    color: var(--heading);
 }
 
 // The social icon rules that used to live here are gone with the icons. They were
@@ -90,23 +90,6 @@
     font-size: 1.125rem;
     line-height: 1.7;
     margin: 0 0 2.5rem;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin home-dark {
-    .home .home-profile .home-subtitle {
-        color: $heading-color-dark;
-    }
-}
-
-[theme=dark] {
-    @include home-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include home-dark;
-    }
 }
 
 // --- Mobile --------------------------------------------------------------
@@ -137,16 +120,8 @@
     display: block;
     width: 100%;
     height: auto;
+    // Paper does not glow: dimmed a little in dark so a white sheet is not the
+    // brightest thing on the screen. The same token as the episode plates.
+    filter: var(--plate-filter);
 }
 
-// Paper does not glow: dimmed a little so a white sheet is not the brightest
-// thing on a dark screen. The same treatment as the episode plates.
-[theme=dark] .home .home-content .home-plate img {
-    filter: brightness(0.9);
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .home .home-content .home-plate img {
-        filter: brightness(0.9);
-    }
-}

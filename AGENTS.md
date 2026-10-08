@@ -67,7 +67,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script). There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script), and for colour `token` / `token_constant` / `contrast_of` (a token's value in each mode, and the WCAG ratio of a pair, measured from the compiled values). There is no `nowhere_re`.
 
 Two documented footguns:
 
@@ -114,7 +114,7 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 1. `./scripts/build.sh && ./scripts/check-build.sh public` — no warnings, all assertions pass
 2. New visible behaviour has a new assertion
 3. Both languages updated, Portuguese correctly accented
-4. New colours measured for contrast; all three theme selectors covered
+4. A new colour is a token in `_tokens.scss` for both modes, its contrast measured in a comment and asserted in the gate; no literal in a component, no `[theme=dark]` rule restating one
 5. Relevant ADRs read, none silently contradicted; `CONTEXT.md` vocabulary used
 6. No new third-party host, webfont, or tracking script
 7. `git status` clean of `public/`, `resources/`, `.vercel/`

@@ -13,7 +13,7 @@
 // headings, the nav strip and metadata are all quiet by default. Hierarchy comes
 // from size and space instead of from colour.
 //
-// Colours here use the $muted-text-color tokens rather than the theme's
+// Colours here use the --muted token rather than the theme's
 // $global-font-secondary-color. That variable measures 2.33:1 in light and 2.18:1
 // in dark -- both well under AA -- which is why the old tier labels and author
 // names looked washed out rather than merely subtle.
@@ -33,7 +33,7 @@ $reading-list: ".single .content:has(.book-entry)";
     margin-top: 4rem;
     margin-bottom: 0.5rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
 }
 
 // The line under each section heading.
@@ -51,7 +51,7 @@ $reading-list: ".single .content:has(.book-entry)";
 #{$reading-list} h2 + p {
     @include sans;
     font-size: 0.9375rem;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 0 0 2rem;
 }
 
@@ -91,13 +91,13 @@ $reading-list: ".single .content:has(.book-entry)";
 
 #{$reading-list} > ul:first-of-type li:not(:first-child)::before {
     content: "\00B7";
-    color: $muted-text-color;
+    color: var(--muted);
     padding: 0 6px;
 }
 
 #{$reading-list} > ul:first-of-type li a {
     font-size: 0.875rem;
-    color: $muted-text-color;
+    color: var(--muted);
     text-decoration: none;
     padding: 0;
     background: none;
@@ -107,7 +107,7 @@ $reading-list: ".single .content:has(.book-entry)";
 }
 
 #{$reading-list} > ul:first-of-type li a:hover {
-    color: $single-link-color;
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -119,21 +119,21 @@ $reading-list: ".single .content:has(.book-entry)";
 }
 
 .single .content .book-entry__title a {
-    color: $single-link-color;
+    color: var(--accent);
     text-decoration: none;
     transition: color $transition-base;
 }
 
 .single .content .book-entry__title a:hover {
-    color: $single-link-hover-color;
+    color: var(--accent-hover);
 }
 
 .single .content .book-entry__author {
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .single .content .book-entry__description {
-    color: $global-font-color;
+    color: var(--ink);
     margin: 0;
 }
 
@@ -177,12 +177,22 @@ $reading-list: ".single .content:has(.book-entry)";
 // --- Featured entries ----------------------------------------------------
 //
 // The answer to "what should I read?" gets room to breathe: a bigger title, the
-// author on its own line, and the description at full reading size. An accent
-// edge groups them without turning them into cards.
+// author on its own line, and the description at full reading size.
 .single .content .book-entry--featured {
     margin-bottom: 2.5rem;
     padding-left: 1.25rem;
-    border-left: 2px solid $global-border-color;
+}
+
+// An edge, in dark only, and not on purpose. This rule used to declare a 2px hairline
+// edge for the featured Entry, to group it without turning it into a card. The Entry
+// row's own transparent 3px edge (_interactions.scss) has the same specificity and is
+// imported later, so it has always won in light, where there is no edge. The dark
+// rule that recoloured the hairline was one attribute more specific, so it won, and
+// dark has shown a hairline edge ever since. This keeps what renders; whether the
+// featured Entry has the edge in both modes or neither is for the Entry rework to
+// decide, and it will be a decision about one rule, not two.
+[theme=dark] .single .content .book-entry--featured {
+    border-left-color: var(--hairline);
 }
 
 .single .content .book-entry--featured .book-entry__header {
@@ -205,56 +215,6 @@ $reading-list: ".single .content:has(.book-entry)";
     font-size: 1.0625rem;
     line-height: 1.7;
     margin-top: 0.625rem;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin reading-list-dark {
-    // Colour is not set here. Headings in dark take $heading-color-dark from
-    // _typography.scss, so that one file decides it for every page rather than each
-    // component restating it.
-    #{$reading-list} h2 {
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    // The first three carry the `:has()` guard their light copies have. The dark
-    // `h2 + p` lost it once and styled that pair on every page in dark mode; it
-    // went unseen only because the muted and body greys are the same value there.
-    #{$reading-list} h2 + p,
-    #{$reading-list} > ul:first-of-type li:not(:first-child)::before,
-    #{$reading-list} > ul:first-of-type li a,
-    .single .content .book-entry__author {
-        color: $muted-text-color-dark;
-    }
-
-    #{$reading-list} > ul:first-of-type li a:hover {
-        color: $single-link-color-dark;
-    }
-
-    .single .content .book-entry__title a {
-        color: $single-link-color-dark;
-    }
-
-    .single .content .book-entry__title a:hover {
-        color: $single-link-hover-color-dark;
-    }
-
-    .single .content .book-entry__description {
-        color: $global-font-color-dark;
-    }
-
-    .single .content .book-entry--featured {
-        border-left-color: $global-border-color-dark;
-    }
-}
-
-[theme=dark] {
-    @include reading-list-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include reading-list-dark;
-    }
 }
 
 // --- Mobile --------------------------------------------------------------

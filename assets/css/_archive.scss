@@ -17,7 +17,7 @@
 
 .archive-intro p {
     font-size: 0.9375rem;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 0.5rem 0 0;
 }
 
@@ -25,10 +25,10 @@
 .archive .group-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 3rem 0 1.25rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
 }
 
 // --- Entries -------------------------------------------------------------
@@ -60,13 +60,13 @@
 }
 
 .archive-item__title a {
-    color: $single-link-color;
+    color: var(--accent);
     text-decoration: none;
     transition: color $transition-base;
 }
 
 .archive-item__title a:hover {
-    color: $single-link-hover-color;
+    color: var(--accent-hover);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -79,42 +79,10 @@
     margin-left: auto;
     padding-left: 0.75rem;
     font-size: 0.8125rem;
-    color: $muted-text-color;
+    color: var(--muted);
     white-space: nowrap;
     // Dates line up as a column when they are the same width.
     font-variant-numeric: tabular-nums;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin archive-dark {
-    .archive-intro p,
-    .archive .group-title,
-    .archive-item__date {
-        color: $muted-text-color-dark;
-    }
-
-    .archive .group-title {
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    .archive-item__title a {
-        color: $single-link-color-dark;
-    }
-
-    .archive-item__title a:hover {
-        color: $single-link-hover-color-dark;
-    }
-
-}
-
-[theme=dark] {
-    @include archive-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include archive-dark;
-    }
 }
 
 // --- Mobile --------------------------------------------------------------

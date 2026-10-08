@@ -3,7 +3,8 @@
 // ==============================
 //
 // Hover, focus and motion for the entry lists. Colours come from the tokens in
-// _override.scss -- nothing here introduces a new value.
+// _tokens.scss -- nothing here introduces a new value, and nothing says which mode it
+// is in.
 //
 // Two rules govern everything below:
 //
@@ -42,22 +43,8 @@
 @media (hover: hover) {
     .talk-entry:hover,
     .single .content .book-entry:hover {
-        background-color: rgba($single-link-color, 0.06);
-        border-left-color: $single-link-color;
-    }
-
-    [theme=dark] .talk-entry:hover,
-    [theme=dark] .single .content .book-entry:hover {
-        background-color: rgba($single-link-color-dark, 0.1);
-        border-left-color: $single-link-color-dark;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        [theme=auto] .talk-entry:hover,
-        [theme=auto] .single .content .book-entry:hover {
-            background-color: rgba($single-link-color-dark, 0.1);
-            border-left-color: $single-link-color-dark;
-        }
+        background-color: var(--accent-wash);
+        border-left-color: var(--accent);
     }
 }
 
@@ -65,22 +52,8 @@
 // the list moves the same visual marker a mouse user gets.
 .talk-entry:focus-within,
 .single .content .book-entry:focus-within {
-    background-color: rgba($single-link-color, 0.06);
-    border-left-color: $single-link-color;
-}
-
-[theme=dark] .talk-entry:focus-within,
-[theme=dark] .single .content .book-entry:focus-within {
-    background-color: rgba($single-link-color-dark, 0.1);
-    border-left-color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .talk-entry:focus-within,
-    [theme=auto] .single .content .book-entry:focus-within {
-        background-color: rgba($single-link-color-dark, 0.1);
-        border-left-color: $single-link-color-dark;
-    }
+    background-color: var(--accent-wash);
+    border-left-color: var(--accent);
 }
 
 // --- Link underlines ----------------------------------------------------
@@ -112,29 +85,16 @@
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
-    outline: 2px solid $single-link-color;
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 2px;
 }
 
-[theme=dark] a:focus-visible,
-[theme=dark] button:focus-visible,
-[theme=dark] [tabindex]:focus-visible {
-    outline-color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] a:focus-visible,
-    [theme=auto] button:focus-visible,
-    [theme=auto] [tabindex]:focus-visible {
-        outline-color: $single-link-color-dark;
-    }
-}
-
 // --- Selected text ------------------------------------------------------
 //
-// The background comes from $selection-color in _override.scss. What is set here
-// is the text colour on top of it, which the theme leaves to the browser.
+// The background comes from $selection-color in _override.scss, which the theme paints
+// itself, under [theme=dark] too. What is set here is the text colour on top of it,
+// which the theme leaves to the browser.
 //
 // Without it, selection inherits whatever colour the text already had, and an
 // amber link inside a selected paragraph lands on an amber background at 3.68:1 --
@@ -142,17 +102,7 @@ button:focus-visible,
 // headings and muted metadata in a single rule: 13.70:1 in light, 9.32:1 in dark,
 // both measured against the composited background rather than the page beneath it.
 ::selection {
-    color: $selection-text-color;
-}
-
-[theme=dark] ::selection {
-    color: $selection-text-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] ::selection {
-        color: $selection-text-color-dark;
-    }
+    color: var(--selection-ink);
 }
 
 // --- Active navigation item ---------------------------------------------
@@ -167,22 +117,10 @@ button:focus-visible,
 // that survives both -- it matches the edge the entry rows use on hover.
 #header-mobile .menu .menu-item.active {
     font-weight: 700;
-    color: $header-hover-color;
-    border-left: 3px solid $header-hover-color;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
     padding-left: 0.75rem;
     margin-left: -0.75rem;
-}
-
-[theme=dark] #header-mobile .menu .menu-item.active {
-    color: $header-hover-color-dark;
-    border-left-color: $header-hover-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] #header-mobile .menu .menu-item.active {
-        color: $header-hover-color-dark;
-        border-left-color: $header-hover-color-dark;
-    }
 }
 
 // --- Motion -------------------------------------------------------------
