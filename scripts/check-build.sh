@@ -718,20 +718,20 @@ nowhere 'Must Read' 'the tier subheadings are gone from both languages'
 # matter?" that is the five-step job ladder, and it rendered as one muted, dotted,
 # inline strip instead of a list. Every other top-level list lost its bullets to the
 # `> ul` reset beside it. A page's rules reach only that page, through the markup
-# the page itself declares -- here, the Entry (`.book-entry`), which only the
+# the page itself declares -- here, the Entry (`.entry--book`), which only the
 # reading list renders.
 echo 'Reading-list styles stay on the reading list'
 absent_from "$CSS" '.single .content>ul:first-of-type' 'no rule styles the first top-level list of every page'
 rule_lacks '\.single \.content>ul' 'list-style:none' 'top-level lists keep their bullets site-wide'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a' 'color:var\(--muted\)' 'its links are muted text, in both modes, still scoped to the reading list'
-rule_sets '\.single \.content:has\(\.book-entry\) h2\+p' 'color:var\(--muted\)' 'and so are its section lines, which have one rule and so one guard'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li a' 'color:var\(--muted\)' 'its links are muted text, in both modes, still scoped to the reading list'
+rule_sets '\.single \.content:has\(\.entry--book\) h2\+p' 'color:var\(--muted\)' 'and so are its section lines, which have one rule and so one guard'
 # What the CSS is aimed away from: the ladder is a plain list in the page, in both
 # languages, on a page that renders no Entry.
 for post in "$PUBLIC/do-job-titles-matter/index.html" "$PUBLIC/pt-br/do-job-titles-matter/index.html"; do
     matches "$post" '<ul><li>Junior Software Developer/Engineer</li>' "the job ladder is a list (${post#"$PUBLIC"/})"
-    absent_from "$post" 'book-entry' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
+    absent_from "$post" 'entry--book' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
 done
 
 # The Entry (CONTEXT.md): one item in a list, whichever list. It was five templates
@@ -808,6 +808,47 @@ for page in "$EN_SPEAKING" "$PT_SPEAKING"; do
     fi
 done
 
+# The reading list's Entries are the same shape with a note, which is the one list that
+# carries one (CONTEXT.md used to say all three did; the speaking page and the archive
+# dropped theirs by decision). A book has no date: a third of the list is newsletters
+# and podcasts, which have no year you could honestly give. Its title leaves the site,
+# so it opens in a new tab, and is an h3 under the section's h2.
+for page in "$EN_READING" "$PT_READING"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--book' "the reading list renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__note' "and a note, the one list that has them ($name)"
+    absent_from "$page" 'entry__date' "and no date ($name)"
+    matches "$page" '<h3 class=entry__title><a href=https?://[^ >]+ target=_blank rel="noopener noreferrer">' "a title is an h3 link that opens in a new tab ($name)"
+    contains "$page" 'entry--featured' "and the featured set is still there ($name)"
+done
+# The two weights of a book, in the stylesheet: compact puts the author on the title's
+# line, featured gives it room. And neither has an edge of its own, in either mode.
+rule_sets '\.entry--book:not\(\.entry--featured\) \.entry__head' 'display:flex' "a compact book's author shares its title's line"
+rule_sets '\.entry--featured \.entry__head>\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
+rule_lacks '\.entry--featured.*' 'border-left' 'a featured Entry has no edge of its own: size and space say it is featured'
+
+# The stylesheet's half of "one": no per-page stylesheet restates an Entry's title, meta
+# or date, because the class names those rules wore no longer exist anywhere in the
+# build. The date column's figures are set by exactly one rule.
+echo 'The Entry is set once'
+nowhere 'book-entry' 'no page carries the reading list'"'"'s old Entry classes, in markup or in CSS'
+nowhere 'talk-entry' 'nor the speaking page'"'"'s'
+# The archive's are checked on the four pages that were ours, not everywhere: the theme
+# keeps an `archive-item` of its own in its stylesheet and on its categories page.
+absent_from "$CSS" 'archive-item__' 'nor the archive'"'"'s, in CSS'
+for page in "$EN_ARCHIVE" "$PT_ARCHIVE" "$EN_TAG" "$PT_TAG"; do
+    absent_from "$page" 'archive-item' "nor the archive's or a tag page's, in markup (${page#"$PUBLIC"/})"
+done
+if [ "$(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums')" -eq 1 ]; then
+    ok 'one rule sets the date column in tabular figures'
+else
+    bad "one rule sets the date column in tabular figures (got $(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums'))"
+fi
+rule_sets '\.entry \.entry__head>\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
+rule_sets '\.entry \.entry__head>\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
+
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
 # The serif existed on the two Episode pages and nowhere else, declared in the last
@@ -849,8 +890,7 @@ rule_lacks '\.single \.content p' 'font-family' 'a paragraph inherits it rather 
 rule_sets 'html' 'font-family:var\(--global-font-family\)' 'the page is sans, so the header and footer are'
 rule_lacks '.*(header|footer|menu|toc|post-meta|post-footer).*' 'font-family:var\(--font-serif\)' 'nothing that navigates takes the serif'
 rule_sets '.*\.ep-kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
-rule_sets '.*\.book-entry' 'font-family:var\(--global-font-family\)' 'reading-list Entries are sans'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
 rule_sets '\.entry' 'font-family:var\(--global-font-family\)' 'Entries are sans, on every list: the speaking page, the writing lists, and the reading list'
 rule_sets '\.single \.content table' 'font-family:var\(--global-font-family\)' 'tables are sans'
 rule_sets '\.single \.content figcaption' 'font-family:var\(--global-font-family\)' 'and so are figure captions'
@@ -870,7 +910,7 @@ rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measur
 rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
 # The module comes first. With the headings' rules in it, and none of them
 # restated later, which file was imported last no longer decides a heading.
-for marker in 'home-signpost' 'portrait__img' 'entry__head' 'book-entry__header' 'entry__meta' 'ep-masthead'; do
+for marker in 'home-signpost' 'portrait__img' 'entry__head' 'entry__meta' 'ep-masthead'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
 done
 
@@ -957,15 +997,10 @@ rule_sets '\.entry \.entry__title a:hover' 'color:var\(--accent-hover\)' 'a step
 rule_sets '\.entry \.entry__date' 'color:var\(--muted\)' 'Entry dates are muted'
 rule_sets '\.archive-intro p' 'color:var\(--muted\)' 'and so is the line under the archive title'
 rule_sets '\.archive \.group-title' 'border-bottom:1px solid var\(--hairline\)' 'year headings sit on a hairline'
-rule_sets '\.single \.content:has\(\.book-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'a reading-list section heading sits on a hairline'
-rule_sets '\.single \.content>h2:has\(~\.entry\)' 'border-bottom:1px solid var\(--hairline\)' 'and so does a heading above any list of Entries, the speaking page included: found by the Entries after it, not by a page'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
-rule_sets '\.single \.content \.book-entry__title a' 'color:var\(--accent\)' 'a book title is a link, so the Accent'
-rule_sets '\.single \.content \.book-entry__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.single \.content \.book-entry__author' 'color:var\(--muted\)' 'an author is muted'
-rule_sets '\.single \.content \.book-entry__description' 'color:var\(--ink\)' 'a description is body text'
-rule_sets '\[theme=dark\] \.single \.content \.book-entry--featured' 'border-left-color:var\(--hairline\)' 'a featured Entry has a hairline edge in dark, which is how it renders, and not in light'
+rule_sets '\.single \.content>h2:has\(~\.entry\)' 'border-bottom:1px solid var\(--hairline\)' 'a heading above a list of Entries sits on a hairline, on the reading list and the speaking page alike: found by the Entries after it, not by a page'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
+rule_sets '\.entry \.entry__note' 'color:var\(--ink\)' 'a note is body text'
 rule_sets '\.entry \.entry__icon' 'color:var\(--muted\)' 'an Entry icon is muted until its kind says otherwise'
 rule_sets '\.entry \.entry__meta' 'color:var\(--muted\)' 'the venue and the author are muted'
 rule_sets '\.entry \.entry__links a' 'color:var\(--accent\)' 'links on the meta line are links, so the Accent'
@@ -1065,10 +1100,12 @@ dark_copy 'the footer, the logo and the home intro' '\.footer-social|\.logo-mark
 dark_copy 'the Greeting, a title or a heading' '\.home-subtitle|\.single-title|\.single \.content h[1-6]'
 dark_copy 'the home plate' '\.home-plate'
 dark_copy 'the headshot line' '\.portrait'
-dark_copy 'the archive' '\.archive-item__|\.archive-intro|\.group-title'
-# (The featured Entry's edge is the one dark rule here, kept as it renders and counted below.)
-dark_copy 'a reading-list Entry or its nav' '\.book-entry__|\.book-entry:|:has\(\.book-entry\)'
+dark_copy 'the archive' '\.archive-intro|\.group-title'
+dark_copy 'the reading list nav' ':has\(\.entry--book\)'
+# The Entry has no dark rule at all. It had one: the featured Entry's edge, shown in dark
+# and not in light by an accident of specificity. It is gone (see _entry.scss).
 dark_copy 'an Entry, on any list' '\.entry'
+rule_lacks '\[theme=dark\] .*\.entry.*' '.' 'and no [theme=dark] rule touches an Entry, whatever it sets'
 dark_copy 'the focus ring or the active nav item' ':focus-visible|\.menu-item\.active'
 dark_copy 'an Episode page' '\.episode|\.ep-'
 # The theme paints the selection's background itself, under [theme=dark]; what is ours is
@@ -1084,13 +1121,14 @@ absent_from "$CSS" 'theme=auto' 'no rule waits on [theme=auto], which nothing se
 absent_from "$CSS" 'prefers-color-scheme' 'and the stylesheet never reads the OS preference: the page does, once'
 # What is left under [theme=dark] reads a token and nothing else: the two rules the theme
 # draws again in dark at a specificity a light rule cannot reach (a quotation, and the
-# rule across the column), and the featured Entry's edge, which is more specific than the
-# Entry row's and so shows in dark only (see _reading-list.scss). A fourth would be a
-# place to restate a value, so adding one is a decision, and this is where it is counted.
-if [ "$(rules_with '\[theme=dark\] .*' 'var\(--')" -eq 3 ]; then
-    ok 'only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders'
+# rule across the column). There was a third, the featured Entry's edge, which was more
+# specific than the Entry row's and so showed in dark only; the Entry rework decided it
+# belongs in neither mode and removed it. A third would be a place to restate a value, so
+# adding one is a decision, and this is where it is counted.
+if [ "$(rules_with '\[theme=dark\] .*' 'var\(--')" -eq 2 ]; then
+    ok 'only two [theme=dark] rules read a token, both undoing the theme'
 else
-    bad "only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders (got $(rules_with '\[theme=dark\] .*' 'var\(--'))"
+    bad "only two [theme=dark] rules read a token, both undoing the theme (got $(rules_with '\[theme=dark\] .*' 'var\(--'))"
 fi
 # Everything after the token blocks is ours. None of it spells a hex colour: a component
 # takes a token, so the value exists in one place and is read from there. (What it may

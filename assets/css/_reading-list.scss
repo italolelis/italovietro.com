@@ -17,28 +17,28 @@
 // $global-font-secondary-color. That variable measures 2.33:1 in light and 2.18:1
 // in dark -- both well under AA -- which is why the old tier labels and author
 // names looked washed out rather than merely subtle.
+//
+// The two weights themselves -- compact, and featured for "Start Here" -- are the
+// Entry's (_entry.scss), the same Entry the speaking page and the archive render. What
+// is left here is what surrounds them on this page: the section lines and the nav.
 
-// The seam. Everything on this page that is not an Entry is scoped through the
-// Entry, because `.book-entry` is the one thing only this page renders -- see the
-// note at the nav, below, for what went wrong when a rule was not.
-$reading-list: ".single .content:has(.book-entry)";
+// The seam. Everything on this page that is not an Entry is scoped through a kind of
+// Entry, because `.entry--book` is the one thing only this page renders -- see the
+// note at the nav, below, for what went wrong when a rule was not. (It is the kind, not
+// `.entry`: the speaking page renders Entries too, and a rule that named only the Entry
+// would reach it.)
+$reading-list: ".single .content:has(.entry--book)";
 
 // --- Section headings ----------------------------------------------------
 //
 // The heading itself -- face, size, weight, margins, colour -- is the site's, in
-// _typography.scss. What belongs here is the rule under it: on this page an h2 heads
-// a list of Entries, and the hairline is what makes the list read as a section.
-// Everywhere else an h2 is an article's subhead and carries no rule.
-#{$reading-list} h2 {
-    margin-top: 4rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--hairline);
-}
+// _typography.scss, and the rule under it is the Entry's (_entry.scss): an h2 that
+// heads a list of Entries has a hairline, on this page and on the speaking page,
+// found by the Entries after it. Nothing here declares it any more.
 
 // The line under each section heading.
 //
-// Scoped with :has(.book-entry) so it only applies on this page. Unscoped, it
+// Scoped with :has(.entry--book) so it only applies on this page. Unscoped, it
 // matched `h2 + p` on every .single page -- which on the home page meant the
 // first body paragraph after each "What I've learned about..." heading rendered
 // at 15px and muted while the paragraphs below it stayed at the 16px default.
@@ -112,117 +112,8 @@ $reading-list: ".single .content:has(.book-entry)";
     text-underline-offset: 3px;
 }
 
-// --- Entries, shared -----------------------------------------------------
-.single .content .book-entry__title {
-    text-wrap: balance;
-    margin: 0;
-}
-
-.single .content .book-entry__title a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: color $transition-base;
-}
-
-.single .content .book-entry__title a:hover {
-    color: var(--accent-hover);
-}
-
-.single .content .book-entry__author {
-    color: var(--muted);
-}
-
-.single .content .book-entry__description {
-    color: var(--ink);
-    margin: 0;
-}
-
-// --- Compact entries (the default) ---------------------------------------
-//
-// Title and author share a line, which is where the density comes from. Long
-// author lists wrap naturally rather than being pushed out of the row.
-.single .content .book-entry {
-    @include sans;
-    margin-bottom: 1.75rem;
-}
-
-.single .content .book-entry__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 0.5rem;
-}
-
-.single .content .book-entry__title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-.single .content .book-entry__author {
-    font-size: 0.8125rem;
-}
-
-// No separator glyph between title and author. A "·" here orphans itself at the
-// start of the next line whenever a long author list wraps -- "Site Reliability
-// Engineering" has four authors and did exactly that. CSS cannot detect wrapping,
-// so the size and colour difference does the separating instead.
-
-.single .content .book-entry__description {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    margin-top: 0.25rem;
-}
-
-// --- Featured entries ----------------------------------------------------
-//
-// The answer to "what should I read?" gets room to breathe: a bigger title, the
-// author on its own line, and the description at full reading size.
-.single .content .book-entry--featured {
-    margin-bottom: 2.5rem;
-    padding-left: 1.25rem;
-}
-
-// An edge, in dark only, and not on purpose. This rule used to declare a 2px hairline
-// edge for the featured Entry, to group it without turning it into a card. The Entry
-// row's own transparent 3px edge (_interactions.scss) has the same specificity and is
-// imported later, so it has always won in light, where there is no edge. The dark
-// rule that recoloured the hairline was one attribute more specific, so it won, and
-// dark has shown a hairline edge ever since. This keeps what renders; whether the
-// featured Entry has the edge in both modes or neither is for the Entry rework to
-// decide, and it will be a decision about one rule, not two.
-[theme=dark] .single .content .book-entry--featured {
-    border-left-color: var(--hairline);
-}
-
-.single .content .book-entry--featured .book-entry__header {
-    display: block;
-}
-
-.single .content .book-entry--featured .book-entry__title {
-    font-size: 1.3125rem;
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-.single .content .book-entry--featured .book-entry__author {
-    display: block;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.single .content .book-entry--featured .book-entry__description {
-    font-size: 1.0625rem;
-    line-height: 1.7;
-    margin-top: 0.625rem;
-}
-
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    #{$reading-list} h2 {
-        margin-top: 3rem;
-    }
-
     #{$reading-list} > ul:first-of-type {
         flex-direction: column;
         gap: 0;
@@ -236,17 +127,5 @@ $reading-list: ".single .content:has(.book-entry)";
         display: block;
         padding: 4px 0;
         text-align: left;
-    }
-
-    .single .content .book-entry--featured {
-        padding-left: 1rem;
-    }
-
-    .single .content .book-entry--featured .book-entry__title {
-        font-size: 1.1875rem;
-    }
-
-    .single .content .book-entry--featured .book-entry__description {
-        font-size: 1rem;
     }
 }

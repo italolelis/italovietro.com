@@ -2,11 +2,13 @@
 // Interaction states
 // ==============================
 //
-// Hover, focus and motion for the entry lists. Colours come from the tokens in
+// Hover, focus and motion for the site. The Entry's own -- its hover row, the tint and
+// the Accent edge, and the link underline -- moved to _entry.scss with the rest of the
+// Entry, so there is one hover and it is written once. Colours come from the tokens in
 // _tokens.scss -- nothing here introduces a new value, and nothing says which mode it
 // is in.
 //
-// Two rules govern everything below:
+// Two rules govern everything below, and the Entry's hover follows them too:
 //
 //   1. Hover styles live inside `@media (hover: hover)`. On a touch screen a
 //      tap counts as hover and the state sticks until the next tap lands
@@ -15,60 +17,6 @@
 //
 //   2. Focus is styled with :focus-visible and never depends on hover, so a
 //      keyboard user can always see where they are.
-
-// --- Entry rows ---------------------------------------------------------
-//
-// The entries are background-less blocks, so a shadow "lift" would have
-// nothing to lift off. A tint plus an accent edge reads as interactive
-// without inventing a card.
-//
-// The negative margin cancels the padding and border so text stays optically
-// aligned with the surrounding prose -- the row grows outward on hover
-// instead of shoving the content sideways.
-%entry-row {
-    padding: 12px 16px;
-    margin-left: -19px; // 16px padding + 3px border
-    border-left: 3px solid transparent;
-    border-radius: 6px;
-    transition:
-        background-color $transition-base,
-        border-left-color $transition-base;
-}
-
-.single .content .book-entry {
-    @extend %entry-row;
-}
-
-@media (hover: hover) {
-    .single .content .book-entry:hover {
-        background-color: var(--accent-wash);
-        border-left-color: var(--accent);
-    }
-}
-
-// A row containing the focused link is highlighted too, so tabbing through
-// the list moves the same visual marker a mouse user gets.
-.single .content .book-entry:focus-within {
-    background-color: var(--accent-wash);
-    border-left-color: var(--accent);
-}
-
-// --- Link underlines ----------------------------------------------------
-//
-// Entry links carry no underline at rest, which keeps the lists scannable.
-// Revealing one on hover and focus means the affordance is not carried by
-// colour alone.
-@media (hover: hover) {
-    .single .content .book-entry__title a:hover {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-    }
-}
-
-.single .content .book-entry__title a:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
 
 // --- Focus ring ---------------------------------------------------------
 //
