@@ -41,26 +41,11 @@
     <article class="page single episode">
         {{- partial "episode/timeline.html" (dict "page" . "chapters" $chapters "duration" $duration "moments" $moments) -}}
 
-        <div class="ep-masthead">
-            <p class="ep-kicker">
-                <span class="ep-kicker__show">{{ $ep.show }}</span>
-                <span class="ep-kicker__sep" aria-hidden="true">·</span>
-                <span>{{ $ep.number }}</span>
-            </p>
-            <h1 class="single-title ep-title">{{ .Title }}</h1>
-            {{- with .Params.subtitle }}
-            <p class="ep-dek">{{ . | markdownify }}</p>
-            {{- end }}
-            <p class="ep-meta">
-                <span>{{ T "episode.basedOn" (dict "Title" $ep.title "Hosts" (delimit $ep.hosts (T "episode.and"))) | safeHTML }}</span>
-                <span>
-                    {{- with $ep.released }}{{ T "episode.released" (time.Format ":date_long" (time.AsTime .)) }}<span class="ep-meta__sep" aria-hidden="true">·</span>{{ end -}}
-                    {{ T "episode.length" (math.Round (div $duration 60.0) | int) }}<span class="ep-meta__sep" aria-hidden="true">·</span>
-                    {{- T "episode.writtenUp" (.Date | time.Format ":date_long") -}}
-                </span>
-            </p>
-            <p class="ep-disclaimer">{{ T "episode.disclaimer" (dict "Writing" ("posts/" | relLangURL)) | markdownify }}</p>
-        </div>
+        {{- /* The masthead is the same partial a post calls (partials/masthead.html):
+               kicker, headline, dek and meta line. What is the Episode page's own is
+               the note under it, which says who wrote the page. */ -}}
+        {{- partial "masthead.html" . }}
+        <p class="ep-disclaimer">{{ T "episode.disclaimer" (dict "Writing" ("posts/" | relLangURL)) | markdownify }}</p>
 
         {{- with $ep.hero }}{{ with $.Resources.GetMatch .src }}
         {{- partial "plate.html" (dict "img" . "alt" $ep.hero.alt "class" "ep-plate--hero" "eager" true) }}
@@ -98,7 +83,10 @@
             </aside>
         </div>
 
-        {{- partial "single/footer.html" . -}}
+        {{- /* The share links, and nothing else of the theme's post footer: no tags
+               (an Episode page is filed under none), no previous and next, no
+               "Updated on" or git hash, no link to the Markdown. */ -}}
+        {{- partial "single/share.html" . -}}
     </article>
 
     {{- with resources.Get "js/episode.js" }}

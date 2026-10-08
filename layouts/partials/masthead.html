@@ -1,0 +1,96 @@
+{{- /*
+    The masthead of a piece of writing: a kicker, the headline, the dek and one quiet
+    meta line. Called with the page -- `{{ partial "masthead.html" . }}` -- by the post
+    layout (layouts/posts/single.html) and the Episode layout (layouts/episodes/single.html),
+    and the markup it writes is the same for both, so one stylesheet (_masthead.scss) and
+    one set of post-build assertions cover every page that has one.
+
+    It replaces two things. A post used to render through the theme's own template: a
+    1.6rem sans title that flipped in, a byline with an icon, the category with another,
+    an ISO date, a word count. The Episode page carried a masthead of its own, inline in
+    its layout. Italo's writing looked like a theme default beside the pages he did not
+    write; this is the one the Episode page had, for both.
+
+    The page is the interface. What each part is, for the two kinds of page there are:
+
+                post                                Episode page
+      kicker    the category, linked to its page    the show and the episode number
+      headline  the title                           the title
+      dek       `subtitle`, else `description`      `subtitle`
+      meta      By Author · Date · N min read       two lines: what it is based on;
+                (· Updated Date, when `lastmod`     released · length · when it was
+                falls on a later day)               written up
+
+    The dek is the page's `subtitle` if it has one and its `description` if not. The
+    description is also the SEO text, so a post that wants a dek of its own writes a
+    `subtitle` and leaves the description as it is.
+
+    "Updated" reads the front matter's `lastmod`, not `.Lastmod`. With `enableGitInfo`
+    on, Hugo's default puts the date of the last commit to touch the file ahead of the
+    front matter, so a revert of an experiment that never changed a word of a post would
+    announce that the post was updated. A claim about currency has to be true, because
+    the audience is checking it (ADR-0005); `lastmod` is the date Italo sets when he
+    changes what a post says. `.Lastmod` is only the fallback for a page without one.
+
+    The dates are written out in the page's language ("October 7, 2026", "7 de outubro de
+    2026"), with the machine-readable day in the `datetime` attribute.
+
+    Every string is a `masthead.*` key in i18n/, not an `episode.*` one: what the
+    masthead says is said once, whichever page it is on.
+
+    A `div`, not a `<header>`. The theme styles a bare `header` element as the site's
+    bar -- full width, a grey fill, a z-index of 150, a shadow on hover -- so a
+    `<header>` here turns the masthead into a second one.
+*/ -}}
+{{- $ep := .Params.episode -}}
+<div class="masthead">
+    {{- /* Kicker: where the piece sits, not what it says. */ -}}
+    {{- if $ep }}
+    <p class="masthead__kicker">
+        <span class="masthead__lead">{{ $ep.show }}</span>
+        <span class="masthead__sep" aria-hidden="true">·</span>
+        <span>{{ $ep.number }}</span>
+    </p>
+    {{- else }}
+        {{- /* The first category only: a piece sits in one place. */ -}}
+        {{- with index (.GetTerms "categories") 0 }}
+    <p class="masthead__kicker"><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></p>
+        {{- end }}
+    {{- end }}
+
+    <h1 class="single-title masthead__title">{{ .Title | emojify }}</h1>
+
+    {{- with .Params.subtitle | default .Params.description }}
+    <p class="masthead__dek">{{ . | markdownify }}</p>
+    {{- end }}
+
+    <p class="masthead__meta">
+        {{- if $ep }}
+        {{- $duration := $ep.duration | int }}
+        <span class="masthead__line">{{ T "masthead.basedOn" (dict "Title" $ep.title "Hosts" (delimit $ep.hosts (T "masthead.and"))) | safeHTML }}</span>
+        <span class="masthead__line">
+            {{- with $ep.released }}{{ T "masthead.released" (time.Format ":date_long" (time.AsTime .)) }}<span class="masthead__sep" aria-hidden="true">·</span>{{ end -}}
+            {{ T "masthead.length" (math.Round (div $duration 60.0) | int) }}<span class="masthead__sep" aria-hidden="true">·</span>
+            {{- T "masthead.writtenUp" (.Date | time.Format ":date_long") -}}
+        </span>
+        {{- else }}
+        <span class="masthead__line">
+            {{- /* The byline goes to the About page: someone arriving from a search is
+                   asking who this is, and that is the page that answers. */ -}}
+            {{- $author := .Params.author | default .Site.Params.Author.name | default (T "author") | htmlEscape -}}
+            {{- with .Site.GetPage "/about" }}{{ $author = printf `<a href="%s" rel="author">%s</a>` .RelPermalink $author }}{{ end -}}
+            {{ T "masthead.by" $author | safeHTML }}<span class="masthead__sep" aria-hidden="true">·</span>
+            {{- /* Written out, with the day machine-readable beside it. */ -}}
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time><span class="masthead__sep" aria-hidden="true">·</span>
+            {{- T "masthead.readingTime" .ReadingTime -}}
+            {{- /* `.Params.lastmod` is the raw front matter, a string; read in the
+                   zone the publication date is in, so two days are compared as days. */ -}}
+            {{- $updated := (time.AsTime (.Params.lastmod | default .Lastmod)).In .Date.Location -}}
+            {{- if gt ($updated.Format "2006-01-02") (.Date.Format "2006-01-02") -}}
+                <span class="masthead__sep" aria-hidden="true">·</span>
+                {{- T "masthead.updated" (printf `<time datetime="%s">%s</time>` ($updated.Format "2006-01-02") ($updated | time.Format ":date_long")) | safeHTML -}}
+            {{- end -}}
+        </span>
+        {{- end }}
+    </p>
+</div>

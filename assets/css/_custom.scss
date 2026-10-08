@@ -10,6 +10,11 @@
 // Then the type module: it owns the voice and the Measure, and every stylesheet
 // below reads from it. See the note at the top of _typography.scss.
 @import "typography";
+// The masthead of a post and of an Episode page, built from the module above and read
+// by both. See the note at the top of _masthead.scss.
+@import "masthead";
+// What sits around a post's text: the Contents box and the foot. See _post.scss.
+@import "post";
 // Was margin-top: 13rem. That existed to compensate for the theme pushing the
 // profile block down by translateY(16vh) -- two hacks cancelling each other, with
 // the result depending on viewport height. The transform is reset in _home.scss,

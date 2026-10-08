@@ -1,0 +1,53 @@
+{{- /*
+    The foot of a post. Mirrors themes/LoveIt/layouts/partials/single/footer.html,
+    which the Episode layout used to share with posts; it is the post's alone now, and
+    what differs is what it keeps.
+
+      removed   "Updated on" and the git hash beside it (the masthead says when a post
+                was updated, where it is true -- see partials/masthead.html), "Read
+                Markdown", "Back | Home", the license line (none is set), and the
+                icons beside the tags and the previous and next links
+      kept      the share links (partials/single/share.html), the tags, and the
+                previous and next posts, on Italo's decision (#320)
+
+    The previous and next posts carry a small label over the title now, in the
+    masthead's kicker voice, so a link to the post before and the post after says
+    which is which without an arrow.
+
+    `#post-footer` stays: the theme's Contents script measures it to know where the
+    floating box stops.
+*/ -}}
+<div class="post-footer" id="post-footer">
+    <div class="post-footer__row">
+        {{- with .GetTerms "tags" }}
+        <ul class="post-tags">
+            {{- range . }}
+            <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+            {{- end }}
+        </ul>
+        {{- end }}
+        {{- partial "single/share.html" . }}
+    </div>
+
+    <div class="post-nav">
+        {{- $prevPage := false -}}
+        {{- $nextPage := false -}}
+        {{- if or (.Params.prev) (.Params.next) -}}
+            {{- with .Params.prev -}}
+                {{- $prevPage = $.Site.GetPage . -}}
+            {{- end -}}
+            {{- with .Params.next -}}
+                {{- $nextPage = $.Site.GetPage . -}}
+            {{- end -}}
+        {{- else -}}
+            {{- $prevPage = .PrevInSection -}}
+            {{- $nextPage = .NextInSection -}}
+        {{- end -}}
+        {{- with $prevPage }}
+        <a href="{{ .RelPermalink }}" class="prev" rel="prev" title="{{ .Title }}"><span class="post-nav__label">{{ T "post.previous" }}</span>{{ .Title | emojify }}</a>
+        {{- end }}
+        {{- with $nextPage }}
+        <a href="{{ .RelPermalink }}" class="next" rel="next" title="{{ .Title }}"><span class="post-nav__label">{{ T "post.next" }}</span>{{ .Title | emojify }}</a>
+        {{- end }}
+    </div>
+</div>

@@ -651,7 +651,7 @@ absent_from "$CSS" 'left:-100vmax' 'nothing on an episode page is laid out past 
 
 # One measure (docs/adr/0004). The masthead and hero sit outside .content and
 # take the cap explicitly; without it the title starts 140px left of the prose.
-matches "$CSS" '\.episode \.ep-masthead,\.episode>\.ep-plate--hero\{max-width:800px' 'the masthead and hero share the 800px measure'
+matches "$CSS" '\.episode>\.ep-disclaimer,\.episode>\.ep-plate--hero\{max-width:800px' 'the disclaimer and the hero plate share the 800px measure'
 # The plates are watercolours with an alpha edge, saved as WebP at twice the
 # measure. A PNG export is ten times the size and looks the same.
 oversized=0
@@ -668,6 +668,179 @@ for plate in "${plates[@]}"; do
     fi
 done
 [ "$oversized" -eq 0 ] && ok 'every plate is under 160KB'
+
+# One masthead for a post and an Episode page (partials/masthead.html): a kicker, the
+# headline, the dek and one quiet meta line. The two used to be unrelated: a post
+# rendered through the theme's own template -- a 1.6rem sans title, a byline with an
+# icon, a word count, a git hash -- and the Episode page carried a masthead of its
+# own, inline in its layout, which Claude had written. Italo's pages looked like a
+# theme default beside the pages he did not write.
+#
+# The pages are found rather than listed. A post is a local row of the writing
+# archive (an Elsewhere row links off the site and has no page here), so a new post
+# is covered by the loop the day it is written. The Episode pages are the list
+# above. The loop asserts on both languages of each.
+echo 'The masthead: one for posts and Episode pages'
+POSTS=()
+while IFS= read -r slug; do
+    POSTS+=("$slug")
+done < <(grep -oE 'class=archive-item__title><a href=/[^ >]+/>' "$EN_ARCHIVE" | sed -E 's#.*href=/([^ >]+)/>#\1#')
+if [ "${#POSTS[@]}" -gt 0 ]; then
+    ok "the writing archive links ${#POSTS[@]} posts written here, and each is checked in both languages"
+else
+    bad 'the writing archive links no post written here, so the masthead loop below would check nothing'
+fi
+MASTHEAD_POSTS=()
+MASTHEAD_EPISODES=()
+for slug in "${POSTS[@]}"; do
+    MASTHEAD_POSTS+=("$PUBLIC/$slug/index.html" "$PUBLIC/pt-br/$slug/index.html")
+done
+for entry in "${EPISODES[@]}"; do
+    read -r slug _ <<< "$entry"
+    MASTHEAD_EPISODES+=("$PUBLIC/episodes/$slug/index.html" "$PUBLIC/pt-br/episodes/$slug/index.html")
+done
+for page in "${MASTHEAD_POSTS[@]}" "${MASTHEAD_EPISODES[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    # The same markup on both kinds of page, in this order. `in_order`, because the
+    # minifier keeps some newlines and the four parts sit on different lines.
+    in_order "$page" 'class=masthead>.*class=masthead__kicker>.*<h1 class="single-title masthead__title">.*class=masthead__dek>.*class=masthead__meta>' "$name: a kicker, the headline, the dek and the meta line, in that order"
+    occurs "$page" 'class=masthead>' 1 "$name: one masthead"
+    occurs "$page" '<h1' 1 "$name: and one h1, which is the headline"
+    # What the theme drew above a post and Italo decided against (#320): the icons
+    # beside the byline, the date and the category, the word count, the title that
+    # flipped in, and the theme's whole meta block. The class names, not the words:
+    # "words" is a word a post may use.
+    for gone in 'fa-user-circle' 'fa-calendar-alt' 'fa-pencil-alt' 'fa-clock' 'fa-folder' 'class=post-meta' 'animate__flipInX'; do
+        absent_from "$page" "$gone" "$name: no theme meta furniture ($gone)"
+    done
+    # What the theme drew under it, and Italo decided against: the git hash beside
+    # "Updated on", a link to the raw Markdown, and "Back | Home".
+    absent_from "$page" 'class=git-hash' "$name: no git hash"
+    absent_from "$page" 'class=link-to-markdown' "$name: no link to the Markdown"
+    absent_from "$page" 'window.history.back()' "$name: no Back | Home"
+    absent_from "$page" 'Updated on' "$name: nor the theme's Updated on line"
+    # Sharing is part of the product (ADR-0005), so it stays, on a post and on an
+    # Episode page alike.
+    contains "$page" 'data-sharer=x' "$name: the share links are kept (X)"
+    contains "$page" 'data-sharer=facebook' "$name: and Facebook"
+    contains "$page" 'data-sharer=hackernews' "$name: and Hacker News"
+done
+
+# A post's meta line: who, when it was written, how long it takes. The date is written
+# out in the page's language, with the day machine-readable beside it; the byline goes
+# to the About page, where someone arriving from a search finds out who this is.
+MONTHS_EN='January|February|March|April|May|June|July|August|September|October|November|December'
+MONTHS_PT='janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
+for page in "${MASTHEAD_POSTS[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    case $name in
+        pt-br/*)
+            in_order "$page" 'class=masthead__meta><span class=masthead__line>Por <a href=/pt-br/sobre/ rel=author>[^<]+</a>.*<time datetime=[0-9]{4}-[0-9]{2}-[0-9]{2}>[0-9]{1,2} de ('"$MONTHS_PT"') de [0-9]{4}</time>.*[0-9]+ min de leitura' "$name: the meta line reads byline, date written out, reading time" ;;
+        *)
+            in_order "$page" 'class=masthead__meta><span class=masthead__line>By <a href=/about/ rel=author>[^<]+</a>.*<time datetime=[0-9]{4}-[0-9]{2}-[0-9]{2}>('"$MONTHS_EN"') [0-9]{1,2}, [0-9]{4}</time>.*[0-9]+ min read' "$name: the meta line reads byline, date written out, reading time" ;;
+    esac
+    # An "Updated" date is a claim about currency, and the audience is checking
+    # (ADR-0005): it appears only for a later day than the one the post was written.
+    published=$(grep -oE 'masthead__line>.{0,200}<time datetime=[0-9-]{10}' "$page" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    updated=$(grep -oE '(Updated|Atualizado em) <time datetime=[0-9-]{10}' "$page" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    if [ -z "$updated" ] || [[ $updated > $published ]]; then
+        ok "$name: an update is announced only for a later day than the one it was written (${updated:-none})"
+    else
+        bad "$name: updated $updated is not after published $published"
+    fi
+done
+# The dek is the post's description, or its own `subtitle` where it has one.
+in_order "$PUBLIC/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'the dek of a post is its description'
+in_order "$PUBLIC/pt-br/do-job-titles-matter/index.html" 'class=masthead__dek>[A-ZÀ-Ú]' 'and in pt-br too'
+
+# An Episode page's meta line: what it is based on, then when it came out, how long it
+# runs and when it was written up. Same partial, so the strings are `masthead.*` keys,
+# and the dates are written out in the page's language.
+for page in "${MASTHEAD_EPISODES[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    in_order "$page" 'class=masthead__kicker><span class=masthead__lead>[^<]+</span>.*class=masthead__meta><span class=masthead__line>.*<strong>[^<]+</strong>.*</span><span class=masthead__line>' "$name: the kicker leads with the show, and the meta line is two lines: what it is based on, then the dates"
+    case $name in
+        pt-br/*)
+            matches "$page" 'Publicado em [0-9]{1,2} de ('"$MONTHS_PT"') de [0-9]{4}' "$name: released date written out"
+            matches "$page" 'Escrito pelo Claude a partir da transcrição do episódio, em [0-9]{1,2} de ('"$MONTHS_PT"') de [0-9]{4}' "$name: and when it was written up" ;;
+        *)
+            matches "$page" 'Released ('"$MONTHS_EN"') [0-9]{1,2}, [0-9]{4}' "$name: released date written out"
+            matches "$page" 'Written by Claude from a transcript of the episode, ('"$MONTHS_EN"') [0-9]{1,2}, [0-9]{4}' "$name: and when it was written up" ;;
+    esac
+    # The note that says who wrote the page comes straight after the masthead, ahead of
+    # the plate and the chapters.
+    matches "$page" '</div><p class=ep-disclaimer>' "$name: the disclaimer sits directly under the masthead"
+    # An Episode page keeps the share links and none of the rest of the theme's post
+    # footer: no tags (it is filed under none), no previous and next, no Updated line.
+    absent_from "$page" 'class=post-nav' "$name: no previous and next"
+    absent_from "$page" 'class=post-tags' "$name: no tags"
+    # The visible links, not the `<link rel=prev>` the head carries for crawlers.
+    absent_from "$page" 'class=prev rel=prev' "$name: nor a link to the previous episode"
+    absent_from "$page" 'class=next rel=next' "$name: nor to the next"
+done
+
+# The footer of a post: tags, the share links and the previous and next posts. The
+# last two are Italo's decision to keep. Every post here has tags and a neighbour.
+for page in "${MASTHEAD_POSTS[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    in_order "$page" 'id=post-footer>.*class=post-tags>.*href=/(pt-br/)?tags/' "$name: the footer lists its tags"
+    matches "$page" 'class=(prev|next)' "$name: and links the post before or after it"
+    # The Contents box is the theme's, and kept: the floating one and the one inside
+    # the article, and the list they share.
+    contains "$page" 'id=toc-auto' "$name: the Contents box is kept (floating)"
+    contains "$page" 'id=toc-static' "$name: and the one inside the article"
+    matches "$page" '<nav id=TableOfContents>(<ul>|<li>)+<a href=#' "$name: with its entries (a post whose headings are all h3 opens on an empty list item)"
+    # Its entries carry no emoji. A heading is written with one; a list to scan is not
+    # improved by one in every row. Found by the bytes, not by a list of emoji, so a
+    # new one is caught: a character outside the Basic Multilingual Plane (every
+    # pictograph added since 2010, lead byte F0), a variation selector, a zero-width
+    # joiner, or an entry opening on a symbol or dingbat (U+2600 to U+27BF).
+    if grep -oE '<a href=#[^ >]+>[^<]*' "$page" | LC_ALL=C grep -qE $'\xf0|\xef\xb8\x8f|\xe2\x80\x8d|>\xe2[\x98-\x9e]'; then
+        bad "$name: a Contents entry carries an emoji"
+    else
+        ok "$name: no Contents entry carries an emoji"
+    fi
+done
+# Only the Contents box is stripped: the heading it points to keeps its emoji.
+contains "$PUBLIC/do-job-titles-matter/index.html" 'href=#-democratic-decisions>Democratic decisions</a>' 'a Contents entry is the heading without its emoji'
+contains "$PUBLIC/do-job-titles-matter/index.html" '👨‍⚖️ Democratic decisions</h3>' 'and the heading itself is left as it was written'
+
+# The stylesheet behind it (_masthead.scss and _post.scss). The masthead is built from the
+# type module's pieces, so what is asserted here is that it reads them: the Measure, the
+# kicker, the headline step an Episode page lifts to the display step, and tokens for
+# every colour. What the theme drew in its own voice -- the amber "|" before each Contents
+# entry, the tag icon, the arrows -- is asserted gone.
+echo 'The masthead and a post: stylesheet'
+rule_sets '\.masthead' 'max-width:800px' 'the masthead is the 800px Measure, so the headline starts on the prose edge'
+rule_sets '\.masthead__kicker' 'text-transform:uppercase' 'a kicker is small caps'
+rule_sets '\.masthead__kicker' 'color:var\(--muted\)' 'in the muted colour'
+rule_sets '\.masthead__kicker a' 'color:var\(--heading\)' 'a category, which is the lead of its kicker, a step darker'
+rule_sets '\.masthead__kicker a:hover' 'color:var\(--accent\)' 'and the Accent when pointed at'
+rule_sets '\.masthead__meta' 'font-size:\.875rem' 'the meta line is the scale'"'"'s ui step'
+rule_sets '\.masthead__line' 'display:block' 'and each line of it is its own block'
+rule_sets '\.masthead__meta a' 'border-bottom:1px solid var\(--hairline\)' 'the byline is a link on a hairline'
+rule_sets '\.masthead__meta a:hover' 'color:var\(--accent\)' 'which takes the Accent when pointed at'
+rule_sets '\.single \.masthead__title' 'margin:0 0 1\.1rem' 'a headline inside a masthead takes no top margin of its own'
+rule_sets '\.episode \.single-title\.masthead__title' 'font-size:3\.75rem' 'an Episode page lifts the headline to the display step'
+rule_sets '\.episode \.single-title\.masthead__title' 'font-weight:400' 'at the regular weight, as it was'
+rule_lacks '\.masthead.*' 'font-family:(Charter|Georgia)' 'no masthead rule spells out a stack'
+rule_sets '\.toc \.toc-content ul a:first-child::before' 'content:none' 'a Contents entry has no amber mark before it'
+rule_sets '\.toc \.toc-title' 'text-transform:uppercase' 'the Contents title is a kicker'
+rule_sets '\.toc \.toc-content a' 'color:var\(--muted\)' 'its entries are muted'
+rule_sets '#toc-auto \.toc-content a\.active' 'color:var\(--accent\)' 'and the one you are reading, in the floating box, takes the Accent'
+rule_sets '#toc-auto' 'border-left:1px solid var\(--rule\)' 'the floating box has a hairline down its side, not the theme'"'"'s 4px bar'
+rule_sets '\.single #toc-static' 'border-top:1px solid var\(--rule\)' 'the box inside the article is ruled above'
+rule_sets '\.single #toc-static' 'border-bottom:1px solid var\(--rule\)' 'and below, not filled'
+rule_sets '\.single \.post-footer' 'max-width:800px' 'the foot of a post is the Measure'
+rule_sets '\.single>\.post-share' 'max-width:800px' 'and so is the share row an Episode page ends on'
+rule_sets '\.post-tags li:not\(:last-child\)::after' 'content:"\\00B7"' 'tags are separated by a middle dot that follows its tag'
+rule_sets '\.post-tags a' 'color:var\(--muted\)' 'a tag is muted'
+rule_sets '\.post-tags a:hover' 'color:var\(--accent\)' 'and the Accent when pointed at'
+rule_sets '\.post-share__links a' 'color:var\(--muted\)' 'a share link is muted'
+rule_sets '\.post-share__label' 'text-transform:uppercase' 'under a kicker label'
+rule_sets '\.post-nav a' 'color:var\(--heading\)' 'the neighbouring posts are titled in the heading colour'
+rule_sets '\.post-nav a:hover' 'color:var\(--accent\)' 'and the Accent when pointed at'
+rule_sets '\.single \.post-footer \.post-nav::before' 'content:none' 'the theme'"'"'s clearfix does not become a flex item'
 
 # Two new jobs for amber: the nav item for the section you are in, and selected
 # text. Both were measured against the theme's real backgrounds -- 4.73:1 for the
@@ -752,7 +925,7 @@ absent_from "$CSS" 'font-family:system-ui,-apple-system,Segoe UI,Roboto,Emoji' '
 # and that is one stack, so the three cannot disagree.
 rule_sets '\.single \.single-title' 'font-family:var\(--font-serif\)' 'a post title is set in the serif'
 rule_sets '\.archive \.single-title' 'font-family:var\(--font-serif\)' 'so is the archive title'
-rule_sets '\.episode \.single-title\.ep-title' 'font-family:var\(--font-serif\)' 'and so is an Episode page title, from the same stack'
+rule_sets '\.episode \.single-title\.masthead__title' 'font-family:var\(--font-serif\)' 'and so is an Episode page title, from the same stack'
 rule_sets '\.home \.home-profile \.home-subtitle' 'font-family:var\(--font-serif\)' 'the Greeting is a headline, so it is serif too'
 rule_sets '\.single \.content>h2' 'font-family:var\(--font-serif\)' 'article section headings are serif'
 rule_sets '\.single \.content>h3' 'font-family:var\(--font-serif\)' 'and so are its subheadings'
@@ -760,7 +933,7 @@ rule_sets '\.single \.content>h3' 'font-family:var\(--font-serif\)' 'and so are 
 # in a list, not a subhead. An article rule that reached it would also outrank the
 # Entry's own, which is how the speaking page's titles once grew to 1.375rem.
 rule_lacks '\.single \.content h[1-6]' 'font-family:var\(--font-serif\)' 'no article heading rule reaches into the markup of an Entry'
-rule_sets '\.episode \.ep-dek' 'font-family:var\(--font-serif\)' 'a dek is serif'
+rule_sets '\.masthead__dek' 'font-family:var\(--font-serif\)' 'a dek is serif'
 # Running text. The paragraph has no rule of its own: it inherits from the column,
 # so a post, About and an Episode page read in the same face.
 rule_sets '\.single \.content' 'font-family:var\(--font-serif\)' 'running text on posts, About and Episode pages is serif'
@@ -771,7 +944,7 @@ rule_lacks '\.single \.content p' 'font-family' 'a paragraph inherits it rather 
 # not prose opts back out.
 rule_sets 'html' 'font-family:var\(--global-font-family\)' 'the page is sans, so the header and footer are'
 rule_lacks '.*(header|footer|menu|toc|post-meta|post-footer).*' 'font-family:var\(--font-serif\)' 'nothing that navigates takes the serif'
-rule_sets '.*\.ep-kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
+rule_sets '\.masthead__kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
 rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
 rule_sets '.*\.book-entry' 'font-family:var\(--global-font-family\)' 'reading-list Entries are sans'
 rule_sets '.*\.talk-entry' 'font-family:var\(--global-font-family\)' 'speaking Entries are sans'
@@ -793,7 +966,7 @@ rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measur
 rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
 # The module comes first. With the headings' rules in it, and none of them
 # restated later, which file was imported last no longer decides a heading.
-for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
+for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'masthead__kicker'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
 done
 
@@ -869,7 +1042,7 @@ echo 'Colour tokens: components read them'
 rule_sets '\.footer-social a' 'color:var\(--muted\)' 'footer links are muted text'
 rule_sets '\.footer-social a' 'border-bottom:1px solid var\(--hairline\)' 'on a hairline'
 rule_sets '\.footer-social a:hover' 'color:var\(--accent\)' 'that takes the Accent when pointed at'
-rule_sets '\.episode \.ep-dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
+rule_sets '\.masthead__dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
 rule_sets '\.single \.content>hr' 'border-top:1px solid var\(--hairline\)' 'a rule across the column is the hairline'
 rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairline\)' 'and is recoloured in dark, where the theme draws its own'
 rule_sets '\.home \.home-content \.home-plate img' 'filter:var\(--plate-filter\)' 'the home plate is dimmed by the token, not by a dark rule'
@@ -909,9 +1082,9 @@ rule_sets '#header-mobile \.menu \.menu-item\.active' 'border-left:3px solid var
 # The Episode pages, the largest single user of colour. Each is one rule for both modes.
 # The ruler is printed paper in both, so its ink is a constant, and its ticks are that
 # ink at an alpha.
-rule_sets '\.episode \.ep-kicker__show' 'color:var\(--heading\)' 'the show name in a kicker is a heading colour'
-rule_sets '\.episode \.ep-meta' 'color:var\(--muted\)' 'the meta line is muted'
-rule_sets '\.episode \.ep-meta strong' 'color:var\(--heading\)' 'with its figures a step up'
+rule_sets '\.masthead__lead' 'color:var\(--heading\)' 'the lead of a kicker, a show or a category, is a heading colour'
+rule_sets '\.masthead__meta' 'color:var\(--muted\)' 'the meta line is muted'
+rule_sets '\.masthead__meta strong' 'color:var\(--heading\)' 'with its figures a step up'
 rule_sets '\.episode \.ep-disclaimer' 'color:var\(--ink\)' 'the disclaimer is body text, not fine print'
 rule_sets '\.episode \.ep-disclaimer' 'border:1px solid var\(--rule\)' 'outlined in the rule colour'
 rule_sets '\.episode \.ep-disclaimer strong' 'color:var\(--ep-ink\)' 'its emphasis in the Episode ink'
@@ -994,6 +1167,9 @@ dark_copy 'a reading-list Entry or its nav' '\.book-entry__|\.book-entry:|:has\(
 dark_copy 'a speaking Entry' '\.talk-entry|:has\(\.talk-entry\)'
 dark_copy 'the focus ring or the active nav item' ':focus-visible|\.menu-item\.active'
 dark_copy 'an Episode page' '\.episode|\.ep-'
+# (Not the Contents box, the foot's wrapper or a bare `.post-tags`: the theme draws those under
+# [theme=dark] itself, for its home-page summaries too, and those rules are its own.)
+dark_copy 'the masthead, the share row and the tags' '\.masthead|\.post-share|\.post-nav__label|\.post-footer__row|\.single \.post-footer \.post-tags'
 # The theme paints the selection's background itself, under [theme=dark]; what is ours is
 # the text on it.
 rule_lacks '\[theme=dark\] ::selection' '(^|;)color:' 'no dark copy of the selected text colour'
