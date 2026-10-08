@@ -2,14 +2,14 @@
 // Archive (the writing list)
 // ==============================
 //
-// Styled to match the reading list and speaking pages: amber title because it is
-// the link, muted metadata, description at body size. Before this the page had a
-// right-aligned heading, grey titles that did not read as links, numeric dates,
-// and no descriptions at all -- which is why it had no presence next to the other
-// two.
+// What is around the Entries on the writing archive and on a tag page: the Measure, the
+// line under the title, and the year headings. The Entries are the site's (_entry.scss),
+// the same as on the reading list and the speaking page. Before that this file carried
+// its own title, date column and hover for them, and the archive was the one list with
+// no hover at all.
 
-// The Measure, taken explicitly: the archive does not render through `.single`, so
-// it gets none of the column rules in _typography.scss for free. Its title is a
+// The Measure, taken explicitly: the archive does not render through `.single`, so it
+// gets none of the column rules in _typography.scss for free. Its title is a
 // `.single-title` and takes the headline from there too.
 .archive {
     @include measure;
@@ -31,75 +31,9 @@
     border-bottom: 1px solid var(--hairline);
 }
 
-// --- Entries -------------------------------------------------------------
-// The theme sets `.archive .archive-item { display: flex; justify-content:
-// space-between }` for its one-line link-and-date layout, plus a 1.5rem left
-// margin. With a description added as a second child, flex laid the header and
-// the description out side by side and squeezed the title into a narrow column.
-// Block stacking is what this markup needs, and the specificity has to match the
-// theme's two-class selector.
-.archive .archive-item {
-    @include sans;
-    display: block;
-    margin: 0 0 1rem;
-}
-
-.archive-item__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 0.75rem;
-}
-
-.archive-item__title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.4;
-    text-wrap: balance;
-    margin: 0;
-}
-
-.archive-item__title a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: color $transition-base;
-}
-
-.archive-item__title a:hover {
-    color: var(--accent-hover);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-// Source and date sit against the right edge, the same column the reading list
-// and the speaking page use. With descriptions gone the rows are single lines, so
-// a left-packed date landed at a different x on every one of them -- the ragged
-// edge was the reason the page still looked unlike the Elsewhere entries above it.
-.archive-item__date {
-    margin-left: auto;
-    padding-left: 0.75rem;
-    font-size: 0.8125rem;
-    color: var(--muted);
-    white-space: nowrap;
-    // Dates line up as a column when they are the same width.
-    font-variant-numeric: tabular-nums;
-}
-
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
     .archive .group-title {
         margin-top: 2.5rem;
-    }
-
-    // Stacked, and the meta drops its auto margin: on its own line it would
-    // otherwise sit against the right edge, reading as a stray date.
-    .archive-item__header {
-        flex-direction: column;
-        gap: 0.125rem;
-    }
-
-    .archive-item__date {
-        margin-left: 0;
-        padding-left: 0;
     }
 }

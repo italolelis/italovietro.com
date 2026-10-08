@@ -304,6 +304,9 @@ PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
 EN_ABOUT="$PUBLIC/about/index.html"
 PT_ABOUT="$PUBLIC/pt-br/sobre/index.html"
 PT_ARCHIVE="$PUBLIC/pt-br/posts/index.html"
+# A tag page: the Entry's fourth list. `cto` is the one tag three posts share.
+EN_TAG="$PUBLIC/tags/cto/index.html"
+PT_TAG="$PUBLIC/pt-br/tags/cto/index.html"
 # Any post page would do for the share buttons; this one is also the older of the
 # two carrying the durability marker, so it is the page most likely to be read.
 EN_POST="$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html"
@@ -496,9 +499,9 @@ echo 'Writing archive has substance'
 # its source and date in the right-hand column, the same one the reading list and
 # speaking page use, so the meta lines up instead of landing at a different x on
 # every row.
-absent_from "$EN_ARCHIVE" 'archive-item__desc' 'archive entries are rows, not write-ups'
-matches "$CSS" '\.archive-item__date\{margin-left:auto' 'archive meta sits in the right-hand column'
-same_count "$EN_ARCHIVE" 'archive-item__title' 'archive-item__date' 'every archive row carries a date, off-site ones included'
+absent_from "$EN_ARCHIVE" 'entry__note' 'archive entries are rows, not write-ups'
+rule_sets '\.entry \.entry__date' 'grid-column:2' 'archive meta sits in the right-hand column'
+same_count "$EN_ARCHIVE" 'entry__title' 'entry__date' 'every archive row carries a date, off-site ones included'
 contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
 absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
 
@@ -731,6 +734,36 @@ for post in "$PUBLIC/do-job-titles-matter/index.html" "$PUBLIC/pt-br/do-job-titl
     absent_from "$post" 'book-entry' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
 done
 
+# The Entry (CONTEXT.md): one item in a list, whichever list. It was five templates
+# and three stylesheets, each restating its title, its muted line, its date column and
+# its hover row, and the five had drifted: the writing archive's rows had no hover at
+# all, the tag page's title was an h2 and its dates an unstyled grey, and a talk's
+# title was 700 weight to a book's 600 because the theme's heading rule beat the
+# declared one on one page and not the other. One partial, layouts/partials/entry.html,
+# renders all of them, and one stylesheet, _entry.scss, sets them.
+#
+# What is asserted is the shape a visitor sees, on each list in both languages: every
+# Entry has a title; the lists that date their Entries have a date in the right-hand
+# column on every one, a count match so adding an Entry without one fails and adding a
+# whole one does not; and the writing lists carry no note.
+echo 'The Entry is one shape, on every list'
+for page in "$EN_ARCHIVE" "$PT_ARCHIVE" "$EN_TAG" "$PT_TAG"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--post"' "the writing list renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__date' "and a date ($name)"
+    absent_from "$page" 'entry__note' "and none a note: a writing list is a list, not a set of write-ups ($name)"
+done
+# A tag page is a page with a title, so its title is the h1, as the archive's is. It was
+# an h2, the defect the archive had already fixed (see layouts/_default/section.html),
+# and the Entries below it are h2s, not h3s, so the outline has no gap.
+for tag in "$EN_TAG" "$PT_TAG"; do
+    matches "$tag" '<h1 class="single-title' "a tag page opens on an h1 (${tag#"$PUBLIC"/})"
+    absent_from "$tag" '<h2 class="single-title' 'and not on an h2'
+    in_order "$tag" '<h1 class="single-title[^>]*>[^<]*</h1>.*<h2 class=entry__title>' 'its Entries are h2s below it, leaving no gap in the outline'
+done
+
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
 # The serif existed on the two Episode pages and nowhere else, declared in the last
@@ -793,7 +826,7 @@ rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measur
 rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
 # The module comes first. With the headings' rules in it, and none of them
 # restated later, which file was imported last no longer decides a heading.
-for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
+for marker in 'home-signpost' 'portrait__img' 'entry__head' 'book-entry__header' 'talk-entry__meta' 'ep-masthead'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
 done
 
@@ -875,9 +908,9 @@ rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairli
 rule_sets '\.home \.home-content \.home-plate img' 'filter:var\(--plate-filter\)' 'the home plate is dimmed by the token, not by a dark rule'
 rule_sets '\.single \.content \.portrait__sizes a' 'border-bottom:1px solid var\(--hairline\)' 'the headshot links are underlined in the hairline'
 rule_sets '\.single \.content \.portrait__sizes a:hover' 'color:var\(--accent\)' 'and take the Accent when pointed at'
-rule_sets '\.archive-item__title a' 'color:var\(--accent\)' 'archive titles are links, so the Accent'
-rule_sets '\.archive-item__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.archive-item__date' 'color:var\(--muted\)' 'archive dates are muted'
+rule_sets '\.entry \.entry__title a' 'color:var\(--accent\)' 'an Entry title, in the archive and on every list, is a link, so the Accent'
+rule_sets '\.entry \.entry__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.entry \.entry__date' 'color:var\(--muted\)' 'Entry dates are muted'
 rule_sets '\.archive-intro p' 'color:var\(--muted\)' 'and so is the line under the archive title'
 rule_sets '\.archive \.group-title' 'border-bottom:1px solid var\(--hairline\)' 'year headings sit on a hairline'
 rule_sets '\.single \.content:has\(\.book-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'a reading-list section heading sits on a hairline'

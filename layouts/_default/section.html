@@ -14,9 +14,16 @@
         Three changes:
           - the section's own title and intro come from content/posts/_index.*.md,
             so the page opens with context the way the others do
-          - each entry shows its description
+          - each entry showed its description. It no longer does: the page lists
+            posts written here and pieces published elsewhere, and a paragraph under
+            only the first kind made it read as two pages stacked (see the gate), so
+            an archive Entry carries no note.
           - headings run h1 -> h2 -> h3 with no gaps. The theme used h2 for the
             page title and h3 for year groups, leaving no h1 on the page at all.
+            The tag page (taxonomy/term.html) follows the same rule.
+
+        Each row is an Entry, rendered by layouts/partials/entry.html like the
+        reading list's and the speaking page's.
     */ -}}
     <div class="page archive">
         {{- /* Same classes the theme puts on every other page title, so this one
@@ -53,24 +60,14 @@
         {{- range $pages.PageGroups -}}
             <h2 class="group-title">{{ .Key }}</h2>
             {{- range .Pages -}}
-                {{- /* Bound because `with` below rebinds the dot, and `$` is the
-                       section page -- not this entry. */ -}}
-                {{- $item := . -}}
-                <article class="archive-item">
-                    <div class="archive-item__header">
-                        <h3 class="archive-item__title">
-                            {{- with .Params.externalUrl -}}
-                                <a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $item.Title | emojify }}</a>
-                            {{- else -}}
-                                <a href="{{ $item.RelPermalink }}">{{ $item.Title | emojify }}</a>
-                            {{- end -}}
-                        </h3>
-                        <span class="archive-item__date">
-                            {{- with .Params.host }}{{ . }} &middot; {{ end -}}
-                            {{- $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
-                        </span>
-                    </div>
-                </article>
+                {{- /* The Entry (layouts/partials/entry.html). An off-site piece links
+                       to where it ran and opens there; a post written here links to its
+                       page. The right-hand column carries the source when there is
+                       one, then the date: the year is the group's, so it is month and
+                       day. */ -}}
+                {{- $date := $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
+                {{- with .Params.host }}{{ $date = printf "%s · %s" . $date }}{{ end -}}
+                {{- partial "entry.html" (dict "title" (.Title | emojify) "link" (.Params.externalUrl | default .RelPermalink) "date" $date) -}}
             {{- end -}}
         {{- end -}}
         {{- partial "paginator.html" . -}}
