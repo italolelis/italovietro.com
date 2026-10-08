@@ -92,7 +92,10 @@ layouts/
 ├── index.rss.xml, posts/rss.xml, # theme mirrors: .Site.Language.Locale
 │   taxonomy/rss.xml
 ├── episodes/single.html          # episode pages
+├── posts/single.html             # a post: the masthead, the Contents box without emoji, the footer
 ├── partials/
+│   ├── masthead.html             # kicker, headline, dek, meta line: posts and Episode pages
+│   ├── single/                   # footer.html (a post's tags, share, neighbours), share.html (also on Episode pages)
 │   ├── episode/                  # timeline, chapters, chapter-heading, moment, clock, seconds
 │   ├── plate.html                # a watercolour, responsive; episode pages and home
 │   ├── head/seo.html             # theme mirror: .Site.Language.Locale
@@ -115,16 +118,44 @@ layouts/
 └── taxonomy/term.html
 ```
 
+## The masthead
+
+The top of a post and of an Episode page is one partial, `layouts/partials/masthead.html`, called with the page: `{{ partial "masthead.html" . }}`. A kicker, the headline, the dek and one quiet meta line, the same markup for both (`.masthead`, `.masthead__kicker`, `.masthead__title`, `.masthead__dek`, `.masthead__meta`), styled by `_masthead.scss` from the type module's mixins. Before it, a post rendered through the theme's own template and the Episode page carried a masthead inline in its layout, which is why Italo's writing looked like a theme default beside pages he did not write. The term is **Masthead** in `CONTEXT.md`.
+
+What each part is, for the two kinds of page:
+
+| | Post | Episode page |
+| --- | --- | --- |
+| kicker | the first category, linked to its page | `episode.show` · `episode.number` |
+| headline | the title | the title, at the display step (3.75rem, regular weight) |
+| dek | `subtitle`, else `description` | `subtitle` |
+| meta | **By** Author · date · N min read, and **Updated** date | two lines: based on, then released · length · written up |
+
+- **The dek is `subtitle` if the page has one, else `description`.** The description is also the SEO text and the share card's, so a post that wants a dek of its own writes a `subtitle` and leaves the description alone. *As found,* four of the six posts here have a `description` that is the opening paragraph verbatim, which now sits under the headline in italics directly above the same sentence; they want a `subtitle` (or a description written as a dek). The layout does not hide the duplicate: every post has a dek, and the gate asserts it.
+- **"Updated" reads the front matter's `lastmod`, not `.Lastmod`.** With `enableGitInfo` on, Hugo's default puts the date of the last commit to touch the file ahead of the front matter, so a revert of an experiment that changed no word of a post announced that it had been updated (the old footer showed *Updated on 2026-08-09* for two of them). A claim about currency has to be true (ADR-0005). It shows only when `lastmod` falls on a later day than `date`, so a post whose `lastmod` equals its `date` shows no update at all. Change a post's text, and bump its `lastmod`.
+- **The byline links to the About page**, which is where someone arriving from a search finds out who this is.
+- **A `div`, not a `<header>`.** The theme styles a bare `header` element as the site bar (full width, a grey fill, a hover shadow).
+- Dates are written out in the page's language (`:date_long`: "October 7, 2026", "7 de outubro de 2026") with the day in `datetime`.
+- **Strings are generic keys**, `masthead.*` in `i18n/` (by, reading time, updated, and the Episode meta's based-on, released, length, written-up), and `post.*` for the footer (share, previous, next). The Episode page's own words stay `episode.*`, among them its disclaimer, which is not part of the masthead: it follows it (`</div><p class="ep-disclaimer">`), and it is the one thing an Episode page adds.
+
+What a post keeps and loses was Italo's decision (#320). **Kept:** the Contents box, reading time, the share links (ADR-0005), tags, previous and next. **Gone:** the icons beside the byline and the category (and the one beside the tags), the word count, the hash of the last commit, "Read Markdown", "Back | Home", the title's flip-in animation. An Episode page keeps the share links and none of the rest of the footer.
+
+- `layouts/posts/single.html` mirrors the theme's. The Contents box is the theme's too (its script moves one list between a floating box and a collapsible one by the width of the window, and measures `#post-footer`, so both ids stay), with two changes: its entries carry **no emoji** (stripped from the box only; the heading keeps its own), and it is drawn only when the post has headings.
+- `layouts/partials/single/footer.html` mirrors the theme's: share, tags, previous and next. `single/share.html` is the share row alone, which the Episode layout calls. The buttons and which networks are on are still the theme's (`[params.page.share]`).
+- Both are asserted for **every post page in both languages**. The gate finds the posts rather than listing them: a local row of the writing archive (an Elsewhere row links off the site) is a post, so a new one is covered the day it is written. The Episode pages are the `EPISODES` list. A page with the masthead needs no new assertion of its own beyond that loop.
+
 ## Stylesheets
 
-`assets/css/` — eleven partials:
+`assets/css/` — the partials:
 
 | File | Scope |
 | --- | --- |
 | `_override.scss` | Theme variable overrides, the Sass inputs the theme reads at compile time: accent, muted text, entry type accents, code font, motion |
 | `_tokens.scss` | **The site's colour** (see *Colour is tokens* below), imported first of all. Every colour as a custom property, set on `:root` and overridden once on `[theme=dark]`, with its measured contrast beside it. Components read `var(--ink)` and never say which mode they are in |
 | `_typography.scss` | **The site's voice** (ADR-0006), imported right after the tokens. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
-| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then every page stylesheet below |
+| `_masthead.scss` | The masthead of a post and of an Episode page (see *The masthead*): kicker, headline, dek, meta line, built from the type module's mixins. Imported right after the type module, before the page stylesheets |
+| `_post.scss` | What sits around a post's text: the Contents box (both the floating one and the one inside the article) and the foot (tags, share row, previous and next). The Episode page's share row takes the same rules |
+| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss` and `_post.scss`, then every page stylesheet below |
 | `_home.scss` | Home page: the Greeting, the signpost, the plate |
 | `_about.scss` | About page + portrait |
 | `_speaking.scss` | Speaking page entries; the hairline under its section headings |
@@ -210,12 +241,13 @@ Because they are not his writing, they are kept out of everything that presents 
 
 Everything below the masthead is built from front matter; the Markdown body is only the short intro. A new episode is a transcript turned into a few hundred words per language. A full long-read format was built for the first episode and dropped in its favour: ten times the words to maintain in two languages, for a page most readers skim for the lessons.
 
-The page carries a masthead, the chapter list, a colophon, and a timeline pinned under the header: the episode as a ruler, with the clock showing the last real timestamp the reader has passed and a playhead that follows the scroll.
+The page carries a masthead (the same partial a post calls; see *The masthead*), the chapter list, a colophon, and a timeline pinned under the header: the episode as a ruler, with the clock showing the last real timestamp the reader has passed and a playhead that follows the scroll.
 
 Front matter:
 
 | Key | Notes |
 | --- | --- |
+| `subtitle` | the dek under the title, in Markdown, written per language |
 | `episode.show`, `.number` | the kicker above the title, written per language |
 | `episode.title`, `.released` | the original episode's title and air date, for the meta line |
 | `episode.duration` | seconds; scales the timeline |
@@ -240,7 +272,7 @@ Every `ask` also takes `question`, `verdict` and `t`, the moment in the recordin
 
 The timeline previews a quote on hover (pointer devices only) and goes to it on click. It sits in the article's column, pinned under the header; its full-width background is a clipped box-shadow, never a positioned element, which once made every episode page scroll sideways -- the gate checks for that.
 
-The recording is **linked, not embedded**: a player is a third-party host loading on every visit, which the asset-host rule exists to prevent. Without JavaScript the timeline is a static ruler; nothing else depends on the script. Interface strings live in `i18n/en.toml` and `i18n/pt-br.toml`.
+The recording is **linked, not embedded**: a player is a third-party host loading on every visit, which the asset-host rule exists to prevent. Without JavaScript the timeline is a static ruler; nothing else depends on the script. Interface strings live in `i18n/en.toml` and `i18n/pt-br.toml`; the masthead's are `masthead.*`, the rest `episode.*`.
 
 The plates are painted by `scripts/watercolour/` (`uv run scripts/watercolour/paint.py [plate]`), which writes 2× PNG masters to a gitignored `out/` and exports WebP with a deckled alpha edge to where each plate lives (`DEST` in `paint.py`), cutting each episode's share card from its hero. Only the WebP and JPEG files are committed; the gate fails any plate over 160KB.
 
