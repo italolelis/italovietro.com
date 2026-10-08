@@ -31,56 +31,23 @@
 // is the one exception to "follows the mode", and it says so where it is used.
 
 // ---- Masthead ------------------------------------------------------------
+//
+// The masthead itself -- kicker, headline, dek, meta line -- is the site's, shared
+// with a post, and lives in _masthead.scss. What an Episode page adds is its size,
+// the note under it that says who wrote the page, and the plate below.
 
-.episode .ep-masthead,
+.episode > .ep-disclaimer,
 .episode > .ep-plate--hero {
     @include measure;
 }
 
-.episode .ep-kicker {
-    @include kicker;
-    margin: 2.5rem 0 0.875rem;
-}
-
-.episode .ep-kicker__show {
-    color: var(--heading);
-}
-
-.episode .ep-kicker__sep {
-    margin: 0 0.4em;
-}
-
 // A post's title is the headline step; this page is the feature, so it takes the
 // step above, `display`: larger, and at the regular weight, which is what lets a
-// serif look set rather than shouted.
-.episode .single-title.ep-title {
+// serif look set rather than shouted. Three classes, to outrank the masthead's own
+// `.single .masthead__title` whatever order the two files are imported in.
+.episode .single-title.masthead__title {
     @include display;
     margin: 0 0 1.1rem;
-}
-
-.episode .ep-dek {
-    @include dek;
-    margin: 0 0 1.25rem;
-}
-
-.episode .ep-meta {
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: var(--muted);
-    margin: 0 0 2rem;
-}
-
-.episode .ep-meta > span {
-    display: block;
-}
-
-.episode .ep-meta strong {
-    color: var(--heading);
-    font-weight: 600;
-}
-
-.episode .ep-meta__sep {
-    margin: 0 0.45em;
 }
 
 // Who wrote the page. Claude does, from the transcript, and the reader is told
@@ -92,7 +59,8 @@
     font-size: 0.875rem;
     line-height: 1.55;
     color: var(--ink);
-    margin: -0.75rem 0 2rem;
+    margin-top: -0.75rem;
+    margin-bottom: 2rem;
     padding: 0.7rem 0.95rem 0.75rem;
     border: 1px solid var(--rule);
     border-radius: 4px;
@@ -102,7 +70,7 @@
     color: var(--ep-ink);
 }
 
-// The masthead sits outside .content, where the theme's link colour does not
+// The note sits outside .content, where the theme's link colour does not
 // reach; this link is amber because it is a link (ADR-0001), nothing more.
 .episode .ep-disclaimer a {
     color: var(--accent);

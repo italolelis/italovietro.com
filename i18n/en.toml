@@ -1,11 +1,41 @@
-# Strings for the episode pages (layouts/episodes/single.html and partials/episode/).
+# Strings the site adds to the theme's: the masthead (partials/masthead.html, shared
+# by posts and Episode pages) and the Episode pages (layouts/episodes/single.html and
+# partials/episode/).
 #
 # Keys are quoted so the dot is part of the name rather than a nested table. Hugo
 # merges this file over the theme's own en.toml, so nothing here may reuse one of
 # the theme's keys unless it means to replace it.
 
-["episode.and"]
+# The masthead. Generic, not `episode.*`: a post and an Episode page render the same
+# partial, and what it says is said once. The dates are written out ("October 7, 2026")
+# by the partial, in the page's language, and passed in.
+["masthead.by"]
+other = "By {{ . }}"
+["masthead.readingTime"]
+other = "{{ . }} min read"
+["masthead.updated"]
+other = "Updated {{ . }}"
+["masthead.and"]
 other = " and "
+["masthead.basedOn"]
+other = "Based on <strong>{{ .Title }}</strong>, with {{ .Hosts }}"
+["masthead.released"]
+other = "Released {{ . }}"
+["masthead.length"]
+other = "{{ . }} min"
+["masthead.writtenUp"]
+other = "Written by Claude from a transcript of the episode, {{ . }}"
+
+# The foot of a post (partials/single/footer.html and share.html). The share row is
+# on Episode pages too.
+["post.share"]
+other = "Share"
+["post.previous"]
+other = "Previous"
+["post.next"]
+other = "Next"
+
+# The Episode pages.
 ["episode.mapLabel"]
 other = "Episode map"
 ["episode.chapter"]
@@ -25,14 +55,6 @@ other = "{{ . }} minutes"
 other = "Intro"
 ["episode.of"]
 other = "of {{ . }}"
-["episode.basedOn"]
-other = "Based on <strong>{{ .Title }}</strong>, with {{ .Hosts }}"
-["episode.released"]
-other = "Released {{ . }}"
-["episode.length"]
-other = "{{ . }} min"
-["episode.writtenUp"]
-other = "Written by Claude from a transcript of the episode, {{ . }}"
 ["episode.lesson"]
 other = "The lesson"
 ["episode.disclaimer"]

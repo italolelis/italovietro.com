@@ -40,6 +40,10 @@ _Avoid_: Highlighted, top pick, recommended
 A podcast appearance on its own page under `/episodes/`: the episode chapter by chapter, each with a short summary, the quotes that carry it, and the lesson pulled out. Written by Claude from the transcript, in the third person, and it says so at the top; only the quotes are Italo's. Not writing -- it stays out of the archive, the feeds and the tags -- and not show notes or a transcript. Linked from its entry on the speaking page as "Highlights".
 _Avoid_: Recap, write-up, episode notes, retold episode, post
 
+**Masthead**:
+The top of a post or an Episode page: a kicker (where the piece sits), the headline, the dek (the italic line that says what it is) and one quiet meta line, in that order. One partial renders it for both, so Italo's writing opens like the pages he did not write. It is not the site header, which is the bar above every page, and not the Greeting, which opens the home page.
+_Avoid_: Hero, page header, title block, byline block, post meta
+
 **Moment**:
 A quote on an episode page, verbatim and linked to the second it was said. The timeline marks each one.
 _Avoid_: Quote card, clip, highlight, timestamp
