@@ -17,23 +17,23 @@ The line opening the home page — "Hey 👋", "Oi 👋". It is the loudest text
 _Avoid_: Tagline, subtitle, headline, strapline, hero text
 
 **Upcoming**:
-A confirmed future appearance, held in `data/upcoming.yaml` and rendered above the past ones on the speaking page. It disappears by itself once its date passes; nothing has to remember to remove it. Distinct from an entry, which is something that already happened.
+A confirmed future appearance, held in `data/upcoming.yaml` and rendered above the past ones on the speaking page. It disappears by itself once its date passes; nothing has to remember to remove it. Rendered as an Entry like the ones below it; what tells it apart is its heading and its calendar icon, and that the others already happened.
 _Avoid_: Events, calendar, schedule, next
 
 **Elsewhere**:
-Writing published on someone else's site. It sits in the same chronological archive as the posts written here, told apart only by the source in its right-hand column — a row with a host ran elsewhere, a row without one ran here. Not a link roundup: these are his pieces, living at another URL.
+Writing published on someone else's site. It sits in the same chronological archive as the posts written here, told apart only by the source in its Entry's right-hand column, ahead of the date — a row with a host ran elsewhere, a row without one ran here. Not a link roundup: these are his pieces, living at another URL.
 _Avoid_: External links, guest posts, links, press
 
 **Entry**:
-One item in one of the three lists: a book, newsletter or podcast on the reading list; a talk or podcast appearance on the speaking page; a post on the writing archive. Entries share a treatment — title, muted metadata, description.
-_Avoid_: Item, card, row, listing
+One item in one of the lists: a book, newsletter or podcast on the reading list; a talk or podcast appearance on the speaking page (an Upcoming one above them); a post on the writing archive or on a tag page. Every Entry has one shape, rendered by one partial and set by one stylesheet: a title, a muted line under it (an author, a venue, the links a talk has), a date in the right-hand column, and optionally a note. An Entry carries only what it has: no date, no column; no note, no paragraph. Only the reading list's Entries carry a note. The speaking page and the writing archive are lists, not sets of write-ups, by decision.
+_Avoid_: Item, card, row, listing, description (the optional part is the note)
 
 **Accent**:
 The amber that marks links, link hover, pagination, the active navigation item and selected text. Five roles, deliberately counted — see [ADR-0001](./docs/adr/0001-amber-accent-colour.md). It does not mark section headings.
 _Avoid_: Brand colour, primary colour, highlight
 
 **Featured**:
-The heavier of the two reading-list entry treatments, used for the "Start Here" set. A property of how an entry is displayed, not a score.
+The heavier of the two reading-list Entry treatments, used for the "Start Here" set: a bigger title, the author on its own line, more room. Told apart by size and space alone; it has no edge of its own. A property of how an Entry is displayed, not a score.
 _Avoid_: Highlighted, top pick, recommended
 
 **Episode page**:

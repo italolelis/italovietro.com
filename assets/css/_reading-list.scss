@@ -70,7 +70,7 @@ $reading-list: ".single .content:has(.entry--book)";
 // titles matter?" rendered as one muted, dotted, inline strip, and a `> ul` reset
 // beside it took the bullets off every other top-level list on the site. A page's
 // rules reach only that page, through markup the page itself declares, and
-// `.book-entry` is the one thing only this page renders. It is the same `:has()`
+// `.entry--book` is the one thing only this page renders. It is the same `:has()`
 // guard the rules above carry; where it is unsupported the nav falls back to an
 // ordinary list, which is a safe way to fail.
 //
