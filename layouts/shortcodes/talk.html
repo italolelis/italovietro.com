@@ -24,7 +24,17 @@
     chapter by chapter, with the lessons pulled out, written by Claude from the
     transcript and saying so. Labelled "Highlights" rather than "Read" because it
     is not Italo's writing. It is the one link on the row that stays on this site,
-    so it comes first. `highlights_label` carries the word per language.
+    so it comes first. Its word defaults to the language's own (i18n `entry.highlights`);
+    `highlights_label` overrides it, which the content still does.
+
+    The words of the other links (Watch, Slides, Event) are i18n keys too, `entry.watch`
+    and so on. They were English in the template, so the Portuguese page said "Watch"
+    and "Slides" between Portuguese cities. A recording's own label (`recordings`) is
+    written per language in the content, as before.
+
+    This renders an Entry (layouts/partials/entry.html), the same as the reading list's
+    and the archive's. What is left here is what only a talk knows: which links it has,
+    in what order, and what to call them.
 */ -}}
 {{- $title     := .Get "title" -}}
 {{- $event     := .Get "event" -}}
@@ -35,52 +45,27 @@
 {{- $recordings := .Get "recordings" | default "" -}}
 {{- $eventUrl  := .Get "event_url" | default "" -}}
 {{- $highlightsUrl   := .Get "highlights_url" | default "" -}}
-{{- $highlightsLabel := .Get "highlights_label" | default "Highlights" -}}
+{{- $highlightsLabel := .Get "highlights_label" | default (i18n "entry.highlights") -}}
 {{- $inner     := trim .Inner "\n" | .Page.RenderString -}}
-{{- $icon := "fa-microphone" -}}
-{{- if eq $type "panel" -}}{{- $icon = "fa-users" -}}{{- end -}}
-{{- if eq $type "podcast" -}}{{- $icon = "fa-podcast" -}}{{- end -}}
-{{- if eq $type "host" -}}{{- $icon = "fa-headphones" -}}{{- end -}}
-<div class="talk-entry talk-entry--{{ $type }}">
-    <div class="talk-entry__header">
-        {{- /* h3, not h4. The groups above these are h2 and have no subheadings,
-               so an h4 skipped a level and left the outline broken -- the same
-               defect the book shortcode fixed on the reading list. */ -}}
-        <h3 class="talk-entry__title">
-            <span class="talk-entry__type-icon"><i class="fas {{ $icon }}"></i></span>{{ $title }}
-        </h3>
-        <div class="talk-entry__meta">
-            <span class="talk-entry__event">{{ $event }}</span>
-            {{- /* Collected into one slice and joined, rather than emitted inline
-                   with a separator before each optional part. Four optional link
-                   kinds means the inline form needs a condition per boundary, and
-                   the previous three-kind version had already lost one: a talk with
-                   both `video_url` and `recordings` ran "Watch" straight into the
-                   first city with no separator. Joining a list cannot have that
-                   bug, whatever combination an entry carries. */ -}}
-            {{- $links := slice -}}
-            {{- $anchor := `<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>` -}}
-            {{- with $highlightsUrl }}{{- $links = $links | append (printf `<a href="%s">%s</a>` (relLangURL .) $highlightsLabel) -}}{{- end }}
-            {{- if $videoUrl }}{{- $links = $links | append (printf $anchor $videoUrl "Watch") -}}{{- end }}
-            {{- with $recordings }}
-                {{- range split . "|" }}
-                    {{- $parts := split . "=" -}}
-                    {{- $links = $links | append (printf $anchor (index $parts 1) (index $parts 0)) -}}
-                {{- end }}
-            {{- end }}
-            {{- if $slidesUrl }}{{- $links = $links | append (printf $anchor $slidesUrl "Slides") -}}{{- end }}
-            {{- if $eventUrl }}{{- $links = $links | append (printf $anchor $eventUrl "Event") -}}{{- end }}
-            {{- with $links }}
-            <span class="talk-entry__links">{{ delimit . " &middot; " | safeHTML }}</span>
-            {{- end }}
-            {{- /* Last in the row: its auto margin pins it to the right edge, which
-                   is the same date column the archive and reading list use. With the
-                   links after it, a talk with three recordings pushed the date into
-                   the middle of the row. */ -}}
-            <span class="talk-entry__date">{{ $date }}</span>
-        </div>
-    </div>
-    {{- if $inner }}
-    <div class="talk-entry__description">{{ $inner }}</div>
+{{- /* The icon is the partial's, picked by kind: talk, panel, podcast, host. */ -}}
+{{- /* Collected into one slice of { label, url } and handed over, rather than emitted
+       inline with a separator before each optional part. Four optional kinds of link
+       means the inline form needs a condition per boundary, and an earlier version had
+       already lost one: a talk with both `video_url` and `recordings` ran "Watch"
+       straight into the first city with no separator. A list cannot have that bug,
+       whatever combination an entry carries; the partial joins it. */ -}}
+{{- $links := slice -}}
+{{- with $highlightsUrl }}{{- $links = $links | append (dict "label" $highlightsLabel "url" (relLangURL .)) -}}{{- end }}
+{{- with $videoUrl }}{{- $links = $links | append (dict "label" (i18n "entry.watch") "url" .) -}}{{- end }}
+{{- with $recordings }}
+    {{- range split . "|" }}
+        {{- $parts := split . "=" -}}
+        {{- $links = $links | append (dict "label" (index $parts 0) "url" (index $parts 1)) -}}
     {{- end }}
-</div>
+{{- end }}
+{{- with $slidesUrl }}{{- $links = $links | append (dict "label" (i18n "entry.slides") "url" .) -}}{{- end }}
+{{- with $eventUrl }}{{- $links = $links | append (dict "label" (i18n "entry.event") "url" .) -}}{{- end }}
+{{- /* The title is plain text, not a link: a talk's destinations are on the meta line.
+       An h3 under the group's h2, as the reading list's are; an h4 skipped a level and
+       left the outline broken. */ -}}
+{{- partial "entry.html" (dict "title" $title "meta" $event "links" $links "date" $date "note" $inner "kind" $type) -}}

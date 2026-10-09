@@ -70,6 +70,11 @@ $text-body-small: 1.125rem;
 $text-ui: 0.875rem; // meta lines, and the nav inside a page
 $text-caption: 0.8125rem; // captions, an Entry's second line
 $text-kicker: 0.75rem;
+// Taken up by the Entry (_entry.scss): its title, and the note under it. The title is
+// the one size in a list that is neither running text nor furniture, and a note is a
+// sentence set a step under the prose it sits beside.
+$text-entry: 1rem;
+$text-note: 0.9375rem;
 
 // --- The Measure ---------------------------------------------------------
 //

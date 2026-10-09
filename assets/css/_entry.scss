@@ -1,0 +1,310 @@
+// ==============================
+// The Entry
+// ==============================
+//
+// One item in a list: a book, a talk, an Upcoming appearance, a post (CONTEXT.md). All
+// of them are rendered by layouts/partials/entry.html, and this is the one stylesheet
+// that sets them. It used to be three: a title, a muted line, a date column and a hover
+// row each written again for the reading list, the speaking page and the archive, which
+// is how the writing archive came to have no hover at all.
+//
+// The shape, which every list shares:
+//
+//     [icon] Title ................................................. date
+//     meta, links
+//     note
+//
+// A title, a muted line under it (an author, a venue, and the links a talk has), a date
+// in the right-hand column on the title's own row, and optionally a note. Anything an
+// Entry does not carry leaves no gap: no date, no column; no meta, no second line.
+//
+// It reads like a newspaper index: set in the sans (ADR-0006: Entry lists navigate,
+// they are not read), a quiet column of dates in tabular figures so the years line up
+// down the page, and a single hover.
+//
+// The one hover. A tint and an Accent edge under the pointer or the focused link, on
+// every list. Two lists had it and the third (the writing archive) had a bare
+// underline; "one consistent hover" is this rule applying to `.entry` and nothing else.
+
+// The row's padding and the edge's width. The negative margin below is their sum, so
+// the text stays on the column's left edge and the tint grows outward on hover instead
+// of shoving the content sideways.
+$entry-pad: 1rem;
+$entry-edge: 3px;
+
+.entry {
+    @include sans;
+    // Unitless, and set here, so the row measures the same on a page that sets a
+    // line-height of its own (running text, 1.65) and on one that gives the theme's
+    // fixed 1.5rem (the archive and tag pages).
+    font-size: $text-entry;
+    line-height: 1.5;
+    padding: 0.5rem $entry-pad;
+    // Bleeds on both sides, so the date column ends on the column's right edge, under
+    // the hairline of the heading above it, instead of a padding's width short of it.
+    margin: 0 (-$entry-pad) 0.25rem calc(-#{$entry-pad} - #{$entry-edge});
+    border-left: $entry-edge solid transparent;
+    border-radius: 6px;
+    transition:
+        background-color $transition-base,
+        border-left-color $transition-base;
+}
+
+// A note makes it a paragraph's worth, and a paragraph wants more air around it than
+// a line does.
+.entry--noted {
+    margin-bottom: 1.25rem;
+}
+
+// --- Head: the title, and the date beside it ------------------------------
+//
+// Two columns, the title taking what the date leaves. A grid, not a flex row that
+// wraps: a flex row moves a long title's date onto a line of its own, where a grid
+// keeps it on the title's first line and lets the title wrap beside it. (Speaking
+// titles run to two lines on a phone and at 1280px, "Inside Parloa's AI Kitchen" does.)
+//
+// The date's padding is the gap between the columns, so an Entry with no date has no
+// gap taken out of its title.
+.entry .entry__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+}
+
+// The specificity is the point. An Entry sits inside `.single .content` on the reading
+// and speaking pages, where the theme sets `.single .content h3 { font-weight: bold;
+// margin: 1.2rem 0 }` at (0,2,1). A title written as `.entry__title` (0,1,0) lost to it
+// on those pages and won on the archive, outside `.content`: 700 weight and 19px of
+// margin above and below on the speaking page, 600 and none in the archive, from one
+// declaration. Three classes beat it everywhere.
+.entry .entry__head > .entry__title {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    font-size: $text-entry;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    color: var(--heading);
+}
+
+.entry .entry__title a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color $transition-base;
+}
+
+.entry .entry__icon {
+    margin-right: 8px;
+    font-size: $text-ui;
+    color: var(--muted);
+}
+
+// What it is, by the colour of its icon. The Accent for what Italo gave and what is
+// next, a teal for a panel and a purple for a podcast: the speaking page's groups, told
+// apart before the heading above them is read.
+.entry--talk .entry__icon,
+.entry--host .entry__icon,
+.entry--upcoming .entry__icon {
+    color: var(--accent);
+}
+
+.entry--panel .entry__icon {
+    color: var(--entry-panel);
+}
+
+.entry--podcast .entry__icon {
+    color: var(--entry-podcast);
+}
+
+// The date: the right-hand column. Tabular figures, so a column of years or of
+// "November 2024" lines up digit under digit, and no wrapping, so it stays one
+// unit. A source, where there is one ("Parloa Labs · June 4"), is part of the same text
+// and ends where the column does.
+.entry .entry__date {
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 1rem;
+    font-size: $text-caption;
+    color: var(--muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+// --- Meta: the muted line -------------------------------------------------
+//
+// Venue and links on a talk, the author of a book. Under the title and across both
+// columns. Its pieces share a baseline and wrap onto the next line one at a time, a
+// "·" between the links only, so a wrapped line never starts on a stray dot.
+.entry .entry__meta {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.5rem;
+    margin-top: 0.125rem;
+    font-size: $text-caption;
+    color: var(--muted);
+}
+
+.entry .entry__links a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color $transition-base;
+}
+
+// --- Note -----------------------------------------------------------------
+//
+// Rendered Markdown, so its paragraphs carry the theme's 0.5rem margins; the Entry's
+// own spacing is what separates it from the title and from the next Entry, and a
+// paragraph inside it adds none of its own.
+.entry .entry__note {
+    margin-top: 0.25rem;
+    font-size: $text-note;
+    line-height: 1.6;
+    color: var(--ink);
+}
+
+.entry .entry__note p {
+    margin: 0;
+}
+
+.entry .entry__note p + p {
+    margin-top: 0.5rem;
+}
+
+// --- A book -----------------------------------------------------------------
+//
+// Compact by default: the author shares the title's line, which is where the reading
+// list's density comes from, and wraps below it when it does not fit. No separator
+// glyph between them: a "·" orphans itself at the start of the next line whenever a
+// long author list wraps ("Site Reliability Engineering" has four authors and did
+// exactly that), and CSS cannot tell when a line has wrapped, so the size and colour
+// difference separates them instead. A book has no date, so nothing here fights for
+// the row.
+.entry--book:not(.entry--featured) .entry__head {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+}
+
+.entry--book:not(.entry--featured) .entry__meta {
+    margin-top: 0;
+}
+
+// --- Featured -------------------------------------------------------------
+//
+// The answer to "what should I read?" gets room to breathe: a bigger title, the author
+// on its own line and the note at reading size. Told apart by size and space alone,
+// as the rest of the reading list is (hierarchy from size, not from colour), so it has
+// no edge of its own. It had one in dark mode and not in light: the Entry row's
+// transparent edge outranked the featured rule that declared a hairline one, and the
+// dark copy of it happened to be a selector more specific. Whether the edge belonged in
+// both modes or neither was left to this stylesheet; neither, because the edge is how
+// an Entry says it is under the pointer, and a permanent one dilutes that.
+.entry--featured {
+    margin-bottom: 1.75rem;
+}
+
+.entry--featured .entry__head > .entry__title {
+    font-size: $text-subsection;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.entry--featured .entry__meta {
+    margin-top: 0.25rem;
+    font-size: $text-ui;
+}
+
+.entry--featured .entry__note {
+    margin-top: 0.625rem;
+    font-size: $text-entry;
+    line-height: 1.7;
+}
+
+// --- The heading above a list ---------------------------------------------
+//
+// The heading itself is the site's (_typography.scss). What belongs here is the rule
+// under it: an h2 that heads a list of Entries (the reading list's sections, the
+// speaking page's groups) is a section of a list, and the hairline is what makes it
+// read as one. An h2 in an article has no rule.
+//
+// Found by the Entries that follow it, so the page declares nothing: `~` is any later
+// sibling, which is every h2 on those pages, and not the h2 that comes after the last
+// Entry (a home page's "Beyond the Code", once Upcoming is on it).
+.single .content > h2:has(~ .entry) {
+    margin-top: 4rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--hairline);
+}
+
+// --- Hover and focus ------------------------------------------------------
+//
+// Gated on `(hover: hover)`: on a touch screen a tap counts as hover and the state
+// sticks until the next tap lands elsewhere, so gating on a real pointer prevents a
+// stuck highlight instead of trying to clear it afterwards. Focus is styled with
+// :focus-visible and never depends on hover, so a keyboard user can always see where
+// they are, and a row containing the focused link is tinted too, so tabbing moves the
+// same marker a pointer does.
+//
+// A link underlines on hover and focus and not at rest, which keeps the lists
+// scannable; revealing it means the affordance is not carried by colour alone.
+@media (hover: hover) {
+    .entry:hover {
+        background-color: var(--accent-wash);
+        border-left-color: var(--accent);
+    }
+
+    .entry .entry__title a:hover,
+    .entry .entry__links a:hover {
+        color: var(--accent-hover);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.entry:focus-within {
+    background-color: var(--accent-wash);
+    border-left-color: var(--accent);
+}
+
+.entry .entry__title a:focus-visible,
+.entry .entry__links a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// --- Mobile ---------------------------------------------------------------
+//
+// Aligned with the theme's own 680px breakpoint. One column: a date beside a title
+// that is already wrapping to three lines leaves the title a strip, so the date drops
+// under the meta, small and left, where the phone shows what a thing is before when
+// it was. It drops its right alignment too -- on its own line it would otherwise sit
+// against the right edge, reading as a stray number.
+@media (max-width: 680px) {
+    .single .content > h2:has(~ .entry) {
+        margin-top: 3rem;
+    }
+
+    .entry .entry__head {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .entry .entry__meta {
+        grid-row: auto;
+    }
+
+    .entry .entry__date {
+        grid-column: 1;
+        grid-row: auto;
+        padding-left: 0;
+        margin-top: 0.125rem;
+    }
+
+    .entry--featured .entry__head > .entry__title {
+        font-size: $text-subsection-small;
+    }
+}

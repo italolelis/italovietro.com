@@ -157,6 +157,8 @@ footer {
     color: inherit;
 }
 
+// The Entry, one stylesheet for every list; the pages below style what is around it.
+@import "entry";
 @import "home";
 @import "about";
 @import "archive";

@@ -304,6 +304,9 @@ PT_READING="$PUBLIC/pt-br/leituras-recomendadas/index.html"
 EN_ABOUT="$PUBLIC/about/index.html"
 PT_ABOUT="$PUBLIC/pt-br/sobre/index.html"
 PT_ARCHIVE="$PUBLIC/pt-br/posts/index.html"
+# A tag page: the Entry's fourth list. `cto` is the one tag three posts share.
+EN_TAG="$PUBLIC/tags/cto/index.html"
+PT_TAG="$PUBLIC/pt-br/tags/cto/index.html"
 # Any post page would do for the share buttons; this one is also the older of the
 # two carrying the durability marker, so it is the page most likely to be read.
 EN_POST="$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html"
@@ -496,9 +499,9 @@ echo 'Writing archive has substance'
 # its source and date in the right-hand column, the same one the reading list and
 # speaking page use, so the meta lines up instead of landing at a different x on
 # every row.
-absent_from "$EN_ARCHIVE" 'archive-item__desc' 'archive entries are rows, not write-ups'
-matches "$CSS" '\.archive-item__date\{margin-left:auto' 'archive meta sits in the right-hand column'
-same_count "$EN_ARCHIVE" 'archive-item__title' 'archive-item__date' 'every archive row carries a date, off-site ones included'
+absent_from "$EN_ARCHIVE" 'entry__note' 'archive entries are rows, not write-ups'
+rule_sets '\.entry \.entry__date' 'grid-column:2' 'archive meta sits in the right-hand column'
+same_count "$EN_ARCHIVE" 'entry__title' 'entry__date' 'every archive row carries a date, off-site ones included'
 contains "$EN_ARCHIVE" '>Writing<' 'archive has its own title, not the generic "All Posts"'
 absent_from "$EN_ARCHIVE" '](http' 'no raw markdown link syntax leaks into a description'
 
@@ -536,8 +539,8 @@ contains "$PT_SPEAKING" '>Palestras<' 'pt-br talks have their own heading'
 contains "$PT_SPEAKING" 'Participações em Podcasts' 'pt-br podcast appearances have their own heading'
 absent_from "$EN_SPEAKING" 'Not everything is here' 'the rejected completeness hedge stays off the en page'
 absent_from "$PT_SPEAKING" 'Nem tudo está aqui' 'and off the pt-br page'
-same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every en entry carries a date'
-same_count "$EN_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every en entry carries a venue'
+same_count "$EN_SPEAKING" 'entry__title' 'entry__date' 'every en entry carries a date'
+same_count "$EN_SPEAKING" 'entry__title' 'entry__meta' 'every en entry carries a venue'
 # One talk given three times is one entry with three recordings, not three entries
 # with the same title. These assert both halves: the entry appears once, and every
 # stage it was given on is reachable.
@@ -546,8 +549,8 @@ contains "$EN_SPEAKING" 'youtu.be/BOn3R41UrV8' 'the GoLab recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'the Golang Piter recording is linked'
 contains "$EN_SPEAKING" 'youtu.be/DKhC_XH8fDs' 'the GoDays recording is linked'
 contains "$PT_SPEAKING" 'youtu.be/QWRPWb1Tzqs' 'and all three in pt-br, with localized city names'
-same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__date' 'every pt-br entry carries a date'
-same_count "$PT_SPEAKING" 'talk-entry__title' 'talk-entry__event' 'every pt-br entry carries a venue'
+same_count "$PT_SPEAKING" 'entry__title' 'entry__date' 'every pt-br entry carries a date'
+same_count "$PT_SPEAKING" 'entry__title' 'entry__meta' 'every pt-br entry carries a venue'
 
 # Panels are their own group rather than talks with "Panel:" typed into the title.
 # The negative assertion is the load-bearing one: the prefix is what the entries
@@ -564,8 +567,8 @@ echo 'Panels are a group, not a title prefix'
 # vacuously. Same reasoning as the apostrophe-free needles above.
 contains "$EN_SPEAKING" 'Roundtables' 'en panels have their own heading'
 contains "$PT_SPEAKING" 'Painéis e Mesas Redondas' 'pt-br panels have their own heading'
-occurs "$EN_SPEAKING" 'talk-entry--panel' 2 'both en panels are typed as panels'
-occurs "$PT_SPEAKING" 'talk-entry--panel' 2 'both pt-br panels are typed as panels'
+occurs "$EN_SPEAKING" 'entry--panel' 2 'both en panels are typed as panels'
+occurs "$PT_SPEAKING" 'entry--panel' 2 'both pt-br panels are typed as panels'
 nowhere '>Panel: ' 'no entry carries the superseded title prefix'
 # A panel leaves no recording, so the event page is the only thing to click. If
 # this link goes, the entry becomes the one row on the page with no destination.
@@ -684,7 +687,7 @@ echo 'The masthead: one for posts and Episode pages'
 POSTS=()
 while IFS= read -r slug; do
     POSTS+=("$slug")
-done < <(grep -oE 'class=archive-item__title><a href=/[^ >]+/>' "$EN_ARCHIVE" | sed -E 's#.*href=/([^ >]+)/>#\1#')
+done < <(grep -oE 'class=entry__title><a href=/[^ >]+/>' "$EN_ARCHIVE" | sed -E 's#.*href=/([^ >]+)/>#\1#')
 if [ "${#POSTS[@]}" -gt 0 ]; then
     ok "the writing archive links ${#POSTS[@]} posts written here, and each is checked in both languages"
 else
@@ -888,21 +891,136 @@ nowhere 'Must Read' 'the tier subheadings are gone from both languages'
 # matter?" that is the five-step job ladder, and it rendered as one muted, dotted,
 # inline strip instead of a list. Every other top-level list lost its bullets to the
 # `> ul` reset beside it. A page's rules reach only that page, through the markup
-# the page itself declares -- here, the Entry (`.book-entry`), which only the
+# the page itself declares -- here, the Entry (`.entry--book`), which only the
 # reading list renders.
 echo 'Reading-list styles stay on the reading list'
 absent_from "$CSS" '.single .content>ul:first-of-type' 'no rule styles the first top-level list of every page'
 rule_lacks '\.single \.content>ul' 'list-style:none' 'top-level lists keep their bullets site-wide'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a' 'color:var\(--muted\)' 'its links are muted text, in both modes, still scoped to the reading list'
-rule_sets '\.single \.content:has\(\.book-entry\) h2\+p' 'color:var\(--muted\)' 'and so are its section lines, which have one rule and so one guard'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type' 'display:flex' 'the reading list keeps its nav strip, behind its own Entries'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li:not\(:first-child\)::before' 'content:"\\00B7"' 'with the dots between its links'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li a' 'color:var\(--muted\)' 'its links are muted text, in both modes, still scoped to the reading list'
+rule_sets '\.single \.content:has\(\.entry--book\) h2\+p' 'color:var\(--muted\)' 'and so are its section lines, which have one rule and so one guard'
 # What the CSS is aimed away from: the ladder is a plain list in the page, in both
 # languages, on a page that renders no Entry.
 for post in "$PUBLIC/do-job-titles-matter/index.html" "$PUBLIC/pt-br/do-job-titles-matter/index.html"; do
     matches "$post" '<ul><li>Junior Software Developer/Engineer</li>' "the job ladder is a list (${post#"$PUBLIC"/})"
-    absent_from "$post" 'book-entry' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
+    absent_from "$post" 'entry--book' 'on a page with no reading-list Entry, so no reading-list rule reaches it'
 done
+
+# The Entry (CONTEXT.md): one item in a list, whichever list. It was five templates
+# and three stylesheets, each restating its title, its muted line, its date column and
+# its hover row, and the five had drifted: the writing archive's rows had no hover at
+# all, the tag page's title was an h2 and its dates an unstyled grey, and a talk's
+# title was 700 weight to a book's 600 because the theme's heading rule beat the
+# declared one on one page and not the other. One partial, layouts/partials/entry.html,
+# renders all of them, and one stylesheet, _entry.scss, sets them.
+#
+# What is asserted is the shape a visitor sees, on each list in both languages: every
+# Entry has a title; the lists that date their Entries have a date in the right-hand
+# column on every one, a count match so adding an Entry without one fails and adding a
+# whole one does not; and the writing lists carry no note.
+echo 'The Entry is one shape, on every list'
+for page in "$EN_ARCHIVE" "$PT_ARCHIVE" "$EN_TAG" "$PT_TAG"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--post"' "the writing list renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__date' "and a date ($name)"
+    absent_from "$page" 'entry__note' "and none a note: a writing list is a list, not a set of write-ups ($name)"
+done
+# A tag page is a page with a title, so its title is the h1, as the archive's is. It was
+# an h2, the defect the archive had already fixed (see layouts/_default/section.html),
+# and the Entries below it are h2s, not h3s, so the outline has no gap.
+for tag in "$EN_TAG" "$PT_TAG"; do
+    matches "$tag" '<h1 class="single-title' "a tag page opens on an h1 (${tag#"$PUBLIC"/})"
+    absent_from "$tag" '<h2 class="single-title' 'and not on an h2'
+    in_order "$tag" '<h1 class="single-title[^>]*>[^<]*</h1>.*<h2 class=entry__title>' 'its Entries are h2s below it, leaving no gap in the outline'
+done
+
+# The speaking page's Entries are the same shape: a title, a venue on the muted line,
+# a date, links on that line, and no note. A talk's title is plain text, and its links
+# (Highlights, Watch, a recording per city, Slides, Event) sit on the meta line, so
+# there is one more thing here than on the writing lists and it is the links, not a
+# different shape.
+for page in "$EN_SPEAKING" "$PT_SPEAKING"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--(talk|panel|podcast|host)"' "the speaking page renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__date' "and a date ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__meta' "and a venue on the muted line ($name)"
+    absent_from "$page" 'entry__note' "and none a note: the speaking page is a list, not a set of write-ups ($name)"
+    absent_from "$page" '<h4' "titles are h3s under the group's h2, leaving no gap in the outline ($name)"
+done
+# What links is written per language. The links' words were hard-coded English in the
+# shortcode, so the Portuguese page said "Watch", "Slides" and "Event" between
+# Portuguese cities and a Portuguese heading, and a visitor reading it in Portuguese
+# was the only one who noticed. The language's words now come from i18n/, and a missing
+# one fails the build (build.sh prints missing translations and panics on a warning).
+contains "$EN_SPEAKING" '>Watch<' 'en: a recording says Watch'
+contains "$EN_SPEAKING" '>Slides<' 'en: a talk with slides says Slides'
+contains "$EN_SPEAKING" '>Event<' 'en: a panel with an event page says Event'
+contains "$PT_SPEAKING" '>Assistir<' 'pt-br: a recording says Assistir'
+contains "$PT_SPEAKING" '>Apresentação<' 'pt-br: a talk with slides says Apresentação'
+contains "$PT_SPEAKING" '>Evento<' 'pt-br: a panel with an event page says Evento'
+absent_from "$PT_SPEAKING" '>Watch<' 'pt-br has no English Watch'
+absent_from "$PT_SPEAKING" '>Slides<' 'pt-br has no English Slides'
+absent_from "$PT_SPEAKING" '>Event<' 'pt-br has no English Event'
+# Upcoming is a list of Entries too, rendered through the same partial. It renders
+# nothing -- not even its heading -- while data/upcoming.yaml has no future date, which
+# is most of the time, so this asserts whichever half the data allows: with none, no
+# heading and no Entry; with one, the heading opens a list of Entries that carry a
+# calendar icon, a title and a date. (The general count matches above already require
+# each Upcoming Entry to have a title, a date and a venue.)
+for page in "$EN_SPEAKING" "$PT_SPEAKING"; do
+    if grep -qF 'entry--upcoming' "$page"; then
+        in_order "$page" '<h2 class=upcoming-title>[^<]+</h2><div class="entry entry--upcoming">' "an Upcoming heading opens its Entries (${page#"$PUBLIC"/})"
+        contains "$page" 'fa-calendar-day' 'and each carries the calendar icon'
+    else
+        absent_from "$page" 'upcoming-title' "with nothing upcoming there is no heading either (${page#"$PUBLIC"/})"
+    fi
+done
+
+# The reading list's Entries are the same shape with a note, which is the one list that
+# carries one (CONTEXT.md used to say all three did; the speaking page and the archive
+# dropped theirs by decision). A book has no date: a third of the list is newsletters
+# and podcasts, which have no year you could honestly give. Its title leaves the site,
+# so it opens in a new tab, and is an h3 under the section's h2.
+for page in "$EN_READING" "$PT_READING"; do
+    name=${page#"$PUBLIC"/}
+    matches "$page" 'class="entry entry--book' "the reading list renders Entries ($name)"
+    contains "$page" 'class=entry__head' "each with the Entry's one head ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__title' "every Entry has a title ($name)"
+    same_count "$page" 'class="entry entry--' 'entry__note' "and a note, the one list that has them ($name)"
+    absent_from "$page" 'entry__date' "and no date ($name)"
+    matches "$page" '<h3 class=entry__title><a href=https?://[^ >]+ target=_blank rel="noopener noreferrer">' "a title is an h3 link that opens in a new tab ($name)"
+    contains "$page" 'entry--featured' "and the featured set is still there ($name)"
+done
+# The two weights of a book, in the stylesheet: compact puts the author on the title's
+# line, featured gives it room. And neither has an edge of its own, in either mode.
+rule_sets '\.entry--book:not\(\.entry--featured\) \.entry__head' 'display:flex' "a compact book's author shares its title's line"
+rule_sets '\.entry--featured \.entry__head>\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
+rule_lacks '\.entry--featured.*' 'border-left' 'a featured Entry has no edge of its own: size and space say it is featured'
+
+# The stylesheet's half of "one": no per-page stylesheet restates an Entry's title, meta
+# or date, because the class names those rules wore no longer exist anywhere in the
+# build. The date column's figures are set by exactly one rule.
+echo 'The Entry is set once'
+nowhere 'book-entry' 'no page carries the reading list'"'"'s old Entry classes, in markup or in CSS'
+nowhere 'talk-entry' 'nor the speaking page'"'"'s'
+# The archive's are checked on the four pages that were ours, not everywhere: the theme
+# keeps an `archive-item` of its own in its stylesheet and on its categories page.
+absent_from "$CSS" 'archive-item__' 'nor the archive'"'"'s, in CSS'
+for page in "$EN_ARCHIVE" "$PT_ARCHIVE" "$EN_TAG" "$PT_TAG"; do
+    absent_from "$page" 'archive-item' "nor the archive's or a tag page's, in markup (${page#"$PUBLIC"/})"
+done
+if [ "$(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums')" -eq 1 ]; then
+    ok 'one rule sets the date column in tabular figures'
+else
+    bad "one rule sets the date column in tabular figures (got $(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums'))"
+fi
+rule_sets '\.entry \.entry__head>\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
+rule_sets '\.entry \.entry__head>\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
 
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
@@ -945,9 +1063,8 @@ rule_lacks '\.single \.content p' 'font-family' 'a paragraph inherits it rather 
 rule_sets 'html' 'font-family:var\(--global-font-family\)' 'the page is sans, so the header and footer are'
 rule_lacks '.*(header|footer|menu|toc|post-meta|post-footer).*' 'font-family:var\(--font-serif\)' 'nothing that navigates takes the serif'
 rule_sets '\.masthead__kicker' 'font-family:var\(--global-font-family\)' 'a kicker is sans'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
-rule_sets '.*\.book-entry' 'font-family:var\(--global-font-family\)' 'reading-list Entries are sans'
-rule_sets '.*\.talk-entry' 'font-family:var\(--global-font-family\)' 'speaking Entries are sans'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type' 'font-family:var\(--global-font-family\)' 'the reading list nav is sans, though the column around it is serif'
+rule_sets '\.entry' 'font-family:var\(--global-font-family\)' 'Entries are sans, on every list: the speaking page, the writing lists, and the reading list'
 rule_sets '\.single \.content table' 'font-family:var\(--global-font-family\)' 'tables are sans'
 rule_sets '\.single \.content figcaption' 'font-family:var\(--global-font-family\)' 'and so are figure captions'
 # What the theme decorates, undone. A blockquote was a blue box with a thick blue bar
@@ -966,7 +1083,7 @@ rule_sets '\.single \.content' 'max-width:800px' 'the column is the 800px measur
 rule_sets '\.single \.single-title' 'max-width:800px' 'and the title above it starts on the same edge'
 # The module comes first. With the headings' rules in it, and none of them
 # restated later, which file was imported last no longer decides a heading.
-for marker in 'home-signpost' 'portrait__img' 'archive-item__header' 'book-entry__header' 'talk-entry__meta' 'masthead__kicker'; do
+for marker in 'home-signpost' 'portrait__img' 'entry__head' 'entry__meta' 'masthead__kicker'; do
     in_order "$CSS" ":root\{--font-serif:.*\.$marker" "the type module is compiled before .$marker"
 done
 
@@ -1048,32 +1165,27 @@ rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairli
 rule_sets '\.home \.home-content \.home-plate img' 'filter:var\(--plate-filter\)' 'the home plate is dimmed by the token, not by a dark rule'
 rule_sets '\.single \.content \.portrait__sizes a' 'border-bottom:1px solid var\(--hairline\)' 'the headshot links are underlined in the hairline'
 rule_sets '\.single \.content \.portrait__sizes a:hover' 'color:var\(--accent\)' 'and take the Accent when pointed at'
-rule_sets '\.archive-item__title a' 'color:var\(--accent\)' 'archive titles are links, so the Accent'
-rule_sets '\.archive-item__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.archive-item__date' 'color:var\(--muted\)' 'archive dates are muted'
+rule_sets '\.entry \.entry__title a' 'color:var\(--accent\)' 'an Entry title, in the archive and on every list, is a link, so the Accent'
+rule_sets '\.entry \.entry__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.entry \.entry__date' 'color:var\(--muted\)' 'Entry dates are muted'
 rule_sets '\.archive-intro p' 'color:var\(--muted\)' 'and so is the line under the archive title'
 rule_sets '\.archive \.group-title' 'border-bottom:1px solid var\(--hairline\)' 'year headings sit on a hairline'
-rule_sets '\.single \.content:has\(\.book-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'a reading-list section heading sits on a hairline'
-rule_sets '\.single \.content:has\(\.talk-entry\) h2' 'border-bottom:1px solid var\(--hairline\)' 'so does a speaking-page one'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
-rule_sets '\.single \.content:has\(\.book-entry\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
-rule_sets '\.single \.content \.book-entry__title a' 'color:var\(--accent\)' 'a book title is a link, so the Accent'
-rule_sets '\.single \.content \.book-entry__title a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.single \.content \.book-entry__author' 'color:var\(--muted\)' 'an author is muted'
-rule_sets '\.single \.content \.book-entry__description' 'color:var\(--ink\)' 'a description is body text'
-rule_sets '\[theme=dark\] \.single \.content \.book-entry--featured' 'border-left-color:var\(--hairline\)' 'a featured Entry has a hairline edge in dark, which is how it renders, and not in light'
-rule_sets '\.talk-entry__type-icon' 'color:var\(--muted\)' 'a speaking icon is muted until its type says otherwise'
-rule_sets '\.talk-entry__meta' 'color:var\(--muted\)' 'the venue and date are muted'
-rule_sets '\.talk-entry__links a' 'color:var\(--accent\)' 'speaking links are links, so the Accent'
-rule_sets '\.talk-entry__links a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
-rule_sets '\.talk-entry--talk \.talk-entry__type-icon' 'color:var\(--accent\)' 'a talk is the Accent'
-rule_sets '\.talk-entry--host \.talk-entry__type-icon' 'color:var\(--accent\)' 'so is a hosted show'
-rule_sets '\.talk-entry--upcoming \.talk-entry__type-icon' 'color:var\(--accent\)' 'and so is what is next, in both modes'
-rule_sets '\.talk-entry--panel \.talk-entry__type-icon' 'color:var\(--entry-panel\)' 'a panel is teal'
-rule_sets '\.talk-entry--podcast \.talk-entry__type-icon' 'color:var\(--entry-podcast\)' 'a podcast is purple'
-rule_sets '\.talk-entry:hover' 'background-color:var\(--accent-wash\)' 'a hovered Entry is washed with the Accent'
-rule_sets '\.single \.content \.book-entry:hover' 'border-left-color:var\(--accent\)' 'and gains an Accent edge'
-rule_sets '\.talk-entry:focus-within' 'background-color:var\(--accent-wash\)' 'a focused one gets the same'
+rule_sets '\.single \.content>h2:has\(~\.entry\)' 'border-bottom:1px solid var\(--hairline\)' 'a heading above a list of Entries sits on a hairline, on the reading list and the speaking page alike: found by the Entries after it, not by a page'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li:not\(:first-child\)::before' 'color:var\(--muted\)' 'the dots in the reading-list nav are muted'
+rule_sets '\.single \.content:has\(\.entry--book\)>ul:first-of-type li a:hover' 'color:var\(--accent\)' 'and its links take the Accent when pointed at'
+rule_sets '\.entry \.entry__note' 'color:var\(--ink\)' 'a note is body text'
+rule_sets '\.entry \.entry__icon' 'color:var\(--muted\)' 'an Entry icon is muted until its kind says otherwise'
+rule_sets '\.entry \.entry__meta' 'color:var\(--muted\)' 'the venue and the author are muted'
+rule_sets '\.entry \.entry__links a' 'color:var\(--accent\)' 'links on the meta line are links, so the Accent'
+rule_sets '\.entry \.entry__links a:hover' 'color:var\(--accent-hover\)' 'a step darker when pointed at'
+rule_sets '\.entry--talk \.entry__icon' 'color:var\(--accent\)' 'a talk is the Accent'
+rule_sets '\.entry--host \.entry__icon' 'color:var\(--accent\)' 'so is a hosted show'
+rule_sets '\.entry--upcoming \.entry__icon' 'color:var\(--accent\)' 'and so is what is next, in both modes'
+rule_sets '\.entry--panel \.entry__icon' 'color:var\(--entry-panel\)' 'a panel is teal'
+rule_sets '\.entry--podcast \.entry__icon' 'color:var\(--entry-podcast\)' 'a podcast is purple'
+rule_sets '\.entry:hover' 'background-color:var\(--accent-wash\)' 'a hovered Entry is washed with the Accent, on every list'
+rule_sets '\.entry:hover' 'border-left-color:var\(--accent\)' 'and gains an Accent edge'
+rule_sets '\.entry:focus-within' 'background-color:var\(--accent-wash\)' 'a focused one gets the same'
 rule_sets 'a:focus-visible' 'outline:2px solid var\(--accent\)' 'the focus ring is the Accent'
 rule_sets '::selection' 'color:var\(--selection-ink\)' 'selected text takes its colour from the token'
 rule_sets '#header-mobile \.menu \.menu-item\.active' 'color:var\(--accent\)' 'the active mobile nav item takes the Accent'
@@ -1161,10 +1273,12 @@ dark_copy 'the footer, the logo and the home intro' '\.footer-social|\.logo-mark
 dark_copy 'the Greeting, a title or a heading' '\.home-subtitle|\.single-title|\.single \.content h[1-6]'
 dark_copy 'the home plate' '\.home-plate'
 dark_copy 'the headshot line' '\.portrait'
-dark_copy 'the archive' '\.archive-item__|\.archive-intro|\.group-title'
-# (The featured Entry's edge is the one dark rule here, kept as it renders and counted below.)
-dark_copy 'a reading-list Entry or its nav' '\.book-entry__|\.book-entry:|:has\(\.book-entry\)'
-dark_copy 'a speaking Entry' '\.talk-entry|:has\(\.talk-entry\)'
+dark_copy 'the archive' '\.archive-intro|\.group-title'
+dark_copy 'the reading list nav' ':has\(\.entry--book\)'
+# The Entry has no dark rule at all. It had one: the featured Entry's edge, shown in dark
+# and not in light by an accident of specificity. It is gone (see _entry.scss).
+dark_copy 'an Entry, on any list' '\.entry'
+rule_lacks '\[theme=dark\] .*\.entry.*' '.' 'and no [theme=dark] rule touches an Entry, whatever it sets'
 dark_copy 'the focus ring or the active nav item' ':focus-visible|\.menu-item\.active'
 dark_copy 'an Episode page' '\.episode|\.ep-'
 # (Not the Contents box, the foot's wrapper or a bare `.post-tags`: the theme draws those under
@@ -1183,13 +1297,14 @@ absent_from "$CSS" 'theme=auto' 'no rule waits on [theme=auto], which nothing se
 absent_from "$CSS" 'prefers-color-scheme' 'and the stylesheet never reads the OS preference: the page does, once'
 # What is left under [theme=dark] reads a token and nothing else: the two rules the theme
 # draws again in dark at a specificity a light rule cannot reach (a quotation, and the
-# rule across the column), and the featured Entry's edge, which is more specific than the
-# Entry row's and so shows in dark only (see _reading-list.scss). A fourth would be a
-# place to restate a value, so adding one is a decision, and this is where it is counted.
-if [ "$(rules_with '\[theme=dark\] .*' 'var\(--')" -eq 3 ]; then
-    ok 'only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders'
+# rule across the column). There was a third, the featured Entry's edge, which was more
+# specific than the Entry row's and so showed in dark only; the Entry rework decided it
+# belongs in neither mode and removed it. A third would be a place to restate a value, so
+# adding one is a decision, and this is where it is counted.
+if [ "$(rules_with '\[theme=dark\] .*' 'var\(--')" -eq 2 ]; then
+    ok 'only two [theme=dark] rules read a token, both undoing the theme'
 else
-    bad "only three [theme=dark] rules read a token: two that undo the theme, one kept as it renders (got $(rules_with '\[theme=dark\] .*' 'var\(--'))"
+    bad "only two [theme=dark] rules read a token, both undoing the theme (got $(rules_with '\[theme=dark\] .*' 'var\(--'))"
 fi
 # Everything after the token blocks is ours. None of it spells a hex colour: a component
 # takes a token, so the value exists in one place and is read from there. (What it may
