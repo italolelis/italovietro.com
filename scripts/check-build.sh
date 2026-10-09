@@ -908,7 +908,16 @@ done
 for page in "${MASTHEAD_POSTS[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     in_order "$page" 'id=post-footer>.*class=post-tags>.*href=/(pt-br/)?tags/' "$name: the footer lists its tags"
-    matches "$page" 'class=(prev|next)' "$name: and links the post before or after it"
+    # Every link there is, with an address. The assertion used to be `class=(prev|next)`
+    # alone, which an `<a href class=prev>` satisfies: the section's neighbour can be an
+    # Elsewhere post (`build.render: never`, no page here), whose RelPermalink is empty,
+    # and six of the twelve pages shipped a previous or next link that went nowhere.
+    matches "$page" '<a href=/[^ >]+ class=(prev|next) ' "$name: and links the post before or after it"
+    if [ "$(grep -oE '<a [^>]*class=(prev|next)[^>]*>' "$page" | grep -vcE '^<a href=/[^ >]+ ' || true)" -eq 0 ]; then
+        ok "$name: every previous and next link has an address"
+    else
+        bad "$name: a previous or next link has no address (its neighbour has no page here)"
+    fi
     # The Contents box is the theme's, and kept: the floating one and the one inside
     # the article, and the list they share.
     contains "$page" 'id=toc-auto' "$name: the Contents box is kept (floating)"
@@ -925,6 +934,12 @@ for page in "${MASTHEAD_POSTS[@]}"; do
         ok "$name: no Contents entry carries an emoji"
     fi
 done
+# Previous is the older post, next the newer, and an Elsewhere post (no page here) is
+# skipped over rather than linked: the oldest post written here has no previous, and
+# the newest no next.
+in_order "$PUBLIC/do-job-titles-matter/index.html" '<a href=/cto-reading-list-1/ class=prev .*<a href=/cto-reading-list-2/ class=next ' 'a post'"'"'s previous link is the older post and its next the newer'
+absent_from "$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html" 'class=prev ' 'the oldest post written here has no previous link, not one to a post published elsewhere'
+absent_from "$PUBLIC/how-do-we-manage-our-github-organization-at-lyko/index.html" 'class=next ' 'nor the newest a next one'
 # Only the Contents box is stripped: the heading it points to keeps its emoji.
 contains "$PUBLIC/do-job-titles-matter/index.html" 'href=#-democratic-decisions>Democratic decisions</a>' 'a Contents entry is the heading without its emoji'
 contains "$PUBLIC/do-job-titles-matter/index.html" '👨‍⚖️ Democratic decisions</h3>' 'and the heading itself is left as it was written'
