@@ -1,0 +1,70 @@
+{{- /* The home page.
+
+       Mirrors themes/LoveIt/layouts/index.html, which draws a profile block (avatar,
+       title, subtitle, social row, disclaimer) from `params.home.profile`, then the
+       page's own content, then a paginated list of posts. None of that is wanted here
+       (the reasons are in _home.scss and the home notes in config.toml), so this is not
+       that template with the switches off: it assembles the page's named parts
+       (CONTEXT.md) from front matter, the menu and the Markdown body, in this order.
+
+         Greeting      `greeting` in front matter, as the page's h1.
+         intro         the body above its first heading.
+         Signpost      `signpost` in front matter: a sentence with a `{identifier}` where
+                       a link to a section goes. Each becomes a link to the menu entry
+                       with that identifier, to its URL and in its label, lower-cased.
+                       The menu holds the URLs; the sentence only says where they fall.
+         section       the body from its first heading on ("Beyond the Code", and
+                       whatever follows: its paragraph, and the Plate, which is a
+                       shortcode in the body and so comes last).
+
+       So content/_index.*.md hold prose and the shortcode call and no layout HTML, and
+       the order is this template's, not each language file's. The Signpost used to be
+       a classed paragraph with every URL typed out once per language, which is the menu
+       again, one line below it, and was the only copy that did not follow a renamed
+       path. An identifier with no menu entry fails the build rather than printing
+       "{writing}" on the home page.
+
+       The wrapper classes are the ones the stylesheet already had (`home-content`,
+       `home-intro`, `home-signpost`, `home-plate`): the structure changed, not the
+       look. Re-read the theme's index.html if a theme bump touches it. */ -}}
+{{- define "content" -}}
+    {{- $params := .Scratch.Get "params" -}}
+
+    {{- $greeting := .Params.greeting -}}
+    {{- if not $greeting -}}
+        {{- errorf "home: %s has no `greeting` in front matter" .Path -}}
+    {{- end -}}
+
+    {{- /* The body, through the same pass the theme gives any page's content, split at
+           its first heading: what is above it is the intro, the rest is the section. */ -}}
+    {{- $body := dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | string -}}
+    {{- $intro := index (split $body "<h2") 0 -}}
+    {{- $section := strings.TrimPrefix $intro $body -}}
+
+    {{- /* The Signpost: the sentence rendered as Markdown (so it is typeset like the rest
+           of the page), then each {identifier} swapped for a link from the menu. */ -}}
+    {{- $signpost := .RenderString (dict "display" "inline") .Params.signpost | string -}}
+    {{- range .Site.Menus.main -}}
+        {{- $link := printf `<a href="%s">%s</a>` (.URL | relLangURL) (.Name | lower | htmlEscape) -}}
+        {{- $signpost = replace $signpost (printf "{%s}" .Identifier) $link -}}
+    {{- end -}}
+    {{- with findRE `\{[a-z0-9-]+\}` $signpost -}}
+        {{- errorf "home: the signpost in %s names %s, which is not a menu identifier" $.Path (delimit . ", ") -}}
+    {{- end -}}
+
+    <div class="page home">
+        <h1 class="home-greeting">{{ $greeting }}</h1>
+
+        <div class="single">
+            <div class="content" id="content">
+                <div class="home-content">
+                    <div class="home-intro">{{ $intro | safeHTML }}</div>
+                    <p class="home-signpost">{{ $signpost | safeHTML }}</p>
+                    {{- with $section }}
+                    <section class="home-beyond">{{ . | safeHTML }}</section>
+                    {{- end }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{- end -}}

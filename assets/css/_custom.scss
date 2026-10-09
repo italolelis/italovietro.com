@@ -15,16 +15,6 @@
 @import "masthead";
 // What sits around a post's text: the Contents box and the foot. See _post.scss.
 @import "post";
-// Was margin-top: 13rem. That existed to compensate for the theme pushing the
-// profile block down by translateY(16vh) -- two hacks cancelling each other, with
-// the result depending on viewport height. The transform is reset in _home.scss,
-// so this no longer needs to make room for anything.
-// Close to the line above it. The opening line is a greeting now rather than a
-// standalone thesis, and a greeting belongs to the sentence that follows it --
-// there was 3.5rem of air between "Hey" and the paragraph it introduces.
-.home-content {
-    margin-top: 0.5rem;
-}
 
 // Logo, <img> fallback only.
 //
@@ -121,21 +111,6 @@ footer {
 
 .footer-social a:hover {
     color: var(--accent);
-}
-
-// Homepage intro paragraph -- replaces inline style on <p class="home-intro">
-//
-// Body colour, not muted. It was the largest block of text on the page and it was
-// deliberately greyed, which is a contradiction: the page dimmed its own substance
-// and then wondered why it read washed out. Muting is for metadata -- dates,
-// authors, section labels -- not for the paragraph a visitor is meant to read.
-//
-// Smaller too. At 1.25rem it outweighed the tagline above it; the tagline is now
-// the opening line and this sits a step below it.
-.home-intro {
-    font-size: 1.125rem;
-    color: var(--ink);
-    margin: 0.5rem 0 2.5rem;
 }
 
 // Bold text carries emphasis by weight, not by a second colour.
