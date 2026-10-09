@@ -23,7 +23,9 @@
 
     The dek is the page's `subtitle` if it has one and its `description` if not. The
     description is also the SEO text, so a post that wants a dek of its own writes a
-    `subtitle` and leaves the description as it is.
+    `subtitle` and leaves the description as it is. A dek that is only the post's opening
+    paragraph said again (a description that equals it, or is the start of it, compared
+    as plain text) is left out, and the page has none.
 
     "Updated" reads the front matter's `lastmod`, not `.Lastmod`. With `enableGitInfo`
     on, Hugo's default puts the date of the last commit to touch the file ahead of the
@@ -63,8 +65,17 @@
 
     <h1 class="single-title masthead__title">{{ .Title | emojify }}</h1>
 
+    {{- /* The dek, unless it is only the opening paragraph said again: a description
+           that equals the first paragraph, or is the start of it, printed that sentence
+           straight above itself. Compared as the text a reader sees. One that merely
+           overlaps keeps its dek. */ -}}
     {{- with .Params.subtitle | default .Params.description }}
+        {{- $dek := partial "plain-text.html" (. | markdownify) -}}
+        {{- $opening := "" -}}
+        {{- with findRE `(?s)<p>.*?</p>` (string $.Content) 1 }}{{ $opening = partial "plain-text.html" (index . 0) }}{{ end -}}
+        {{- if not (and $dek (hasPrefix $opening $dek)) }}
     <p class="masthead__dek">{{ . | markdownify }}</p>
+        {{- end }}
     {{- end }}
 
     <p class="masthead__meta">

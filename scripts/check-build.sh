@@ -827,7 +827,13 @@ for page in "${MASTHEAD_POSTS[@]}" "${MASTHEAD_EPISODES[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     # The same markup on both kinds of page, in this order. `in_order`, because the
     # minifier keeps some newlines and the four parts sit on different lines.
-    in_order "$page" 'class=masthead>.*class=masthead__kicker>.*<h1 class="single-title masthead__title">.*class=masthead__dek>.*class=masthead__meta>' "$name: a kicker, the headline, the dek and the meta line, in that order"
+    # The dek is optional, since a post whose description only repeats its opening
+    # paragraph has none (see the dek assertions below), so the order is checked for the
+    # parts every page has, and again with the dek in it on a page that has one.
+    in_order "$page" 'class=masthead>.*class=masthead__kicker>.*<h1 class="single-title masthead__title">.*class=masthead__meta>' "$name: a kicker, the headline and the meta line, in that order"
+    if grep -q 'class=masthead__dek>' "$page"; then
+        in_order "$page" '<h1 class="single-title masthead__title">.*class=masthead__dek>.*class=masthead__meta>' "$name: and the dek, when there is one, sits between the headline and the meta line"
+    fi
     occurs "$page" 'class=masthead>' 1 "$name: one masthead"
     occurs "$page" '<h1' 1 "$name: and one h1, which is the headline"
     # What the theme drew above a post and Italo decided against (#320): the icons
@@ -905,6 +911,30 @@ done
 # The dek is the post's description, or its own `subtitle` where it has one.
 in_order "$PUBLIC/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'the dek of a post is its description'
 in_order "$PUBLIC/pt-br/do-job-titles-matter/index.html" 'class=masthead__dek>[A-ZÀ-Ú]' 'and in pt-br too'
+# The dek is not the first paragraph said twice. Four posts (Italo's, so their
+# descriptions are not ours to rewrite) have a `description` that is word for word
+# their opening paragraph, and the dek printed it straight above the same sentence. The
+# partial leaves the dek out when the description equals the opening paragraph or is the
+# start of it; one that only overlaps ("do-job-titles-matter" opens its description with a
+# sentence its body does not) is a different thing, and keeps its dek.
+for slug in 5-ways-to-keep-coding-being-an-engineering-manager cto-reading-list-2 cto-reading-list-3 how-do-we-manage-our-github-organization-at-lyko; do
+    absent_from "$PUBLIC/$slug/index.html" 'class=masthead__dek' "$slug: no dek, its description is the opening paragraph"
+    absent_from "$PUBLIC/pt-br/$slug/index.html" 'class=masthead__dek' "pt-br/$slug: nor in pt-br"
+done
+contains "$PUBLIC/cto-reading-list-1/index.html" 'class=masthead__dek>' 'cto-reading-list-1 keeps its dek: its description is not its first paragraph'
+# The general rule, for the post written next: no page opens with a dek that the body
+# repeats. The first 48 characters of the dek, tags dropped, occurring a second time in
+# the page's text from the masthead down.
+dek_repeated() {
+    local text dek
+    text=$(tr '\n' ' ' < "$1" | sed -E 's/.*class=masthead>//; s#</(p|h[1-6]|div|section|li)>#& #g; s/<[^>]*>//g; s/[[:space:]]+/ /g')
+    dek=$(tr '\n' ' ' < "$1" | grep -oE 'class=masthead__dek>.{0,250}' | sed -E 's/^class=masthead__dek>//; s#</p>.*##; s/<[^>]*>//g' | cut -c1-48)
+    [ -n "$dek" ] && [ "$(printf '%s' "$text" | grep -oF -- "$dek" | wc -l)" -gt 1 ]
+}
+for page in "${MASTHEAD_POSTS[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    if dek_repeated "$page"; then bad "$name: the dek is said again in the body"; else ok "$name: the dek is not said again in the body"; fi
+done
 
 # An Episode page's meta line: what it is based on, then when it came out, how long it
 # runs and when it was written up. Same partial, so the strings are `masthead.*` keys,
