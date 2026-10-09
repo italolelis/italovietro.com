@@ -4,14 +4,15 @@
     {{- $params := .Scratch.Get "params" -}}
 
     <div class="page archive">
-        {{- /* Title */ -}}
-        <h2 class="single-title animate__animated animate__pulse animate__faster">
+        {{- /* Title. An h1, as the archive's is (layouts/_default/section.html): the
+               theme had an h2 here and so no h1 on the page at all. */ -}}
+        <h1 class="single-title animate__animated animate__pulse animate__faster">
             {{- .Title -}}
-        </h2>
+        </h1>
 
         {{- /* Subtitle */ -}}
         {{- with $params.subtitle -}}
-            <h3 class="single-subtitle">{{ . }}</h3>
+            <h2 class="single-subtitle">{{ . }}</h2>
         {{- end -}}
 
         {{- /* Content */ -}}
@@ -19,20 +20,14 @@
             {{- with .Content }}{{ . }}{{ end -}}
         </div>
 
-        {{- /* Term List */ -}}
-        {{- if .Pages -}}
-            <div class="archive-item-list">
-                {{- range .Pages -}}
-                    <article class="archive-item">
-                        <a href="{{ .RelPermalink }}" class="archive-item-link">
-                            {{- .Title -}}
-                        </a>
-                        <span class="archive-item-date">
-                            {{- .Date.Format "2006-01-02" -}}
-                        </span>
-                    </article>
-                {{- end -}}
-            </div>
+        {{- /* Term List. Entries, the same as the archive's (layouts/partials/entry.html),
+               at level 2: the title above them is the h1 and there is no year heading
+               between, so an h3 would skip a level. The date keeps its year -- there is
+               no group to carry it -- in the format [params.list] sets. */ -}}
+        {{- range .Pages -}}
+            {{- $date := $.Site.Params.list.dateFormat | default "2006-01-02" | .Date.Format -}}
+            {{- with .Params.host }}{{ $date = printf "%s · %s" . $date }}{{ end -}}
+            {{- partial "entry.html" (dict "title" .Title "link" (.Params.externalUrl | default .RelPermalink) "date" $date "level" 2) -}}
         {{- end -}}
     </div>
 {{- end -}}

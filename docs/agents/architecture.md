@@ -28,7 +28,7 @@ italovietro.com/
 │   └── music/
 ├── content/                     # see content map below
 ├── data/upcoming.yaml           # confirmed future appearances
-├── i18n/                        # strings for the episode layout, merged over the theme's
+├── i18n/                        # strings for the episode layout and the speaking links, merged over the theme's
 ├── docs/
 │   ├── adr/                     # 6 architecture decision records
 │   └── agents/                  # agent-facing conventions (incl. this file)
@@ -86,7 +86,7 @@ The home page routes to all four in prose — the **Signpost**, not a list of ca
 ```
 layouts/
 ├── _default/
-│   ├── section.html              # post archive, incl. Elsewhere rows
+│   ├── section.html              # post archive, incl. Elsewhere rows, each an Entry
 │   └── _markup/                  # codeblock render hooks (goat, mermaid, default)
 ├── _default/baseof.html          # theme mirror: .Site.Language.Locale
 ├── index.rss.xml, posts/rss.xml, # theme mirrors: .Site.Language.Locale
@@ -97,6 +97,7 @@ layouts/
 │   ├── masthead.html             # kicker, headline, dek, meta line: posts and Episode pages
 │   ├── single/                   # footer.html (a post's tags, share, neighbours), share.html (also on Episode pages)
 │   ├── episode/                  # timeline, chapters, chapter-heading, moment, clock, seconds
+│   ├── entry.html                # THE Entry: every list's items, one markup (see its contract below)
 │   ├── plate.html                # a Plate: page, src, alt, role (see Plates); every page that has one
 │   ├── head/seo.html             # theme mirror: .Site.Language.Locale
 │   ├── header.html
@@ -108,14 +109,14 @@ layouts/
 │       ├── analytics.html        # Vercel Analytics + Speed Insights
 │       └── img.html
 ├── shortcodes/
-│   ├── talk.html                 # speaking entries
+│   ├── talk.html                 # speaking Entries, through partials/entry.html
 │   ├── plate.html                # a Plate in Markdown: the home page's desk, or one in a post
-│   ├── upcoming.html             # future appearances from data/upcoming.yaml
-│   ├── book.html                 # reading list entries
+│   ├── upcoming.html             # future appearances from data/upcoming.yaml, as Entries
+│   ├── book.html                 # reading list Entries, through partials/entry.html
 │   ├── portrait.html             # About page headshot + downloads
 │   ├── x.html, x_simple.html, instagram.html
 ├── speaking/single.html
-└── taxonomy/term.html
+└── taxonomy/term.html            # a tag page: an h1, then Entries
 ```
 
 ## The masthead
@@ -194,17 +195,18 @@ SHARE_CARD = True                        # optional: also cut that page's 1200x6
 | `_typography.scss` | **The site's voice** (ADR-0006), imported right after the tokens. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
 | `_masthead.scss` | The masthead of a post and of an Episode page (see *The masthead*): kicker, headline, dek, meta line, built from the type module's mixins. Imported right after the type module, before the page stylesheets |
 | `_post.scss` | What sits around a post's text: the Contents box (both the floating one and the one inside the article) and the foot (tags, share row, previous and next). The Episode page's share row takes the same rules |
-| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss` and `_post.scss`, then every page stylesheet below |
+| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss`, `_post.scss` and `_plate.scss`, then every page stylesheet below |
 | `_plate.scss` | **Every Plate** (see *Plates*): the figure's framing, the room around it, the role's size (hero, spot, inline) and its dimming in dark, once. Imported before the page stylesheets, so a page asks for a Plate and styles nothing of it |
 | `_home.scss` | Home page: the Greeting, the signpost |
 | `_about.scss` | About page + portrait |
-| `_speaking.scss` | Speaking page entries; the hairline under its section headings |
+| `_entry.scss` | **The Entry**, one stylesheet for every list: the row, the title, the muted line and its links, the date column in tabular figures, the note, the book's compact and featured weights, the icon colour per kind, the one hover, and the hairline under an h2 that heads a list of Entries. No page stylesheet restates any of it |
+| `_speaking.scss` | Speaking page: the banner photograph. Its Entries are `_entry.scss`'s |
 | `_episode.scss` | Episode pages: the timeline, chapter list, quotes, lessons, figures. Everything scoped under `.episode` (its Plates are `_plate.scss`'s) |
-| `_reading-list.scss` | Reading list entries and its in-page nav. Scoped through `.single .content:has(.book-entry)`, so none of it reaches another page |
-| `_archive.scss` | Post archive |
-| `_interactions.scss` | Shared hover/focus/underline rules, focus rings |
+| `_reading-list.scss` | The reading list's in-page nav and the line under each section heading. Scoped through `.single .content:has(.entry--book)`, so none of it reaches another page |
+| `_archive.scss` | The writing archive and tag pages, around their Entries: the Measure, the line under the title, the year headings |
+| `_interactions.scss` | Focus rings, selected text, the active mobile nav item, reduced motion. (The Entry's hover is `_entry.scss`'s) |
 
-**A page stylesheet styles only its own page**, through markup the page declares: a class on its wrapper, or the Entry (`.book-entry`, `.talk-entry`). A selector that names no page (`.single .content > ul:first-of-type`) matches every page that renders through `.single`; that is how a post's job ladder once rendered as the reading list's nav strip. Rules that are true of every page belong in `_typography.scss`.
+**A page stylesheet styles only its own page**, through markup the page declares: a class on its wrapper, or a kind of Entry (`.entry--book`, the reading list's own). A selector that names no page (`.single .content > ul:first-of-type`) matches every page that renders through `.single`; that is how a post's job ladder once rendered as the reading list's nav strip. Rules that are true of every page belong in `_typography.scss`.
 
 ### Colour is tokens
 
@@ -231,7 +233,7 @@ Adding or changing a colour:
 
 1. **A new colour is a new token** in both blocks of `_tokens.scss`, light and dark, with its **measured contrast** in a comment beside it (4.5:1 for text, 3:1 for anything that is not). Do not write a literal in a component. Not even a one-off: a literal is how a colour ends up written three times.
 2. **Assert it**: a `token` line (its value in each mode) and, if it is text or an icon, a `contrast_of` line in `scripts/check-build.sh`. The gate measures every pair again from the compiled values, in both modes, so editing a value cannot quietly take one under its threshold.
-3. **Do not add a `[theme=dark]` rule** to switch a colour: change the token. The only dark rules besides the token block are the ones that undo something the *theme* draws again under `[theme=dark]` at a specificity a light rule cannot reach (a quotation's box, the rule across the column, bold text). They read tokens, set no value, and the gate counts them; a new one is a decision. (The one other is the featured Entry's edge, which shows in dark only because its rule is more specific than the Entry row's: kept as it renders, and commented where it is.) The gate also fails if any rule of ours spells a hex colour instead of reading a token.
+3. **Do not add a `[theme=dark]` rule** to switch a colour: change the token. The only dark rules besides the token block are the ones that undo something the *theme* draws again under `[theme=dark]` at a specificity a light rule cannot reach (a quotation's box, the rule across the column, bold text). They read tokens, set no value, and the gate counts them; a new one is a decision. (The Entry has none. It had one, the featured Entry's edge, which showed in dark only; the Entry rework removed it, and the gate asserts that no `[theme=dark]` rule touches an Entry.) The gate also fails if any rule of ours spells a hex colour instead of reading a token.
 4. A token that is the same in both modes (`--ep-ruler-ink`) is set on `:root` only; the gate asserts `[theme=dark]` does not set it.
 5. A value the theme's own stylesheet also reads (the accent, the greys, the borders) stays in `_override.scss`, because the theme consumes it at compile time. The token is wired to that variable, so the value is still chosen once.
 
@@ -239,7 +241,33 @@ Mobile breakpoint is 680px, aligned with LoveIt's own.
 
 ## Shortcode contracts
 
-### `talk` — speaking page entries
+### The Entry — `layouts/partials/entry.html`
+
+One partial renders every Entry (CONTEXT.md): a book, a talk, an Upcoming appearance, a post on the archive and on a tag page. One stylesheet, `_entry.scss`, sets them. A page passes what it has and nothing else; an Entry with no date has no date column, one with no meta has no second line.
+
+```
+{{ partial "entry.html" (dict "title" "…" "link" "…" "meta" "…" "date" "…" "kind" "post") }}
+```
+
+| Key | Notes |
+| --- | --- |
+| `title` | **Required.** Plain text, or HTML that is already safe |
+| `link` | Where the title goes. An absolute `http…` URL opens in a new tab; anything else stays on the site. Without one the title is plain text, as a talk's is |
+| `meta` | The muted line under the title: an author, a venue |
+| `links` | A list of `{ label, url }` on the meta line after `meta`: a talk's Watch, Slides, Event. Absolute ones open in a new tab |
+| `date` | The right-hand column, in tabular figures, on the title's row. Text, because `2020–2023` is a date here. A source goes in front (`Parloa Labs · June 4`): that is how a row tells Elsewhere from a post written here |
+| `note` | HTML under the rest. Only the reading list passes one |
+| `kind` | `book`, `post`, `talk`, `panel`, `podcast`, `host`, `upcoming`; default `post`. Becomes `entry--<kind>` and, for the last five, picks the icon |
+| `featured` | bool. The reading list's heavier "Start Here" weight |
+| `level` | Heading level of the title, default 3. The tag page passes 2: its title is the h1 and no year heading comes between |
+
+The shape is title, then date on the same row, then the muted line, then the note; on a phone it is one column, with the date under the meta. A book's author shares the title's line unless it is featured. Rules that hold for it, each asserted by the gate: the title is `600` weight and `margin: 0` on every list (it needs three classes of specificity to beat the theme's `.single .content h3`, which once made a talk's title 700 with 19px of margin on one page and 600 on another); the date is the only rule that sets tabular figures; there is one hover, a tint and an Accent edge, on every list; and no `[theme=dark]` rule touches an Entry.
+
+A new list of Entries is a new call to this partial, not new markup and not new CSS. An h2 above Entries gets its hairline from them (`.single .content > h2:has(~ .entry)`), so a page declares nothing. The home page renders Upcoming the same way: `title` the event, `link` its page, `meta` the venue, `date` the display date, `kind` `upcoming`.
+
+### `talk` — speaking page Entries
+
+Renders an Entry through `layouts/partials/entry.html` (contract below): the title is plain text, the venue is its muted line, the links sit on that line, the date is in the right-hand column.
 
 ```
 {{< talk title="…" event="…" date="…" type="panel" event_url="…" >}}
@@ -252,14 +280,18 @@ Mobile breakpoint is 680px, aligned with LoveIt's own.
 | `event` | yes | Event name, plus city where useful |
 | `date` | yes | Free text, e.g. `August 2026` |
 | `type` | yes | `talk` \| `panel` \| `podcast` \| `host` |
-| `video_url` | no | renders **Watch** |
+| `video_url` | no | renders **Watch** (*Assistir* in pt-br) |
 | `recordings` | no | pipe-separated `Label=URL` for a talk given more than once |
-| `slides_url` | no | renders **Slides** |
-| `event_url` | no | renders **Event** — for panels with an event page but no recording |
+| `slides_url` | no | renders **Slides** (*Apresentação* in pt-br) |
+| `event_url` | no | renders **Event** (*Evento*) — for panels with an event page but no recording |
+| `highlights_url` | no | the episode's page under `/episodes/`, passed through `relLangURL`. Renders **Highlights** (*Destaques*), first in the row because it is the only link that stays on the site. Not "Read": the page is not Italo's writing |
+| `highlights_label` | no | overrides that word. The default is the language's own, so the content need not pass it |
+
+The words of Watch, Slides, Event and Highlights are i18n keys (`entry.watch`, `entry.slides`, `entry.event`, `entry.highlights` in `i18n/`), not template strings: the Portuguese page said all three in English until they were. A recording's own label is written per language in the content.
 
 Type drives icon and accent: `talk` → `fa-microphone` (amber), `panel` → `fa-users` (teal), `podcast` → `fa-podcast` (purple), `host` → `fa-headphones` (amber).
 
-**Entries carry no description.** Commit `b551ae7` removed all eight paragraphs: the titles already say what each session was, the voice now sits once at the top of the page next to the invitation, and eight paragraphs in two languages was 400 words per language of translation liability. The shortcode still renders inner content so a single entry *can* carry a note when there is genuinely something to add — but it is not the default, and adding one back to every entry reverses a deliberate decision.
+**Speaking Entries carry no note.** Commit `b551ae7` removed all eight paragraphs: the titles already say what each session was, the voice now sits once at the top of the page next to the invitation, and eight paragraphs in two languages was 400 words per language of translation liability. The shortcode still renders inner content so a single entry *can* carry a note when there is genuinely something to add — but it is not the default, and adding one back to every entry reverses a deliberate decision.
 
 A talk given more than once is **one entry with several recordings**, not one entry per stage. Labels are written per language, so a city is `Florence` in en and `Florença` in pt-br.
 
@@ -270,8 +302,6 @@ Sections, in order: Upcoming (auto) → Conference Talks → Panels & Roundtable
 Reads `data/upcoming.yaml`. Param: `heading` (required, passed per language). Renders **nothing at all — not even the heading** once every entry's `until` date has passed, because an empty "Upcoming" heading says the opposite of what it exists to say. Entries expire by date rather than by anyone remembering to delete them.
 
 When an appearance happens, move it into `content/speaking/index.*.md` and delete it from the YAML. Nothing does this automatically.
-
-Two optional params for episode pages: `highlights_url` (the page under `/episodes/`, passed through `relLangURL`) and `highlights_label` (the link's word per language, default `Highlights`; `Destaques` in pt-br). Not "Read": the page is not Italo's writing. The link comes first in the row because it is the only one that stays on the site.
 
 ### Episode pages — `content/episodes/`
 
@@ -318,9 +348,9 @@ The Plates are the site's, not the Episode page's: how one is asked for, painted
 
 A new episode page also needs a line in `EPISODES` at the top of the episode section of `scripts/check-build.sh` (its slug and first chapter id), which runs every episode assertion against it, and a `highlights_url` on its speaking entry.
 
-### `book` — reading list entries
+### `book` — reading list Entries
 
-Params: `title`, `author`, `link` (required), `type` (`book`\|`newsletter`\|`podcast`), `featured` (optional). **There is no rating param** — it was removed because every entry scored 4 or 5 out of 5, and a scale whose values all sit in the top 40% is decoration. Read the comment before reintroducing one.
+Renders an Entry (contract below) with the shortcode's body as its **note**: the reading list is the one list whose Entries carry one. Params: `title`, `author`, `link` (required), `featured` (optional), and `type` (`book`\|`newsletter`\|`podcast`), which is read and no longer rendered: it was a modifier class no style used, and a `podcast` one would collide with the speaking page's. The content still sets it. **There is no rating param** — it was removed because every entry scored 4 or 5 out of 5, and a scale whose values all sit in the top 40% is decoration. Read the comment before reintroducing one.
 
 ### `portrait` — About page
 
