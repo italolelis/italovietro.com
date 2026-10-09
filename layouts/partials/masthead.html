@@ -30,7 +30,10 @@
     front matter, so a revert of an experiment that never changed a word of a post would
     announce that the post was updated. A claim about currency has to be true, because
     the audience is checking it (ADR-0005); `lastmod` is the date Italo sets when he
-    changes what a post says. `.Lastmod` is only the fallback for a page without one.
+    changes what a post says. It shows when the front matter sets one and it falls on a
+    later day than `date`, and never from `.Lastmod`: that used to be the fallback for a
+    page without a `lastmod`, and a post written without one announced the date of its
+    last commit. archetypes/default.md writes one, so a new post has it.
 
     The dates are written out in the page's language ("October 7, 2026", "7 de outubro de
     2026"), with the machine-readable day in the `datetime` attribute.
@@ -83,12 +86,19 @@
             {{- /* Written out, with the day machine-readable beside it. */ -}}
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time><span class="masthead__sep" aria-hidden="true">·</span>
             {{- T "masthead.readingTime" .ReadingTime -}}
-            {{- /* `.Params.lastmod` is the raw front matter, a string; read in the
+            {{- /* `.Params.lastmod` is the raw front matter, a string, when the page
+                   sets one. When it does not, Hugo fills the key in with the resolved
+                   `.Lastmod` (the last commit, with enableGitInfo), a time.Time, and
+                   that is not Italo's to claim: so only a string counts. Read in the
                    zone the publication date is in, so two days are compared as days. */ -}}
-            {{- $updated := (time.AsTime (.Params.lastmod | default .Lastmod)).In .Date.Location -}}
-            {{- if gt ($updated.Format "2006-01-02") (.Date.Format "2006-01-02") -}}
-                <span class="masthead__sep" aria-hidden="true">·</span>
-                {{- T "masthead.updated" (printf `<time datetime="%s">%s</time>` ($updated.Format "2006-01-02") ($updated | time.Format ":date_long")) | safeHTML -}}
+            {{- with .Params.lastmod -}}
+                {{- if eq (printf "%T" .) "string" -}}
+                    {{- $updated := (time.AsTime .).In $.Date.Location -}}
+                    {{- if gt ($updated.Format "2006-01-02") ($.Date.Format "2006-01-02") -}}
+                        <span class="masthead__sep" aria-hidden="true">·</span>
+                        {{- T "masthead.updated" (printf `<time datetime="%s">%s</time>` ($updated.Format "2006-01-02") ($updated | time.Format ":date_long")) | safeHTML -}}
+                    {{- end -}}
+                {{- end -}}
             {{- end -}}
         </span>
         {{- end }}

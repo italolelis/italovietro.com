@@ -872,6 +872,35 @@ for page in "${MASTHEAD_POSTS[@]}"; do
     else
         bad "$name: updated $updated is not after published $published"
     fi
+    # And only when the front matter says so: a `lastmod` set, on a later day than
+    # `date`. The page used to fall back to Hugo's `.Lastmod`, which with enableGitInfo
+    # is the date of the last commit to touch the file, so a post written without a
+    # `lastmod` announced an update nobody had made. The one check on this page that
+    # reads the source, because "what the front matter says" is the thing being tested.
+    slug=${name#pt-br/}; lang=en
+    case $name in pt-br/*) lang=pt-br ;; esac
+    source_md="$(dirname "$0")/../content/posts/$slug/index.$lang.md"
+    if [ -f "$source_md" ]; then
+        written=$(head -30 "$source_md" | sed -n "s/^date: *[\"']*\([0-9-]\{10\}\).*/\1/p" | head -1)
+        revised=$(head -30 "$source_md" | sed -n "s/^lastmod: *[\"']*\([0-9-]\{10\}\).*/\1/p" | head -1)
+        want=''
+        if [ -n "$revised" ] && [[ $revised > $written ]]; then want=$revised; fi
+        if [ "$updated" = "$want" ]; then
+            ok "$name: Updated is the front matter's lastmod, and only when it is a later day (${want:-none})"
+        else
+            bad "$name: Updated is '${updated:-none}' but the front matter says '${want:-none}'"
+        fi
+    else
+        bad "$name: cannot find its source ($source_md) to check Updated against"
+    fi
+done
+# A new post starts from the archetype, and the masthead reads three things from front
+# matter that the archetype once left out: `lastmod` (without one a post says nothing
+# about being updated, which is right, but nobody learns to bump it), `description` (the
+# SEO text and the dek) and `categories` (the kicker). Source, not output: `hugo new`
+# is the only way these get written.
+for key in 'lastmod:' 'description:' 'categories:'; do
+    contains "$(dirname "$0")/../archetypes/default.md" "$key" "the new-post archetype carries $key, as AGENTS.md's front matter does"
 done
 # The dek is the post's description, or its own `subtitle` where it has one.
 in_order "$PUBLIC/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'the dek of a post is its description'
