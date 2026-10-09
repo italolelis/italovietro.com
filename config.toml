@@ -72,49 +72,38 @@ ignoreLogs = ['shortcode-twitter-getremote']
         iconColor = "#5bbad5"
         tileColor = "#da532c"
       # Home page config
+      #
+      # The page is layouts/index.html, and it reads none of the theme's `home.profile`
+      # or `home.posts`: those blocks configured the theme's profile block and its list
+      # of posts, and neither is drawn any more. What they decided is recorded here,
+      # because the reasons outlive the keys.
+      #
+      # The Greeting is `greeting` in each language's own content/_index file, not
+      # config. It is "Hey 👋" / "Oi 👋" and not the aphorism that used to sit there --
+      # "The hardest problems aren't technical" read as a slogan, and a slogan is a
+      # claim about yourself made before you have said anything. The paragraph under it
+      # does the introducing, which is why it can be two words. It is the page's h1.
+      #
+      # No portrait on the home page (the theme's `avatarURL`, kept empty). Only 2 of
+      # the 14 sites surveyed in .planning/research/minimal-personal-site-patterns.md
+      # show a face on theirs, and both belong to people with something to sell. The
+      # photograph opens /about/, where a reader has asked to see who is writing.
+      #
+      # No typing animation. The Greeting is the first line a visitor sees and the only
+      # one above the fold, so it should be there at first paint rather than arriving
+      # character by character behind a cursor that the theme's `duration = -1` then
+      # left blinking forever.
+      #
+      # No social icons. They were an icon row directly under the Greeting -- the first
+      # interactive thing a visitor met, ahead of anything the site is about. 1 of the
+      # 14 sites surveyed does that; 7 have none on the home page at all. The links are
+      # text in the footer.
+      #
+      # No list of posts (`home.posts.enable = false`): writing is its own page, and the
+      # Signpost routes to it.
       [languages.en.params.home]
         # amount of RSS pages
         rss = 10
-        # Home page profile
-        [languages.en.params.home.profile]
-          enable = true
-          gravatarEmail = ""
-          # No portrait on the home page. Only 2 of the 14 sites surveyed in
-          # .planning/research/minimal-personal-site-patterns.md show a face on
-          # theirs, and both belong to people with something to sell. The photograph
-          # now opens /about/, where a reader has asked to see who is writing.
-          #
-          # Empty rather than profile.enable = false: the tagline and the social row
-          # come from this same block and both stay.
-          avatarURL = ""
-          # title shown in home page (HTML format is supported)
-          title = ""
-          # The opening line. A greeting rather than the aphorism that used to sit
-          # here -- "The hardest problems aren't technical" read as a slogan, and a
-          # slogan is a claim about yourself made before you have said anything.
-          # The paragraph under it does the introducing, which is why this can be
-          # two words.
-          #
-          # It renders through the theme's profile block, whose field is called
-          # subtitle; that is the slot, not the intent.
-          subtitle = "Hey 👋"
-          # No typing animation. The tagline is the first line a visitor sees and
-          # the only one above the fold, so it should be there at first paint
-          # rather than arriving character by character behind a cursor that the
-          # theme's `duration = -1` then left blinking forever.
-          typeit = false
-          # Social links live in the footer now, as text. On the home page they
-          # were an icon row directly under the tagline -- the first interactive
-          # thing a visitor met, ahead of anything the site is about. 1 of the 14
-          # sites surveyed does that; 7 have none on the home page at all.
-          social = false
-          # disclaimer (HTML format is supported)
-          disclaimer = ""
-        # Home page posts
-        [languages.en.params.home.posts]
-          enable = false
-          # special amount of posts in each home posts page
-          paginate = 6
 
   [languages.pt-br]
     weight = 2
@@ -139,8 +128,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
         url = "/leituras-recomendadas/"
         title = ""
         weight = 2
+      # Identifiers are the same in both languages (this one was "palestras"): the home
+      # page's Signpost names a section by identifier, in each language's own file.
       [[languages.pt-br.menu.main]]
-        identifier = "palestras"
+        identifier = "speaking"
         pre = ""
         name = "Palestras"
         url = "/palestras/"
@@ -167,24 +158,10 @@ ignoreLogs = ['shortcode-twitter-getremote']
         themeColor = "#ffffff"
         iconColor = "#5bbad5"
         tileColor = "#da532c"
+      # See the en block above: the page is layouts/index.html, and the Greeting is
+      # `greeting` in content/_index.pt-br.md.
       [languages.pt-br.params.home]
         rss = 10
-        [languages.pt-br.params.home.profile]
-          enable = true
-          gravatarEmail = ""
-          # See the en block above: the portrait moved to /pt-br/sobre/.
-          avatarURL = ""
-          title = ""
-          # See the en block above.
-          subtitle = "Oi 👋"
-          # See the en block above.
-          typeit = false
-          # See the en block above.
-          social = false
-          disclaimer = ""
-        [languages.pt-br.params.home.posts]
-          enable = false
-          paginate = 6
 
 [params]
   # LoveIt theme version
@@ -508,7 +485,16 @@ ignoreLogs = ['shortcode-twitter-getremote']
       taskList = true
       typographer = true
     [markup.goldmark.renderer]
-      unsafe = true
+      # Raw HTML in Markdown is refused. It was on for one reason: the home page was
+      # a wrapper div and classed paragraphs typed into the Markdown. The home layout
+      # (layouts/index.html) draws those now, and nothing else on the site carries a
+      # tag outside a code fence or a shortcode (checked: the build output is
+      # byte-identical with it off). Off, Hugo says "Raw HTML omitted" and
+      # --panicOnWarning (scripts/build.sh) turns that into a failed build, so layout
+      # markup cannot drift back into the content files unnoticed. A post that really
+      # needs a tag (a <details>, an <iframe>) is one line away: set this to true and
+      # say why here.
+      unsafe = false
   # Table Of Contents settings
   [markup.tableOfContents]
     startLevel = 2

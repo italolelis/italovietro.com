@@ -89,6 +89,23 @@ in_order() {
     fi
 }
 
+# text_has <file> <sentence> <description> -- the page's text, not its markup: every tag
+# dropped (a block's closing tag leaves a space, so two paragraphs do not run together)
+# and whitespace collapsed. For a sentence with a link in the middle of it, which
+# `contains` cannot hold whole because the tag is in the way. Entities are NOT decoded:
+# a needle writes the typographer's `&rsquo;` and `&ldquo;` as the page does (the
+# footgun in AGENTS.md), which is also why a straight apostrophe here matches nothing.
+text_has() {
+    local file=$1 needle=$2 desc=$3
+    if [ ! -f "$file" ]; then
+        bad "$desc (no such file: $file)"
+    elif tr '\n' ' ' < "$file" | sed -E 's#</(p|h[1-6]|div|section|li)>#& #g; s/<[^>]*>//g; s/[[:space:]]+/ /g' | grep -qF -- "$needle"; then
+        ok "$desc"
+    else
+        bad "$desc"
+    fi
+}
+
 # same_count <file> <literalA> <literalB> <description> -- asserts two things occur
 # equally often. Better than a fixed number for "every entry has one of these": it
 # keeps passing when entries are added and fails when one is added without.
@@ -377,17 +394,19 @@ contains "$EN_HOME" '>Reading<' 'nav uses the short parallel label, not the sent
 # so rewording the copy cannot break it and deleting a link cannot pass.
 contains "$EN_HOME" 'home-signpost' 'the home page routes in prose'
 contains "$PT_HOME" 'home-signpost' 'and so does the pt-br home page'
-# The opening line greets and stops. Asserted because it comes from config rather
-# than from the content file, which is the least likely place to look when the
-# first line of the site is wrong.
-matches "$EN_HOME" 'home-subtitle>Hey' 'the en home page opens with the greeting'
-matches "$PT_HOME" 'home-subtitle>Oi' 'the pt-br home page opens with the greeting'
-# Asserted at the theme's own specificity, which is the whole point: styling this
-# line from `.home .home-subtitle` is one class short of the theme's rule, so it
-# loses and the greeting silently renders at 1rem with 8px of padding. The
-# stylesheet said 1.75rem for two commits while the browser showed 16px.
-matches "$CSS" '\.home \.home-profile \.home-subtitle\{[^}]*font-size:2\.75rem' 'the greeting is styled at a specificity that beats the theme'
-matches "$CSS" '\.home \.home-profile \.home-subtitle\{[^}]*padding:0' 'and keeps the one left edge, with no padding of its own'
+# The opening line greets and stops, and it is the page's h1. It was a div the theme
+# drew from config, which left the loudest text on the page with no heading meaning
+# at all: a screen reader's heading list opened on "Beyond the Code". It is front
+# matter now, in each language's own file, rendered by layouts/index.html.
+matches "$EN_HOME" '<h1 class=home-greeting>Hey' 'the en home page opens with the greeting, as its h1'
+matches "$PT_HOME" '<h1 class=home-greeting>Oi' 'the pt-br home page opens with the greeting, as its h1'
+# While the Greeting was the theme's `.home-subtitle` div it had to be styled at the
+# theme's own specificity: one class short lost silently, and it rendered at 1rem with
+# 8px of padding while the stylesheet said 1.75rem for two commits. The layout draws
+# its own h1 now, so there is no theme rule to beat; what is asserted is that it is
+# the headline step, and that nothing pads it off the left edge.
+rule_sets '\.home \.home-greeting' 'font-size:2\.75rem' 'the greeting is the headline step'
+rule_lacks '\.home \.home-greeting' 'padding-left' 'and keeps the one left edge, with no side padding of its own'
 absent_from "$EN_HOME" 'home-route__name' 'the route list that mirrored the nav is gone'
 contains "$EN_HOME" 'href=/recommended-reading/' 'en home page reaches the reading list'
 contains "$EN_HOME" 'href=/speaking/' 'en home page reaches the speaking page'
@@ -402,16 +421,74 @@ contains "$PT_HOME" 'href=/pt-br/palestras/' 'pt-br home page reaches the speaki
 # list that quietly loses its fourth item.
 #
 # Asserted on '<h1' rather than the heading text because the failure is structural:
-# the site header already carries the name, so a second first-level heading on the
-# home page is wrong whatever it says.
+# the site header already carries the name, so a second first-level heading restating
+# it is wrong whatever it says. The guard used to be "no h1 at all". The Greeting is
+# the page's h1 now (see 'Home page layout'), so it is that there is exactly one and
+# that it is not the name.
 echo 'Home page is contents, not biography'
-absent_from "$EN_HOME" '<h1' 'en home page has no heading repeating the name in the header'
-absent_from "$PT_HOME" '<h1' 'pt-br home page has no heading repeating the name either'
+occurs "$EN_HOME" '<h1' 1 'en home page has one first-level heading'
+occurs "$PT_HOME" '<h1' 1 'pt-br home page has one first-level heading'
+absent_from "$EN_HOME" '<h1 class=home-greeting>Italo' 'and it is not the name the header already carries'
+absent_from "$PT_HOME" '<h1 class=home-greeting>Italo' 'in pt-br either'
 absent_from "$EN_HOME" 'home-avatar' 'no portrait on the en home page'
 absent_from "$PT_HOME" 'home-avatar' 'no portrait on the pt-br home page'
 nowhere '/images/avatar.png' 'the 428KB portrait PNG is referenced nowhere'
 absent_from "$EN_HOME" 'learned about people' 'the moved biography is not left behind on the en home page'
 absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left behind on the pt-br home page'
+
+# The home page is a layout (layouts/index.html) that assembles named parts, in this
+# order: the Greeting, an intro, the Signpost, "Beyond the Code", the Plate. It was raw
+# HTML inside Markdown: a wrapper div, classed paragraphs, and a Signpost with every
+# URL typed out per language, repeating the menu that already holds them. Same order
+# and same words, by decision (Italo); only the structure changed, so what is asserted
+# here is the words, in order, and where each part's links come from.
+echo 'Home page layout'
+in_order "$EN_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Beyond the Code</h2>.*<figure class="plate plate--[a-z]+">' 'the en home page runs Greeting, intro, Signpost, Beyond the Code, Plate'
+in_order "$PT_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Além do Código</h2>.*<figure class="plate plate--[a-z]+">' 'and so does the pt-br home page'
+# The Plate is last: nothing but closing tags between its figure and the end of the page's
+# content, so a new part cannot be added after the picture without this noticing.
+matches "$EN_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|</div>)*</main>' 'the en Plate comes last'
+matches "$PT_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|</div>)*</main>' 'the pt-br Plate comes last'
+# The words, whole, as a reader gets them. The typographer curls a quote or an apostrophe
+# the way it does anywhere else in Markdown, which is the one visible change from the
+# raw HTML these sentences used to sit in, so the needles are written curled (`&rsquo;`).
+text_has "$EN_HOME" 'I&rsquo;m Senior Director of Engineering at Parloa, where we&rsquo;re figuring out how to make AI conversations actually work reliably at scale. The kind of problem where &ldquo;move fast and break things&rdquo; doesn&rsquo;t fly. I&rsquo;ve been in tech for 18+ years. Started fixing computers in João Pessoa, Brazil, eventually moved into software, and made my way across Europe building teams and systems.' 'the en intro, word for word'
+text_has "$PT_HOME" 'Sou Senior Director of Engineering na Parloa, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde &ldquo;move fast and break things&rdquo; não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.' 'the pt-br intro, word for word'
+text_has "$EN_HOME" 'I write from time to time, and those thoughts end up in writing. I read a good deal more than I write, and the books that stuck are in reading. I also like talking about what I have had to figure out the hard way, which is speaking. If you want the longer version of all this, it is in about.' 'the en Signpost, word for word'
+text_has "$PT_HOME" 'Escrevo de vez em quando, e esses textos acabam em artigos. Leio bem mais do que escrevo, e os livros que ficaram estão em leituras. Também gosto de falar sobre o que tive que descobrir na marra, e isso está em palestras. Se quiser a versão mais longa de tudo isso, está em sobre.' 'the pt-br Signpost, word for word'
+text_has "$EN_HOME" 'When I&rsquo;m not thinking about distributed systems, you&rsquo;ll find me managing my homelab (Kubernetes clusters, self-hosted everything), brewing coffee with an amount of precision that my family finds unreasonable, strategizing over D&amp;D campaigns, and being a dedicated dad and husband. The homelab is where I experiment. The coffee is where I focus. The D&amp;D is where I accept that even the best-laid plans fall apart.' 'the en Beyond the Code paragraph, word for word'
+text_has "$PT_HOME" 'Quando não estou pensando em sistemas distribuídos, você me encontra gerenciando meu homelab (clusters Kubernetes, self-hosting de tudo), preparando café com uma precisão que minha família acha excessiva, bolando estratégias em campanhas de D&amp;D e sendo pai dedicado e marido presente. O homelab é onde eu experimento. O café é onde eu foco. O D&amp;D é onde eu aceito que até os melhores planos desmoronam.' 'the pt-br Além do Código paragraph, word for word'
+# The Signpost's links are the menu's: the set of hrefs inside the sentence is exactly
+# the set in the navigation, in each language. Typing a URL into the sentence, or a menu
+# entry that the sentence forgets, makes the two sets differ. Compared as sets, so the
+# order the sentence mentions the sections in is the copy's business.
+links_in() { # links_in <file> <sed-expression picking the region> -- its hrefs, one a line, unique
+    tr -d '\n' < "$1" | sed -E "$2" | grep -oE 'href=[^ >]+' | sort -u
+}
+for lang in en pt; do
+    if [ "$lang" = en ]; then file=$EN_HOME; else file=$PT_HOME; fi
+    signpost=$(links_in "$file" 's#.*<p class=home-signpost>##; s#</p>.*##')
+    menu=$(links_in "$file" 's#.*<div class=menu>##; s#<span class="menu-item delimiter">.*##')
+    if [ -n "$signpost" ] && [ "$signpost" = "$menu" ]; then
+        ok "the $lang Signpost links to exactly the sections the menu lists"
+    else
+        bad "the $lang Signpost links to exactly the sections the menu lists (signpost: $(echo $signpost), menu: $(echo $menu))"
+    fi
+done
+# The one assertion in this script that reads source and not output, because the output
+# cannot say who wrote a <div>: the page's wrapper, its classed paragraphs and its typed
+# URLs were all authored in the content file, and what compiled from them looks the same
+# whoever wrote it. The home page's Markdown holds prose, and a shortcode call, and no
+# tags. (`{{<` opens a shortcode, and is not a tag.) With `unsafe = false` in config.toml
+# Hugo already fails the build on a tag in any Markdown file; this is what still says so
+# if someone turns that back on for a post, and it names the file.
+for f in "$(dirname "${BASH_SOURCE[0]}")"/../content/_index.*.md; do
+    if awk '/^---[[:space:]]*$/ { n++; next } n >= 2' "$f" | grep -qE '(^|[^{])</?[A-Za-z][A-Za-z0-9-]*([ />]|$)'; then
+        bad "no layout HTML in $(basename "$f")"
+    else
+        ok "no layout HTML in $(basename "$f"), prose only"
+    fi
+done
 
 # One measure, one left edge -- see docs/adr/0004. The profile block sits outside
 # the wrapper that carries the 800px cap, so without this rule the tagline drifts
@@ -422,7 +499,7 @@ absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left 
 # descriptions depends on it: under flex each description started wherever its own
 # label ended, and `max-content` is what sizes the label track to the longest label
 # in whichever language is rendering.
-matches "$CSS" '\.home \.home-profile\{max-width:800px' 'the profile block shares the 800px measure'
+rule_sets '\.home \.home-greeting' 'max-width:800px' 'the greeting shares the 800px measure'
 absent_from "$EN_HOME" '<hr' 'no rule between the routes and the last section'
 absent_from "$PT_HOME" '<hr' 'nor on the pt-br home page'
 rule_sets '\.home-intro' 'color:var\(--ink\)' 'the intro paragraph is body colour, not muted'
@@ -440,7 +517,7 @@ rule_sets '\.portrait__sizes' 'color:var\(--muted\)' 'the headshot line is muted
 echo 'Headings outrank body text in dark'
 rule_sets '\.single-title' 'color:var\(--heading\)' 'a title takes the heading colour, which dark makes the brighter one'
 rule_sets '\.single \.content h2' 'color:var\(--heading\)' 'and so does a section heading, wherever it sits in the column'
-rule_sets '\.home \.home-profile \.home-subtitle' 'color:var\(--heading\)' 'the greeting is treated as a heading, not body text'
+rule_sets '\.home \.home-greeting' 'color:var\(--heading\)' 'the greeting is treated as a heading, not body text'
 if awk -v h="$(contrast "$(token_value dark heading)" "$(token_value dark paper)")" -v i="$(contrast "$(token_value dark ink)" "$(token_value dark paper)")" 'BEGIN { exit !(h + 0 > i + 0) }'; then
     ok 'in dark a heading is brighter than the body text under it'
 else
@@ -1088,7 +1165,7 @@ absent_from "$CSS" 'font-family:system-ui,-apple-system,Segoe UI,Roboto,Emoji' '
 rule_sets '\.single \.single-title' 'font-family:var\(--font-serif\)' 'a post title is set in the serif'
 rule_sets '\.archive \.single-title' 'font-family:var\(--font-serif\)' 'so is the archive title'
 rule_sets '\.episode \.single-title\.masthead__title' 'font-family:var\(--font-serif\)' 'and so is an Episode page title, from the same stack'
-rule_sets '\.home \.home-profile \.home-subtitle' 'font-family:var\(--font-serif\)' 'the Greeting is a headline, so it is serif too'
+rule_sets '\.home \.home-greeting' 'font-family:var\(--font-serif\)' 'the Greeting is a headline, so it is serif too'
 rule_sets '\.single \.content>h2' 'font-family:var\(--font-serif\)' 'article section headings are serif'
 rule_sets '\.single \.content>h3' 'font-family:var\(--font-serif\)' 'and so are its subheadings'
 # Not the headings inside a shortcode: an Entry title is an h3 too, and it is a title
@@ -1319,7 +1396,7 @@ dark_copy() { # dark_copy <description> <selector-regex>
     rule_lacks "\\[theme=dark\\] .*($2).*" "$COLOUR_DECL" "no dark copy of $1"
 }
 dark_copy 'the footer, the logo and the home intro' '\.footer-social|\.logo-mark|\.home-intro'
-dark_copy 'the Greeting, a title or a heading' '\.home-subtitle|\.single-title|\.single \.content h[1-6]'
+dark_copy 'the Greeting, a title or a heading' '\.home-greeting|\.single-title|\.single \.content h[1-6]'
 dark_copy 'a Plate' '\.plate'
 dark_copy 'the headshot line' '\.portrait'
 dark_copy 'the archive' '\.archive-intro|\.group-title'

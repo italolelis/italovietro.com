@@ -89,6 +89,7 @@ layouts/
 │   ├── section.html              # post archive, incl. Elsewhere rows, each an Entry
 │   └── _markup/                  # codeblock render hooks (goat, mermaid, default)
 ├── _default/baseof.html          # theme mirror: .Site.Language.Locale
+├── index.html                    # the home page: Greeting, intro, Signpost, section (see The home page)
 ├── index.rss.xml, posts/rss.xml, # theme mirrors: .Site.Language.Locale
 │   taxonomy/rss.xml
 ├── episodes/single.html          # episode pages
@@ -118,6 +119,23 @@ layouts/
 ├── speaking/single.html
 └── taxonomy/term.html            # a tag page: an h1, then Entries
 ```
+
+## The home page
+
+The home page is a layout, `layouts/index.html`, that assembles named parts (`CONTEXT.md`) from front matter, the menu and the Markdown body, in this order. It mirrors the theme's `index.html`, which drew a profile block from config; none of that is wanted here.
+
+| Part | Where it comes from |
+| --- | --- |
+| **Greeting** | `greeting` in front matter, as the page's `<h1>` (`.home-greeting`) |
+| intro | the body above its first heading (`.home-intro`) |
+| **Signpost** | `signpost` in front matter: a sentence with a `{identifier}` where a link goes. The layout swaps each one for a link to the menu entry with that identifier, with that entry's URL and its label lower-cased (`.home-signpost`) |
+| section | the body from its first heading on, "Beyond the Code" (`.home-beyond`) |
+| **Plate** | `{{< plate >}}` in the body, so it comes last; framed by `_plate.scss` like every Plate (see *Plates*) |
+
+- **`content/_index.*.md` hold prose and a shortcode call, no layout HTML.** Raw HTML in Markdown is refused (`unsafe = false` in `config.toml`), and the build fails on it; the gate also reads those two files and fails on a tag. The order is the layout's, not each language file's.
+- **The Signpost's URLs are the menu's.** A renamed path changes it by itself. Menu identifiers are the same in both languages (`writing`, `reading-list`, `speaking`, `about`) because the sentence names them; an identifier with no menu entry fails the build instead of printing `{writing}`. The sentence reads in whatever order the copy wants: the gate compares the *set* of its links to the set in the navigation.
+- **A new part is a change to the layout, then to the gate's order assertion.** The wrapper `.home-content` stays, for a reason in `_home.scss`: it keeps the page's paragraphs and heading out of the article rules, which are set on the column's direct children.
+- **The Greeting is not config any more.** `[params.home.profile]` was the theme's slot for it; the decisions recorded there (no portrait, no typing animation, no social icons, no post list) are comments under `[languages.en.params.home]` in `config.toml`.
 
 ## The masthead
 
@@ -195,9 +213,9 @@ SHARE_CARD = True                        # optional: also cut that page's 1200x6
 | `_typography.scss` | **The site's voice** (ADR-0006), imported right after the tokens. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
 | `_masthead.scss` | The masthead of a post and of an Episode page (see *The masthead*): kicker, headline, dek, meta line, built from the type module's mixins. Imported right after the type module, before the page stylesheets |
 | `_post.scss` | What sits around a post's text: the Contents box (both the floating one and the one inside the article) and the foot (tags, share row, previous and next). The Episode page's share row takes the same rules |
-| `_custom.scss` | Logo, footer, the home intro; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss`, `_post.scss` and `_plate.scss`, then every page stylesheet below |
+| `_custom.scss` | Logo, footer; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss`, `_post.scss` and `_plate.scss`, then every page stylesheet below |
 | `_plate.scss` | **Every Plate** (see *Plates*): the figure's framing, the room around it, the role's size (hero, spot, inline) and its dimming in dark, once. Imported before the page stylesheets, so a page asks for a Plate and styles nothing of it |
-| `_home.scss` | Home page: the Greeting, the signpost |
+| `_home.scss` | Home page, all of it but its Plate: the Greeting, the column, the intro, the signpost |
 | `_about.scss` | About page + portrait |
 | `_entry.scss` | **The Entry**, one stylesheet for every list: the row, the title, the muted line and its links, the date column in tabular figures, the note, the book's compact and featured weights, the icon colour per kind, the one hover, and the hairline under an h2 that heads a list of Entries. No page stylesheet restates any of it |
 | `_speaking.scss` | Speaking page: the banner photograph. Its Entries are `_entry.scss`'s |
