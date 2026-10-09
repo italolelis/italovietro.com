@@ -933,6 +933,18 @@ for page in "${MASTHEAD_POSTS[@]}"; do
     else
         ok "$name: no Contents entry carries an emoji"
     fi
+    # Nor does stripping the emoji run the words together. The cleanup once removed every
+    # space beside a tag, so a heading "Why `kubectl` matters in *practice*" listed as
+    # "Why<code>kubectl</code>matters in<em>practice</em>". No post has a heading with
+    # inline markup yet, so this is a guard for the first one that does, not a check of
+    # one that exists (it was checked, red and then green, by writing that heading in
+    # and taking it out again). An entry whose markup is glued to a letter on purpose
+    # ("<code>foo</code>s") would trip it; rewrite the heading or the assertion then.
+    if grep -oE '<a href=#[^ >]+>[^<]*(<[^>]*>[^<]*)*</a>' "$page" | grep -qE '[A-Za-z]<(code|em|strong)>|</(code|em|strong)>[A-Za-z]'; then
+        bad "$name: a Contents entry has its words run together around inline markup"
+    else
+        ok "$name: no Contents entry has its words run together around inline markup"
+    fi
 done
 # Previous is the older post, next the newer, and an Elsewhere post (no page here) is
 # skipped over rather than linked: the oldest post written here has no previous, and

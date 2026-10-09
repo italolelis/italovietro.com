@@ -40,17 +40,25 @@
     {{- end -}}
 
     {{- /* The Contents box lists the headings, so a post without any has none. The
-           pictographs, joiners and variation selectors go, with the space after them
+           pictographs, joiners and variation selectors go, with the space beside them
            (a heading is written "🧩 Avoiding difficult discussions"). Only the box is
-           stripped: the heading keeps its emoji. */ -}}
+           stripped: the heading keeps its emoji.
+
+           Only the whitespace next to an emoji goes. This used to trim every `>\s+` and
+           `\s+<` in the list, to tidy the gap an emoji left at the edge of an entry,
+           and that also ate the real spaces around inline markup in a heading, so that
+           "Why <code>kubectl</code> matters in <em>practice</em>" came out as
+           "Why<code>kubectl</code>matters in<em>practice</em>". An emoji at the start of an
+           entry takes the space after it, one at the end the space before it, and one
+           in the middle is replaced by a single space. */ -}}
+    {{- $emoji := `(?:\s*[\x{1F000}-\x{1FAFF}\x{2300}-\x{23FF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}\x{200D}\x{20E3}])+\s*` -}}
     {{- $tocHTML := "" -}}
     {{- if ne $toc.enable false -}}
         {{- if in .TableOfContents "<li" -}}
             {{- $tocHTML = .TableOfContents
-                | replaceRE `[\x{1F000}-\x{1FAFF}\x{2300}-\x{23FF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}\x{200D}\x{20E3}]+` ""
-                | replaceRE `>\s+` ">"
-                | replaceRE `\s+<` "<"
-                | replaceRE `\s{2,}` " " -}}
+                | replaceRE (printf `(<a [^>]*>)%s` $emoji) "${1}"
+                | replaceRE (printf `%s(</a>)` $emoji) "${1}"
+                | replaceRE $emoji " " -}}
         {{- end -}}
     {{- end -}}
 
