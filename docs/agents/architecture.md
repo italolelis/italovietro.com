@@ -35,7 +35,7 @@ italovietro.com/
 ├── layouts/                     # theme overrides only
 ├── scripts/
 │   ├── check-build.sh           # THE BUILD GATE (~670 lines)
-│   └── watercolour/             # paints the episode plates; not run in CI
+│   └── watercolour/             # paints the Plates, one script each, each naming its own DEST; not run in CI
 ├── static/                      # favicons, manifest, og-card.jpg
 ├── themes/LoveIt/               # submodule — do not edit
 ├── CONTEXT.md                   # domain glossary — read before naming things
@@ -99,7 +99,7 @@ layouts/
 │   ├── single/                   # footer.html (a post's tags, share, neighbours), share.html (also on Episode pages)
 │   ├── episode/                  # timeline, chapters, chapter-heading, moment, clock, seconds
 │   ├── entry.html                # THE Entry: every list's items, one markup (see its contract below)
-│   ├── plate.html                # a watercolour, responsive; episode pages and home
+│   ├── plate.html                # a Plate: page, src, alt, role (see Plates); every page that has one
 │   ├── head/seo.html             # theme mirror: .Site.Language.Locale
 │   ├── header.html
 │   ├── footer.html               # carries the contact address on every page
@@ -111,7 +111,7 @@ layouts/
 │       └── img.html
 ├── shortcodes/
 │   ├── talk.html                 # speaking Entries, through partials/entry.html
-│   ├── home-plate.html           # the home page's watercolour, from assets/
+│   ├── plate.html                # a Plate in Markdown: the home page's desk, or one in a post
 │   ├── upcoming.html             # future appearances from data/upcoming.yaml, as Entries
 │   ├── book.html                 # reading list Entries, through partials/entry.html
 │   ├── portrait.html             # About page headshot + downloads
@@ -130,7 +130,7 @@ The home page is a layout, `layouts/index.html`, that assembles named parts (`CO
 | intro | the body above its first heading (`.home-intro`) |
 | **Signpost** | `signpost` in front matter: a sentence with a `{identifier}` where a link goes. The layout swaps each one for a link to the menu entry with that identifier, with that entry's URL and its label lower-cased (`.home-signpost`) |
 | section | the body from its first heading on, "Beyond the Code" (`.home-beyond`) |
-| **Plate** | a shortcode in the body, so it comes last (`.home-plate`) |
+| **Plate** | `{{< plate >}}` in the body, so it comes last; framed by `_plate.scss` like every Plate (see *Plates*) |
 
 - **`content/_index.*.md` hold prose and a shortcode call, no layout HTML.** Raw HTML in Markdown is refused (`unsafe = false` in `config.toml`), and the build fails on it; the gate also reads those two files and fails on a tag. The order is the layout's, not each language file's.
 - **The Signpost's URLs are the menu's.** A renamed path changes it by itself. Menu identifiers are the same in both languages (`writing`, `reading-list`, `speaking`, `about`) because the sentence names them; an identifier with no menu entry fails the build instead of printing `{writing}`. The sentence reads in whatever order the copy wants: the gate compares the *set* of its links to the set in the navigation.
@@ -163,6 +163,45 @@ What a post keeps and loses was Italo's decision (#320). **Kept:** the Contents 
 - `layouts/partials/single/footer.html` mirrors the theme's: share, tags, previous and next. `single/share.html` is the share row alone, which the Episode layout calls. The buttons and which networks are on are still the theme's (`[params.page.share]`).
 - Both are asserted for **every post page in both languages**. The gate finds the posts rather than listing them: a local row of the writing archive (an Elsewhere row links off the site) is a post, so a new one is covered the day it is written. The Episode pages are the `EPISODES` list. A page with the masthead needs no new assertion of its own beyond that loop.
 
+## Plates
+
+A **Plate** (`CONTEXT.md`) is a watercolour on a page. Placing one anywhere is **one script plus one line**: a painting script that names where its file lives, and a line of front matter or a shortcode that names the file and its role. Nothing else: not a stylesheet, not a layout edit, not a gate edit.
+
+**The role** is the Plate's one decision, and it is made in one place, `layouts/partials/plate.html`:
+
+| Role | Where | Sized | Loaded |
+| --- | --- | --- | --- |
+| `hero` | straight under a masthead, outside the column, so it takes the Measure itself | the full Measure (800px) | eager (`fetchpriority=high`): the one image above the fold |
+| `spot` | in the column, three fifths of the Measure with its caption beside it | 480px, then 60vw on a narrow window | lazy |
+| `inline` | in the column, the full Measure. **The default** | the full Measure (800px) | lazy |
+
+**Asking for one.** The partial takes the page, the file, the alt text and the role, and nothing about how it looks:
+
+```
+{{ partial "plate.html" (dict "page" . "src" "kitchen.webp" "alt" "…" "role" "hero" "caption" "…") }}
+```
+
+`src` is a file in the page's own bundle, or else one in `assets/` (the home page's content is `content/_index.*.md` with no bundle to hold an image, so its desk is `assets/images/plates/desk.webp`). A `src` found in neither, or a role that is not one of the three, stops the build. A Plate does not quietly render as nothing.
+
+- **From front matter**, an Episode page does it for you: `episode.hero` is the hero, and a chapter's `plate: { src, alt, caption, role }` is a spot or inline one (no `role` is inline). See *Episode pages*.
+- **From Markdown**, the `plate` shortcode takes the same: `{{< plate src="desk.webp" alt="…" role="inline" caption="…" >}}`. The home page ends on one. A post could place one the same way, from its own bundle.
+- **From a layout**, call the partial, as `layouts/episodes/single.html` does.
+
+**What the markup is** is `<figure class="plate plate--<role>"><img … sizes loading|fetchpriority …><figcaption>…`, with the master's width and height on the image so nothing jumps when it loads, and Hugo's own 640, 960 and 1280 widths in the `srcset`. The role decides the `sizes` and whether the image is lazy; the page decides neither.
+
+**How it looks** is `assets/css/_plate.scss`, once: the framing and the room around a Plate, each role's size, the caption, and the dimming in dark. That dimming is the one rule that reads `--plate-filter`, a token, so there is no `[theme=dark]` rule for a Plate. A page stylesheet styles no Plate. The gate asserts there is exactly one rule that dims a Plate, and that no `ep-plate` or `home-plate` rule is back.
+
+**How it is painted** is `scripts/watercolour/`: one script in `plates/` per Plate, which paints a sheet with `wc.py` and saves its 2× PNG master to the gitignored `out/`. `uv run scripts/watercolour/paint.py [plate…]` runs them, and exports each as WebP with a deckled alpha edge. Each script names its own destination after its imports:
+
+```python
+DEST = "content/episodes/some-episode"   # the page bundle or assets/ folder, relative to the repo root
+SHARE_CARD = True                        # optional: also cut that page's 1200x630 cover.jpg from it (a hero's)
+```
+
+`paint.py` reads those two names and has no list of plates or destinations of its own; a script without a `DEST` stops it. It resets the painting module for each plate, so a Plate comes out the same whichever plates ran before it. Only the WebP and JPEG are committed; masters are not. Nothing paints in CI.
+
+**What the gate covers**, for every Plate on every page, found by reading the compiled pages rather than from a list: it declares its size, it is lazy or the hero is eager, it is told its width by its role, and none carries a page's own class. Every file a page links as a Plate, its resized widths included, is published and under 160KB. A Plate placed on a post tomorrow is covered the day it is placed. The gate's list of Episode pages (`EPISODES`) is still needed for the Episode assertions, but not for Plates.
+
 ## Stylesheets
 
 `assets/css/` — the partials:
@@ -174,12 +213,13 @@ What a post keeps and loses was Italo's decision (#320). **Kept:** the Contents 
 | `_typography.scss` | **The site's voice** (ADR-0006), imported right after the tokens. The serif stack (`--font-serif`) and the `serif`/`sans` mixins, the size scale, the Measure (`$measure`, `measure`), the masthead mixins (`headline`, `display`, `dek`, `kicker`), and what holds for every `.single` page: the column, the title above it, an article's headings, lists, quotations, the rule. Page stylesheets read from it and set no `font-family` of their own |
 | `_masthead.scss` | The masthead of a post and of an Episode page (see *The masthead*): kicker, headline, dek, meta line, built from the type module's mixins. Imported right after the type module, before the page stylesheets |
 | `_post.scss` | What sits around a post's text: the Contents box (both the floating one and the one inside the article) and the foot (tags, share row, previous and next). The Episode page's share row takes the same rules |
-| `_custom.scss` | Logo, footer; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss` and `_post.scss`, then every page stylesheet below |
-| `_home.scss` | Home page, all of it: the Greeting, the column, the intro, the signpost, the plate |
+| `_custom.scss` | Logo, footer; imports `_tokens.scss`, then `_typography.scss`, then `_masthead.scss`, `_post.scss` and `_plate.scss`, then every page stylesheet below |
+| `_plate.scss` | **Every Plate** (see *Plates*): the figure's framing, the room around it, the role's size (hero, spot, inline) and its dimming in dark, once. Imported before the page stylesheets, so a page asks for a Plate and styles nothing of it |
+| `_home.scss` | Home page, all of it but its Plate: the Greeting, the column, the intro, the signpost |
 | `_about.scss` | About page + portrait |
 | `_entry.scss` | **The Entry**, one stylesheet for every list: the row, the title, the muted line and its links, the date column in tabular figures, the note, the book's compact and featured weights, the icon colour per kind, the one hover, and the hairline under an h2 that heads a list of Entries. No page stylesheet restates any of it |
 | `_speaking.scss` | Speaking page: the banner photograph. Its Entries are `_entry.scss`'s |
-| `_episode.scss` | Episode pages: the timeline, chapter list, quotes, lessons, figures, plates. Everything scoped under `.episode` |
+| `_episode.scss` | Episode pages: the timeline, chapter list, quotes, lessons, figures. Everything scoped under `.episode` (its Plates are `_plate.scss`'s) |
 | `_reading-list.scss` | The reading list's in-page nav and the line under each section heading. Scoped through `.single .content:has(.entry--book)`, so none of it reaches another page |
 | `_archive.scss` | The writing archive and tag pages, around their Entries: the Measure, the line under the title, the year headings |
 | `_interactions.scss` | Focus rings, selected text, the active mobile nav item, reduced motion. (The Entry's hover is `_entry.scss`'s) |
@@ -205,7 +245,7 @@ There is no `[theme=dark] .thing`, and there is never a `[theme=auto]`: nothing 
 | `--muted` | dates, labels, captions | `--entry-podcast`, `--entry-panel` | the two Entry types that are not the Accent |
 | `--hairline` | the faint divider under a heading | `--ep-ink`, `--on-ink` | the Episode ink, and text on a fill of it |
 | `--rule` | a visible rule: a quote's bar, a box | `--ep-fill-1..4`, `--ep-lesson`, `--ep-tip`, `--ep-bar` | Episode figures |
-| `--plate-filter` | how a watercolour plate is dimmed | `--ep-paper`, `--ep-ruler-ink` | the timeline's ruler: paper, and the ink on it, which is the same in both modes |
+| `--plate-filter` | how a Plate is dimmed (the one rule that reads it is in `_plate.scss`) | `--ep-paper`, `--ep-ruler-ink` | the timeline's ruler: paper, and the ink on it, which is the same in both modes |
 
 Adding or changing a colour:
 
@@ -302,9 +342,9 @@ Front matter:
 | `episode.hosts` | list |
 | `episode.at`, `.at_label` | where a timestamp goes: a URL with `%d` for the second (YouTube `…&t=%ds`, Spotify `…?t=%d`), and the platform's name for the link title |
 | `episode.listen` | `[{ label, url }]`, the "listen" links in the colophon, labels written per language |
-| `episode.hero` | `{ src, alt }`, a plate from the bundle |
+| `episode.hero` | `{ src, alt }`, a Plate from the bundle, always with the role `hero` (see *Plates*) |
 | (no `layout`) | the section picks `layouts/episodes/single.html` |
-| `chapters` | per chapter: `id`, `n`, `t` (start, seconds), `title`, `summary`, `moments: [{ t: "mm:ss", text, size }]`, `lesson`, and an optional `plate: { src, alt, caption, size }` (`size: spot` for the smaller, captioned-beside treatment) |
+| `chapters` | per chapter: `id`, `n`, `t` (start, seconds), `title`, `summary`, `moments: [{ t: "mm:ss", text, size }]`, `lesson`, and an optional `plate: { src, alt, caption, role }` (`role: spot` for the smaller, captioned-beside treatment; no role is `inline`, the full Measure) |
 | `images` | `["cover.jpg"]`, the 1200×630 card cut from the hero |
 
 **Interactive figures** are front matter too, per chapter, so a new episode gets them without new code:
@@ -322,7 +362,7 @@ The timeline previews a quote on hover (pointer devices only) and goes to it on 
 
 The recording is **linked, not embedded**: a player is a third-party host loading on every visit, which the asset-host rule exists to prevent. Without JavaScript the timeline is a static ruler; nothing else depends on the script. Interface strings live in `i18n/en.toml` and `i18n/pt-br.toml`; the masthead's are `masthead.*`, the rest `episode.*`.
 
-The plates are painted by `scripts/watercolour/` (`uv run scripts/watercolour/paint.py [plate]`), which writes 2× PNG masters to a gitignored `out/` and exports WebP with a deckled alpha edge to where each plate lives (`DEST` in `paint.py`), cutting each episode's share card from its hero. Only the WebP and JPEG files are committed; the gate fails any plate over 160KB.
+The Plates are the site's, not the Episode page's: how one is asked for, painted and framed is under *Plates* below.
 
 A new episode page also needs a line in `EPISODES` at the top of the episode section of `scripts/check-build.sh` (its slug and first chapter id), which runs every episode assertion against it, and a `highlights_url` on its speaking entry.
 

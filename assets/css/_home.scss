@@ -136,19 +136,7 @@
 // without asking to be looked at.
 //
 // Last on the page, so the greeting stays the first and loudest thing, and at
-// the full measure like everything else (docs/adr/0004). The sheet has a torn
-// alpha edge, so it reads as paper on either theme rather than as a box.
-.home .home-content .home-plate {
-    margin: 2.25rem 0 0;
-    text-align: left;
-}
-
-.home .home-content .home-plate img {
-    display: block;
-    width: 100%;
-    height: auto;
-    // Paper does not glow: dimmed a little in dark so a white sheet is not the
-    // brightest thing on the screen. The same token as the episode plates.
-    filter: var(--plate-filter);
-}
+// the full measure like everything else (docs/adr/0004). It is an inline Plate
+// (`{{< plate >}}` in content/_index.*.md), framed and dimmed by _plate.scss like
+// every other: nothing about it is the home page's to style.
 

@@ -25,8 +25,10 @@
        "{writing}" on the home page.
 
        The wrapper classes are the ones the stylesheet already had (`home-content`,
-       `home-intro`, `home-signpost`, `home-plate`): the structure changed, not the
-       look. Re-read the theme's index.html if a theme bump touches it. */ -}}
+       `home-intro`, `home-signpost`): the structure changed, not the look. The Plate
+       is a `{{< plate >}}` in the body like any other, framed by _plate.scss, and
+       nothing here styles it. Re-read the theme's index.html if a theme bump touches
+       it. */ -}}
 {{- define "content" -}}
     {{- $params := .Scratch.Get "params" -}}
 

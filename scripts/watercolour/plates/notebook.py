@@ -1,6 +1,7 @@
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from wc import *
 from wc import OUT
+DEST = "content/episodes/shipping-more-not-faster"
 
 W = H = 1000
 s = Sheet(W, H, scale=2, s=31)

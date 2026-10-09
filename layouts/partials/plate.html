@@ -1,23 +1,43 @@
-{{- /* One watercolour plate.
+{{- /* One watercolour Plate.
 
-       The master in the bundle is 1600px wide, twice the measure, and carries a
-       deckled edge as alpha -- so it reads as a sheet of paper on either theme
-       rather than as a rectangle. Hugo derives the smaller widths here; WebP keeps
-       the alpha, which JPEG would flatten onto a background colour that is wrong
-       for one of the two themes.
+       A page asks for a Plate by name and role and nothing else:
 
-       Spot plates sit at three fifths of the measure beside their caption, so they
-       tell the browser so, and a phone is not sent the full-width file for them.
+           {{ partial "plate.html" (dict "page" . "src" "kitchen.webp" "alt" "…" "role" "hero") }}
 
-       Used by the episode pages and the home page, each with its own class prefix
-       (`base`, default "ep-plate"), so each page styles its plates in its own
-       stylesheet without one page's rules reaching the other.
+       `src` is a file in the page's own bundle, or else one in assets/ (the home page
+       has no bundle to hold an image, so its desk lives in assets/images/plates/). A
+       Plate that is in neither stops the build; it does not quietly render nothing.
 
-       Params: img (resource), alt, base (optional), class (optional), eager (optional; the hero is
-       above the fold, so lazy-loading it would only delay the first thing seen),
-       caption (optional, already rendered HTML). */ -}}
-{{- $img := .img -}}
-{{- $base := .base | default "ep-plate" -}}
+       The role is the Plate's one decision, and it is made here, in one place:
+
+           hero    straight under a masthead, outside the column, so it takes the
+                   Measure itself. Above the fold, so the one image that is eager.
+           spot    three fifths of the Measure with its caption beside it, so the
+                   browser is told 480px, and a phone is not sent the full-width file.
+           inline  the full Measure, in the column. The default.
+
+       Role decides the markup (`plate plate--<role>`), the `sizes`, and whether the
+       image is lazy. The framing, the room around it, and its dimming in dark are
+       one stylesheet's (assets/css/_plate.scss), keyed on that class; no page styles
+       a Plate of its own, which is how the dimming came to be written twice.
+
+       The master is 1600px wide, twice the Measure, and carries a deckled edge as
+       alpha -- so it reads as a sheet of paper on either theme rather than as a
+       rectangle. Hugo derives the smaller widths here; WebP keeps the alpha, which
+       JPEG would flatten onto a background colour that is wrong for one of the two
+       themes.
+
+       Params: page, src, alt, role (optional), caption (optional, already rendered
+       HTML). */ -}}
+{{- $page := .page -}}
+{{- $role := .role | default "inline" -}}
+{{- if not (in (slice "hero" "spot" "inline") $role) -}}
+    {{- errorf "plate: role %q on %s is not hero, spot or inline" $role $page.Path -}}
+{{- end -}}
+{{- $img := or ($page.Resources.GetMatch .src) (resources.Get .src) -}}
+{{- if not $img -}}
+    {{- errorf "plate: no file %q in the bundle of %s, nor in assets/" .src $page.Path -}}
+{{- end -}}
 {{- $widths := slice 640 960 1280 -}}
 {{- $srcset := slice -}}
 {{- range $widths -}}
@@ -27,13 +47,15 @@
     {{- end -}}
 {{- end -}}
 {{- $srcset = $srcset | append (printf "%s %dw" $img.RelPermalink $img.Width) -}}
-<figure class="{{ $base }} {{ .class }}">
+{{- $sizes := "(min-width: 840px) 800px, 100vw" -}}
+{{- if eq $role "spot" }}{{ $sizes = "(min-width: 840px) 480px, (min-width: 681px) 60vw, 100vw" }}{{ end -}}
+<figure class="plate plate--{{ $role }}">
     <img src="{{ $img.RelPermalink }}"
          srcset="{{ delimit $srcset ", " }}"
-         sizes="{{ if eq .class (printf "%s--spot" $base) }}(min-width: 840px) 480px, (min-width: 681px) 60vw, 100vw{{ else }}(min-width: 840px) 800px, 100vw{{ end }}"
+         sizes="{{ $sizes }}"
          width="{{ $img.Width }}" height="{{ $img.Height }}"
          alt="{{ .alt }}"
-         {{ if .eager }}fetchpriority="high"{{ else }}loading="lazy"{{ end }} decoding="async">
+         {{ if eq $role "hero" }}fetchpriority="high"{{ else }}loading="lazy"{{ end }} decoding="async">
     {{- with .caption }}
     <figcaption>{{ . }}</figcaption>
     {{- end }}

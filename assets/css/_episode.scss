@@ -13,13 +13,11 @@
 // list. What stays in this file is what only an Episode page has: the timeline, the
 // chapter list, the quotes, the figures, and the masthead's one step up in size.
 //
-// One measure (ADR-0004). The masthead and the hero plate sit outside
-// `.content`, so they take the same 800px cap and the same left edge explicitly.
-// Nothing on this page is wider than the prose, the plates included: a
-// full-bleed plate was considered and left out, because it is the one element
-// the ADR asks to justify, and a watercolour reads as an object on a page rather
-// than as a banner. The timeline's background runs the width of the window like
-// the header it sits under; its contents keep the measure.
+// One measure (ADR-0004). The masthead and the disclaimer sit outside `.content`, so
+// they take the same 800px cap and the same left edge explicitly (and so does the hero
+// plate, in _plate.scss, which also records why no plate is full-bleed). Nothing on
+// this page is wider than the prose. The timeline's background runs the width of the
+// window like the header it sits under; its contents keep the measure.
 //
 // Colour. The accent keeps its five roles (ADR-0001) and gains none: links here
 // are amber because they are links -- the timestamps, the chapter names -- and
@@ -36,8 +34,7 @@
 // with a post, and lives in _masthead.scss. What an Episode page adds is its size,
 // the note under it that says who wrote the page, and the plate below.
 
-.episode > .ep-disclaimer,
-.episode > .ep-plate--hero {
+.episode > .ep-disclaimer {
     @include measure;
 }
 
@@ -189,45 +186,9 @@
 }
 
 // ---- Plates ---------------------------------------------------------------
-
-.episode .ep-plate,
-.episode .content .ep-plate {
-    margin: 2.5rem 0;
-}
-
-.episode .ep-plate img {
-    display: block;
-    width: 100%;
-    height: auto;
-    // The plates are paper, and paper does not glow: dimmed slightly in dark so a
-    // white sheet does not become the brightest thing on the screen.
-    filter: var(--plate-filter);
-}
-
-.episode .ep-plate figcaption {
-    font-size: 0.875rem;
-    line-height: 1.45;
-    color: var(--muted);
-    margin-top: 0.6rem;
-}
-
-.episode > .ep-plate--hero {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-}
-
-// Spot plates: object-only illustrations at three fifths of the measure, caption
-// beside rather than under, both still starting at the one left edge.
-.episode .ep-plate--spot {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 1.5rem;
-    align-items: end;
-}
-
-.episode .ep-plate--spot figcaption {
-    margin: 0 0 1.25rem;
-}
+//
+// None here. The hero, the spot and the inline Plates of this page are the site's, and
+// are framed, sized and dimmed in _plate.scss, the same as the home page's desk.
 
 // ---- Episode map -------------------------------------------------------------
 
@@ -1070,15 +1031,6 @@
         margin-bottom: 0.25rem;
     }
 
-    .episode .ep-plate--spot {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .episode .ep-plate--spot figcaption {
-        margin: 0.6rem 0 0;
-    }
-
     .episode .content .ep-guess__row {
         grid-template-columns: 6.5rem minmax(0, 1fr);
     }
@@ -1103,11 +1055,6 @@
 
     .episode .content .ep-flow__step--fork {
         grid-template-columns: 1fr;
-    }
-
-    // A portrait spot plate at full width is a whole screen of hat and apron.
-    .episode .ep-plate--spot img {
-        max-width: 72%;
     }
 
     .episode .content .ep-map__legend {

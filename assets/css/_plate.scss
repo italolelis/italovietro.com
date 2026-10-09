@@ -1,0 +1,91 @@
+// Plates.
+//
+// A watercolour on a page (partials/plate.html): `<figure class="plate plate--<role>">`,
+// the role being hero, spot or inline. This file is where all of it is framed, and
+// the only place. The home page's desk and the Episode pages' seven used to be styled
+// in `_home.scss` and `_episode.scss`, each with its own copy of the image rules and,
+// word for word, its own copy of the dimming in dark, so a Plate on a third page would
+// have been a third. A page now asks for a Plate and styles nothing of it.
+//
+// `.single figure.plate`, not `.plate`. The theme sets a figure inside `.content` to
+// `margin: .5rem; text-align: center` at `.single .content figure`, and a Plate has to
+// outrank that to sit on the left edge with the prose. `.single figure.plate` ties with
+// it on specificity and comes later; the hero, which is outside `.content`, only needs
+// the class. Importing this before the page stylesheets keeps a page from restyling one.
+//
+// One Measure (ADR-0004). Nothing here is wider than the prose, the Plates included:
+// a full-bleed Plate was considered and left out, because it is the one element the
+// ADR asks to justify, and a watercolour reads as an object on a page rather than as a
+// banner. The sheet has a torn alpha edge, so it reads as paper on either theme rather
+// than as a box.
+
+.single figure.plate {
+    margin: 2.5rem 0;
+    text-align: left;
+}
+
+// A Plate that ends its column leaves the room below it to the column. The desk closes
+// the home page, and used to say so with a margin of its own (`2.25rem 0 0`).
+.single figure.plate:last-child {
+    margin-bottom: 0;
+}
+
+.single figure.plate img {
+    display: block;
+    width: 100%;
+    height: auto;
+    // Paper does not glow: dimmed slightly in dark so a white sheet is not the
+    // brightest thing on the screen. The one place a Plate is dimmed, and a token
+    // (--plate-filter), so no `[theme=dark]` rule restates it.
+    filter: var(--plate-filter);
+}
+
+.single figure.plate figcaption {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--muted);
+    margin-top: 0.6rem;
+}
+
+// ---- Roles ----------------------------------------------------------------
+
+// Hero: straight under a masthead, outside `.content`, so it takes the Measure and
+// the left edge itself. Without the cap the sheet would start 140px left of the
+// prose, as the title once did.
+.single figure.plate--hero {
+    @include measure;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+// Spot: object-only illustrations at three fifths of the Measure, caption beside
+// rather than under, both still starting at the one left edge. (`partials/plate.html`
+// tells the browser the same, 480px, so a phone is not sent the full-width file.)
+.single figure.plate--spot {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.single figure.plate--spot figcaption {
+    margin: 0 0 1.25rem;
+}
+
+// Inline is the default: the full Measure, in the column. It needs nothing of its own.
+
+@media (max-width: 680px) {
+    .single figure.plate--spot {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .single figure.plate--spot figcaption {
+        margin: 0.6rem 0 0;
+    }
+
+    // A portrait spot Plate at full width is a whole screen of hat and apron.
+    .single figure.plate--spot img {
+        max-width: 72%;
+    }
+}

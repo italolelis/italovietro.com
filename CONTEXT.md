@@ -49,7 +49,7 @@ A quote on an episode page, verbatim and linked to the second it was said. The t
 _Avoid_: Quote card, clip, highlight, timestamp
 
 **Plate**:
-A watercolour on an episode page or the home page, painted by `scripts/watercolour/`. Full-width or spot, never wider than the measure. Objects, never a face.
+A watercolour on a page (the home page's desk, an Episode page's seven), painted by `scripts/watercolour/`. It has a role: **hero** (under a masthead, eager), **spot** (three fifths of the measure, caption beside it) or **inline** (the full measure, the default). Never wider than the measure. Objects, never a face.
 _Avoid_: Illustration, image, hero image, graphic
 
 **Post-build assertion**:
