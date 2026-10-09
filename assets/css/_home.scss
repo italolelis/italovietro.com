@@ -66,9 +66,16 @@
 // Everything below the Greeting sits in `.home-content`, inside the theme's `.single
 // .content`. That wrapper is what keeps the page's paragraphs and its one heading from
 // being the column's direct children: an article's rhythm and headings are set on
-// those (_typography.scss), and this page has always had its own, one step smaller.
-// The layout draws it (layouts/index.html); it used to be a div typed into the
-// Markdown.
+// those (_typography.scss), and none of them reaches this page. Its one heading,
+// "Beyond the Code", is an h2 inside `section.home-beyond`, so it is not an article's
+// h2: no rule of ours is written for it, and it is set by the theme's heading rule for
+// anything in `.content` (the serif and the bold are the column's own): 28.5px, 1.2rem
+// above and below, no hairline under it. It is that on purpose, and it was before the
+// layout (#327): read from the computed style of the page built at be6f2ea and of this
+// one, in light and in dark, on a desktop and on a phone, the two are the same. (An
+// earlier version of this comment said the page "has always had its own, one step
+// smaller" style. It has none.) The layout draws the wrapper (layouts/index.html); it
+// used to be a div typed into the Markdown.
 //
 // Close to the line above it. The opening line is a greeting rather than a standalone
 // thesis, and a greeting belongs to the sentence that follows it -- there was 3.5rem

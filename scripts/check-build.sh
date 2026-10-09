@@ -445,6 +445,11 @@ absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left 
 echo 'Home page layout'
 in_order "$EN_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Beyond the Code</h2>.*<figure class="plate plate--[a-z]+">' 'the en home page runs Greeting, intro, Signpost, Beyond the Code, Plate'
 in_order "$PT_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Além do Código</h2>.*<figure class="plate plate--[a-z]+">' 'and so does the pt-br home page'
+# The home page renders no Entries, Upcoming included: it keeps the same order and the
+# same prose it had as a Markdown page, and Upcoming is on the speaking page. The
+# architecture notes and the Entry stylesheet said otherwise for a while.
+absent_from "$EN_HOME" 'class="entry ' 'the en home page renders no Entry, Upcoming included'
+absent_from "$PT_HOME" 'class="entry ' 'nor the pt-br one'
 # The Plate is last: nothing but closing tags between its figure and the end of the page's
 # content, so a new part cannot be added after the picture without this noticing.
 matches "$EN_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|</div>)*</main>' 'the en Plate comes last'
@@ -827,7 +832,13 @@ for page in "${MASTHEAD_POSTS[@]}" "${MASTHEAD_EPISODES[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     # The same markup on both kinds of page, in this order. `in_order`, because the
     # minifier keeps some newlines and the four parts sit on different lines.
-    in_order "$page" 'class=masthead>.*class=masthead__kicker>.*<h1 class="single-title masthead__title">.*class=masthead__dek>.*class=masthead__meta>' "$name: a kicker, the headline, the dek and the meta line, in that order"
+    # The dek is optional, since a post whose description only repeats its opening
+    # paragraph has none (see the dek assertions below), so the order is checked for the
+    # parts every page has, and again with the dek in it on a page that has one.
+    in_order "$page" 'class=masthead>.*class=masthead__kicker>.*<h1 class="single-title masthead__title">.*class=masthead__meta>' "$name: a kicker, the headline and the meta line, in that order"
+    if grep -q 'class=masthead__dek>' "$page"; then
+        in_order "$page" '<h1 class="single-title masthead__title">.*class=masthead__dek>.*class=masthead__meta>' "$name: and the dek, when there is one, sits between the headline and the meta line"
+    fi
     occurs "$page" 'class=masthead>' 1 "$name: one masthead"
     occurs "$page" '<h1' 1 "$name: and one h1, which is the headline"
     # What the theme drew above a post and Italo decided against (#320): the icons
@@ -850,11 +861,41 @@ for page in "${MASTHEAD_POSTS[@]}" "${MASTHEAD_EPISODES[@]}"; do
     contains "$page" 'data-sharer=hackernews' "$name: and Hacker News"
 done
 
+# The dates in a list of Entries are written out in the page's language. The archive's
+# were Go's `.Date.Format "January 2"`, which writes English month names whatever the
+# page ("March 20" on /pt-br/posts/), and a tag page showed the ISO `2020-12-03` the
+# archive had left behind. The archive's year is its group heading, so its dates are the
+# day and month ("March 20", "20 de março"); a tag page has no group, so its dates carry
+# the year ("December 3, 2020", "3 de dezembro de 2020"). An Elsewhere row leads with its
+# source ("Parloa Labs · June 4", "Parloa Labs · 4 de junho").
+MONTHS_EN='January|February|March|April|May|June|July|August|September|October|November|December'
+MONTHS_PT='janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
+entry_dates() { grep -oE 'class=entry__date>[^<]*' "$1" | sed 's/^class=entry__date>//'; }
+# every_date <file> <regex> <description> -- there is at least one, and each matches.
+every_date() {
+    local file=$1 pattern=$2 desc=$3 total off
+    if [ ! -f "$file" ]; then bad "$desc (no such file: $file)"; return; fi
+    total=$(entry_dates "$file" | wc -l | tr -d ' ')
+    off=$(entry_dates "$file" | grep -vcE -- "$pattern" || true)
+    if [ "$total" -gt 0 ] && [ "$off" -eq 0 ]; then
+        ok "$desc ($total dates)"
+    else
+        bad "$desc ($off of $total do not match: $(entry_dates "$file" | grep -vE -- "$pattern" | head -3 | tr '\n' '|'))"
+    fi
+}
+echo 'Entry dates, in the language of the page'
+every_date "$EN_ARCHIVE" '^(.* · )?('"$MONTHS_EN"') [0-9]{1,2}$' 'the archive writes the month and day out in English'
+every_date "$PT_ARCHIVE" '^(.* · )?[0-9]{1,2} de ('"$MONTHS_PT"')$' 'and in Portuguese, day first, with Portuguese month names'
+for page in "$PUBLIC"/tags/*/index.html; do
+    every_date "$page" '^(.* · )?('"$MONTHS_EN"') [0-9]{1,2}, [0-9]{4}$' "${page#"$PUBLIC"/}: a tag page writes the date out with its year, not as an ISO date"
+done
+for page in "$PUBLIC"/pt-br/tags/*/index.html; do
+    every_date "$page" '^(.* · )?[0-9]{1,2} de ('"$MONTHS_PT"') de [0-9]{4}$' "${page#"$PUBLIC"/}: and in Portuguese"
+done
+
 # A post's meta line: who, when it was written, how long it takes. The date is written
 # out in the page's language, with the day machine-readable beside it; the byline goes
 # to the About page, where someone arriving from a search finds out who this is.
-MONTHS_EN='January|February|March|April|May|June|July|August|September|October|November|December'
-MONTHS_PT='janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
 for page in "${MASTHEAD_POSTS[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     case $name in
@@ -872,10 +913,63 @@ for page in "${MASTHEAD_POSTS[@]}"; do
     else
         bad "$name: updated $updated is not after published $published"
     fi
+    # And only when the front matter says so: a `lastmod` set, on a later day than
+    # `date`. The page used to fall back to Hugo's `.Lastmod`, which with enableGitInfo
+    # is the date of the last commit to touch the file, so a post written without a
+    # `lastmod` announced an update nobody had made. The one check on this page that
+    # reads the source, because "what the front matter says" is the thing being tested.
+    slug=${name#pt-br/}; lang=en
+    case $name in pt-br/*) lang=pt-br ;; esac
+    source_md="$(dirname "$0")/../content/posts/$slug/index.$lang.md"
+    if [ -f "$source_md" ]; then
+        written=$(head -30 "$source_md" | sed -n "s/^date: *[\"']*\([0-9-]\{10\}\).*/\1/p" | head -1)
+        revised=$(head -30 "$source_md" | sed -n "s/^lastmod: *[\"']*\([0-9-]\{10\}\).*/\1/p" | head -1)
+        want=''
+        if [ -n "$revised" ] && [[ $revised > $written ]]; then want=$revised; fi
+        if [ "$updated" = "$want" ]; then
+            ok "$name: Updated is the front matter's lastmod, and only when it is a later day (${want:-none})"
+        else
+            bad "$name: Updated is '${updated:-none}' but the front matter says '${want:-none}'"
+        fi
+    else
+        bad "$name: cannot find its source ($source_md) to check Updated against"
+    fi
+done
+# A new post starts from the archetype, and the masthead reads three things from front
+# matter that the archetype once left out: `lastmod` (without one a post says nothing
+# about being updated, which is right, but nobody learns to bump it), `description` (the
+# SEO text and the dek) and `categories` (the kicker). Source, not output: `hugo new`
+# is the only way these get written.
+for key in 'lastmod:' 'description:' 'categories:'; do
+    contains "$(dirname "$0")/../archetypes/default.md" "$key" "the new-post archetype carries $key, as AGENTS.md's front matter does"
 done
 # The dek is the post's description, or its own `subtitle` where it has one.
 in_order "$PUBLIC/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'the dek of a post is its description'
 in_order "$PUBLIC/pt-br/do-job-titles-matter/index.html" 'class=masthead__dek>[A-ZÀ-Ú]' 'and in pt-br too'
+# The dek is not the first paragraph said twice. Four posts (Italo's, so their
+# descriptions are not ours to rewrite) have a `description` that is word for word
+# their opening paragraph, and the dek printed it straight above the same sentence. The
+# partial leaves the dek out when the description equals the opening paragraph or is the
+# start of it; one that only overlaps ("do-job-titles-matter" opens its description with a
+# sentence its body does not) is a different thing, and keeps its dek.
+for slug in 5-ways-to-keep-coding-being-an-engineering-manager cto-reading-list-2 cto-reading-list-3 how-do-we-manage-our-github-organization-at-lyko; do
+    absent_from "$PUBLIC/$slug/index.html" 'class=masthead__dek' "$slug: no dek, its description is the opening paragraph"
+    absent_from "$PUBLIC/pt-br/$slug/index.html" 'class=masthead__dek' "pt-br/$slug: nor in pt-br"
+done
+contains "$PUBLIC/cto-reading-list-1/index.html" 'class=masthead__dek>' 'cto-reading-list-1 keeps its dek: its description is not its first paragraph'
+# The general rule, for the post written next: no page opens with a dek that the body
+# repeats. The first 48 characters of the dek, tags dropped, occurring a second time in
+# the page's text from the masthead down.
+dek_repeated() {
+    local text dek
+    text=$(tr '\n' ' ' < "$1" | sed -E 's/.*class=masthead>//; s#</(p|h[1-6]|div|section|li)>#& #g; s/<[^>]*>//g; s/[[:space:]]+/ /g')
+    dek=$(tr '\n' ' ' < "$1" | grep -oE 'class=masthead__dek>.{0,250}' | sed -E 's/^class=masthead__dek>//; s#</p>.*##; s/<[^>]*>//g' | cut -c1-48)
+    [ -n "$dek" ] && [ "$(printf '%s' "$text" | grep -oF -- "$dek" | wc -l)" -gt 1 ]
+}
+for page in "${MASTHEAD_POSTS[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%/index.html}
+    if dek_repeated "$page"; then bad "$name: the dek is said again in the body"; else ok "$name: the dek is not said again in the body"; fi
+done
 
 # An Episode page's meta line: what it is based on, then when it came out, how long it
 # runs and when it was written up. Same partial, so the strings are `masthead.*` keys,
@@ -908,7 +1002,16 @@ done
 for page in "${MASTHEAD_POSTS[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     in_order "$page" 'id=post-footer>.*class=post-tags>.*href=/(pt-br/)?tags/' "$name: the footer lists its tags"
-    matches "$page" 'class=(prev|next)' "$name: and links the post before or after it"
+    # Every link there is, with an address. The assertion used to be `class=(prev|next)`
+    # alone, which an `<a href class=prev>` satisfies: the section's neighbour can be an
+    # Elsewhere post (`build.render: never`, no page here), whose RelPermalink is empty,
+    # and six of the twelve pages shipped a previous or next link that went nowhere.
+    matches "$page" '<a href=/[^ >]+ class=(prev|next) ' "$name: and links the post before or after it"
+    if [ "$(grep -oE '<a [^>]*class=(prev|next)[^>]*>' "$page" | grep -vcE '^<a href=/[^ >]+ ' || true)" -eq 0 ]; then
+        ok "$name: every previous and next link has an address"
+    else
+        bad "$name: a previous or next link has no address (its neighbour has no page here)"
+    fi
     # The Contents box is the theme's, and kept: the floating one and the one inside
     # the article, and the list they share.
     contains "$page" 'id=toc-auto' "$name: the Contents box is kept (floating)"
@@ -924,7 +1027,25 @@ for page in "${MASTHEAD_POSTS[@]}"; do
     else
         ok "$name: no Contents entry carries an emoji"
     fi
+    # Nor does stripping the emoji run the words together. The cleanup once removed every
+    # space beside a tag, so a heading "Why `kubectl` matters in *practice*" listed as
+    # "Why<code>kubectl</code>matters in<em>practice</em>". No post has a heading with
+    # inline markup yet, so this is a guard for the first one that does, not a check of
+    # one that exists (it was checked, red and then green, by writing that heading in
+    # and taking it out again). An entry whose markup is glued to a letter on purpose
+    # ("<code>foo</code>s") would trip it; rewrite the heading or the assertion then.
+    if grep -oE '<a href=#[^ >]+>[^<]*(<[^>]*>[^<]*)*</a>' "$page" | grep -qE '[A-Za-z]<(code|em|strong)>|</(code|em|strong)>[A-Za-z]'; then
+        bad "$name: a Contents entry has its words run together around inline markup"
+    else
+        ok "$name: no Contents entry has its words run together around inline markup"
+    fi
 done
+# Previous is the older post, next the newer, and an Elsewhere post (no page here) is
+# skipped over rather than linked: the oldest post written here has no previous, and
+# the newest no next.
+in_order "$PUBLIC/do-job-titles-matter/index.html" '<a href=/cto-reading-list-1/ class=prev .*<a href=/cto-reading-list-2/ class=next ' 'a post'"'"'s previous link is the older post and its next the newer'
+absent_from "$PUBLIC/5-ways-to-keep-coding-being-an-engineering-manager/index.html" 'class=prev ' 'the oldest post written here has no previous link, not one to a post published elsewhere'
+absent_from "$PUBLIC/how-do-we-manage-our-github-organization-at-lyko/index.html" 'class=next ' 'nor the newest a next one'
 # Only the Contents box is stripped: the heading it points to keeps its emoji.
 contains "$PUBLIC/do-job-titles-matter/index.html" 'href=#-democratic-decisions>Democratic decisions</a>' 'a Contents entry is the heading without its emoji'
 contains "$PUBLIC/do-job-titles-matter/index.html" '👨‍⚖️ Democratic decisions</h3>' 'and the heading itself is left as it was written'
@@ -952,7 +1073,7 @@ rule_sets '\.toc \.toc-content ul a:first-child::before' 'content:none' 'a Conte
 rule_sets '\.toc \.toc-title' 'text-transform:uppercase' 'the Contents title is a kicker'
 rule_sets '\.toc \.toc-content a' 'color:var\(--muted\)' 'its entries are muted'
 rule_sets '#toc-auto \.toc-content a\.active' 'color:var\(--accent\)' 'and the one you are reading, in the floating box, takes the Accent'
-rule_sets '#toc-auto' 'border-left:1px solid var\(--rule\)' 'the floating box has a hairline down its side, not the theme'"'"'s 4px bar'
+rule_sets '\.toc#toc-auto' 'border-left:1px solid var\(--rule\)' 'the floating box has a hairline down its side, not the theme'"'"'s 4px bar'
 rule_sets '\.single #toc-static' 'border-top:1px solid var\(--rule\)' 'the box inside the article is ruled above'
 rule_sets '\.single #toc-static' 'border-bottom:1px solid var\(--rule\)' 'and below, not filled'
 rule_sets '\.single \.post-footer' 'max-width:800px' 'the foot of a post is the Measure'
@@ -1120,7 +1241,7 @@ done
 # The two weights of a book, in the stylesheet: compact puts the author on the title's
 # line, featured gives it room. And neither has an edge of its own, in either mode.
 rule_sets '\.entry--book:not\(\.entry--featured\) \.entry__head' 'display:flex' "a compact book's author shares its title's line"
-rule_sets '\.entry--featured \.entry__head>\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
+rule_sets '\.entry--featured \.entry__head>h[23]\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
 rule_lacks '\.entry--featured.*' 'border-left' 'a featured Entry has no edge of its own: size and space say it is featured'
 
 # The stylesheet's half of "one": no per-page stylesheet restates an Entry's title, meta
@@ -1140,8 +1261,8 @@ if [ "$(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums')" -eq 1 ]
 else
     bad "one rule sets the date column in tabular figures (got $(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums'))"
 fi
-rule_sets '\.entry \.entry__head>\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
-rule_sets '\.entry \.entry__head>\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
+rule_sets '\.entry \.entry__head>h[23]\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
+rule_sets '\.entry \.entry__head>h[23]\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
 
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
@@ -1283,6 +1404,10 @@ rule_sets '\.footer-social a:hover' 'color:var\(--accent\)' 'that takes the Acce
 rule_sets '\.masthead__dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
 rule_sets '\.single \.content>hr' 'border-top:1px solid var\(--hairline\)' 'a rule across the column is the hairline'
 rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairline\)' 'and is recoloured in dark, where the theme draws its own'
+# The theme's `[theme=dark] .single .content hr { border-top: 1px dashed }` is what the
+# dark rule above answers, and answering its colour alone left its dashes: the rule was
+# solid in light and dashed in dark. Read in both modes with a computed-style probe.
+rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-style:solid' 'and stays solid there, not dashed as the theme draws it'
 rule_sets '\.single figure\.plate img' 'filter:var\(--plate-filter\)' 'a Plate, wherever it is, is dimmed by the token, not by a dark rule'
 occurs "$CSS" 'filter:var(--plate-filter)' 1 'and that is the one rule that dims a Plate, the home page'"'"'s and the Episode pages'"'"' alike'
 absent_from "$CSS" 'ep-plate' 'no Episode-page Plate rules: one stylesheet frames every Plate'
@@ -1342,6 +1467,14 @@ rule_sets '\.episode \.ep-timeline__clock b' 'color:var\(--heading\)' 'its clock
 rule_sets '\.episode \.ep-timeline__ruler' 'background-color:var\(--ep-paper\)' 'the ruler is the paper token'
 rule_sets '\.episode \.ep-timeline__label' 'color:var\(--ep-ruler-ink\)' 'and is printed in the ruler ink, which is the same in both modes'
 rule_sets '\.episode \.ep-timeline__head' 'background:var\(--ep-ruler-ink\)' 'as is the playhead'
+# The dot of a quote under the pointer is printed on the ruler, so it is the ruler's ink,
+# not the page's. It read `--ep-ink`, which in dark is a light indigo (#9db0e0) for the
+# dark page, on the ruler's dark paper (#cfc5ae): 1.26:1, a dot that vanished when
+# hovered. The ruler's ink on its paper is 6.56:1 in light and 4.72:1 in dark, asserted
+# below at the 3:1 a graphic needs.
+rule_sets '\.episode \.ep-timeline__moment\.is-hot' 'background:var\(--ep-ruler-ink\)' 'the quote dot under the pointer is the ruler ink'
+rule_lacks '\.episode \.ep-timeline__moment(\.is-hot)?' 'var\(--ep-ink\)' 'and no quote dot reads the page'"'"'s Episode ink, which is a light indigo in dark'
+contrast_of ep-ruler-ink ep-paper 3 'so the dot under the pointer stands out from the ruler it is printed on, in both modes'
 contains "$CSS" 'rgba(61,79,122,0.55)' 'its ticks are that ink at an alpha, computed from the one value'
 rule_sets '\.episode \.content \.ep-hl__lesson' 'background:var\(--ep-lesson\)' 'the lesson box is the lesson token'
 rule_sets '\.episode \.content \.ep-hl__lesson' 'border-left:3px solid var\(--ep-ink\)' 'with an ink edge'
@@ -1380,7 +1513,6 @@ absent_from "$CSS" 'ep-station-dark' 'a lit station has one animation, whose col
 rule_sets '\.episode \.ep-timeline__tip' 'background:var\(--ep-tip\)' 'the preview is its own token'
 rule_sets '\.episode \.ep-timeline__tip' 'color:var\(--heading\)' 'with heading-coloured text'
 rule_sets '\.episode \.ep-timeline__tip-clock' 'color:var\(--ep-ink\)' 'and an ink clock'
-rule_sets '\.episode \.ep-timeline__moment\.is-hot' 'background:var\(--ep-ink\)' 'a hovered quote dot is the ink'
 rule_sets '\.episode \.content \.ep-colophon' 'border-top:2px solid var\(--heading\)' 'the colophon opens on a heavy rule'
 rule_sets '\.episode \.content \.ep-colophon' 'color:var\(--muted\)' 'in muted text'
 rule_sets '\.episode \.content \.ep-colophon__title' 'color:var\(--heading\)' 'under a heading-coloured title'

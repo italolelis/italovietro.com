@@ -336,6 +336,10 @@ $measure: 800px;
     background-color: transparent;
 }
 
+// The rule's style as well as its colour: the theme's dark rule is `border-top: 1px
+// dashed`, a shorthand, so it restyles all of it, and recolouring alone left the rule solid
+// in light and dashed in dark.
 [theme=dark] .single .content > hr {
+    border-top-style: solid;
     border-top-color: var(--hairline);
 }

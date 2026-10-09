@@ -65,8 +65,12 @@
     color: var(--accent);
 }
 
-// The floating box. A hairline down its side, where the theme drew a 4px bar.
-#toc-auto {
+// The floating box. A hairline down its side, where the theme drew a 4px bar. Written
+// `.toc#toc-auto` (1,1,0), not `#toc-auto` (1,0,0): the theme recolours that bar under
+// [theme=dark] with `[theme=dark] #toc-auto { border-left-color }` (1,1,0), so the bare id
+// lost its colour in dark (the theme's #363636 there, not --rule) while winning the width
+// and the style. The box is outside `.single`, so the class that ties it is its own.
+.toc#toc-auto {
     border-left: 1px solid var(--rule);
 }
 

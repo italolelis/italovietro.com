@@ -73,11 +73,18 @@ $entry-edge: 3px;
 
 // The specificity is the point. An Entry sits inside `.single .content` on the reading
 // and speaking pages, where the theme sets `.single .content h3 { font-weight: bold;
-// margin: 1.2rem 0 }` at (0,2,1). A title written as `.entry__title` (0,1,0) lost to it
-// on those pages and won on the archive, outside `.content`: 700 weight and 19px of
-// margin above and below on the speaking page, 600 and none in the archive, from one
-// declaration. Three classes beat it everywhere.
-.entry .entry__head > .entry__title {
+// margin: 1.2rem 0 }` at (0,2,1), and under [theme=dark] `font-weight: bolder` at
+// (0,3,1). A title written as `.entry__title` (0,1,0) lost to the first on those pages
+// and won on the archive, outside `.content`: 700 weight and 19px of margin above and
+// below on the speaking page, 600 and none in the archive, from one declaration. Three
+// classes (0,3,0) beat that one and still lost to the dark one, so the speaking page and
+// the reading list set their titles at 700 in dark and 600 in light (found by reading the
+// computed style in both). The heading's own tag takes it to (0,3,1), which ties the
+// dark rule, and this is the later stylesheet. The tag is `h2` or `h3`, an Entry's
+// `level` (entry.html): a list under the page's h2 is h3, a tag page's, under its h1, is
+// h2, and the theme's rule names both.
+.entry .entry__head > h2.entry__title,
+.entry .entry__head > h3.entry__title {
     grid-column: 1;
     grid-row: 1;
     margin: 0;
@@ -207,7 +214,10 @@ $entry-edge: 3px;
     margin-bottom: 1.75rem;
 }
 
-.entry--featured .entry__head > .entry__title {
+// (Written with the heading's tag like the title above: a class alone would be the weaker
+// of the two, and a featured title would lose its 700 to the 600.)
+.entry--featured .entry__head > h2.entry__title,
+.entry--featured .entry__head > h3.entry__title {
     font-size: $text-subsection;
     font-weight: 700;
     line-height: 1.3;
@@ -232,8 +242,10 @@ $entry-edge: 3px;
 // read as one. An h2 in an article has no rule.
 //
 // Found by the Entries that follow it, so the page declares nothing: `~` is any later
-// sibling, which is every h2 on those pages, and not the h2 that comes after the last
-// Entry (a home page's "Beyond the Code", once Upcoming is on it).
+// sibling, which is every h2 on those pages, and not an h2 that comes after the last
+// Entry, a closing section's, which no page has today. (The home page has no Entries,
+// Upcoming included: that is on the speaking page, and its "Beyond the Code" is not
+// reached by this rule for that reason.)
 .single .content > h2:has(~ .entry) {
     margin-top: 4rem;
     margin-bottom: 0.5rem;
@@ -304,7 +316,8 @@ $entry-edge: 3px;
         margin-top: 0.125rem;
     }
 
-    .entry--featured .entry__head > .entry__title {
+    .entry--featured .entry__head > h2.entry__title,
+    .entry--featured .entry__head > h3.entry__title {
         font-size: $text-subsection-small;
     }
 }

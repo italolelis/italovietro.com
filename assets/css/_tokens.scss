@@ -165,7 +165,9 @@ $ep-ink: #3d4f7a;
     // The timeline's ruler is paper, like the plates: a physical object on the page,
     // in both themes, and the ink printed on it does not follow the mode. 6.56:1 on
     // the light paper; the dark paper is dimmed so it does not glare, and the same
-    // ink measures 4.72:1 on it.
+    // ink measures 4.72:1 on it. Everything drawn on the ruler takes it, the quote dot
+    // under the pointer included: that read `--ep-ink`, the light indigo of the dark
+    // page, and measured 1.26:1 on the dark paper.
     --ep-paper: #efe7d4;
     --ep-ruler-ink: #{$ep-ink};
 

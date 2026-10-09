@@ -40,8 +40,15 @@
                 {{- $nextPage = $.Site.GetPage . -}}
             {{- end -}}
         {{- else -}}
-            {{- $prevPage = .PrevInSection -}}
-            {{- $nextPage = .NextInSection -}}
+            {{- /* Neighbours among the pages that have a page: a post published
+                   elsewhere sits in the section with `build.render: never`, and a
+                   link to it has no address (.PrevInSection / .NextInSection hand
+                   it back all the same, and six of twelve post pages shipped a
+                   previous or next link that went nowhere). The two read in the
+                   same direction as the section's own: previous is the older. */ -}}
+            {{- $rendered := where .CurrentSection.RegularPages "RelPermalink" "ne" "" -}}
+            {{- $prevPage = $rendered.Prev . -}}
+            {{- $nextPage = $rendered.Next . -}}
         {{- end -}}
         {{- with $prevPage }}
         <a href="{{ .RelPermalink }}" class="prev" rel="prev" title="{{ .Title }}"><span class="post-nav__label">{{ T "post.previous" }}</span>{{ .Title | emojify }}</a>
