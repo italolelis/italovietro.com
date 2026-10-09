@@ -44,13 +44,14 @@ Hugo must be the **extended** build, at the version in `.hugo-version` (CI and V
 
 This repo documents its own decisions. Before anything non-trivial:
 
-- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Moment, Plate, Post-build assertion.
-- **`docs/adr/`** — five accepted decisions. Read the ones touching your area:
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Masthead, Moment, Plate, Post-build assertion.
+- **`docs/adr/`** — six accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
   - `0003-logo-redrawn-as-vector.md`
   - `0004-one-800px-measure.md` — one column width, site-wide
   - `0005-the-site-serves-inbound.md` — **read this before any content or layout work.** It decides what the site is for, and therefore what wins: contact is first-class, sharing is part of the product, **what is next outranks what happened**, and every claim about currency must be true because the audience is checking.
+  - `0006-serif-to-read-sans-to-navigate.md` — **read this before touching type.** Serif for headlines, the dek and running text; sans for the header, footer, nav, kickers, meta lines, Entry lists, tables and captions. One module, `_typography.scss`, owns the stacks, the scale and the Measure, and no page stylesheet sets a `font-family` of its own.
 - **`docs/agents/architecture.md`** — directory map, content and routing map, stylesheets, shortcode contracts, deployment, analytics. Split out of this file to keep it small; read it when you need the layout of things.
 - **Source comments** — `config.toml`, `scripts/check-build.sh` and the layout overrides carry long comments explaining why each non-obvious choice was made, including rejected alternatives. They are the most reliable source in the repo. Read them before "simplifying" anything.
 
@@ -66,7 +67,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, `text_has` (a sentence over the page's text with its tags dropped, for one with a link in the middle), and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script), and for colour `token` / `token_constant` / `contrast_of` (a token's value in each mode, and the WCAG ratio of a pair, measured from the compiled values). There is no `nowhere_re`.
 
 Two documented footguns:
 
@@ -92,9 +93,13 @@ categories: ["Engineering"]
 
 Non-post pages also carry `slug`, and `aliases` where a path changed. Every page needs its own `description`. Posts published elsewhere carry `host:` — see *Elsewhere* in `CONTEXT.md`.
 
+A post's **Masthead** is made from its front matter: the first `categories` entry is the kicker, the `title` the headline, and the dek is the `subtitle` if there is one, else the `description` (which is also the SEO text, so write a `subtitle` rather than bending the description into a dek; a description that is only a copy of the first paragraph prints no dek). "Updated" shows only when the front matter sets a `lastmod` on a later day than `date`, and it reads the front matter, not the commit history: bump `lastmod` when you change what a post says, and not otherwise. See *The masthead* in `docs/agents/architecture.md`.
+
 **What goes in Writing (`content/posts/`) comes from Italo.** A podcast appearance can get an **episode page** in `content/episodes/` instead: chapter by chapter, a summary, the quotes and the lesson, all from front matter. Claude writes those, in the third person, under a disclaimer that says so; the quotes are verbatim from the recording, lightly trimmed with brackets and ellipses, and linked to their second. Never write in Italo's first person anywhere he did not write it. Quotes are transcribed, not remembered; a claim the recording does not support does not go in. Contract in `docs/agents/architecture.md`.
 
 **The speaking page is a list, not a set of write-ups.** Entries are title + venue + date + links, with no description. Voice lives once at the top of the page, next to the invitation. Don't re-add a paragraph per entry.
+
+**Raw HTML in Markdown is refused** (`unsafe = false` in `config.toml`): the build fails on it, and the home page, which used to be a `<div>` and classed paragraphs, is `layouts/index.html` now. A content file holds prose and shortcode calls; structure belongs to a layout. See *The home page* in `docs/agents/architecture.md`.
 
 Where prose does exist (home page, About, reading list, post bodies) it is first person and takes positions. If a position isn't known, **ask rather than invent one.**
 
@@ -113,7 +118,7 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 1. `./scripts/build.sh && ./scripts/check-build.sh public` — no warnings, all assertions pass
 2. New visible behaviour has a new assertion
 3. Both languages updated, Portuguese correctly accented
-4. New colours measured for contrast; all three theme selectors covered
+4. A new colour is a token in `_tokens.scss` for both modes, its contrast measured in a comment and asserted in the gate; no literal in a component, no `[theme=dark]` rule restating one
 5. Relevant ADRs read, none silently contradicted; `CONTEXT.md` vocabulary used
 6. No new third-party host, webfont, or tracking script
 7. `git status` clean of `public/`, `resources/`, `.vercel/`

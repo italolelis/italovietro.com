@@ -13,47 +13,32 @@
 // headings, the nav strip and metadata are all quiet by default. Hierarchy comes
 // from size and space instead of from colour.
 //
-// Colours here use the $muted-text-color tokens rather than the theme's
+// Colours here use the --muted token rather than the theme's
 // $global-font-secondary-color. That variable measures 2.33:1 in light and 2.18:1
 // in dark -- both well under AA -- which is why the old tier labels and author
 // names looked washed out rather than merely subtle.
+//
+// The two weights themselves -- compact, and featured for "Start Here" -- are the
+// Entry's (_entry.scss), the same Entry the speaking page and the archive render. What
+// is left here is what surrounds them on this page: the section lines and the nav.
 
-// --- Column --------------------------------------------------------------
-.single .content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-// The theme right-aligns the title on "special" pages via
-// `.special .single-title`, which reads as a mistake on a content page. Matching
-// that selector's specificity is required -- a bare `.single-title` rule loses
-// even though it is declared later. Blog posts are unaffected: they are not
-// .special, so their titles were never right-aligned.
-.special .single-title {
-    text-align: left;
-}
+// The seam. Everything on this page that is not an Entry is scoped through a kind of
+// Entry, because `.entry--book` is the one thing only this page renders -- see the
+// note at the nav, below, for what went wrong when a rule was not. (It is the kind, not
+// `.entry`: the speaking page renders Entries too, and a rule that named only the Entry
+// would reach it.)
+$reading-list: ".single .content:has(.entry--book)";
 
 // --- Section headings ----------------------------------------------------
-.single .content h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    text-wrap: balance;
-    margin-top: 4rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid $global-border-color;
-    color: $global-font-color;
-}
-
-// The theme's JS injects a "#" before each h2, inheriting the link colour. It
-// reads as markdown that failed to render, and it was one of amber's four jobs.
-.single .content > h2 > .header-mark {
-    display: none;
-}
+//
+// The heading itself -- face, size, weight, margins, colour -- is the site's, in
+// _typography.scss, and the rule under it is the Entry's (_entry.scss): an h2 that
+// heads a list of Entries has a hairline, on this page and on the speaking page,
+// found by the Entries after it. Nothing here declares it any more.
 
 // The line under each section heading.
 //
-// Scoped with :has(.book-entry) so it only applies on this page. Unscoped, it
+// Scoped with :has(.entry--book) so it only applies on this page. Unscoped, it
 // matched `h2 + p` on every .single page -- which on the home page meant the
 // first body paragraph after each "What I've learned about..." heading rendered
 // at 15px and muted while the paragraphs below it stayed at the 16px default.
@@ -61,39 +46,37 @@
 //
 // If :has() is unavailable the rule simply does not apply and these lines render
 // as ordinary paragraphs, which is a safe way to fail.
-.single .content:has(.book-entry) h2 + p {
+//
+// Sans: it labels the list under it, it is not part of the reading.
+#{$reading-list} h2 + p {
+    @include sans;
     font-size: 0.9375rem;
-    color: $muted-text-color;
+    color: var(--muted);
     margin: 0 0 2rem;
 }
 
-// --- Intro ---------------------------------------------------------------
-//
-// Also scoped. It did not reach the home page, whose paragraphs sit inside a
-// .home-content wrapper rather than directly under .content, but it did apply to
-// the speaking page and to every blog post.
-.single .content:has(.book-entry) > p:first-of-type {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-}
-
-.single .content > hr {
-    margin: 2.5rem 0;
-    border: none;
-    border-top: 1px solid $global-border-color;
-}
+// The intro paragraph used to be sized up here (1.1rem against the sans page's 1rem)
+// to stand apart from what followed. It is running text now, set at the site's body
+// size with the rest (_typography.scss), and needs no rule of its own.
 
 // --- Section nav ---------------------------------------------------------
 //
 // Quiet by default. Four amber links in a row was a stripe of colour competing
 // with the entry titles for no reason -- these are wayfinding, not destinations.
-.single .content > ul {
-    padding-left: 0;
-    list-style: none;
-}
-
-.single .content > ul:first-of-type {
+//
+// Scoped to this page, through the Entry. It was `.single .content >
+// ul:first-of-type`, which names no page: it matched the first top-level list on
+// every page that renders through .single, so the five-step job ladder in "Do job
+// titles matter?" rendered as one muted, dotted, inline strip, and a `> ul` reset
+// beside it took the bullets off every other top-level list on the site. A page's
+// rules reach only that page, through markup the page itself declares, and
+// `.entry--book` is the one thing only this page renders. It is the same `:has()`
+// guard the rules above carry; where it is unsupported the nav falls back to an
+// ordinary list, which is a safe way to fail.
+//
+// Sans, because it is navigation: the column around it is serif.
+#{$reading-list} > ul:first-of-type {
+    @include sans;
     display: flex;
     flex-wrap: wrap;
     list-style: none;
@@ -101,20 +84,20 @@
     margin: 0 0 3rem 0;
 }
 
-.single .content > ul:first-of-type li {
+#{$reading-list} > ul:first-of-type li {
     margin: 0;
     padding: 0;
 }
 
-.single .content > ul:first-of-type li:not(:first-child)::before {
+#{$reading-list} > ul:first-of-type li:not(:first-child)::before {
     content: "\00B7";
-    color: $muted-text-color;
+    color: var(--muted);
     padding: 0 6px;
 }
 
-.single .content > ul:first-of-type li a {
+#{$reading-list} > ul:first-of-type li a {
     font-size: 0.875rem;
-    color: $muted-text-color;
+    color: var(--muted);
     text-decoration: none;
     padding: 0;
     background: none;
@@ -123,188 +106,26 @@
     transition: color $transition-base;
 }
 
-.single .content > ul:first-of-type li a:hover {
-    color: $single-link-color;
+#{$reading-list} > ul:first-of-type li a:hover {
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
 
-// --- Entries, shared -----------------------------------------------------
-.single .content .book-entry__title {
-    text-wrap: balance;
-    margin: 0;
-}
-
-.single .content .book-entry__title a {
-    color: $single-link-color;
-    text-decoration: none;
-    transition: color $transition-base;
-}
-
-.single .content .book-entry__title a:hover {
-    color: $single-link-hover-color;
-}
-
-.single .content .book-entry__author {
-    color: $muted-text-color;
-}
-
-.single .content .book-entry__description {
-    color: $global-font-color;
-    margin: 0;
-}
-
-// --- Compact entries (the default) ---------------------------------------
-//
-// Title and author share a line, which is where the density comes from. Long
-// author lists wrap naturally rather than being pushed out of the row.
-.single .content .book-entry {
-    margin-bottom: 1.75rem;
-}
-
-.single .content .book-entry__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 0.5rem;
-}
-
-.single .content .book-entry__title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-.single .content .book-entry__author {
-    font-size: 0.8125rem;
-}
-
-// No separator glyph between title and author. A "·" here orphans itself at the
-// start of the next line whenever a long author list wraps -- "Site Reliability
-// Engineering" has four authors and did exactly that. CSS cannot detect wrapping,
-// so the size and colour difference does the separating instead.
-
-.single .content .book-entry__description {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    margin-top: 0.25rem;
-}
-
-// --- Featured entries ----------------------------------------------------
-//
-// The answer to "what should I read?" gets room to breathe: a bigger title, the
-// author on its own line, and the description at full reading size. An accent
-// edge groups them without turning them into cards.
-.single .content .book-entry--featured {
-    margin-bottom: 2.5rem;
-    padding-left: 1.25rem;
-    border-left: 2px solid $global-border-color;
-}
-
-.single .content .book-entry--featured .book-entry__header {
-    display: block;
-}
-
-.single .content .book-entry--featured .book-entry__title {
-    font-size: 1.3125rem;
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-.single .content .book-entry--featured .book-entry__author {
-    display: block;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.single .content .book-entry--featured .book-entry__description {
-    font-size: 1.0625rem;
-    line-height: 1.7;
-    margin-top: 0.625rem;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin reading-list-dark {
-    // Colour is not set here any more. Headings in dark take $heading-color-dark
-    // from _typography.scss, which is imported last so that one file decides it
-    // for every page rather than each component restating it.
-    .single .content h2 {
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    .single .content h2 + p,
-    .single .content > ul:first-of-type li:not(:first-child)::before,
-    .single .content > ul:first-of-type li a,
-    .single .content .book-entry__author {
-        color: $muted-text-color-dark;
-    }
-
-    .single .content > ul:first-of-type li a:hover {
-        color: $single-link-color-dark;
-    }
-
-    .single .content > hr {
-        border-top-color: $global-border-color-dark;
-    }
-
-    .single .content .book-entry__title a {
-        color: $single-link-color-dark;
-    }
-
-    .single .content .book-entry__title a:hover {
-        color: $single-link-hover-color-dark;
-    }
-
-    .single .content .book-entry__description {
-        color: $global-font-color-dark;
-    }
-
-    .single .content .book-entry--featured {
-        border-left-color: $global-border-color-dark;
-    }
-}
-
-[theme=dark] {
-    @include reading-list-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include reading-list-dark;
-    }
-}
-
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    .single .content h2 {
-        font-size: 1.5rem;
-        margin-top: 3rem;
-    }
-
-    .single .content > ul:first-of-type {
+    #{$reading-list} > ul:first-of-type {
         flex-direction: column;
         gap: 0;
     }
 
-    .single .content > ul:first-of-type li:not(:first-child)::before {
+    #{$reading-list} > ul:first-of-type li:not(:first-child)::before {
         display: none;
     }
 
-    .single .content > ul:first-of-type li a {
+    #{$reading-list} > ul:first-of-type li a {
         display: block;
         padding: 4px 0;
         text-align: left;
-    }
-
-    .single .content .book-entry--featured {
-        padding-left: 1rem;
-    }
-
-    .single .content .book-entry--featured .book-entry__title {
-        font-size: 1.1875rem;
-    }
-
-    .single .content .book-entry--featured .book-entry__description {
-        font-size: 1rem;
     }
 }

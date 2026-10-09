@@ -36,48 +36,23 @@
 // So the selectors below are qualified to outrank the theme's rather than left to
 // win on ordering, which only ever worked in one of the two themes.
 .portrait__sizes {
+    @include sans;
     margin-top: 0.625rem;
     font-size: 0.8125rem;
-    color: $muted-text-color;
+    color: var(--muted);
 }
 
 .single .content .portrait__sizes a {
-    color: $muted-text-color;
+    color: var(--muted);
     text-decoration: none;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
     transition: color $transition-base;
 }
 
 // Hover is a state, not a second resting colour: the accent appears when you
 // point at the link and goes away again.
 .single .content .portrait__sizes a:hover {
-    color: $single-link-color;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin about-dark {
-    .portrait__sizes,
-    .single .content .portrait__sizes a {
-        color: $muted-text-color-dark;
-    }
-
-    .single .content .portrait__sizes a {
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    .single .content .portrait__sizes a:hover {
-        color: $single-link-color-dark;
-    }
-}
-
-[theme=dark] {
-    @include about-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include about-dark;
-    }
+    color: var(--accent);
 }
 
 // --- Mobile --------------------------------------------------------------

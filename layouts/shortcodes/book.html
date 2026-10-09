@@ -19,6 +19,16 @@
 
     The title is an h3, not an h4. Sections here have no subheadings, so an h4
     skipped a level and left screen readers with a broken outline.
+
+    This renders an Entry (layouts/partials/entry.html), the same as the speaking
+    page's and the archive's, and the stylesheet is theirs too (_entry.scss).
+
+    `type` (book|newsletter|podcast) is still read and no longer rendered. It became a
+    modifier class, `book-entry--<type>`, that no style ever read: the reading list's
+    three sections already say what each Entry is, and a `podcast` modifier on a book
+    would collide with the speaking page's, which colours an icon by it. The content
+    still sets it. It is harmless, and it is the one thing here the next person has to
+    work out, so drop it from the content when next in those files.
 */ -}}
 {{- $title    := .Get "title" -}}
 {{- $author   := .Get "author" -}}
@@ -26,14 +36,4 @@
 {{- $type     := .Get "type" | default "book" -}}
 {{- $featured := .Get "featured" -}}
 {{- $inner    := trim .Inner "\n" | .Page.RenderString -}}
-<div class="book-entry book-entry--{{ $type }}{{ if $featured }} book-entry--featured{{ end }}">
-    <div class="book-entry__header">
-        <h3 class="book-entry__title">
-            <a href="{{ $link }}" target="_blank" rel="noopener noreferrer">{{ $title }}</a>
-        </h3>
-        <span class="book-entry__author">{{ $author }}</span>
-    </div>
-    <div class="book-entry__description">
-        {{- $inner -}}
-    </div>
-</div>
+{{- partial "entry.html" (dict "title" $title "link" $link "meta" $author "note" $inner "kind" "book" "featured" $featured) -}}

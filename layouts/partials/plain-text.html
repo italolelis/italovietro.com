@@ -1,0 +1,12 @@
+{{- /*
+    A string as plain text, for comparing two of them: the tags dropped, the entities
+    decoded, the typographer's curly quotes straightened and the whitespace collapsed.
+    Called as `{{ partial "plain-text.html" $html }}` and returns the text.
+
+    Written for the masthead's dek (partials/masthead.html), which asks whether a
+    post's description is only its opening paragraph said again. The description is
+    Markdown and the paragraph is rendered HTML, so what is compared is what a reader
+    sees, and a curly apostrophe on one side and a straight one on the other is not a
+    difference.
+*/ -}}
+{{- return (. | plainify | htmlUnescape | replaceRE `[\x{2018}\x{2019}]` "'" | replaceRE `[\x{201C}\x{201D}]` `"` | replaceRE `\s+` " " | strings.TrimSpace) -}}

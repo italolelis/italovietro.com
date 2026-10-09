@@ -42,7 +42,7 @@ chapters:
     t: 261
     title: "Write it yourself"
     summary: "Writing is the one thing Italo doesn’t hand to AI; he uses it as a rubber duck that argues back. Building follows the same loop at home and at work: spec it out, research, implement, validate, deploy. In management, skills take the administrative load (performance reviews, interview preparation, the morning priorities) and stop short of the decisions."
-    plate: { src: "notebook.webp", size: "spot", alt: "A watercolour of an open paper notebook with handwritten lines, a pen resting across it.", caption: "He still carries a paper notebook." }
+    plate: { src: "notebook.webp", role: "spot", alt: "A watercolour of an open paper notebook with handwritten lines, a pen resting across it.", caption: "He still carries a paper notebook." }
     moments:
       - { t: "06:35", text: "Writing helps me think better. So I still do the writing myself." }
       - { t: "12:38", text: "I don’t like to offload the decision of hiring for AI." }
@@ -53,7 +53,7 @@ chapters:
     t: 960
     title: "The kitchen"
     summary: "One engineer collected skills in a repository and called it the kitchen. Hardly anyone used it until a team rewrote a struggling service in one Accelerator Week without touching the code, passed Parloa’s checks in SonarQube and shipped it to a slice of customers. Then *Show me how you cook* made it social. Soon 95% of Parloa’s code was coming out of the kitchen."
-    plate: { src: "toque.webp", size: "spot", alt: "A watercolour of a white chef’s toque on a wooden shelf and an amber apron hanging from a peg beneath it.", caption: "A chef’s hat for showing something. The master chef apron for customer impact." }
+    plate: { src: "toque.webp", role: "spot", alt: "A watercolour of a white chef’s toque on a wooden shelf and an amber apron hanging from a peg beneath it.", caption: "A chef’s hat for showing something. The master chef apron for customer impact." }
     moments:
       - { t: "18:55", size: "pull", text: "The kitchen is nothing but a bunch of skills together. [It] is the harness." }
     lesson: "**Prove a harness on something real, then make adoption social.** A nice repository that a few people know about is not a system."

@@ -1,0 +1,111 @@
+{{- /*
+    A post. Mirrors themes/LoveIt/layouts/posts/single.html, which renders it
+    otherwise; what differs is the masthead and what the footer keeps.
+
+    The theme's title, subtitle and meta block are replaced by the masthead partial
+    (partials/masthead.html), the one the Episode page has: a kicker, a serif headline,
+    an italic dek and one quiet meta line. What goes with them, on Italo's decision
+    (#320):
+
+      removed   the icons beside the byline and the category, the word count, the
+                git hash, "Read Markdown", "Back | Home", the title's flip-in
+                animation, and the view counter, which was off
+      kept      the Contents box, reading time, the share links, tags, and the
+                previous and next posts (partials/single/footer.html)
+
+    The raw Markdown is still published beside each post (`index.md`, from
+    `[outputs]` in config.toml), only no longer linked, so `linkToMarkdown` under
+    `[params.page]` has no visible effect on a post now.
+
+    The Contents box is the theme's, with two changes. Its entries carry no emoji: a
+    heading is written with one, the Contents box is a list to scan, and an emoji in
+    every entry is noise there. And it is drawn only when the post has headings to
+    list; the theme drew an empty box for a post without any.
+
+    The static box is the theme's markup and classes. Its script (initToc) moves
+    `#TableOfContents` between the floating box and this one by the width of the
+    window, and measures `#post-footer` to know where the floating box stops, so both
+    ids stay.
+*/ -}}
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    {{- $params := .Scratch.Get "params" -}}
+
+    {{- $toc := $params.toc -}}
+    {{- if eq $toc true -}}
+        {{- $toc = .Site.Params.page.toc | default dict -}}
+    {{- else if eq $toc false -}}
+        {{- $toc = dict "enable" false -}}
+    {{- end -}}
+
+    {{- /* The Contents box lists the headings, so a post without any has none. The
+           pictographs, joiners and variation selectors go, with the space beside them
+           (a heading is written "🧩 Avoiding difficult discussions"). Only the box is
+           stripped: the heading keeps its emoji.
+
+           Only the whitespace next to an emoji goes. This used to trim every `>\s+` and
+           `\s+<` in the list, to tidy the gap an emoji left at the edge of an entry,
+           and that also ate the real spaces around inline markup in a heading, so that
+           "Why <code>kubectl</code> matters in <em>practice</em>" came out as
+           "Why<code>kubectl</code>matters in<em>practice</em>". An emoji at the start of an
+           entry takes the space after it, one at the end the space before it, and one
+           in the middle is replaced by a single space. */ -}}
+    {{- $emoji := `(?:\s*[\x{1F000}-\x{1FAFF}\x{2300}-\x{23FF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}\x{200D}\x{20E3}])+\s*` -}}
+    {{- $tocHTML := "" -}}
+    {{- if ne $toc.enable false -}}
+        {{- if in .TableOfContents "<li" -}}
+            {{- $tocHTML = .TableOfContents
+                | replaceRE (printf `(<a [^>]*>)%s` $emoji) "${1}"
+                | replaceRE (printf `%s(</a>)` $emoji) "${1}"
+                | replaceRE $emoji " " -}}
+        {{- end -}}
+    {{- end -}}
+
+    {{- /* Auto TOC */ -}}
+    {{- if $tocHTML -}}
+        <div class="toc" id="toc-auto">
+            <h2 class="toc-title">{{ T "contents" }}</h2>
+            <div class="toc-content{{ if eq $toc.auto false }} always-active{{ end }}" id="toc-content-auto"></div>
+        </div>
+    {{- end -}}
+
+    <article class="page single">
+        {{- partial "masthead.html" . -}}
+
+        {{- /* Featured image */ -}}
+        {{- $image := $params.featuredimage -}}
+        {{- with .Resources.GetMatch "featured-image" -}}
+            {{- $image = .RelPermalink -}}
+        {{- end -}}
+        {{- with $image -}}
+            <div class="featured-image">
+                {{- dict "Src" . "Title" $.Description "Resources" $.Resources | partial "plugin/img.html" -}}
+            </div>
+        {{- end -}}
+
+        {{- /* Static TOC */ -}}
+        {{- if $tocHTML -}}
+            <div class="details toc" id="toc-static"  data-kept="{{ if $toc.keepStatic }}true{{ end }}">
+                <div class="details-summary toc-title">
+                    <span>{{ T "contents" }}</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static">
+                    {{- dict "Content" $tocHTML "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+                </div>
+            </div>
+        {{- end -}}
+
+        {{- /* Content */ -}}
+        <div class="content" id="content">
+            {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+        </div>
+
+        {{- /* Footer */ -}}
+        {{- partial "single/footer.html" . -}}
+
+        {{- /* Comment */ -}}
+        {{- partial "comment.html" . -}}
+    </article>
+{{- end -}}

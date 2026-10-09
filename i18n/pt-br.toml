@@ -1,8 +1,38 @@
-# Textos das páginas de episódio (layouts/episodes/single.html e partials/episode/).
+# Textos que o site acrescenta aos do tema: o cabeçalho de abertura (partials/masthead.html,
+# compartilhado por artigos e páginas de episódio) e as páginas de episódio
+# (layouts/episodes/single.html e partials/episode/).
 # Ver i18n/en.toml. O Hugo combina este arquivo com o pt-BR.toml do tema.
 
-["episode.and"]
+# O cabeçalho de abertura. Genérico, não `episode.*`: um artigo e uma página de episódio
+# usam o mesmo partial. As datas são escritas por extenso ("7 de outubro de 2026") pelo
+# partial, no idioma da página, e chegam aqui prontas.
+["masthead.by"]
+other = "Por {{ . }}"
+["masthead.readingTime"]
+other = "{{ . }} min de leitura"
+["masthead.updated"]
+other = "Atualizado em {{ . }}"
+["masthead.and"]
 other = " e "
+["masthead.basedOn"]
+other = "Baseado em <strong>{{ .Title }}</strong>, com {{ .Hosts }}"
+["masthead.released"]
+other = "Publicado em {{ . }}"
+["masthead.length"]
+other = "{{ . }} min"
+["masthead.writtenUp"]
+other = "Escrito pelo Claude a partir da transcrição do episódio, em {{ . }}"
+
+# O fim de um artigo (partials/single/footer.html e share.html). A linha de
+# compartilhamento também aparece nas páginas de episódio.
+["post.share"]
+other = "Compartilhar"
+["post.previous"]
+other = "Anterior"
+["post.next"]
+other = "Próximo"
+
+# As páginas de episódio.
 ["episode.mapLabel"]
 other = "Mapa do episódio"
 ["episode.chapter"]
@@ -22,14 +52,6 @@ other = "{{ . }} minutos"
 other = "Abertura"
 ["episode.of"]
 other = "de {{ . }}"
-["episode.basedOn"]
-other = "Baseado em <strong>{{ .Title }}</strong>, com {{ .Hosts }}"
-["episode.released"]
-other = "Publicado em {{ . }}"
-["episode.length"]
-other = "{{ . }} min"
-["episode.writtenUp"]
-other = "Escrito pelo Claude a partir da transcrição do episódio, em {{ . }}"
 ["episode.lesson"]
 other = "A lição"
 ["episode.disclaimer"]
@@ -59,3 +81,20 @@ other = "A etapa mais longa é %s."
 other = "Etapas a automatizar"
 ["episode.tipHint"]
 other = "Clique para ler"
+
+# As palavras dos links de uma Entry na página de palestras (layouts/shortcodes/talk.html).
+# Ver i18n/en.toml. "Apresentação" e não "Slides": o link leva ao material, e a página
+# toda é lida em português.
+["entry.highlights"]
+other = "Destaques"
+["entry.watch"]
+other = "Assistir"
+["entry.slides"]
+other = "Apresentação"
+["entry.event"]
+other = "Evento"
+# Dia e mês sem o ano, como o arquivo de textos escreve uma data (o ano é o título do
+# grupo acima): um layout de tempo do Go, e cada idioma põe o dia e o mês na sua ordem.
+# Usado com `time.Format`, que escreve o nome do mês no idioma da página.
+["entry.dayMonth"]
+other = "2 de January"

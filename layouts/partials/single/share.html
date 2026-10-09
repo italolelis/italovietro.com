@@ -1,0 +1,18 @@
+{{- /*
+    The share links under a piece of writing. Sharing is part of the product
+    (ADR-0005): a page's link preview is the first thing many people see of it, and
+    the buttons are how it gets there.
+
+    Called with the page, by the post footer (partials/single/footer.html) and by the
+    Episode layout, which keeps these and none of the rest of the post footer. The
+    buttons themselves, and which networks are on, are the theme's
+    (partials/plugin/share.html, `[params.page.share]` in config.toml). What is added
+    is the label, so the row says what it is, and that it draws nothing at all when no
+    network is on rather than a label with nothing beside it.
+*/ -}}
+{{- with partial "plugin/share.html" . }}
+<div class="post-share">
+    <span class="post-share__label">{{ T "post.share" }}</span>
+    <span class="post-share__links">{{ . }}</span>
+</div>
+{{- end -}}
