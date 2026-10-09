@@ -9,11 +9,11 @@ The single 800px column every page is laid out in. One number, one left edge, si
 _Avoid_: Container, wrapper, content width, column width
 
 **Signpost**:
-The sentence on the home page that links to each section and says which ones are still moving. It replaced a four-row list of labelled routes, which repeated the navigation one line below it. Routing is its job; the navigation's job is getting there from anywhere.
+The sentence on the home page that links to each section and says which ones are still moving. It replaced a four-row list of labelled routes, which repeated the navigation one line below it. Routing is its job; the navigation's job is getting there from anywhere. Its links are the menu's: the sentence is copy, and the URLs are not.
 _Avoid_: Route list, section cards, links block, secondary nav
 
 **Greeting**:
-The line opening the home page — "Hey 👋", "Oi 👋". It is the loudest text on the page and is styled as a heading, not as body text. It greets and nothing else; the paragraph beneath it does the introducing. It is not the site title, which lives in the header, and it is not a tagline — the aphorism that used to sit here read as a claim made before anything had been said.
+The line opening the home page — "Hey 👋", "Oi 👋". It is the loudest text on the page and is the page's `<h1>`, styled as a heading, not as body text. It greets and nothing else; the paragraph beneath it does the introducing. It is not the site title, which lives in the header, and it is not a tagline — the aphorism that used to sit here read as a claim made before anything had been said.
 _Avoid_: Tagline, subtitle, headline, strapline, hero text
 
 **Upcoming**:

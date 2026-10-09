@@ -67,7 +67,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script), and for colour `token` / `token_constant` / `contrast_of` (a token's value in each mode, and the WCAG ratio of a pair, measured from the compiled values). There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`, `text_has` (a sentence over the page's text with its tags dropped, for one with a link in the middle), and for the stylesheet `rule_sets` / `rule_lacks` (does a rule for this selector set this declaration, matching each selector in a comma list whole; see the note above them in the script), and for colour `token` / `token_constant` / `contrast_of` (a token's value in each mode, and the WCAG ratio of a pair, measured from the compiled values). There is no `nowhere_re`.
 
 Two documented footguns:
 
@@ -98,6 +98,8 @@ A post's **Masthead** is made from its front matter: the first `categories` entr
 **What goes in Writing (`content/posts/`) comes from Italo.** A podcast appearance can get an **episode page** in `content/episodes/` instead: chapter by chapter, a summary, the quotes and the lesson, all from front matter. Claude writes those, in the third person, under a disclaimer that says so; the quotes are verbatim from the recording, lightly trimmed with brackets and ellipses, and linked to their second. Never write in Italo's first person anywhere he did not write it. Quotes are transcribed, not remembered; a claim the recording does not support does not go in. Contract in `docs/agents/architecture.md`.
 
 **The speaking page is a list, not a set of write-ups.** Entries are title + venue + date + links, with no description. Voice lives once at the top of the page, next to the invitation. Don't re-add a paragraph per entry.
+
+**Raw HTML in Markdown is refused** (`unsafe = false` in `config.toml`): the build fails on it, and the home page, which used to be a `<div>` and classed paragraphs, is `layouts/index.html` now. A content file holds prose and shortcode calls; structure belongs to a layout. See *The home page* in `docs/agents/architecture.md`.
 
 Where prose does exist (home page, About, reading list, post bodies) it is first person and takes positions. If a position isn't known, **ask rather than invent one.**
 
