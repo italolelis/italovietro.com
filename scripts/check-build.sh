@@ -1068,7 +1068,7 @@ rule_sets '\.toc \.toc-content ul a:first-child::before' 'content:none' 'a Conte
 rule_sets '\.toc \.toc-title' 'text-transform:uppercase' 'the Contents title is a kicker'
 rule_sets '\.toc \.toc-content a' 'color:var\(--muted\)' 'its entries are muted'
 rule_sets '#toc-auto \.toc-content a\.active' 'color:var\(--accent\)' 'and the one you are reading, in the floating box, takes the Accent'
-rule_sets '#toc-auto' 'border-left:1px solid var\(--rule\)' 'the floating box has a hairline down its side, not the theme'"'"'s 4px bar'
+rule_sets '\.toc#toc-auto' 'border-left:1px solid var\(--rule\)' 'the floating box has a hairline down its side, not the theme'"'"'s 4px bar'
 rule_sets '\.single #toc-static' 'border-top:1px solid var\(--rule\)' 'the box inside the article is ruled above'
 rule_sets '\.single #toc-static' 'border-bottom:1px solid var\(--rule\)' 'and below, not filled'
 rule_sets '\.single \.post-footer' 'max-width:800px' 'the foot of a post is the Measure'
@@ -1236,7 +1236,7 @@ done
 # The two weights of a book, in the stylesheet: compact puts the author on the title's
 # line, featured gives it room. And neither has an edge of its own, in either mode.
 rule_sets '\.entry--book:not\(\.entry--featured\) \.entry__head' 'display:flex' "a compact book's author shares its title's line"
-rule_sets '\.entry--featured \.entry__head>\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
+rule_sets '\.entry--featured \.entry__head>h[23]\.entry__title' 'font-size:1\.375rem' 'a featured title is a step up the scale'
 rule_lacks '\.entry--featured.*' 'border-left' 'a featured Entry has no edge of its own: size and space say it is featured'
 
 # The stylesheet's half of "one": no per-page stylesheet restates an Entry's title, meta
@@ -1256,8 +1256,8 @@ if [ "$(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums')" -eq 1 ]
 else
     bad "one rule sets the date column in tabular figures (got $(rules_with '.*entry__date' 'font-variant-numeric:tabular-nums'))"
 fi
-rule_sets '\.entry \.entry__head>\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
-rule_sets '\.entry \.entry__head>\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
+rule_sets '\.entry \.entry__head>h[23]\.entry__title' 'margin:0' 'a title beats the theme'"'"'s heading margin, which would otherwise float it'
+rule_sets '\.entry \.entry__head>h[23]\.entry__title' 'font-weight:600' 'and its weight, so a title is the same on every list'
 
 # One voice for the site -- see docs/adr/0006: serif to read, sans to navigate.
 #
@@ -1399,6 +1399,10 @@ rule_sets '\.footer-social a:hover' 'color:var\(--accent\)' 'that takes the Acce
 rule_sets '\.masthead__dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
 rule_sets '\.single \.content>hr' 'border-top:1px solid var\(--hairline\)' 'a rule across the column is the hairline'
 rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairline\)' 'and is recoloured in dark, where the theme draws its own'
+# The theme's `[theme=dark] .single .content hr { border-top: 1px dashed }` is what the
+# dark rule above answers, and answering its colour alone left its dashes: the rule was
+# solid in light and dashed in dark. Read in both modes with a computed-style probe.
+rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-style:solid' 'and stays solid there, not dashed as the theme draws it'
 rule_sets '\.single figure\.plate img' 'filter:var\(--plate-filter\)' 'a Plate, wherever it is, is dimmed by the token, not by a dark rule'
 occurs "$CSS" 'filter:var(--plate-filter)' 1 'and that is the one rule that dims a Plate, the home page'"'"'s and the Episode pages'"'"' alike'
 absent_from "$CSS" 'ep-plate' 'no Episode-page Plate rules: one stylesheet frames every Plate'
