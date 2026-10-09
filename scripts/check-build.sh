@@ -856,11 +856,41 @@ for page in "${MASTHEAD_POSTS[@]}" "${MASTHEAD_EPISODES[@]}"; do
     contains "$page" 'data-sharer=hackernews' "$name: and Hacker News"
 done
 
+# The dates in a list of Entries are written out in the page's language. The archive's
+# were Go's `.Date.Format "January 2"`, which writes English month names whatever the
+# page ("March 20" on /pt-br/posts/), and a tag page showed the ISO `2020-12-03` the
+# archive had left behind. The archive's year is its group heading, so its dates are the
+# day and month ("March 20", "20 de março"); a tag page has no group, so its dates carry
+# the year ("December 3, 2020", "3 de dezembro de 2020"). An Elsewhere row leads with its
+# source ("Parloa Labs · June 4", "Parloa Labs · 4 de junho").
+MONTHS_EN='January|February|March|April|May|June|July|August|September|October|November|December'
+MONTHS_PT='janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
+entry_dates() { grep -oE 'class=entry__date>[^<]*' "$1" | sed 's/^class=entry__date>//'; }
+# every_date <file> <regex> <description> -- there is at least one, and each matches.
+every_date() {
+    local file=$1 pattern=$2 desc=$3 total off
+    if [ ! -f "$file" ]; then bad "$desc (no such file: $file)"; return; fi
+    total=$(entry_dates "$file" | wc -l | tr -d ' ')
+    off=$(entry_dates "$file" | grep -vcE -- "$pattern" || true)
+    if [ "$total" -gt 0 ] && [ "$off" -eq 0 ]; then
+        ok "$desc ($total dates)"
+    else
+        bad "$desc ($off of $total do not match: $(entry_dates "$file" | grep -vE -- "$pattern" | head -3 | tr '\n' '|'))"
+    fi
+}
+echo 'Entry dates, in the language of the page'
+every_date "$EN_ARCHIVE" '^(.* · )?('"$MONTHS_EN"') [0-9]{1,2}$' 'the archive writes the month and day out in English'
+every_date "$PT_ARCHIVE" '^(.* · )?[0-9]{1,2} de ('"$MONTHS_PT"')$' 'and in Portuguese, day first, with Portuguese month names'
+for page in "$PUBLIC"/tags/*/index.html; do
+    every_date "$page" '^(.* · )?('"$MONTHS_EN"') [0-9]{1,2}, [0-9]{4}$' "${page#"$PUBLIC"/}: a tag page writes the date out with its year, not as an ISO date"
+done
+for page in "$PUBLIC"/pt-br/tags/*/index.html; do
+    every_date "$page" '^(.* · )?[0-9]{1,2} de ('"$MONTHS_PT"') de [0-9]{4}$' "${page#"$PUBLIC"/}: and in Portuguese"
+done
+
 # A post's meta line: who, when it was written, how long it takes. The date is written
 # out in the page's language, with the day machine-readable beside it; the byline goes
 # to the About page, where someone arriving from a search finds out who this is.
-MONTHS_EN='January|February|March|April|May|June|July|August|September|October|November|December'
-MONTHS_PT='janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
 for page in "${MASTHEAD_POSTS[@]}"; do
     name=${page#"$PUBLIC"/}; name=${name%/index.html}
     case $name in

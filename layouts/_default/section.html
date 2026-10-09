@@ -64,8 +64,10 @@
                        to where it ran and opens there; a post written here links to its
                        page. The right-hand column carries the source when there is
                        one, then the date: the year is the group's, so it is month and
-                       day. */ -}}
-                {{- $date := $.Site.Params.section.dateFormat | default "January 2" | .Date.Format -}}
+                       day, in the page's language ("March 20", "20 de março"). A Go
+                       layout from i18n, written by `time.Format`: `.Date.Format` writes
+                       English month names whatever the page. */ -}}
+                {{- $date := .Date | time.Format (T "entry.dayMonth") -}}
                 {{- with .Params.host }}{{ $date = printf "%s · %s" . $date }}{{ end -}}
                 {{- partial "entry.html" (dict "title" (.Title | emojify) "link" (.Params.externalUrl | default .RelPermalink) "date" $date) -}}
             {{- end -}}

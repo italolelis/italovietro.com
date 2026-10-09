@@ -228,9 +228,12 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.section]
     # special amount of posts in each section page
     paginate = 20
-    # The archive groups by year, so the year is already on screen. "January 2"
-    # reads as a date; "01-02" reads as a code.
-    dateFormat = "January 2"
+    # No `dateFormat` here any more. The archive groups by year, so the year is already
+    # on screen, and a date reads as "January 2" where "01-02" reads as a code; but that
+    # layout is English, and Go's `.Date.Format` writes English month names on every
+    # page, so /pt-br/posts/ showed "March 20" for "20 de março". The layout is the
+    # i18n string `entry.dayMonth` now, one per language, written by `time.Format`
+    # (layouts/_default/section.html).
     # amount of RSS pages
     rss = 10
 
@@ -238,10 +241,12 @@ ignoreLogs = ['shortcode-twitter-getremote']
   [params.list]
     # special amount of posts in each list page
     paginate = 20
-    # Year-bearing, like the section format. Every dated site in the reference
-    # survey shows the year without exception; "01-02" made a 2021 post read as
-    # if it were published this year.
-    dateFormat = "2006-01-02"
+    # No `dateFormat` here either. A tag page is year-bearing, every dated site in the
+    # reference survey shows the year without exception, and "01-02" made a 2021 post
+    # read as if it were published this year; but the ISO "2006-01-02" it settled on
+    # is a code, not a date to read. It is written out in the page's language now,
+    # `:date_long` ("December 3, 2020", "3 de dezembro de 2020"), as the masthead's is
+    # (layouts/taxonomy/term.html).
     # amount of RSS pages
     rss = 10
 

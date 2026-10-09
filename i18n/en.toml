@@ -98,3 +98,8 @@ other = "Watch"
 other = "Slides"
 ["entry.event"]
 other = "Event"
+# A day and month with no year, as the writing archive writes a date (its year is the
+# heading above the group): a Go time layout, so a language puts the day and month in its
+# own order. Used with `time.Format`, which writes the month name in the page's language.
+["entry.dayMonth"]
+other = "January 2"

@@ -93,3 +93,8 @@ other = "Assistir"
 other = "Apresentação"
 ["entry.event"]
 other = "Evento"
+# Dia e mês sem o ano, como o arquivo de textos escreve uma data (o ano é o título do
+# grupo acima): um layout de tempo do Go, e cada idioma põe o dia e o mês na sua ordem.
+# Usado com `time.Format`, que escreve o nome do mês no idioma da página.
+["entry.dayMonth"]
+other = "2 de January"

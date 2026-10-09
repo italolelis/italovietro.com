@@ -23,9 +23,11 @@
         {{- /* Term List. Entries, the same as the archive's (layouts/partials/entry.html),
                at level 2: the title above them is the h1 and there is no year heading
                between, so an h3 would skip a level. The date keeps its year -- there is
-               no group to carry it -- in the format [params.list] sets. */ -}}
+               no group to carry it -- written out in the page's language, as the
+               masthead writes one ("December 3, 2020", "3 de dezembro de 2020"). It was
+               an ISO `2020-12-03`, a code rather than a date to read. */ -}}
         {{- range .Pages -}}
-            {{- $date := $.Site.Params.list.dateFormat | default "2006-01-02" | .Date.Format -}}
+            {{- $date := .Date | time.Format ":date_long" -}}
             {{- with .Params.host }}{{ $date = printf "%s · %s" . $date }}{{ end -}}
             {{- partial "entry.html" (dict "title" .Title "link" (.Params.externalUrl | default .RelPermalink) "date" $date "level" 2) -}}
         {{- end -}}
