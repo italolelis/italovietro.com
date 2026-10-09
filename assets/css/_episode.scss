@@ -944,8 +944,13 @@
     margin-bottom: 0.15rem;
 }
 
+// The dot is printed on the ruler, so it takes the ruler's ink and not the page's:
+// `--ep-ink` is a light indigo in dark, for the dark page, and on the ruler's dark paper
+// the hovered dot measured 1.26:1 (#9db0e0 on #cfc5ae) and all but vanished. The ruler's
+// ink does not follow the mode: 6.56:1 on the light paper, 4.72:1 on the dark, both over
+// the 3:1 a graphic needs, which the gate measures from the tokens.
 .episode .ep-timeline__moment.is-hot {
-    background: var(--ep-ink);
+    background: var(--ep-ruler-ink);
     transform: scale(1.6);
 }
 

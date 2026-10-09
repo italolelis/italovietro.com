@@ -1467,6 +1467,14 @@ rule_sets '\.episode \.ep-timeline__clock b' 'color:var\(--heading\)' 'its clock
 rule_sets '\.episode \.ep-timeline__ruler' 'background-color:var\(--ep-paper\)' 'the ruler is the paper token'
 rule_sets '\.episode \.ep-timeline__label' 'color:var\(--ep-ruler-ink\)' 'and is printed in the ruler ink, which is the same in both modes'
 rule_sets '\.episode \.ep-timeline__head' 'background:var\(--ep-ruler-ink\)' 'as is the playhead'
+# The dot of a quote under the pointer is printed on the ruler, so it is the ruler's ink,
+# not the page's. It read `--ep-ink`, which in dark is a light indigo (#9db0e0) for the
+# dark page, on the ruler's dark paper (#cfc5ae): 1.26:1, a dot that vanished when
+# hovered. The ruler's ink on its paper is 6.56:1 in light and 4.72:1 in dark, asserted
+# below at the 3:1 a graphic needs.
+rule_sets '\.episode \.ep-timeline__moment\.is-hot' 'background:var\(--ep-ruler-ink\)' 'the quote dot under the pointer is the ruler ink'
+rule_lacks '\.episode \.ep-timeline__moment(\.is-hot)?' 'var\(--ep-ink\)' 'and no quote dot reads the page'"'"'s Episode ink, which is a light indigo in dark'
+contrast_of ep-ruler-ink ep-paper 3 'so the dot under the pointer stands out from the ruler it is printed on, in both modes'
 contains "$CSS" 'rgba(61,79,122,0.55)' 'its ticks are that ink at an alpha, computed from the one value'
 rule_sets '\.episode \.content \.ep-hl__lesson' 'background:var\(--ep-lesson\)' 'the lesson box is the lesson token'
 rule_sets '\.episode \.content \.ep-hl__lesson' 'border-left:3px solid var\(--ep-ink\)' 'with an ink edge'
@@ -1505,7 +1513,6 @@ absent_from "$CSS" 'ep-station-dark' 'a lit station has one animation, whose col
 rule_sets '\.episode \.ep-timeline__tip' 'background:var\(--ep-tip\)' 'the preview is its own token'
 rule_sets '\.episode \.ep-timeline__tip' 'color:var\(--heading\)' 'with heading-coloured text'
 rule_sets '\.episode \.ep-timeline__tip-clock' 'color:var\(--ep-ink\)' 'and an ink clock'
-rule_sets '\.episode \.ep-timeline__moment\.is-hot' 'background:var\(--ep-ink\)' 'a hovered quote dot is the ink'
 rule_sets '\.episode \.content \.ep-colophon' 'border-top:2px solid var\(--heading\)' 'the colophon opens on a heavy rule'
 rule_sets '\.episode \.content \.ep-colophon' 'color:var\(--muted\)' 'in muted text'
 rule_sets '\.episode \.content \.ep-colophon__title' 'color:var\(--heading\)' 'under a heading-coloured title'
