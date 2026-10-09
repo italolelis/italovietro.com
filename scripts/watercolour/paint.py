@@ -88,9 +88,8 @@ def main(names):
         # A plate paints the same whatever ran before it. wc.py keeps its random
         # state at module level, and a script takes a copy of it when it imports wc,
         # so a second script in this process would otherwise start from the end of
-        # the first one's. (bottle, knives and notebook were painted that way, in one
-        # chained run, and their committed WebP files are what it gave; painted alone,
-        # as here, they come out a little differently. The other five match.)
+        # the first one's. Dropping the module is what makes a plate come out
+        # byte for byte the same alone, in a full run, or on another day.
         sys.modules.pop("wc", None)
         script = runpy.run_path(os.path.join(SCRIPTS, f"{name}.py"), run_name="__main__")
         if "DEST" not in script:
