@@ -281,7 +281,7 @@ One partial renders every Entry (CONTEXT.md): a book, a talk, an Upcoming appear
 
 The shape is title, then date on the same row, then the muted line, then the note; on a phone it is one column, with the date under the meta. A book's author shares the title's line unless it is featured. Rules that hold for it, each asserted by the gate: the title is `600` weight and `margin: 0` on every list (it needs three classes of specificity to beat the theme's `.single .content h3`, which once made a talk's title 700 with 19px of margin on one page and 600 on another); the date is the only rule that sets tabular figures; there is one hover, a tint and an Accent edge, on every list; and no `[theme=dark]` rule touches an Entry.
 
-A new list of Entries is a new call to this partial, not new markup and not new CSS. An h2 above Entries gets its hairline from them (`.single .content > h2:has(~ .entry)`), so a page declares nothing. The home page renders Upcoming the same way: `title` the event, `link` its page, `meta` the venue, `date` the display date, `kind` `upcoming`.
+A new list of Entries is a new call to this partial, not new markup and not new CSS. An h2 above Entries gets its hairline from them (`.single .content > h2:has(~ .entry)`), so a page declares nothing. The home page renders no Entries: it keeps the same order and the same prose as before it became a layout, and Upcoming appears on the speaking page only (`{{< upcoming >}}`, below), not on the home page.
 
 ### `talk` — speaking page Entries
 

@@ -445,6 +445,11 @@ absent_from "$PT_HOME" 'aprendi sobre pessoas' 'the moved biography is not left 
 echo 'Home page layout'
 in_order "$EN_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Beyond the Code</h2>.*<figure class="plate plate--[a-z]+">' 'the en home page runs Greeting, intro, Signpost, Beyond the Code, Plate'
 in_order "$PT_HOME" '<h1 class=home-greeting>.*class=home-intro>.*<p class=home-signpost>.*<section class=home-beyond><h2[^>]*>Além do Código</h2>.*<figure class="plate plate--[a-z]+">' 'and so does the pt-br home page'
+# The home page renders no Entries, Upcoming included: it keeps the same order and the
+# same prose it had as a Markdown page, and Upcoming is on the speaking page. The
+# architecture notes and the Entry stylesheet said otherwise for a while.
+absent_from "$EN_HOME" 'class="entry ' 'the en home page renders no Entry, Upcoming included'
+absent_from "$PT_HOME" 'class="entry ' 'nor the pt-br one'
 # The Plate is last: nothing but closing tags between its figure and the end of the page's
 # content, so a new part cannot be added after the picture without this noticing.
 matches "$EN_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|</div>)*</main>' 'the en Plate comes last'

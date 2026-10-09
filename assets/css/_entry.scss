@@ -242,8 +242,10 @@ $entry-edge: 3px;
 // read as one. An h2 in an article has no rule.
 //
 // Found by the Entries that follow it, so the page declares nothing: `~` is any later
-// sibling, which is every h2 on those pages, and not the h2 that comes after the last
-// Entry (a home page's "Beyond the Code", once Upcoming is on it).
+// sibling, which is every h2 on those pages, and not an h2 that comes after the last
+// Entry, a closing section's, which no page has today. (The home page has no Entries,
+// Upcoming included: that is on the speaking page, and its "Beyond the Code" is not
+// reached by this rule for that reason.)
 .single .content > h2:has(~ .entry) {
     margin-top: 4rem;
     margin-bottom: 0.5rem;
