@@ -47,9 +47,9 @@
         {{- partial "masthead.html" . }}
         <p class="ep-disclaimer">{{ T "episode.disclaimer" (dict "Writing" ("posts/" | relLangURL)) | markdownify }}</p>
 
-        {{- with $ep.hero }}{{ with $.Resources.GetMatch .src }}
-        {{- partial "plate.html" (dict "img" . "alt" $ep.hero.alt "class" "ep-plate--hero" "eager" true) }}
-        {{- end }}{{ end }}
+        {{- with $ep.hero }}
+        {{- partial "plate.html" (dict "page" $ "src" .src "alt" .alt "role" "hero") }}
+        {{- end }}
 
         <div class="content" id="content">
             {{- .Content -}}
@@ -59,9 +59,9 @@
                 {{- partial "episode/chapter-heading.html" (dict "page" $ "c" .) -}}
                 {{- with .ask }}{{ partial "episode/ask.html" (dict "page" $ "ask" .) }}{{ end -}}
                 {{- with .summary }}<div class="ep-hl__summary">{{ $.RenderString (dict "display" "block") . }}</div>{{ end -}}
-                {{- with .plate }}{{ $p := . }}{{ with $.Resources.GetMatch $p.src }}
-                    {{- partial "plate.html" (dict "img" . "alt" $p.alt "class" (cond (eq $p.size "spot") "ep-plate--spot" "") "caption" ($p.caption | default "" | $.RenderString)) }}
-                {{- end }}{{ end -}}
+                {{- with .plate }}
+                    {{- partial "plate.html" (dict "page" $ "src" .src "alt" .alt "role" .role "caption" (.caption | default "" | $.RenderString)) }}
+                {{- end -}}
                 {{- range .figures }}{{ partial "episode/figure.html" (dict "page" $ "f" .) }}{{ end -}}
                 {{- range .moments }}
                     {{- partial "episode/moment.html" (dict "page" $ "t" .t "text" .text "size" .size) }}

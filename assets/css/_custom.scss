@@ -15,6 +15,9 @@
 @import "masthead";
 // What sits around a post's text: the Contents box and the foot. See _post.scss.
 @import "post";
+// Every watercolour Plate, whatever page it is on. A page asks for one and styles
+// nothing of it, so this comes before the page stylesheets. See _plate.scss.
+@import "plate";
 // Was margin-top: 13rem. That existed to compensate for the theme pushing the
 // profile block down by translateY(16vh) -- two hacks cancelling each other, with
 // the result depending on viewport height. The transform is reset in _home.scss,

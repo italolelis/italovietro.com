@@ -453,11 +453,11 @@ fi
 # Last and lazy, so the greeting stays the first thing painted; a still life, so
 # the no-portrait decision above still holds.
 echo 'Home page plate'
-contains "$EN_HOME" 'class=home-plate' 'the en home page carries its plate'
-contains "$PT_HOME" 'class=home-plate' 'and so does the pt-br home page'
-in_order "$EN_HOME" 'Beyond the Code.*class=home-plate' 'the plate closes the page, after the paragraph it illustrates'
-in_order "$PT_HOME" 'Além do Código.*class=home-plate' 'in pt-br too'
-matches "$EN_HOME" 'class=home-plate><img [^>]*loading=lazy' 'the plate is lazy-loaded, behind the text'
+contains "$EN_HOME" 'class="plate plate--inline"' 'the en home page carries its plate'
+contains "$PT_HOME" 'class="plate plate--inline"' 'and so does the pt-br home page'
+in_order "$EN_HOME" 'Beyond the Code.*class="plate plate--inline"' 'the plate closes the page, after the paragraph it illustrates'
+in_order "$PT_HOME" 'Além do Código.*class="plate plate--inline"' 'in pt-br too'
+matches "$EN_HOME" 'class="plate plate--inline"><img [^>]*loading=lazy' 'the plate is lazy-loaded, behind the text'
 
 echo 'About page'
 exists "$EN_ABOUT" 'en About page is built'
@@ -640,7 +640,11 @@ for entry in "${EPISODES[@]}"; do
     # The share card is the episode's own plate, not the site card, and a file.
     contains "$EN_EPISODE" "og:image\" content=\"https://italovietro.com/episodes/$slug/cover.jpg" "$slug: the preview card is the episode plate"
     exists "$PUBLIC/episodes/$slug/cover.jpg" "$slug: and the card is published"
-    contains "$EN_EPISODE" 'fetchpriority=high' "$slug: the hero plate is not lazy-loaded"
+    # The hero is above the fold, so it is the one Plate that is not lazy; every other
+    # Plate on the page is (see 'Plates' below, which checks that for every page).
+    matches "$EN_EPISODE" 'class="plate plate--hero"><img [^>]*fetchpriority=high' "$slug: the hero Plate is not lazy-loaded"
+    matches "$PT_EPISODE" 'class="plate plate--hero"><img [^>]*fetchpriority=high' "$slug: nor is the pt-br one"
+    occurs "$EN_EPISODE" 'fetchpriority=high' 1 "$slug: and it is the only eager image on the page"
 done
 # The toy model's days are invented, and the figure has to say so where the
 # numbers are: the episode gives no breakdown of Parloa's cycle time, and a reader
@@ -654,18 +658,58 @@ absent_from "$CSS" 'left:-100vmax' 'nothing on an episode page is laid out past 
 
 # One measure (docs/adr/0004). The masthead and hero sit outside .content and
 # take the cap explicitly; without it the title starts 140px left of the prose.
-matches "$CSS" '\.episode>\.ep-disclaimer,\.episode>\.ep-plate--hero\{max-width:800px' 'the disclaimer and the hero plate share the 800px measure'
-# The plates are watercolours with an alpha edge, saved as WebP at twice the
-# measure. A PNG export is ten times the size and looks the same.
-oversized=0
-plates=("$PUBLIC"/images/plates/*.webp)
+matches "$CSS" '\.episode>\.ep-disclaimer\{max-width:800px' 'the disclaimer takes the 800px measure'
+rule_sets '\.single figure\.plate--hero' 'max-width:800px' 'and so does a hero Plate'
+
+# Plates (partials/plate.html): one figure, `plate plate--<role>`, the role being hero,
+# spot or inline. The role decides the framing (one stylesheet, _plate.scss), the
+# `sizes` the browser is told and whether the image is eager; a page asks for a Plate
+# by name and role, and never by a class of its own. Everything below is read off the
+# compiled pages, so a Plate placed on a post tomorrow is covered the day it is placed.
+echo 'Plates'
+# plate_imgs <page> -- the <img> of every Plate on a page, one a line.
+plate_imgs() { grep -oE '<figure class="plate plate--[a-z]+"><img [^>]*>' "$1" || true; }
+# plates_lacking <page> <regex> -- how many of a page's Plates do not match it.
+plates_lacking() { plate_imgs "$1" | { grep -cvE -- "$2" || true; }; }
+# plates_sized_by_role <page> -- a spot Plate is told it is 480px wide, any other 800px.
+plates_sized_by_role() {
+    plate_imgs "$1" | awk '
+        /plate--spot"/ { if ($0 !~ /sizes="[^"]*480px/) n++; next }
+        { if ($0 !~ /sizes="[^"]*800px/) n++ }
+        END { print n + 0 }'
+}
+plate_pages=("$EN_HOME" "$PT_HOME")
 for entry in "${EPISODES[@]}"; do
     read -r slug _ <<< "$entry"
-    plates+=("$PUBLIC/episodes/$slug"/*.webp)
+    plate_pages+=("$PUBLIC/episodes/$slug/index.html" "$PUBLIC/pt-br/episodes/$slug/index.html")
 done
-for plate in "${plates[@]}"; do
-    [ -f "$plate" ] || continue
-    if [ "$(wc -c < "$plate")" -ge 160000 ]; then
+for page in "${plate_pages[@]}"; do
+    name=${page#"$PUBLIC"/}; name=${name%index.html}; name=${name:-home}
+    if [ "$(plate_imgs "$page" | wc -l | tr -d ' ')" -gt 0 ]; then ok "$name: carries a Plate"; else bad "$name: carries a Plate"; fi
+    [ "$(plates_lacking "$page" 'width=[0-9]+ height=[0-9]+')" -eq 0 ] && ok "$name: every Plate declares its size, so nothing jumps when it loads" || bad "$name: every Plate declares its size"
+    [ "$(plates_lacking "$page" 'loading=lazy|fetchpriority=high')" -eq 0 ] && ok "$name: every Plate is lazy, or the hero is eager" || bad "$name: every Plate is lazy, or the hero is eager"
+    [ "$(plates_sized_by_role "$page")" -eq 0 ] && ok "$name: every Plate is told its width by its role" || bad "$name: every Plate is told its width by its role"
+    own_class=$(grep -cE 'class="?(ep-plate|home-plate)' "$page" || true)
+    [ "$own_class" -eq 0 ] && ok "$name: no Plate carries a page's own class" || bad "$name: no Plate carries a page's own class"
+done
+# A spot Plate is the one that sits beside its caption.
+in_order "$PUBLIC/episodes/shipping-more-not-faster/index.html" 'class="plate plate--spot"><img [^>]*>[[:space:]]*<figcaption>' 'a spot Plate carries its caption beside it'
+# The plates are watercolours with an alpha edge, saved as WebP at twice the measure. A
+# PNG export is ten times the size and looks the same. Found from the pages rather than
+# from a list of folders: every file a Plate links to, its resized widths included,
+# wherever it lives.
+plate_files=()
+while IFS= read -r url; do
+    plate_files+=("$PUBLIC$url")
+done < <(grep -rhoE --include='*.html' '<figure class="plate plate--[a-z]+"><img [^>]*>' "$PUBLIC" | grep -oE '/[^ ",=]+\.webp' | sort -u)
+if [ "${#plate_files[@]}" -ge 8 ]; then ok "the pages link ${#plate_files[@]} Plate files, resized widths included"; else bad "the pages link at least eight Plate files (found ${#plate_files[@]})"; fi
+oversized=0
+# (An empty array is unbound under `set -u` in the bash 3.2 macOS ships, hence the `+`.)
+for plate in ${plate_files[@]+"${plate_files[@]}"}; do
+    if [ ! -f "$plate" ]; then
+        bad "every Plate a page links to is published (${plate#"$PUBLIC"/} is not)"
+        oversized=1
+    elif [ "$(wc -c < "$plate")" -ge 160000 ]; then
         bad "every plate is under 160KB (${plate#"$PUBLIC"/} is $(wc -c < "$plate") bytes)"
         oversized=1
     fi
@@ -1162,7 +1206,13 @@ rule_sets '\.footer-social a:hover' 'color:var\(--accent\)' 'that takes the Acce
 rule_sets '\.masthead__dek' 'color:var\(--heading\)' 'a dek is set in the heading colour'
 rule_sets '\.single \.content>hr' 'border-top:1px solid var\(--hairline\)' 'a rule across the column is the hairline'
 rule_sets '\[theme=dark\] \.single \.content>hr' 'border-top-color:var\(--hairline\)' 'and is recoloured in dark, where the theme draws its own'
-rule_sets '\.home \.home-content \.home-plate img' 'filter:var\(--plate-filter\)' 'the home plate is dimmed by the token, not by a dark rule'
+rule_sets '\.single figure\.plate img' 'filter:var\(--plate-filter\)' 'a Plate, wherever it is, is dimmed by the token, not by a dark rule'
+occurs "$CSS" 'filter:var(--plate-filter)' 1 'and that is the one rule that dims a Plate, the home page'"'"'s and the Episode pages'"'"' alike'
+absent_from "$CSS" 'ep-plate' 'no Episode-page Plate rules: one stylesheet frames every Plate'
+absent_from "$CSS" 'home-plate' 'no home-page Plate rules either'
+rule_sets '\.single figure\.plate' 'margin:2\.5rem 0' 'every Plate has the same room above and below it'
+rule_sets '\.single figure\.plate--hero' 'margin-top:0' 'a hero Plate sits straight under the masthead'
+rule_sets '\.single figure\.plate--spot' 'grid-template-columns:3fr 2fr' 'a spot Plate is three fifths of the Measure, its caption beside it'
 rule_sets '\.single \.content \.portrait__sizes a' 'border-bottom:1px solid var\(--hairline\)' 'the headshot links are underlined in the hairline'
 rule_sets '\.single \.content \.portrait__sizes a:hover' 'color:var\(--accent\)' 'and take the Accent when pointed at'
 rule_sets '\.entry \.entry__title a' 'color:var\(--accent\)' 'an Entry title, in the archive and on every list, is a link, so the Accent'
@@ -1204,7 +1254,6 @@ rule_sets '\.episode \.ep-disclaimer a' 'color:var\(--accent\)' 'and its link, b
 rule_sets '\.episode \.content \.ep-chapter' 'border-bottom:1px solid var\(--hairline\)' 'a chapter sits on a hairline'
 rule_sets '\.episode \.content \.ep-moment' 'border-left:2px solid var\(--rule\)' 'a quote has a rule beside it'
 rule_sets '\.episode \.content \.ep-moment--pull blockquote::before' 'color:var\(--rule\)' 'a pull quote hangs a quotation mark in the same grey'
-rule_sets '\.episode \.ep-plate img' 'filter:var\(--plate-filter\)' 'an episode plate is dimmed by the token'
 rule_sets '\.episode \.content \.ep-map__heading' 'color:var\(--heading\)' 'the map heading is a heading colour'
 rule_sets '\.episode \.content \.ep-map__legend' 'border-top:1px solid var\(--rule\)' 'the legend sits between two rules'
 rule_sets '\.episode \.content \.ep-map__legend a' 'border-bottom:1px solid var\(--rule\)' 'one under each row'
@@ -1271,7 +1320,7 @@ dark_copy() { # dark_copy <description> <selector-regex>
 }
 dark_copy 'the footer, the logo and the home intro' '\.footer-social|\.logo-mark|\.home-intro'
 dark_copy 'the Greeting, a title or a heading' '\.home-subtitle|\.single-title|\.single \.content h[1-6]'
-dark_copy 'the home plate' '\.home-plate'
+dark_copy 'a Plate' '\.plate'
 dark_copy 'the headshot line' '\.portrait'
 dark_copy 'the archive' '\.archive-intro|\.group-title'
 dark_copy 'the reading list nav' ':has\(\.entry--book\)'
