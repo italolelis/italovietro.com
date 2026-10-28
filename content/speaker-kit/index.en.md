@@ -19,21 +19,21 @@ layout: "kit"
 draft: false
 
 role: "VP of Engineering, Parloa"
-topics: "Platform engineering, engineering organisations that grow without getting slower, and engineering leadership and culture"
+topics: "Platform engineering, growing teams without slowing them down, and leadership and culture"
 
 bio:
   short: >-
     Italo Vietro is VP of Engineering at Parloa, working on making AI conversations
     reliable at scale. Across almost two decades in Brazil and Europe, Italo has led
     platform and engineering organisations at Babbel, HelloFresh, N26 and Urban Sports
-    Club, and speaks about platform engineering, building engineering organisations
-    that grow without getting slower, and engineering leadership and culture.
+    Club, and speaks about platform engineering, growing teams without slowing them
+    down, and leadership and culture.
   long: |-
     Italo Vietro is VP of Engineering at Parloa, working on making AI conversations reliable at scale.
 
     Italo started out fixing computers in João Pessoa, Brazil, and built high-load systems for the Brazilian government's company registration before moving to Europe. Previous roles include VP of Platform at Babbel, leading more than 120 people across platform, infrastructure and reliability; Director of Engineering at HelloFresh, through its growth from 13 to more than 300 engineers; leading 40 engineers across core banking at N26; and helping build Urban Sports Club's TechHub in Spain.
 
-    Italo speaks about platform engineering, building engineering organisations that grow without getting slower, and engineering leadership and culture, at conferences including GoLab, GoDays, LeadingEng Berlin, DevTalks Romania and the Platform Engineering and Developer Experience Summit in London, and hosted 23 episodes of The Critical Channel podcast.
+    Italo speaks about platform engineering, growing teams without slowing them down, and leadership and culture, at conferences including GoLab, GoDays, LeadingEng Berlin, DevTalks Romania and the Platform Engineering and Developer Experience Summit in London, and hosted 23 episodes of The Critical Channel podcast.
 
 photos:
   - src: "headshot.jpg"

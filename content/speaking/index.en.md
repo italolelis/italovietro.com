@@ -14,7 +14,7 @@ math:
 
 Happy to talk at your event or on your podcast — [me@italovietro.com](mailto:me@italovietro.com).
 
-Mostly about what platforms cost, what reliability takes, and the parts of engineering leadership nobody puts on a slide.
+Mostly about platform engineering, growing teams without slowing them down, and leadership and culture.
 
 Organising an event? A bio and photos are in the [speaker kit](/speaking/kit/).
 

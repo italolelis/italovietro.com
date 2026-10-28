@@ -14,7 +14,7 @@ math:
 
 Fico feliz em falar no seu evento ou no seu podcast — [me@italovietro.com](mailto:me@italovietro.com).
 
-Geralmente sobre o custo das plataformas, o que confiabilidade exige, e as partes da liderança em engenharia que ninguém coloca em slide.
+Geralmente sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura.
 
 Organizando um evento? Bio e fotos estão no [kit do palestrante](/pt-br/palestras/kit/).
 

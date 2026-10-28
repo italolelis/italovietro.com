@@ -374,16 +374,21 @@ text_has "$PT_KIT" 'Italo Vietro é VP of Engineering na Parloa' 'the pt-br bios
 occurs "$EN_KIT" 'kit__bio' 2 'en: a short bio and a long one'
 occurs "$PT_KIT" 'kit__bio' 2 'pt-br: a short bio and a long one'
 # Italo's choices for the bios (October 2026): Urban Sports Club rather than Lykon,
-# "almost two decades" rather than a count of years, and his own three topics rather
-# than the speaking page's "nobody puts on a slide" line.
+# "almost two decades" rather than a count of years, and his own three topics in
+# plain words, "engineering" said once, where the speaking page's old line was
+# "the parts of engineering leadership nobody puts on a slide" (it read as written
+# by a machine, so it is gone from the whole site, not only from the kit).
 absent_from "$EN_KIT" 'Lykon' 'the en kit names Urban Sports Club, not Lykon'
 absent_from "$PT_KIT" 'Lykon' 'nor does the pt-br one'
 text_has "$EN_KIT" 'almost two decades' 'the en short bio says almost two decades'
 text_has "$PT_KIT" 'quase duas décadas' 'the pt-br one says quase duas décadas'
-absent_from "$EN_KIT" 'on a slide' 'the en kit drops the slide line'
-absent_from "$PT_KIT" 'em slide' 'and so does the pt-br one'
-text_has "$EN_KIT" 'speaks about platform engineering' 'the en bios name the topics Italo gave'
-text_has "$PT_KIT" 'fala sobre engenharia de plataforma' 'and so do the pt-br ones'
+nowhere 'nobody puts on a slide' 'the slide line appears nowhere in English'
+nowhere 'ninguém coloca em slide' 'nor in Portuguese'
+text_has "$EN_KIT" 'speaks about platform engineering, growing teams without slowing them down, and leadership and culture' 'the en bios name the topics Italo gave'
+text_has "$PT_KIT" 'fala sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura' 'and so do the pt-br ones'
+absent_from "$EN_KIT" 'engineering leadership and culture' 'the en topics say engineering once, not three times'
+text_has "$EN_SPEAKING" 'Mostly about platform engineering, growing teams without slowing them down, and leadership and culture.' 'the en speaking intro names the same topics, word for word'
+text_has "$PT_SPEAKING" 'Geralmente sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura.' 'the pt-br speaking intro, word for word'
 # Calls for papers cap a bio by words, so each says how long it is.
 matches "$EN_KIT" '[0-9]+ words' 'each en bio says how many words it is'
 matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'

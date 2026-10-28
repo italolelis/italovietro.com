@@ -20,21 +20,21 @@ layout: "kit"
 draft: false
 
 role: "VP of Engineering, Parloa"
-topics: "Engenharia de plataforma, organizações de engenharia que crescem sem ficar mais lentas, e liderança e cultura em engenharia"
+topics: "Engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura"
 
 bio:
   short: >-
     Italo Vietro é VP of Engineering na Parloa, onde trabalha para que conversas com
     IA funcionem de forma confiável em escala. Em quase duas décadas no Brasil e na
     Europa, liderou organizações de plataforma e engenharia na Babbel, HelloFresh, N26
-    e Urban Sports Club, e fala sobre engenharia de plataforma, como fazer organizações
-    de engenharia crescerem sem ficar mais lentas, e liderança e cultura em engenharia.
+    e Urban Sports Club, e fala sobre engenharia de plataforma, como crescer times sem
+    perder velocidade, e liderança e cultura.
   long: |-
     Italo Vietro é VP of Engineering na Parloa, onde trabalha para que conversas com IA funcionem de forma confiável em escala.
 
     Começou consertando computadores em João Pessoa e construiu sistemas de alta carga para o registro de empresas do governo brasileiro antes de se mudar para a Europa. Entre os cargos anteriores estão VP of Platform na Babbel, à frente de mais de 120 pessoas em plataforma, infraestrutura e confiabilidade; Director of Engineering na HelloFresh, durante o crescimento de 13 para mais de 300 engenheiros; a liderança de 40 engenheiros em core banking na N26; e a construção do TechHub da Urban Sports Club na Espanha.
 
-    Fala sobre engenharia de plataforma, como fazer organizações de engenharia crescerem sem ficar mais lentas, e liderança e cultura em engenharia, em conferências como GoLab, GoDays, LeadingEng Berlin, DevTalks Romania e o Platform Engineering and Developer Experience Summit, em Londres, e apresentou 23 episódios do podcast The Critical Channel.
+    Fala sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura, em conferências como GoLab, GoDays, LeadingEng Berlin, DevTalks Romania e o Platform Engineering and Developer Experience Summit, em Londres, e apresentou 23 episódios do podcast The Critical Channel.
 
 photos:
   - src: "headshot.jpg"
