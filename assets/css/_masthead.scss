@@ -1,0 +1,95 @@
+// ==============================
+// Masthead
+// ==============================
+//
+// The top of a post and of an Episode page (layouts/partials/masthead.html): a kicker,
+// the headline, the dek and one quiet meta line. The two kinds of page render the same
+// markup, so this is the one stylesheet for it, and an Episode page's only difference
+// is the size of its headline.
+//
+// It is built from the pieces the type module owns (_typography.scss, ADR-0006): the
+// `kicker`, `headline`, `dek` and `measure` mixins and the scale. Nothing here chooses a
+// face or a size of its own, except the meta line, which takes the scale's `ui` step.
+// Every colour is a token (_tokens.scss), so there is nothing to switch for dark.
+//
+// Before this, a post's title was the theme's 1.6rem sans with a byline and a word
+// count under it, and the Episode page's masthead was styled in _episode.scss under
+// `.episode .ep-*` and could not be reached from anywhere else. Moving it here is what
+// lets a post have it.
+//
+// One measure (ADR-0004). The masthead sits outside `.content`, so it takes the cap
+// itself, and the headline inside it starts on the same left edge as the prose.
+
+.masthead {
+    @include measure;
+    padding-top: 2.5rem;
+}
+
+// The kicker: where the piece sits, not what it says. Sans, small caps, muted; the
+// lead of it (an Episode's show, a post's category) a step darker.
+.masthead__kicker {
+    @include kicker;
+    margin: 0 0 0.875rem;
+}
+
+.masthead__lead,
+.masthead__kicker a {
+    color: var(--heading);
+}
+
+// A category is a link, and says so only when you point at it: the Accent for a link
+// under the pointer, as everywhere else (ADR-0001).
+.masthead__kicker a {
+    text-decoration: none;
+}
+
+.masthead__kicker a:hover {
+    color: var(--accent);
+}
+
+.masthead__sep {
+    margin: 0 0.45em;
+}
+
+// The headline. The type module sizes `.single .single-title` as a headline and gives it
+// a top margin to clear the header; inside a masthead the padding does that, and the
+// kicker, when there is one, is the first thing under it.
+.single .masthead__title {
+    margin: 0 0 1.1rem;
+}
+
+.masthead__dek {
+    @include dek;
+    margin: 0 0 1.25rem;
+}
+
+// One quiet line. Muted, at the scale's `ui` step; a post has one line of it, an Episode
+// page two, each its own block.
+.masthead__meta {
+    font-size: $text-ui;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 2rem;
+}
+
+.masthead__line {
+    display: block;
+}
+
+.masthead__meta strong {
+    color: var(--heading);
+    font-weight: 600;
+}
+
+// The byline is a link to the About page, and sits a step darker than the line around
+// it, on a hairline, as the footer's links do. Pointed at, it takes the Accent.
+.masthead__meta a {
+    color: var(--heading);
+    text-decoration: none;
+    border-bottom: 1px solid var(--hairline);
+    transition: color $transition-base;
+}
+
+.masthead__meta a:hover {
+    color: var(--accent);
+}

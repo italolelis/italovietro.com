@@ -1,6 +1,7 @@
 """
-A small procedural watercolour engine, for the plates on the episode pages
-(layouts/episodes/single.html). Run it through paint.py; see there for usage.
+A small procedural watercolour engine, for the Plates (layouts/partials/plate.html):
+the Episode pages' and the home page's. Run it through paint.py; see there for usage,
+and for how a plate script says where its Plate lives.
 
 Model: each wash accumulates pigment *density* D on a float field. Densities are
 turned into colour with Beer-Lambert -- paper * pigment ** D -- so overlapping

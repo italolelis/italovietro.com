@@ -12,68 +12,94 @@
 // /posts/ with nothing linking to them. The signpost sentence below is the fix,
 // and the biography it used to open with now lives on /about/.
 
-// One measure, one left edge.
+// The Greeting: the first thing on the page and the largest thing on it, and its h1.
 //
-// The theme's .page is `max-width: 1080px` centred, and the content inside it is
-// capped at 800px and centred again. The profile block sits outside that second
-// wrapper, so above roughly 1690px the tagline started 140px to the left of the
-// prose -- two left edges on a page whose whole point is that it commits to one.
+// One measure, one left edge. The theme's .page is `max-width: 1080px` centred, and
+// the content inside it is capped at 800px and centred again. The Greeting sits
+// outside that second wrapper, so without the cap here, above roughly 1690px it
+// started 140px to the left of the prose -- two left edges on a page whose whole point
+// is that it commits to one. Matching the cap rather than removing it from .content:
+// 800px is about 90 characters at this body size, and 1080 would be 120. See
+// docs/adr/0004. The number is `$measure` in _typography.scss, which owns it.
 //
-// Matching the cap here rather than removing it from .content: 800px is about 90
-// characters at this body size, and 1080 would be 120. See docs/adr/0004.
-.home .home-profile {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+// The headline step (2.75rem, in _typography.scss, which also gives it the serif and
+// the phone size) is deliberate. This is the only thing above the fold that is not
+// prose, and at anything smaller it read as a caption to the paragraph rather than as
+// an opening. It outsizes the section headings, which is the correct order, and since
+// the layout made it the page's h1 it is also the right one in the outline.
+//
+// Takes the heading colour rather than the body colour, because that is what it is
+// doing. No margin; 2rem of air above it and 0.5rem below, which is what the theme's
+// profile block kept around the line and what the paragraph under it is spaced
+// against. That block also pushed itself down by translateY(16vh) to centre a
+// profile-style home page, which left roughly 210px of empty space and a gap that
+// depended on viewport height. It is gone with the theme's index template (see
+// layouts/index.html), and so is the transform.
+//
+// It used to be styled from the theme's own selector, `.home .home-profile
+// .home-subtitle`, because anything one class shorter lost silently: the stylesheet
+// said 1.75rem for two commits while the browser showed 16px, and the theme's 8px of
+// padding pushed the line off the left edge. The layout draws its own element now, so
+// there is no theme rule to out-specify. A class rather than the bare h1, qualified by
+// `.home`: the theme sizes every h1, and an unscoped rule would reach any other page
+// that grew one.
+.home .home-greeting {
+    @include headline;
+    @include measure;
     text-align: left;
-    padding-top: 2rem;
+    padding: 2rem 0 0.5rem;
+    margin-top: 0;
     margin-bottom: 0;
-
-    // The theme pushes this block down by translateY(16vh) to vertically centre a
-    // profile-style home page. That left roughly 210px of empty space under the
-    // header, and made the gap depend on viewport height, which is why the
-    // content below carried a matching 13rem top margin to compensate. Resetting
-    // the transform removes both halves of that arrangement.
-    transform: none;
+    color: var(--heading);
 }
 
 // The avatar rules that used to live here are gone with the avatar itself: the
-// portrait moved to /about/ and `avatarURL` is empty, so the theme emits no
-// .home-avatar block at all on this page.
-
-// The greeting: the first thing on the page and the largest thing on it.
-//
-// Qualified to `.home .home-profile .home-subtitle` because that is the theme's
-// own selector, and it sets font-size 1rem, font-weight normal and .5rem of
-// padding there. Every earlier attempt to style this line from `.home
-// .home-subtitle` -- one class short -- lost silently: the line rendered at body
-// size while the stylesheet said 1.75rem, and the padding it kept pushed it 8px
-// right of the paragraph below, breaking the one left edge on the one element
-// that opens the page.
-//
-// 2.75rem is deliberate. This is the only thing above the fold that is not prose,
-// and at anything smaller it read as a caption to the paragraph rather than as an
-// opening. It outsizes the section headings, which is the correct order: the
-// greeting is the page's h1 in everything but markup.
-//
-// Takes the heading colour rather than the body colour, because that is what it
-// is doing.
-.home .home-profile .home-subtitle {
-    text-align: left;
-    padding: 0;
-    margin: 0;
-    font-size: 2.75rem;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-    color: $global-font-color;
-}
+// portrait moved to /about/, and the layout draws none.
 
 // The social icon rules that used to live here are gone with the icons. They were
 // the first interactive elements a visitor met, ahead of anything the site is
 // about, and an iconised social row appears on 1 of the 14 surveyed sites. The
 // links are text in the footer now -- see layouts/partials/footer.html.
+
+// --- The column ----------------------------------------------------------
+//
+// Everything below the Greeting sits in `.home-content`, inside the theme's `.single
+// .content`. That wrapper is what keeps the page's paragraphs and its one heading from
+// being the column's direct children: an article's rhythm and headings are set on
+// those (_typography.scss), and none of them reaches this page. Its one heading,
+// "Beyond the Code", is an h2 inside `section.home-beyond`, so it is not an article's
+// h2: no rule of ours is written for it, and it is set by the theme's heading rule for
+// anything in `.content` (the serif and the bold are the column's own): 28.5px, 1.2rem
+// above and below, no hairline under it. It is that on purpose, and it was before the
+// layout (#327): read from the computed style of the page built at be6f2ea and of this
+// one, in light and in dark, on a desktop and on a phone, the two are the same. (An
+// earlier version of this comment said the page "has always had its own, one step
+// smaller" style. It has none.) The layout draws the wrapper (layouts/index.html); it
+// used to be a div typed into the Markdown.
+//
+// Close to the line above it. The opening line is a greeting rather than a standalone
+// thesis, and a greeting belongs to the sentence that follows it -- there was 3.5rem
+// of air between "Hey" and the paragraph it introduces. (The 13rem margin that once
+// stood here existed to cancel the theme's translateY(16vh) on the profile block,
+// two hacks making up for one another; the block and the transform are both gone.)
+.home-content {
+    margin-top: 0.5rem;
+}
+
+// --- Intro ---------------------------------------------------------------
+//
+// Body colour, not muted. It was the largest block of text on the page and it was
+// deliberately greyed, which is a contradiction: the page dimmed its own substance
+// and then wondered why it read washed out. Muting is for metadata -- dates, authors,
+// section labels -- not for the paragraph a visitor is meant to read.
+//
+// Smaller than running text, and a step below the Greeting: at 1.25rem it outweighed
+// the line above it. It is a wrapper around the Markdown's first paragraphs, so the
+// paragraphs take its size and colour; their spacing is the theme's.
+.home-intro {
+    font-size: 1.125rem;
+    color: var(--ink);
+}
 
 // --- Signpost ------------------------------------------------------------
 //
@@ -90,35 +116,18 @@
 //
 // Links need no rules of their own: inside .single .content they already take the
 // accent.
+//
+// Same size as the intro and a looser leading, since it is a sentence of links. It
+// had `margin: 0 0 2.5rem`, which never applied: the theme's `.single .content p`
+// is two classes and an element, and wins, so the gap under it has always been the
+// theme's 0.5rem. Dropped rather than carried across, so this says what renders.
 .home-signpost {
     font-size: 1.125rem;
     line-height: 1.7;
-    margin: 0 0 2.5rem;
-}
-
-// --- Dark ----------------------------------------------------------------
-@mixin home-dark {
-    .home .home-profile .home-subtitle {
-        color: $heading-color-dark;
-    }
-}
-
-[theme=dark] {
-    @include home-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include home-dark;
-    }
 }
 
 // --- Mobile --------------------------------------------------------------
 @media (max-width: 680px) {
-    .home .home-profile .home-subtitle {
-        font-size: 2rem;
-    }
-
     .home-signpost {
         font-size: 1.0625rem;
     }
@@ -134,27 +143,7 @@
 // without asking to be looked at.
 //
 // Last on the page, so the greeting stays the first and loudest thing, and at
-// the full measure like everything else (docs/adr/0004). The sheet has a torn
-// alpha edge, so it reads as paper on either theme rather than as a box.
-.home .home-content .home-plate {
-    margin: 2.25rem 0 0;
-    text-align: left;
-}
+// the full measure like everything else (docs/adr/0004). It is an inline Plate
+// (`{{< plate >}}` in content/_index.*.md), framed and dimmed by _plate.scss like
+// every other: nothing about it is the home page's to style.
 
-.home .home-content .home-plate img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-// Paper does not glow: dimmed a little so a white sheet is not the brightest
-// thing on a dark screen. The same treatment as the episode plates.
-[theme=dark] .home .home-content .home-plate img {
-    filter: brightness(0.9);
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .home .home-content .home-plate img {
-        filter: brightness(0.9);
-    }
-}

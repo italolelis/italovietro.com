@@ -42,7 +42,7 @@ chapters:
     t: 261
     title: "Escreva você mesmo"
     summary: "Escrever é a única coisa que o Italo não entrega à IA; ele a usa como um pato de borracha que discorda dele. Construir segue o mesmo ciclo em casa e no trabalho: especificar, pesquisar, implementar, validar, publicar. Na gestão, skills cuidam da parte administrativa (avaliações de desempenho, preparação de entrevistas, as prioridades da manhã) e param antes das decisões."
-    plate: { src: "notebook.webp", size: "spot", alt: "Uma aquarela de um caderno de papel aberto, com linhas manuscritas e uma caneta deitada sobre ele.", caption: "Ele ainda anda com um caderno de papel." }
+    plate: { src: "notebook.webp", role: "spot", alt: "Uma aquarela de um caderno de papel aberto, com linhas manuscritas e uma caneta deitada sobre ele.", caption: "Ele ainda anda com um caderno de papel." }
     moments:
       - { t: "06:35", text: "Escrever me ajuda a pensar melhor. Então eu ainda escrevo eu mesmo." }
       - { t: "12:38", text: "Não gosto de delegar à IA a decisão de contratar." }
@@ -53,7 +53,7 @@ chapters:
     t: 960
     title: "A cozinha"
     summary: "Um engenheiro juntou skills num repositório e o chamou de cozinha. Quase ninguém usava, até que um time reescreveu um serviço problemático numa única Accelerator Week, sem tocar no código, passou pelas verificações da Parloa no SonarQube e o colocou em produção para uma fatia dos clientes. Depois, o *Show me how you cook* tornou a coisa social. Logo, 95% do código da Parloa saía da cozinha."
-    plate: { src: "toque.webp", size: "spot", alt: "Uma aquarela de um chapéu de chef branco sobre uma prateleira de madeira e um avental âmbar pendurado num gancho logo abaixo.", caption: "Um chapéu de chef para quem mostra algo. O avental de master chef para impacto real em clientes." }
+    plate: { src: "toque.webp", role: "spot", alt: "Uma aquarela de um chapéu de chef branco sobre uma prateleira de madeira e um avental âmbar pendurado num gancho logo abaixo.", caption: "Um chapéu de chef para quem mostra algo. O avental de master chef para impacto real em clientes." }
     moments:
       - { t: "18:55", size: "pull", text: "A cozinha não é nada além de um monte de skills juntas. [Ela] é o harness." }
     lesson: "**Prove o harness em algo real e depois torne a adoção social.** Um repositório bonito que meia dúzia de pessoas conhece não é um sistema."

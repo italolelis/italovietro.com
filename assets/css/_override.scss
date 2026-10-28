@@ -3,13 +3,22 @@
 // 覆盖变量
 // ==============================
 //
-// The site's palette lives here. This file is imported after the theme's own
+// The palette's Sass inputs live here. This file is imported after the theme's own
 // variables but before anything that consumes them, so a plain reassignment
 // wins over the theme's `!default` value and every component that already
 // reads these variables picks up the new value without being touched.
 //
+// These are the values the theme reads at compile time, in its own light and dark
+// rules. The site's own components do not read them: they read the colour tokens in
+// _tokens.scss, which wires each to the variable defined here, so a value is chosen
+// once and a component never says which mode it is in.
+//
 // Every ratio below was measured against the theme's actual background values
-// (#fff light, #292a2d dark), not assumed.
+// (#fff light, #292a2d dark), not assumed, and the build gate measures the pairs
+// again from the compiled tokens. (Doing so found four
+// figures below that did not match their colours, now corrected: body text on white is
+// 18.67:1, not 15.72:1; the dark heading is 11.43:1, not 11.90:1; and the panel icon is
+// 5.47:1 and 9.70:1, not 5.28:1 and 9.86:1.)
 
 // --- Accent -------------------------------------------------------------
 //
@@ -63,14 +72,14 @@ $selection-text-color-dark: #fff; // 9.32:1 on the dark selection
 // --- Headings -----------------------------------------------------------
 //
 // Dark mode only. Light mode needs nothing here: body text is a near-black at
-// 15.72:1, so a heading in the same colour already reads as the strongest thing
+// 18.67:1, so a heading in the same colour already reads as the strongest thing
 // on the page. Dark inverted that -- headings took $global-font-color-dark, the
 // exact colour of the body text under them, so hierarchy rested on size alone and
 // every page read flat.
 //
 // This is not the bold-inside-prose case, which stays inherited on purpose (see
 // _custom.scss): a heading is a different element doing a different job.
-$heading-color-dark: #e7e5e4; // 11.90:1 on #292a2d, against body text at 6.16:1
+$heading-color-dark: #e7e5e4; // 11.43:1 on #292a2d, against body text at 6.16:1
 
 // --- Muted text ---------------------------------------------------------
 //
@@ -109,8 +118,8 @@ $entry-podcast-color-dark: #bb8fce; // 5.42:1 on #292a2d
 // Panel is teal rather than a fourth warm hue: it has to be separable from both
 // the amber accent the talks take and the podcast purple, and the cool side of
 // the wheel is the only place left that manages both at icon size.
-$entry-panel-color: #0f766e; // 5.28:1 on #fff
-$entry-panel-color-dark: #5eead4; // 9.86:1 on #292a2d
+$entry-panel-color: #0f766e; // 5.47:1 on #fff
+$entry-panel-color-dark: #5eead4; // 9.70:1 on #292a2d
 
 // --- Motion -------------------------------------------------------------
 $transition-fast: 0.15s ease;

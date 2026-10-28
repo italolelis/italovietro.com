@@ -1,0 +1,210 @@
+// ==============================
+// Colour tokens
+// ==============================
+//
+// Every colour this site chooses is a custom property, set here once on :root (light)
+// and overridden once on [theme=dark] (dark). A component reads `var(--ink)` and
+// neither knows nor says which mode it is in, so switching theme is switching these
+// values, and a component has no dark copy to forget.
+//
+// What this replaced: each colour rule was written three times, `.thing`,
+// `[theme=dark] .thing` and `@media (prefers-color-scheme: dark) { [theme=auto]
+// .thing }`, about a seventh of the stylesheet in all. The third never matched.
+// Nothing sets `theme=auto`: baseof.html sets `dark` (from the visitor's choice or
+// their OS, through `defaultTheme = "auto"`), and the theme's own script toggles
+// light and dark. The copies were dead weight that the docs and the pre-flight
+// checklist still demanded, and they had drifted from each other: a dark rule that
+// lost the :has() guard its light twin carried, a dark rule with no auto twin.
+//
+// The theme sets `theme` on <body>, so `[theme=dark]` is a rule on <body> and every
+// token below is inherited from it. There is no `[theme=light]`: light is the default.
+//
+// This file is the one place a colour's value is chosen. A value the theme's own
+// stylesheet also reads (the accent, the body greys, the borders) is still defined in
+// _override.scss, because the theme reads it at compile time, and is only wired to a
+// token here. A value only this site uses is defined here. Either way, a component
+// takes a token and never a literal.
+//
+// Every ratio below was measured against the real backgrounds (#fff and #292a2d), and
+// scripts/check-build.sh measures the pairs again from the compiled values, in both
+// modes, so a later edit cannot quietly take one under its threshold: 4.5:1 for text,
+// 3:1 for anything that is not.
+//
+//   token            what it is                           light      dark
+//   --paper          the page                             #fff       #292a2d
+//   --header         the header's own bar                 #f8f8f8    #252627
+//   --ink            body text                            #161209    #a9a9b3
+//   --heading        headlines                            #161209    #e7e5e4
+//   --muted          dates, labels, captions              #57534e    #a9a9b3
+//   --hairline       the faint divider under a heading    #f0f0f0    #363636
+//   --rule           a visible rule: a quote's bar        #d6d3d1    #4b4d52
+//   --accent         the Accent (ADR-0001)                #b45309    #f59e0b
+//   --accent-hover   the Accent, hovered                  #92400e    #fbbf24
+//   --accent-wash    the tint under a hovered Entry       6% accent  10% accent
+//   --selection-ink  text over a selection                #161209    #fff
+//   --entry-podcast  the podcast icon                     #9b59b6    #bb8fce
+//   --entry-panel    the panel icon                       #0f766e    #5eead4
+//   --ep-ink         the Episode pages' ink               #3d4f7a    #9db0e0
+//   --on-ink         text on a filled ink                 #fff       #1c1d20
+//   --ep-fill-1..4   the grey bands of an Episode figure  greys      greys
+//   --ep-lesson      the lesson box                       #f7f2e7    a white wash
+//   --ep-tip         the timeline's quote preview         #fffdf7    #34353a
+//   --ep-bar         a reader's guess, drawn as a bar     #78716c    #8a8c93
+//   --ep-paper       the timeline's ruler                 #efe7d4    #cfc5ae
+//   --ep-ruler-ink   the ink printed on that ruler        #3d4f7a    #3d4f7a
+//   --plate-filter   how a watercolour plate is dimmed    none       brightness(0.9)
+//
+// A token that does not change with the mode (--ep-ruler-ink) is set on :root only,
+// and the gate asserts [theme=dark] does not set it.
+
+// The Episode ink is a Sass variable too, because the ruler's ticks are this ink at
+// several alphas, and a custom property cannot be given one.
+$ep-ink: #3d4f7a;
+
+// --- The page -------------------------------------------------------------
+//
+// The theme's own values, read from the theme's own variables so that the header, the
+// body and a component of ours cannot disagree about what the page is.
+:root {
+    --paper: #{$global-background-color};
+    --header: #{$header-background-color};
+
+    // --- Text ---------------------------------------------------------------
+    //
+    // Three tiers: 18.67:1 for body text in light and 6.16:1 in dark, and a heading at
+    // 18.67:1 and 11.43:1. In light the body text is a near-black that is already the
+    // strongest thing on the page, so a heading takes the same value. Dark inverted
+    // that: headings took the body colour, so hierarchy rested on size alone and every
+    // page read flat. --heading is the brighter step above it, and the one place
+    // that is decided for every headline, the Greeting and the figure titles alike.
+    --ink: #{$global-font-color};
+    --heading: #{$global-font-color};
+
+    // Warm neutrals, chosen to sit with the accent rather than against it. Not the
+    // theme's $global-font-secondary-color, which measures 2.33:1 on white and
+    // 2.18:1 on the dark page; the theme variable stays for what it treats as
+    // decoration. In dark this is the body grey, on purpose: it was #a8a29e against
+    // #a9a9b3, a 1% difference that existed in the stylesheet and nowhere on the
+    // screen. The tier is carried there by size and weight, which is what was
+    // distinguishing metadata all along. Light keeps two values, where #57534e (7.63:1)
+    // against a near-black body is a difference you can see.
+    --muted: #{$muted-text-color};
+
+    // --- Lines --------------------------------------------------------------
+    //
+    // None of these is text, so none has a contrast to meet; they only have to be
+    // seen. --hairline is the theme's border colour, under a heading that heads a
+    // list. --rule is the heavier one: the bar beside a quotation, the outline of a
+    // box, the rule a figure sits between. The Episode pages and the blockquote had
+    // each written this grey out and agreed by accident.
+    --hairline: #{$global-border-color};
+    --rule: #d6d3d1;
+
+    // --- The Accent (ADR-0001) ---------------------------------------------
+    //
+    // One token, so the roles it plays are countable: `var(--accent)` in the
+    // compiled stylesheet, and the gate pins how many there are. Amber/terracotta,
+    // replacing the theme's #2d96bd, which measured 3.38:1 on white. Hover is the
+    // same hue a step darker in light and lighter in dark. The wash is the accent at
+    // a low alpha, derived from it here rather than typed again, and stronger in dark
+    // where the same alpha reads fainter. Measured on white: 5.02:1 and 7.09:1; on the
+    // dark page 6.68:1 and 8.60:1, and on the headers (#f8f8f8, #252627), where the
+    // active nav item sits, 4.73:1 and 7.06:1.
+    --accent: #{$single-link-color};
+    --accent-hover: #{$single-link-hover-color};
+    --accent-wash: #{rgba($single-link-color, 0.06)};
+
+    // The text colour over selected text, which the theme leaves to the browser. The
+    // theme paints the selection itself from $selection-color; measured against that
+    // composite, not against the page beneath it.
+    --selection-ink: #{$selection-text-color};
+
+    // --- Entry types --------------------------------------------------------
+    //
+    // Talk, host and upcoming take the Accent. A podcast and a panel each keep a hue
+    // of their own so the types stay tellable apart at a glance. These are icon
+    // colours, so the threshold is 3:1, and every value clears it: 4.67:1 and 5.42:1 for
+    // the podcast, 5.47:1 and 9.70:1 for the panel. Panel is teal
+    // rather than a fourth warm hue: it has to be separable from both the amber and
+    // the purple, and the cool side of the wheel is the only place left that manages
+    // both at icon size.
+    --entry-podcast: #{$entry-podcast-color};
+    --entry-panel: #{$entry-panel-color};
+
+    // --- The Episode pages --------------------------------------------------
+    //
+    // One ink, the indigo the watercolours are painted in, so the furniture and the
+    // plates read as one set. The Accent keeps its roles (ADR-0001) and gains none
+    // here: a link on an Episode page is amber because it is a link, and nothing is
+    // amber for decoration. Everything else that marks something uses this.
+    --ep-ink: #{$ep-ink};
+
+    // What goes on a solid fill of it, or of --heading: white on the light ink at
+    // 8.08:1, near-black on the dark one at 7.80:1.
+    --on-ink: #fff;
+
+    // The grey bands under their own labels in a figure: 12.5:1 and up for body text
+    // in light, 6.4:1 and up in dark, so telling them apart never rests on the fill.
+    --ep-fill-1: #e7e5e4;
+    --ep-fill-2: #d6d3d1;
+    --ep-fill-3: #cfcac4;
+    --ep-fill-4: #c4beb7;
+
+    // The one boxed element on the page. Body text on it measures 16.73:1 and the ink
+    // kicker 7.24:1. In dark it is a white wash on the page, composited to #333436:
+    // 5.35:1 for text, 5.77:1 for the kicker.
+    --ep-lesson: #f7f2e7;
+
+    // The timeline's quote preview. Body text on it: 18.36:1 in light, 9.74:1 in dark.
+    --ep-tip: #fffdf7;
+
+    // The bar a reader's own guess draws, quieter than the answer's. 4.80:1 on the
+    // page in light, 4.27:1 in dark; it is a bar, not text, so 3:1 applies.
+    --ep-bar: #78716c;
+
+    // The timeline's ruler is paper, like the plates: a physical object on the page,
+    // in both themes, and the ink printed on it does not follow the mode. 6.56:1 on
+    // the light paper; the dark paper is dimmed so it does not glare, and the same
+    // ink measures 4.72:1 on it. Everything drawn on the ruler takes it, the quote dot
+    // under the pointer included: that read `--ep-ink`, the light indigo of the dark
+    // page, and measured 1.26:1 on the dark paper.
+    --ep-paper: #efe7d4;
+    --ep-ruler-ink: #{$ep-ink};
+
+    // Paper does not glow: a watercolour plate is dimmed a little in dark, so a white
+    // sheet is not the brightest thing on a dark screen.
+    --plate-filter: none;
+}
+
+[theme=dark] {
+    --paper: #{$global-background-color-dark};
+    --header: #{$header-background-color-dark};
+
+    --ink: #{$global-font-color-dark};
+    --heading: #{$heading-color-dark};
+    --muted: #{$muted-text-color-dark};
+
+    --hairline: #{$global-border-color-dark};
+    --rule: #4b4d52;
+
+    --accent: #{$single-link-color-dark};
+    --accent-hover: #{$single-link-hover-color-dark};
+    --accent-wash: #{rgba($single-link-color-dark, 0.1)};
+    --selection-ink: #{$selection-text-color-dark};
+
+    --entry-podcast: #{$entry-podcast-color-dark};
+    --entry-panel: #{$entry-panel-color-dark};
+
+    --ep-ink: #9db0e0;
+    --on-ink: #1c1d20;
+    --ep-fill-1: #3a3b40;
+    --ep-fill-2: #44464b;
+    --ep-fill-3: #4e5056;
+    --ep-fill-4: #575a60;
+    --ep-lesson: #{rgba(#fff, 0.045)};
+    --ep-tip: #34353a;
+    --ep-bar: #8a8c93;
+    --ep-paper: #cfc5ae;
+
+    --plate-filter: brightness(0.9);
+}

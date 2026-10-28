@@ -1,0 +1,88 @@
+{{- /* layouts/partials/entry.html */ -}}
+{{- /*
+    The Entry (CONTEXT.md): one item in one of the lists. A book on the reading list,
+    a talk on the speaking page, an Upcoming appearance, a post in the writing archive
+    and on a tag page all come through here, so there is one markup and one stylesheet
+    (assets/css/_entry.scss) and they cannot drift apart again. They had: five
+    templates, three stylesheets, a hover row on two of the lists and not the third,
+    and a title that was 600 weight on one page and 700 on another.
+
+    Called with a dict:
+
+        title     (required) the words. Plain text, or HTML that is already safe.
+        link      where the title goes. Absolute (http...) opens in a new tab, anything
+                  else stays on the site. Without one the title is plain text, as a
+                  talk's is: its links sit on the meta line instead.
+        meta      the muted line under the title: an author, a venue.
+        links     a list of dicts, { label, url }, on the meta line after `meta`. A
+                  talk's Watch, Slides and Event. Absolute ones open in a new tab.
+        date      the right-hand column. Text, because "2020-2023" and "13-14 March"
+                  are dates here. A source goes in front of it ("Parloa Labs · June 4"):
+                  that is how a row tells Elsewhere from a post written here.
+        note      a sentence or two of HTML under the rest. Only the reading list uses
+                  one; the speaking page and the archive are lists, by decision.
+        kind      what it is: book, post, talk, panel, podcast, host, upcoming. Becomes
+                  `entry--<kind>`, and picks the icon a talk-like Entry has. Default post.
+        featured  bool. The heavier treatment of the reading list's "Start Here".
+        level     the heading level of the title, default 3: the h2 above a list is the
+                  page's, so a title is the next one down. A page whose title is the h1
+                  and whose Entries follow it directly (a tag page) passes 2.
+
+    Only `title` is required, and a caller that has nothing to pass for the rest passes
+    nothing: an Entry with no date has no date column, one with no meta has no second
+    line.
+
+    The title is a heading because the Entries are what a page's outline is made of.
+    It was an h4 on the reading list for a while, which skipped a level and left screen
+    readers with a broken outline; the level is a parameter so no page has to skip one.
+
+    There is no <article> or <li> around it. A shortcode cannot open a list, so the
+    Entries that Markdown writes cannot be one, and an <article> per book would have
+    a screen reader announce twenty articles.
+*/ -}}
+{{- $kind  := .kind | default "post" -}}
+{{- $level := .level | default 3 -}}
+{{- $icon  := index (dict "talk" "fa-microphone" "panel" "fa-users" "podcast" "fa-podcast" "host" "fa-headphones" "upcoming" "fa-calendar-day") $kind -}}
+{{- $link  := .link | default "" -}}
+{{- $anchor := `<a href="%s"%s>%s</a>` -}}
+{{- $external := ` target="_blank" rel="noopener noreferrer"` -}}
+<div class="entry entry--{{ $kind }}{{ if .featured }} entry--featured{{ end }}{{ if .note }} entry--noted{{ end }}">
+    <div class="entry__head">
+        {{- printf `<h%d class="entry__title">` $level | safeHTML -}}
+        {{- with $icon }}<span class="entry__icon"><i class="fas {{ . }}"></i></span>{{ end -}}
+        {{- with $link -}}
+            <a href="{{ . }}"{{ if hasPrefix . "http" }}{{ $external | safeHTMLAttr }}{{ end }}>{{ $.title }}</a>
+        {{- else -}}
+            {{ $.title }}
+        {{- end -}}
+        {{- printf `</h%d>` $level | safeHTML -}}
+        {{- if or .meta .links }}
+        <div class="entry__meta">
+            {{- with .meta }}<span>{{ . }}</span>{{ end -}}
+            {{- /* Collected into one slice and joined, rather than emitted inline with
+                   a separator before each optional part. A talk has four optional kinds
+                   of link, so the inline form needs a condition per boundary, and an
+                   earlier version of the talk shortcode had already lost one: a talk with
+                   both a recording and several cities ran "Watch" straight into the
+                   first city with no separator. Joining a list cannot have that bug,
+                   whatever combination an Entry carries. */ -}}
+            {{- $anchors := slice -}}
+            {{- range .links -}}
+                {{- $ext := cond (hasPrefix .url "http") $external "" -}}
+                {{- $anchors = $anchors | append (printf $anchor (.url | htmlEscape) $ext (.label | htmlEscape)) -}}
+            {{- end -}}
+            {{- with $anchors }}<span class="entry__links">{{ delimit . " &middot; " | safeHTML }}</span>{{ end -}}
+        </div>
+        {{- end -}}
+        {{- with .date }}
+        {{- /* After the meta in the markup, and first in the row on a wide screen: the
+               stylesheet puts it in the title's row, in the right-hand column. In
+               source order it is read after what the Entry is, which is the order a
+               phone shows it in too. */ -}}
+        <span class="entry__date">{{ . }}</span>
+        {{- end }}
+    </div>
+    {{- with .note }}
+    <div class="entry__note">{{ . }}</div>
+    {{- end }}
+</div>

@@ -1,11 +1,41 @@
-# Strings for the episode pages (layouts/episodes/single.html and partials/episode/).
+# Strings the site adds to the theme's: the masthead (partials/masthead.html, shared
+# by posts and Episode pages) and the Episode pages (layouts/episodes/single.html and
+# partials/episode/).
 #
 # Keys are quoted so the dot is part of the name rather than a nested table. Hugo
 # merges this file over the theme's own en.toml, so nothing here may reuse one of
 # the theme's keys unless it means to replace it.
 
-["episode.and"]
+# The masthead. Generic, not `episode.*`: a post and an Episode page render the same
+# partial, and what it says is said once. The dates are written out ("October 7, 2026")
+# by the partial, in the page's language, and passed in.
+["masthead.by"]
+other = "By {{ . }}"
+["masthead.readingTime"]
+other = "{{ . }} min read"
+["masthead.updated"]
+other = "Updated {{ . }}"
+["masthead.and"]
 other = " and "
+["masthead.basedOn"]
+other = "Based on <strong>{{ .Title }}</strong>, with {{ .Hosts }}"
+["masthead.released"]
+other = "Released {{ . }}"
+["masthead.length"]
+other = "{{ . }} min"
+["masthead.writtenUp"]
+other = "Written by Claude from a transcript of the episode, {{ . }}"
+
+# The foot of a post (partials/single/footer.html and share.html). The share row is
+# on Episode pages too.
+["post.share"]
+other = "Share"
+["post.previous"]
+other = "Previous"
+["post.next"]
+other = "Next"
+
+# The Episode pages.
 ["episode.mapLabel"]
 other = "Episode map"
 ["episode.chapter"]
@@ -25,14 +55,6 @@ other = "{{ . }} minutes"
 other = "Intro"
 ["episode.of"]
 other = "of {{ . }}"
-["episode.basedOn"]
-other = "Based on <strong>{{ .Title }}</strong>, with {{ .Hosts }}"
-["episode.released"]
-other = "Released {{ . }}"
-["episode.length"]
-other = "{{ . }} min"
-["episode.writtenUp"]
-other = "Written by Claude from a transcript of the episode, {{ . }}"
 ["episode.lesson"]
 other = "The lesson"
 ["episode.disclaimer"]
@@ -63,3 +85,21 @@ other = "The longest stage is %s."
 other = "Stages to automate"
 ["episode.tipHint"]
 other = "Click to read it"
+
+# The words an Entry's links carry on the speaking page (layouts/shortcodes/talk.html).
+# They were hard-coded English in the shortcode, so the Portuguese page said "Watch"
+# and "Slides" between Portuguese cities. A talk may still pass its own label for
+# Highlights, but the default is here.
+["entry.highlights"]
+other = "Highlights"
+["entry.watch"]
+other = "Watch"
+["entry.slides"]
+other = "Slides"
+["entry.event"]
+other = "Event"
+# A day and month with no year, as the writing archive writes a date (its year is the
+# heading above the group): a Go time layout, so a language puts the day and month in its
+# own order. Used with `time.Format`, which writes the month name in the page's language.
+["entry.dayMonth"]
+other = "January 2"

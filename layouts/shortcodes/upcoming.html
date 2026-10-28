@@ -11,8 +11,9 @@
     because the failure mode is silent: nobody visits their own speaking page the
     week after a talk to check it aged correctly.
 
-    Markup matches the talk shortcode, so the group sits in the same visual language
-    as the two below it.
+    Each one is an Entry (layouts/partials/entry.html), the same as the talks below it,
+    so the group sits in the same visual language by construction and not by a copy of
+    the markup, which is what this used to be.
 
     Parameters: heading (required -- passed per language, since the data file holds
     venues and dates rather than prose).
@@ -27,19 +28,9 @@
 {{- with $future }}
 <h2 class="upcoming-title">{{ $heading }}</h2>
 {{- range . }}
-<div class="talk-entry talk-entry--upcoming">
-    <div class="talk-entry__header">
-        <h3 class="talk-entry__title">
-            <span class="talk-entry__type-icon"><i class="fas fa-calendar-day"></i></span>
-            {{- with .url }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ end -}}
-            {{ .event }}
-            {{- with .url }}</a>{{ end -}}
-        </h3>
-        <div class="talk-entry__meta">
-            {{- with .venue }}<span class="talk-entry__event">{{ . }}</span>{{ end }}
-            <span class="talk-entry__date">{{ .display }}</span>
-        </div>
-    </div>
-</div>
+{{- /* The title links to the event when there is a page for it, and the Entry (the
+       partial) opens it in a new tab. The calendar icon is the partial's, picked by
+       the `upcoming` kind. */ -}}
+{{- partial "entry.html" (dict "title" .event "link" .url "meta" .venue "date" .display "kind" "upcoming") -}}
 {{- end }}
 {{- end -}}

@@ -1,34 +1,345 @@
 // ==============================
-// Typography
+// Typography: one voice for the whole site
 // ==============================
 //
-// Headings, in dark mode. Nothing else belongs here yet.
+// Serif to read, sans to navigate (docs/adr/0006).
 //
-// Imported last on purpose. The heading rules it overrides live in _reading-list
-// and in the theme, and several of them are two-class selectors of exactly this
-// specificity -- so this file wins by cascade order rather than by being written
-// more specifically than it needs to be. Keep it last in _custom.scss.
+// A headline, a dek and the running text of an article are set in a serif. Everything
+// you use to get around, or to scan -- the header, the footer, a kicker, a meta line,
+// a list of Entries, a table, a caption -- stays in the system sans. It is how a
+// newspaper feature sets a page: the reading is in one face and the furniture around
+// it is in another, so you can tell at a glance which is which.
 //
-// Light mode is absent from this file by design: body text there is #161209 at
-// 15.72:1, so a heading in the same colour is already the strongest text on the
-// page. Only dark had headings and body sharing one colour.
+// This file owns the voice, and every page stylesheet reads from it:
+//
+//   - the two stacks, as mixins (`serif`, `sans`), and the serif as a custom
+//     property, so the stack is written once and every use of it is the same
+//     `var(--font-serif)`. A page stylesheet sets no font-family of its own;
+//   - a short scale of sizes;
+//   - the pieces a masthead is made of (`headline`, `display`, `dek`, `kicker`);
+//   - the Measure (docs/adr/0004), as one number and one mixin;
+//   - what is true of every page that renders through `.single`: the column, the
+//     title above it, the section headings, the lists and the rule.
+//
+// It is imported before the page stylesheets, not after. It used to be last, so that
+// its heading colours won by cascade order over two-class rules written earlier in
+// other files; the heading rules are all in here now and none are restated, so which
+// file comes last no longer decides one.
+//
+// No webfont is loaded (ADR-0002). Charter ships with macOS and iOS, Sitka and
+// Cambria with Windows, Bitstream Charter with most Linux desktops, and Georgia is
+// everywhere else. Typography stays at the mercy of the visitor's OS, which is the
+// trade that ADR already made for the sans.
 
-@mixin headings-dark {
-    .single-title,
-    .archive .single-title,
-    .single .content h1,
-    .single .content h2,
-    .single .content h3 {
-        color: $heading-color-dark;
+// --- The two stacks ------------------------------------------------------
+$serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, "Iowan Old Style", Georgia, serif;
+
+// A custom property because the stack is long and every headline names it: pasted
+// into each rule it can drift by one family in one place and look identical in a
+// diff. The sans needs no twin -- the theme already publishes its own as
+// `--global-font-family`.
+:root {
+    --font-serif: #{$serif};
+}
+
+@mixin serif {
+    font-family: var(--font-serif);
+}
+
+@mixin sans {
+    font-family: var(--global-font-family);
+}
+
+// --- The scale -----------------------------------------------------------
+//
+// A short scale, and the top of it is in use: titles, headings, the dek and running
+// text all read from it. The small steps (ui, caption, kicker) name the sizes the
+// meta lines, nav and Entries already use, and are taken up as those are reworked;
+// until then a page that sets 0.875rem itself is setting `$text-ui`. The `-small`
+// values are the same step on a phone (680px, aligned with the theme's own breakpoint).
+$text-display: 3.75rem; // an Episode page's headline
+$text-display-small: 2.5rem;
+$text-headline: 2.75rem; // a page or post title, and the Greeting
+$text-headline-small: 2rem;
+$text-section: 1.75rem; // an article's h2
+$text-section-small: 1.5rem;
+$text-subsection: 1.375rem; // h3, and the dek
+$text-subsection-small: 1.1875rem;
+$text-body: 1.1875rem; // running text
+$text-body-small: 1.125rem;
+$text-ui: 0.875rem; // meta lines, and the nav inside a page
+$text-caption: 0.8125rem; // captions, an Entry's second line
+$text-kicker: 0.75rem;
+// Taken up by the Entry (_entry.scss): its title, and the note under it. The title is
+// the one size in a list that is neither running text nor furniture, and a note is a
+// sentence set a step under the prose it sits beside.
+$text-entry: 1rem;
+$text-note: 0.9375rem;
+
+// --- The Measure ---------------------------------------------------------
+//
+// 800px is about 85 characters at the body size above, the upper end of the
+// comfortable range rather than the middle of it (ADR-0004 weighed 680px and left
+// it). One number here, so changing it is one edit, and a mixin for the elements
+// that sit outside `.content` -- a masthead, a banner, a full-width figure -- which
+// must either take it or say why not.
+$measure: 800px;
+
+@mixin measure {
+    max-width: $measure;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+// --- Masthead pieces -----------------------------------------------------
+
+// The headline of a page or a post, and of the Greeting, which is the home page's.
+// Bold, tightly set, balanced: a title wraps into two even lines instead of one
+// long one and a stranded word.
+@mixin headline($size: $text-headline, $small: $text-headline-small) {
+    @include serif;
+    font-size: $size;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+
+    @media (max-width: 680px) {
+        font-size: $small;
     }
 }
 
-[theme=dark] {
-    @include headings-dark;
+// The step above it, for a page that is the feature and not an entry in a list --
+// an Episode page. Larger, and at the regular weight: past about 3rem a serif at
+// bold shouts, and at regular it reads as set.
+@mixin display {
+    @include serif;
+    font-size: $text-display;
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+
+    @media (max-width: 680px) {
+        font-size: $text-display-small;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-    [theme=auto] {
-        @include headings-dark;
+// The line under a headline that says what the piece is. Italic, so it cannot be
+// taken for the first paragraph.
+@mixin dek {
+    @include serif;
+    font-size: $text-subsection;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--heading);
+    text-wrap: pretty;
+
+    @media (max-width: 680px) {
+        font-size: $text-subsection-small;
     }
+}
+
+// The small-caps line above a headline: where the piece sits, not what it says.
+// Sans, because it labels.
+@mixin kicker {
+    @include sans;
+    font-size: $text-kicker;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+// Running text. Set on `.content`, so a paragraph has no rule of its own and a post,
+// About and an Episode page read in the same face and at the same size. 1.65 leading
+// is what a serif at this size wants; the theme's 1.5rem was written for the sans.
+@mixin prose {
+    @include serif;
+    font-size: $text-body;
+    line-height: 1.65;
+
+    @media (max-width: 680px) {
+        font-size: $text-body-small;
+    }
+}
+
+// --- Titles --------------------------------------------------------------
+//
+// The theme sizes `.single-title` at 1.6rem bold sans with 140% leading, set for
+// one-line post titles, and right-aligns it on `.special` pages and the archive. A
+// page title is a headline, and starts on the left edge of the text under it.
+//
+// The title sits outside `.content`, so it took the full width of `.page` while the
+// prose sat in the Measure centred inside it, and started roughly 140px to its left
+// on a wide screen: the defect ADR-0004 records for the home page, on every other
+// page. Same number as the column, one left edge.
+.single .single-title,
+.archive .single-title {
+    @include headline;
+    text-align: left;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.single .single-title {
+    @include measure;
+}
+
+// --- The column ----------------------------------------------------------
+.single .content {
+    @include measure;
+    @include prose;
+}
+
+// The rhythm of prose: a paragraph or a list that is a direct child of the column,
+// which is what Markdown writes. Not every `p` inside it -- an Entry's description
+// is rendered Markdown too, and a paragraph there is spaced by the Entry.
+.single .content > p {
+    margin: 0 0 1.1em;
+    text-wrap: pretty;
+}
+
+.single .content > ul,
+.single .content > ol {
+    margin: 0 0 1.1em;
+}
+
+.single .content > ul > li + li,
+.single .content > ol > li + li {
+    margin-top: 0.35em;
+}
+
+// A quotation. The theme draws a blue box with a thick blue bar, a second accent that
+// belongs to nothing else here (docs/adr/0001 counts the accent's roles, and this is
+// not one of them). Set it as a newspaper does: italic, behind a quiet rule, in the
+// colour of the text around it. The rule is decoration, not information, so it has
+// no contrast to meet; it is the same grey the Episode page rules its quotes with
+// (`--rule`).
+.single .content blockquote {
+    display: block;
+    margin: 1.75rem 0;
+    padding: 0 0 0 1.25rem;
+    border: 0;
+    border-left: 2px solid var(--rule);
+    background: none;
+    font-style: italic;
+}
+
+.single .content blockquote p {
+    margin: 0 0 0.6em;
+}
+
+.single .content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+// Not prose: a table is read across and down, and a caption labels the figure it
+// sits under. Inside a serif column they would otherwise inherit its face.
+.single .content table,
+.single .content figcaption {
+    @include sans;
+}
+
+// --- Section headings ----------------------------------------------------
+//
+// An article's headings: the ones Markdown writes, which are direct children of the
+// column. Not every heading inside it. A shortcode's own heading -- an Entry's title,
+// a figure's -- is nested in the markup it belongs to and is styled there; reaching
+// in from here is what made a page's rules lose to the site's on specificity, one
+// heading at a time.
+//
+// Serif, bold, no ornament. The theme prefixes every heading with a "#" or "|" in the
+// accent through `.header-mark`; the "#" read as markdown that failed to render and
+// was one of amber's four jobs (docs/adr/0001), and the "|" is the same job again.
+//
+// The rule that used to sit under every h2 belongs to the pages whose h2 head a list
+// of Entries (the reading list and the speaking page), which declare it themselves.
+// In an article it is furniture the headline does not need.
+.single .content > h1,
+.single .content > h2,
+.single .content > h3,
+.single .content > h4,
+.single .content > h5,
+.single .content > h6 {
+    @include serif;
+    font-weight: 700;
+    text-wrap: balance;
+}
+
+.single .content > h2 {
+    font-size: $text-section;
+    line-height: 1.15;
+    margin: 3.5rem 0 1rem;
+
+    @media (max-width: 680px) {
+        font-size: $text-section-small;
+        margin-top: 3rem;
+    }
+}
+
+.single .content > h3 {
+    font-size: $text-subsection;
+    line-height: 1.25;
+    margin: 2.5rem 0 0.75rem;
+}
+
+.single .content > h4,
+.single .content > h5,
+.single .content > h6 {
+    font-size: $text-body;
+    line-height: 1.3;
+    margin: 2rem 0 0.5rem;
+}
+
+.single .content .header-mark {
+    display: none;
+}
+
+.single .content > hr {
+    margin: 2.5rem 0;
+    border: none;
+    border-top: 1px solid var(--hairline);
+}
+
+// --- Heading colour ------------------------------------------------------
+//
+// One token, `--heading`, for every headline: a title, an article's headings, and the
+// headings inside what a shortcode renders. Dark mode gives it a brighter value than
+// the body text under it. It used to share the body colour there, so hierarchy rested
+// on size alone and every page read flat; light never had the problem, its body text
+// being a near-black that is already the strongest thing on the page.
+//
+// Every heading in the column, not only the column's direct children, because that is
+// how far the dark rule always reached: an Entry's title is an h3 inside its header and
+// the home page's section heading is inside a wrapper, and in light both inherited the
+// body colour, which is the same value. Colour is the one thing this reaches in to set.
+// Face, size and margin stay the Entry's own (see above).
+.single-title,
+.single .content h1,
+.single .content h2,
+.single .content h3,
+.single .content h4,
+.single .content h5,
+.single .content h6 {
+    color: var(--heading);
+}
+
+// --- Dark ----------------------------------------------------------------
+//
+// The two things the theme draws again under [theme=dark], at a specificity a light rule
+// cannot reach: a quotation's tinted box and blue bar, and the dashed rule across the
+// column. They are restated here, and they have no value of their own. The token
+// block in _tokens.scss is what switches the rest of the page.
+[theme=dark] .single .content blockquote {
+    border-left-color: var(--rule);
+    background-color: transparent;
+}
+
+// The rule's style as well as its colour: the theme's dark rule is `border-top: 1px
+// dashed`, a shorthand, so it restyles all of it, and recolouring alone left the rule solid
+// in light and dashed in dark.
+[theme=dark] .single .content > hr {
+    border-top-style: solid;
+    border-top-color: var(--hairline);
 }

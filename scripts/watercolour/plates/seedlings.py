@@ -5,6 +5,8 @@
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from wc import *
 from wc import OUT
+DEST = "content/episodes/show-people-their-impact"
+SHARE_CARD = True  # also cut the episode's 1200x630 share card from this plate (cover.jpg)
 
 W, H = 1600, 1000
 s = Sheet(W, H, scale=2, s=113)

@@ -6,6 +6,7 @@
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from wc import *
 from wc import OUT
+DEST = "assets/images/plates"
 
 W, H = 1600, 1000
 s = Sheet(W, H, scale=2, s=91)

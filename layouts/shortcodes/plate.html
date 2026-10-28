@@ -1,0 +1,14 @@
+{{- /* {{< plate src="desk.webp" alt="…" role="inline" caption="…" >}}
+
+       A watercolour Plate in a page's Markdown. `src` is a file in the page's own
+       bundle, or else one in assets/ -- the home page's content is one Markdown file
+       per language at the root of content/, with no bundle of its own to hold an
+       image, so its desk is `images/plates/desk.webp` under assets/. `role` is hero,
+       spot or inline, and defaults to inline; `caption` is optional. All of it is
+       partials/plate.html's: this is only the way to ask for one from Markdown.
+
+       Lazy unless it is a hero: a Plate in the body sits below what a visitor came
+       for. (The home page's is last, so the Greeting stays the first thing painted.) */ -}}
+{{- $caption := "" -}}
+{{- with .Get "caption" }}{{ $caption = . | $.Page.RenderString }}{{ end -}}
+{{- partial "plate.html" (dict "page" .Page "src" (.Get "src") "alt" (.Get "alt") "role" (.Get "role") "caption" $caption) -}}

@@ -3,16 +3,21 @@
 // 自定义样式
 // ==============================
 /* assets/css/custom.css */
-// Was margin-top: 13rem. That existed to compensate for the theme pushing the
-// profile block down by translateY(16vh) -- two hacks cancelling each other, with
-// the result depending on viewport height. The transform is reset in _home.scss,
-// so this no longer needs to make room for anything.
-// Close to the line above it. The opening line is a greeting now rather than a
-// standalone thesis, and a greeting belongs to the sentence that follows it --
-// there was 3.5rem of air between "Hey" and the paragraph it introduces.
-.home-content {
-    margin-top: 0.5rem;
-}
+
+// The colour tokens first: every colour below is `var(--token)`, set once for light
+// and once for dark. See the note at the top of _tokens.scss.
+@import "tokens";
+// Then the type module: it owns the voice and the Measure, and every stylesheet
+// below reads from it. See the note at the top of _typography.scss.
+@import "typography";
+// The masthead of a post and of an Episode page, built from the module above and read
+// by both. See the note at the top of _masthead.scss.
+@import "masthead";
+// What sits around a post's text: the Contents box and the foot. See _post.scss.
+@import "post";
+// Every watercolour Plate, whatever page it is on. A page asks for one and styles
+// nothing of it, so this comes before the page stylesheets. See _plate.scss.
+@import "plate";
 
 // Logo, <img> fallback only.
 //
@@ -37,29 +42,19 @@
 //
 // No single colour fixes that: the light accent measures 2.02:1 on the light
 // header and the dark accent 3.02:1 on the dark one. So the mark is inlined SVG
-// now and CSS picks the matching accent, at 4.73:1 light and 7.06:1 dark. The
-// standalone file at static/images/logo.svg keeps a literal colour, because a
-// favicon has no document to inherit from.
+// now and takes the Accent token, which is the matching one in each mode, at
+// 4.73:1 light and 7.06:1 dark. The standalone file at static/images/logo.svg keeps
+// a literal colour, because a favicon has no document to inherit from.
 .header-title .logo-mark {
     display: inline-block;
     line-height: 0;
-    color: $single-link-color;
+    color: var(--accent);
 }
 
 .header-title .logo-mark svg {
     height: 2.5em;
     width: auto;
     vertical-align: middle;
-}
-
-[theme=dark] .header-title .logo-mark {
-    color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .header-title .logo-mark {
-        color: $single-link-color-dark;
-    }
 }
 
 /* Mobile logo adjustment */
@@ -73,22 +68,6 @@
     .header-title .logo-mark svg {
         height: 2em;
     }
-}
-
-// Page titles share the measure with the text under them.
-//
-// The theme puts .single-title outside .content, so it took the full width of
-// .page while the prose sat in the 800px column centred inside it -- the title
-// started roughly 140px to its left on a wide screen. Exactly the defect
-// docs/adr/0004 records for the home page, on every other page, found by
-// comparing the writing archive (which constrains its own wrapper, so it was
-// right) against the reading and speaking pages (which did not).
-//
-// Same numbers as .content rather than a new value: one measure, one left edge.
-.single .single-title {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 // The footer sizes to its contents.
@@ -127,59 +106,14 @@ footer {
 }
 
 .footer-social a {
-    color: $muted-text-color;
+    color: var(--muted);
     text-decoration: none;
-    border-bottom: 1px solid $global-border-color;
+    border-bottom: 1px solid var(--hairline);
     transition: color $transition-base;
 }
 
 .footer-social a:hover {
-    color: $single-link-color;
-}
-
-[theme=dark] .footer-social a {
-    color: $muted-text-color-dark;
-    border-bottom-color: $global-border-color-dark;
-}
-
-[theme=dark] .footer-social a:hover {
-    color: $single-link-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .footer-social a {
-        color: $muted-text-color-dark;
-        border-bottom-color: $global-border-color-dark;
-    }
-
-    [theme=auto] .footer-social a:hover {
-        color: $single-link-color-dark;
-    }
-}
-
-// Homepage intro paragraph -- replaces inline style on <p class="home-intro">
-//
-// Body colour, not muted. It was the largest block of text on the page and it was
-// deliberately greyed, which is a contradiction: the page dimmed its own substance
-// and then wondered why it read washed out. Muting is for metadata -- dates,
-// authors, section labels -- not for the paragraph a visitor is meant to read.
-//
-// Smaller too. At 1.25rem it outweighed the tagline above it; the tagline is now
-// the opening line and this sits a step below it.
-.home-intro {
-    font-size: 1.125rem;
-    color: $global-font-color;
-    margin: 0.5rem 0 2.5rem;
-}
-
-[theme=dark] .home-intro {
-    color: $global-font-color-dark;
-}
-
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .home-intro {
-        color: $global-font-color-dark;
-    }
+    color: var(--accent);
 }
 
 // Bold text carries emphasis by weight, not by a second colour.
@@ -193,18 +127,16 @@ footer {
 // Body text already clears AA at 6.16:1, so bold comes down to match rather than
 // prose going up. The theme's more specific rule for bold inside links is left
 // intact, so a bolded link still takes the accent.
+//
+// One of the few rules left under [theme=dark], and it sets no value: it undoes the
+// theme's, which has to be matched at the theme's own specificity to win.
 [theme=dark] .single .content b,
 [theme=dark] .single .content strong {
     color: inherit;
 }
 
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .single .content b,
-    [theme=auto] .single .content strong {
-        color: inherit;
-    }
-}
-
+// The Entry, one stylesheet for every list; the pages below style what is around it.
+@import "entry";
 @import "home";
 @import "about";
 @import "archive";
@@ -212,5 +144,3 @@ footer {
 @import "speaking";
 @import "episode";
 @import "interactions";
-// Last: its heading rules win on cascade order. See the note in the file.
-@import "typography";

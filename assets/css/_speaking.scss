@@ -1,10 +1,28 @@
 // ==============================
 // Speaking Page Styles
 // ==============================
+//
+// What is on the page besides the Entries. The Entries are the site's (_entry.scss): the
+// talk, the panel, the podcast, the hosted show and Upcoming are the same Entry as the
+// reading list's books and the archive's posts, set by one stylesheet. This file used to
+// carry a title, a muted line, a date column, link colours and an icon colour per
+// type for them, and a hover row in _interactions.scss.
+//
+// A list, not a set of write-ups. Every entry used to carry a paragraph describing the
+// session. Three of three comparable sites in the survey keep talks as a plain
+// date/venue/title list, and the titles here already say what each talk was about --
+// "From cost to impact: Leading through infrastructure investment decisions" needs no
+// gloss. What the paragraphs added was voice, and voice now sits once at the top of the
+// page instead of eight times, in two languages, where it was also the thing most
+// likely to rot in translation. The shortcode still renders inner content, so a single
+// entry can carry a note when there is genuinely something to add; it is not the
+// default, and the gate asserts the page carries none.
+//
+// The heading above each group is the site's (_typography.scss), and the hairline under
+// it is the Entry's (_entry.scss): an h2 that heads a list of Entries has one wherever
+// that list is, with no page declaring it.
 
-// Light mode (default)
-
-// Featured image -- extracted from layouts/talks/single.html inline styles (D-07)
+// The speaking page's banner photograph, from layouts/speaking/single.html.
 .featured-image {
     margin: 2rem 0;
     overflow: hidden;
@@ -20,201 +38,8 @@
     display: block;
 }
 
-// A list, not a set of write-ups.
-//
-// Every entry used to carry a paragraph describing the session. Three of three
-// comparable sites in the survey keep talks as a plain date/venue/title list, and
-// the titles here already say what each talk was about -- "From cost to impact:
-// Leading through infrastructure investment decisions" needs no gloss. What the
-// paragraphs added was voice, and voice now sits once at the top of the page
-// instead of eight times, in two languages, where it was also the thing most
-// likely to rot in translation.
-//
-// So the entries are dense enough that all eight fit on one screen, which is what
-// someone deciding whether to book him is actually doing: scanning for recency and
-// venue, not reading.
-.talk-entry {
-    margin-bottom: 1rem;
-}
-
-.talk-entry__title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.4;
-    text-wrap: balance;
-}
-
-.talk-entry__type-icon {
-    margin-right: 8px;
-    font-size: 0.875rem;
-    color: $muted-text-color;
-}
-
-// Venue on the left, date on the right, links between them. The date column is
-// the same right-aligned, tabular-figures treatment the reading list and the
-// archive use, so recency is scannable down the page rather than hunted for
-// inside each row.
-.talk-entry__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 0.5rem;
-    font-size: 0.8125rem;
-    color: $muted-text-color;
-    margin-top: 0.125rem;
-}
-
-.talk-entry__event {
-    font-weight: 500;
-}
-
-.talk-entry__date {
-    margin-left: auto;
-    padding-left: 0.75rem;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-// No separator glyph before the date any more: it sat mid-row when the date was
-// inline, and now the date is a column with space around it doing that job.
-
-.talk-entry__links {
-    margin-left: 0;
-}
-
-.talk-entry__links a {
-    font-size: 0.8125rem;
-    color: $single-link-color;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.talk-entry__links a:hover {
-    color: $single-link-hover-color;
-}
-
-// .talk-entry__description is gone with the descriptions themselves. The
-// shortcode still supports inner content, so a single entry can carry a note when
-// there is genuinely something to add -- it just is not the default any more.
-
-// --- Upcoming ------------------------------------------------------------
-//
-// Only the icon differs. Spacing is the base entry's now that no entry carries a
-// description, and the group is distinguished by position and heading rather than
-// by being painted differently. The icon takes the accent, which is the rule the
-// talk entries below already follow.
-.talk-entry--upcoming .talk-entry__type-icon {
-    color: $single-link-color;
-}
-
-[theme=dark] .talk-entry--upcoming .talk-entry__type-icon {
-    color: $single-link-color-dark;
-}
-
-// Type-based icon colors (light mode)
-.talk-entry--talk .talk-entry__type-icon {
-    color: $single-link-color;
-}
-
-.talk-entry--panel .talk-entry__type-icon {
-    color: $entry-panel-color;
-}
-
-.talk-entry--podcast .talk-entry__type-icon {
-    color: $entry-podcast-color;
-}
-
-.talk-entry--host .talk-entry__type-icon {
-    color: $single-link-color;
-}
-
-// Dark mode
-[theme=dark] .talk-entry__type-icon {
-    color: $muted-text-color-dark;
-}
-
-[theme=dark] .talk-entry__meta {
-    color: $muted-text-color-dark;
-}
-
-[theme=dark] .talk-entry__links a {
-    color: $single-link-color-dark;
-}
-
-[theme=dark] .talk-entry__links a:hover {
-    color: $single-link-hover-color-dark;
-}
-
-[theme=dark] .talk-entry--talk .talk-entry__type-icon {
-    color: $single-link-color-dark;
-}
-
-[theme=dark] .talk-entry--panel .talk-entry__type-icon {
-    color: $entry-panel-color-dark;
-}
-
-[theme=dark] .talk-entry--podcast .talk-entry__type-icon {
-    color: $entry-podcast-color-dark;
-}
-
-[theme=dark] .talk-entry--host .talk-entry__type-icon {
-    color: $single-link-color-dark;
-}
-
-// Auto theme
-@media (prefers-color-scheme: dark) {
-    [theme=auto] .talk-entry__type-icon {
-        color: $muted-text-color-dark;
-    }
-
-    [theme=auto] .talk-entry__meta {
-        color: $muted-text-color-dark;
-    }
-
-    [theme=auto] .talk-entry__links a {
-        color: $single-link-color-dark;
-    }
-
-    [theme=auto] .talk-entry__links a:hover {
-        color: $single-link-hover-color-dark;
-    }
-
-    [theme=auto] .talk-entry--talk .talk-entry__type-icon {
-        color: $single-link-color-dark;
-    }
-
-    [theme=auto] .talk-entry--panel .talk-entry__type-icon {
-        color: $entry-panel-color-dark;
-    }
-
-    [theme=auto] .talk-entry--podcast .talk-entry__type-icon {
-        color: $entry-podcast-color-dark;
-    }
-
-    [theme=auto] .talk-entry--host .talk-entry__type-icon {
-        color: $single-link-color-dark;
-    }
-}
-
 // Mobile breakpoint (aligned with LoveIt 680px breakpoint)
 @media (max-width: 680px) {
-    .talk-entry__title {
-        font-size: 1rem;
-    }
-
-    // Stacked, and the date drops its auto margin -- otherwise it right-aligns
-    // itself on its own line, which reads as a stray number.
-    .talk-entry__meta {
-        flex-direction: column;
-        gap: 0.125rem 0;
-    }
-
-    .talk-entry__date {
-        margin-left: 0;
-        padding-left: 0;
-    }
-
     .featured-image img {
         height: 180px;
     }
