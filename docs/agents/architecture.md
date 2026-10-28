@@ -23,7 +23,7 @@ italovietro.com/
 ├── .planning/                   # GSD planning artifacts
 ├── assets/
 │   ├── css/                     # 10 SCSS partials, see below
-│   ├── images/                  # avatar.webp + portrait.jpg, logo.svg
+│   ├── images/                  # logo.svg, the Plates; the portrait is the speaker kit's headshot
 │   ├── js/episode.js            # the episode page's timeline; no dependencies
 │   └── music/
 ├── content/                     # see content map below
@@ -374,7 +374,7 @@ A new episode page also needs a line in `EPISODES` at the top of the episode sec
 
 One page per language, all of it front matter, rendered by `layouts/speaking/kit.html` in three parts: the facts (name and contact from `params.author`, `role`, `topics`, a link to the speaking page), `bio.short` and `bio.long` (each labelled with its length in words, since calls for papers cap a bio by words), and `photos`, a list of `{src, name, label, alt}`.
 
-A photo is a file in the bundle. The kit offers it as a JPEG, converting it if it is not one (upload forms still turn away WebP), and prints the size it reads from the file, so it cannot describe a photo as larger than it is. To upgrade a photo, drop the larger original into the bundle under the same name. A missing file, a missing bio or a photo without alt text stops the build. Styles: `_kit.scss`.
+A photo is a file in the bundle. The kit offers it as a JPEG, converting it if it is not one (upload forms still turn away WebP), and prints the size it reads from the file, so it cannot describe a photo as larger than it is. To upgrade a photo, drop the larger original into the bundle under the same name. Photos sit two to a row and show square on the page (the download is the whole photo); a landscape one, like the stage shot, takes a row of its own. The gate requires every photo offered to be at least 1000px wide. A missing file, a missing bio or a photo without alt text stops the build. Styles: `_kit.scss`.
 
 ### `book` — reading list Entries
 
@@ -382,7 +382,7 @@ Renders an Entry (contract below) with the shortcode's body as its **note**: the
 
 ### `portrait` — About page
 
-Params: `alt`, `download_label` (both required). Derives every resolution from the single `assets/images/avatar.webp` master at build time. To add a size, change a number in the shortcode — do not add another binary. The master must stay WebP (it has a real alpha channel) and under the size ceiling the gate enforces.
+Params: `alt`, `caption` (both required; `caption` is the translated label before the size links). The source is the speaker kit's headshot, `content/speaker-kit/headshot.jpg` (1416px), so About and the kit show one photograph. The page loads square crops cut from it at build time (256px and 512px, for the 176px circle at 1x and 2x, each under the gate's 120KB ceiling) and links a 512px square and the full file. To change the photograph, replace the kit's headshot; to add a size, change a number in the shortcode. Do not add another binary.
 
 ## Deployment
 

@@ -7,42 +7,47 @@
     page, and both belong to people with something to sell. On an About page a
     portrait is the point.
 
-    Event organisers ask for a headshot by email today, so both sizes are offered
-    as links rather than left inside a srcset only a browser can read. 512px is the
-    full extent of the original -- there is no larger source to offer, and
-    upscaling would hand over a softer image than the one asked for.
+    Event organisers ask for a headshot by email, so sizes are offered as links
+    rather than left inside a srcset only a browser can read: a 512px square, and
+    the full-size photograph.
 
-    Sizes come from Hugo's image processing, so the two files are derived from one
-    source and cannot drift apart. The source is a 59KB JPEG; it was a 428KB PNG
-    of the same 512x512 photograph, which is 7x the bytes for no extra pixels.
+    The source is the speaker kit's headshot (content/speaker-kit/headshot.jpg,
+    1416px), so About and the kit show one photograph and cannot drift apart; a new
+    headshot dropped into the kit changes both. It was a 512px JPEG of its own, and
+    before that a 428KB PNG of the same 512x512 image. The page itself loads only
+    square crops cut from it here, 256px and 512px for the 176px circle at 1x and
+    2x, so the full 370KB file is fetched only by someone who clicks for it. Fill,
+    not Resize: the source is not quite square, and Resize to 256x256 would squash it.
 
     Parameters: alt (required), caption (required -- the label before the size
     links, so it can be translated by the caller).
 */ -}}
-{{- $src := resources.Get "images/portrait.jpg" -}}
+{{- $kit := site.GetPage "/speaker-kit" -}}
+{{- $src := cond (ne $kit nil) ($kit.Resources.Get "headshot.jpg") nil -}}
 {{- $alt := .Get "alt" -}}
 {{- $caption := .Get "caption" -}}
 {{- if not $alt -}}
     {{- errorf "portrait.html: alt is required -- a portrait with no alt text tells a screen reader nothing about who is on the page" -}}
 {{- end -}}
 {{- if $src -}}
-    {{- $small := $src.Resize "256x256 jpg q88" -}}
+    {{- $small := $src.Fill "256x256 jpg q88 Center" -}}
+    {{- $medium := $src.Fill "512x512 jpg q88 Center" -}}
     <figure class="portrait">
         <img
             class="portrait__img"
             src="{{ $small.RelPermalink }}"
-            srcset="{{ $small.RelPermalink }} 1x, {{ $src.RelPermalink }} 2x"
+            srcset="{{ $small.RelPermalink }} 1x, {{ $medium.RelPermalink }} 2x"
             width="{{ $small.Width }}"
             height="{{ $small.Height }}"
             alt="{{ $alt }}"
             decoding="async">
         <figcaption class="portrait__sizes">
             {{ $caption }}
-            <a href="{{ $small.RelPermalink }}">{{ $small.Width }}&#8202;&times;&#8202;{{ $small.Height }}</a>
+            <a href="{{ $medium.RelPermalink }}">{{ $medium.Width }}&#8202;&times;&#8202;{{ $medium.Height }}</a>
             <span aria-hidden="true">&middot;</span>
             <a href="{{ $src.RelPermalink }}">{{ $src.Width }}&#8202;&times;&#8202;{{ $src.Height }}</a>
         </figcaption>
     </figure>
 {{- else -}}
-    {{- errorf "portrait.html: assets/images/portrait.jpg is missing" -}}
+    {{- errorf "portrait.html: the speaker kit's headshot (content/speaker-kit/headshot.jpg) is missing" -}}
 {{- end -}}

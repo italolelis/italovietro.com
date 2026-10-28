@@ -395,8 +395,24 @@ matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'
 text_has "$EN_KIT" 'VP of Engineering, Parloa' 'the en kit states the role on its own line'
 text_has "$PT_KIT" 'VP of Engineering, Parloa' 'and so does the pt-br one'
 # Every photo is offered as a JPEG an organiser can download, and the link resolves.
-occurs "$EN_KIT" 'kit__download' 2 'en: two photos to download'
-occurs "$PT_KIT" 'kit__download' 2 'pt-br: two photos to download'
+occurs "$EN_KIT" 'kit__download' 3 'en: three photos to download, two headshots and one on stage'
+occurs "$PT_KIT" 'kit__download' 3 'pt-br: three photos to download'
+# Organisers print and project these, so none may be small: every photo the kit offers
+# is at least 1000px wide, read from the size the kit prints beside it (taken from the
+# file, so it cannot be claimed). Digits only in the pattern: no accented letters or
+# symbols inside a bracket, which GNU grep on the CI runner rejects.
+occurs "$EN_KIT" 'download=italo-vietro-headshot.jpg>Download JPEG' 1 'en: the headshot is offered'
+# `.{1,2}` is the middle dot: one character in a UTF-8 locale, two bytes in C.
+for kit in "$EN_KIT" "$PT_KIT"; do
+    [ -f "$kit" ] || continue
+    total=$(grep -oF 'kit__download' "$kit" | wc -l | tr -d ' ')
+    big=$(grep -oE '(Download|Baixar) JPEG .{1,2} [0-9]{4,} ' "$kit" | wc -l | tr -d ' ')
+    if [ "$total" -gt 0 ] && [ "$total" = "$big" ]; then
+        ok "every kit photo is at least 1000px wide: ${kit#"$PUBLIC"/}"
+    else
+        bad "every kit photo is at least 1000px wide: ${kit#"$PUBLIC"/} ($big of $total)"
+    fi
+done
 for kit in "$EN_KIT" "$PT_KIT"; do
     [ -f "$kit" ] || continue
     for href in $(grep -oE 'kit__download"? href="?[^" >]+' "$kit" | sed -E 's/.*href="?//'); do
@@ -623,15 +639,25 @@ rule_sets '\.single \.content \.portrait__sizes a' 'color:var\(--muted\)' 'the h
 contains "$PT_ABOUT" 'portrait__img' 'the portrait renders on pt-br About too'
 
 # The photograph was a 428KB PNG of a 512x512 image -- 7x the bytes for no extra
-# pixels. This ceiling fails loudly if an unoptimised export replaces it.
-PORTRAIT="$PUBLIC/images/portrait.jpg"
-if [ ! -f "$PORTRAIT" ]; then
-    bad "portrait is materially smaller than the 428KB it replaced (no such file: $PORTRAIT)"
-elif [ "$(wc -c < "$PORTRAIT")" -lt 120000 ]; then
-    ok 'portrait is materially smaller than the 428KB it replaced'
-else
-    bad "portrait is materially smaller than the 428KB it replaced (got $(wc -c < "$PORTRAIT") bytes, ceiling 120000)"
+# pixels -- and then a 59KB JPEG of the same. Since October 2026 its source is the
+# speaker kit's full-size headshot (1416px, ~370KB), one file for both pages, so the
+# ceiling is on what the About page actually loads: the sizes in the portrait's
+# srcset, each cut from that source. Only the size link points at the full file.
+PORTRAIT_FILES=$(grep -oE '<img class=portrait__img[^>]*>' "$EN_ABOUT" 2>/dev/null | grep -oE '/[^ ,"]+\.jpg' | sort -u)
+if [ -z "$PORTRAIT_FILES" ]; then
+    bad 'About loads its portrait at a light size (no portrait image found)'
 fi
+for f in $PORTRAIT_FILES; do
+    if [ ! -f "$PUBLIC$f" ]; then
+        bad "About loads its portrait at a light size (no such file: $f)"
+    elif [ "$(wc -c < "$PUBLIC$f")" -lt 120000 ]; then
+        ok "About loads its portrait at a light size: $f"
+    else
+        bad "About loads its portrait at a light size: $f ($(wc -c < "$PUBLIC$f") bytes, ceiling 120000)"
+    fi
+done
+contains "$EN_ABOUT" 'href=/speaking/kit/headshot.jpg' 'About links the full-size headshot, the one in the speaker kit'
+contains "$PT_ABOUT" 'href=/speaking/kit/headshot.jpg' 'and so does the pt-br About'
 
 # The archive page showed link-and-date rows and nothing else, while every post
 # already carried a description in front matter. These guard the substance.
