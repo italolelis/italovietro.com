@@ -55,6 +55,7 @@ Page bundles, one file per language. **The directory name is not the URL** — `
 | `content/about/` | `/about/` | `/pt-br/sobre/` |
 | `content/recommended-reading/` | `/recommended-reading/` | `/pt-br/leituras-recomendadas/` |
 | `content/speaking/` | `/speaking/` | `/pt-br/palestras/` |
+| `content/speaker-kit/` | `/speaking/kit/` | `/pt-br/palestras/kit/` |
 | `content/episodes/<slug>/` | `/episodes/<slug>/` | `/pt-br/episodes/<slug>/` |
 
 **Posts render at the site root**, not under `/posts/` — `[Permalinks] posts = ":contentbasename"`. `/posts/` is the archive index, rendered by `layouts/_default/section.html`.
@@ -63,6 +64,8 @@ Page bundles, one file per language. **The directory name is not the URL** — `
 
 
 **Episode pages** live in `content/episodes/`, not in `posts/`: Claude writes them, and the writing section is only what Italo writes. The section has no list page (`build.render: never`); each episode is reached from its entry on the speaking page. See *Episode pages* under *Shortcode contracts*.
+
+The **speaker kit** lives in `content/speaker-kit/` with `type: speaking` and `layout: kit`, so it renders through `layouts/speaking/kit.html`, and sets its URL with `url:`, which Hugo does not prefix with the language: the Portuguese file writes `/pt-br/palestras/kit/` in full. See *Speaker kit* under *Shortcode contracts*.
 
 Old paths are preserved as `aliases` (`/talks/` → `/speaking/`, `/my-reading-list/` → `/recommended-reading/`). Keep them when renaming; they are live inbound links.
 
@@ -219,6 +222,7 @@ SHARE_CARD = True                        # optional: also cut that page's 1200x6
 | `_about.scss` | About page + portrait |
 | `_entry.scss` | **The Entry**, one stylesheet for every list: the row, the title, the muted line and its links, the date column in tabular figures, the note, the book's compact and featured weights, the icon colour per kind, the one hover, and the hairline under an h2 that heads a list of Entries. No page stylesheet restates any of it |
 | `_speaking.scss` | Speaking page: the banner photograph. Its Entries are `_entry.scss`'s |
+| `_kit.scss` | The speaker kit: the facts as a two-column list, the two bios, the photos two to a row with their downloads |
 | `_episode.scss` | Episode pages: the timeline, chapter list, quotes, lessons, figures. Everything scoped under `.episode` (its Plates are `_plate.scss`'s) |
 | `_reading-list.scss` | The reading list's in-page nav and the line under each section heading. Scoped through `.single .content:has(.entry--book)`, so none of it reaches another page |
 | `_archive.scss` | The writing archive and tag pages, around their Entries: the Measure, the line under the title, the year headings |
@@ -365,6 +369,12 @@ The recording is **linked, not embedded**: a player is a third-party host loadin
 The Plates are the site's, not the Episode page's: how one is asked for, painted and framed is under *Plates* below.
 
 A new episode page also needs a line in `EPISODES` at the top of the episode section of `scripts/check-build.sh` (its slug and first chapter id), which runs every episode assertion against it, and a `highlights_url` on its speaking entry.
+
+### Speaker kit — `content/speaker-kit/`
+
+One page per language, all of it front matter, rendered by `layouts/speaking/kit.html` in three parts: the facts (name and contact from `params.author`, `role`, `topics`, a link to the speaking page), `bio.short` and `bio.long` (each labelled with its length in words, since calls for papers cap a bio by words), and `photos`, a list of `{src, name, label, alt}`.
+
+A photo is a file in the bundle. The kit offers it as a JPEG, converting it if it is not one (upload forms still turn away WebP), and prints the size it reads from the file, so it cannot describe a photo as larger than it is. To upgrade a photo, drop the larger original into the bundle under the same name. A missing file, a missing bio or a photo without alt text stops the build. Styles: `_kit.scss`.
 
 ### `book` — reading list Entries
 

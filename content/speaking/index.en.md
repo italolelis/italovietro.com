@@ -14,7 +14,9 @@ math:
 
 Happy to talk at your event or on your podcast — [me@italovietro.com](mailto:me@italovietro.com).
 
-Mostly about what platforms cost, what reliability takes, and the parts of engineering leadership nobody puts on a slide.
+Mostly about platform engineering, growing teams without slowing them down, and leadership and culture.
+
+Organising an event? A bio and photos are in the [speaker kit](/speaking/kit/).
 
 {{< upcoming heading="Upcoming" >}}
 
@@ -41,6 +43,9 @@ Mostly about what platforms cost, what reliability takes, and the parts of engin
 {{< /talk >}}
 
 ## Podcast Appearances
+
+{{< talk title="How to Take AI Agents From Pilot to Production at Scale" event="Tech Transformed (EM360Tech)" date="October 2026" type="podcast" video_url="https://em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale" >}}
+{{< /talk >}}
 
 {{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" highlights_url="/episodes/shipping-more-not-faster/" >}}
 {{< /talk >}}

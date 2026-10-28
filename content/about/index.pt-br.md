@@ -7,7 +7,7 @@ draft: false
 
 {{< portrait alt="Italo Vietro, de óculos e blusa escura, com um risco de luz em prisma na parede atrás dele." caption="Foto:" >}}
 
-Sou Senior Director of Engineering na **[Parloa](https://parloa.com)**. Comecei consertando computadores em João Pessoa, migrei para software, e passei os últimos 18 anos construindo times e sistemas pela Europa.
+Sou VP of Engineering na **[Parloa](https://parloa.com)**. Comecei consertando computadores em João Pessoa, migrei para software, e passei os últimos 18 anos construindo times e sistemas pela Europa.
 
 ## O que aprendi sobre pessoas
 

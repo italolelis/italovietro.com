@@ -52,6 +52,10 @@ _Avoid_: Quote card, clip, highlight, timestamp
 A watercolour on a page (the home page's desk, an Episode page's seven), painted by `scripts/watercolour/`. It has a role: **hero** (under a masthead, eager), **spot** (three fifths of the measure, caption beside it) or **inline** (the full measure, the default). Never wider than the measure. Objects, never a face.
 _Avoid_: Illustration, image, hero image, graphic
 
+**Speaker kit**:
+The page at `/speaking/kit/` an event organiser takes things from: the facts a call for papers asks for (name, role, topics, contact), a short bio and a long one in the third person, and photos offered as JPEG downloads with their real sizes. Linked from the speaking page's invitation; not in the archive or the feeds. Its bios say only what About and the speaking page already state, and name Italo rather than use a pronoun.
+_Avoid_: Press kit, media kit, EPK, bio page
+
 **Post-build assertion**:
 A check in `scripts/check-build.sh` run against the generated HTML and compiled CSS, not against source. It asserts what a browser receives, so it survives reorganisation of content and stylesheets.
 _Avoid_: Test, lint, smoke test

@@ -1,11 +1,11 @@
 ---
 title: "Italo Vietro"
-description: "Senior Director of Engineering na Parloa. 18+ anos construindo software e liderando times de engenharia no Brasil e na Europa."
+description: "VP of Engineering na Parloa. 18+ anos construindo software e liderando times de engenharia no Brasil e na Europa."
 greeting: "Oi 👋"
 signpost: "Escrevo de vez em quando, e esses textos acabam em {writing}. Leio bem mais do que escrevo, e os livros que ficaram estão em {reading-list}. Também gosto de falar sobre o que tive que descobrir na marra, e isso está em {speaking}. Se quiser a versão mais longa de tudo isso, está em {about}."
 ---
 
-Sou Senior Director of Engineering na **[Parloa](https://parloa.com)**, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde "move fast and break things" não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.
+Sou VP of Engineering na **[Parloa](https://parloa.com)**, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde "move fast and break things" não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.
 
 ## Além do Código
 

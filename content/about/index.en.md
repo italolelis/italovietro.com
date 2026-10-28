@@ -7,7 +7,7 @@ draft: false
 
 {{< portrait alt="Italo Vietro, in glasses and a dark sweater, with a prism streak of light on the wall behind him." caption="Headshot:" >}}
 
-I'm Senior Director of Engineering at **[Parloa](https://parloa.com)**. I started fixing computers in João Pessoa, Brazil, moved into software, and spent the last 18 years building teams and systems across Europe.
+I'm VP of Engineering at **[Parloa](https://parloa.com)**. I started fixing computers in João Pessoa, Brazil, moved into software, and spent the last 18 years building teams and systems across Europe.
 
 ## What I've learned about people
 

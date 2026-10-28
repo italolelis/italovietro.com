@@ -98,3 +98,31 @@ other = "Evento"
 # Usado com `time.Format`, que escreve o nome do mês no idioma da página.
 ["entry.dayMonth"]
 other = "2 de January"
+
+# O kit do palestrante (layouts/speaking/kit.html): bio e fotos para quem organiza.
+["kit.facts"]
+other = "Em resumo"
+["kit.name"]
+other = "Nome"
+["kit.role"]
+other = "Cargo"
+["kit.topics"]
+other = "Fala sobre"
+["kit.record"]
+other = "Palestras anteriores"
+["kit.recordLink"]
+other = "A página de palestras"
+["kit.contact"]
+other = "Contato"
+["kit.bio"]
+other = "Bio"
+["kit.short"]
+other = "Curta"
+["kit.long"]
+other = "Longa"
+["kit.words"]
+other = "{{ .Count }} palavras"
+["kit.photos"]
+other = "Fotos"
+["kit.download"]
+other = "Baixar JPEG · {{ .W }} × {{ .H }} · {{ .KB }} KB"

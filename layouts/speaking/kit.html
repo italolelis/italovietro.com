@@ -1,0 +1,100 @@
+{{- /*
+    The speaker kit (content/speaker-kit/), at /speaking/kit/: what an event organiser
+    needs to announce a talk or an episode, so Italo can paste one URL into a call for
+    papers instead of answering the same email. Linked from the invitation at the top
+    of the speaking page, which is the one place the speaking page has prose.
+
+    Three parts, in the order a call-for-papers form asks for them: the facts (name,
+    role, topics, contact), a short bio and a long one, then photos.
+
+    The bios come from front matter, `bio.short` and `bio.long`, and each is labelled
+    with its length in words, counted here, because calls for papers cap a bio by
+    words and an organiser should not have to count.
+
+    The photos are files in the page bundle, listed in `photos` (src, name, label,
+    alt). Each is offered as a JPEG, converted here if the file is not one, since
+    upload forms still turn away WebP; its size is read from the file, so the kit
+    cannot describe a photo as larger than it is. A missing file or alt text stops the
+    build rather than shipping a broken tile.
+*/ -}}
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    {{- $speaking := site.GetPage "/speaking" -}}
+    <div class="page single special kit">
+        <div class="kit__head">
+            {{- with $speaking -}}
+                <p class="kit__kicker"><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>
+            {{- end -}}
+            <h1 class="single-title">{{ .Title }}</h1>
+            {{- with .Description -}}
+                <p class="kit__dek">{{ . }}</p>
+            {{- end -}}
+        </div>
+
+        <div class="content" id="content">
+            <section class="kit__section" aria-labelledby="kit-facts">
+                <h2 id="kit-facts">{{ T "kit.facts" }}</h2>
+                <dl class="kit__facts">
+                    <dt>{{ T "kit.name" }}</dt>
+                    <dd>{{ site.Params.author.name }}</dd>
+                    {{- with .Params.role }}
+                        <dt>{{ T "kit.role" }}</dt>
+                        <dd>{{ . }}</dd>
+                    {{- end }}
+                    {{- with .Params.topics }}
+                        <dt>{{ T "kit.topics" }}</dt>
+                        <dd>{{ . }}</dd>
+                    {{- end }}
+                    {{- with $speaking }}
+                        <dt>{{ T "kit.record" }}</dt>
+                        <dd><a href="{{ .RelPermalink }}">{{ T "kit.recordLink" }}</a></dd>
+                    {{- end }}
+                    {{- with site.Params.author.email }}
+                        <dt>{{ T "kit.contact" }}</dt>
+                        <dd><a href="mailto:{{ . }}">{{ . }}</a></dd>
+                    {{- end }}
+                </dl>
+            </section>
+
+            <section class="kit__section" aria-labelledby="kit-bio">
+                <h2 id="kit-bio">{{ T "kit.bio" }}</h2>
+                {{- range slice "short" "long" }}
+                    {{- $text := index ($.Params.bio | default dict) . -}}
+                    {{- if not $text -}}
+                        {{- errorf "speaker kit %s: bio.%s is missing" $.File.Path . -}}
+                    {{- end }}
+                    <div class="kit__bio">
+                        <h3 class="kit__label">{{ T (printf "kit.%s" .) }} <span class="kit__count">{{ T "kit.words" (dict "Count" (countwords $text)) }}</span></h3>
+                        {{ $text | $.Page.RenderString (dict "display" "block") }}
+                    </div>
+                {{- end }}
+            </section>
+
+            <section class="kit__section" aria-labelledby="kit-photos">
+                <h2 id="kit-photos">{{ T "kit.photos" }}</h2>
+                <ul class="kit__photos">
+                    {{- range .Params.photos }}
+                        {{- $img := $.Resources.Get .src -}}
+                        {{- if not $img -}}
+                            {{- errorf "speaker kit %s: photo %q is not in the bundle" $.File.Path .src -}}
+                        {{- end -}}
+                        {{- if not .alt -}}
+                            {{- errorf "speaker kit %s: photo %q has no alt text" $.File.Path .src -}}
+                        {{- end -}}
+                        {{- $thumb := $img.Resize "720x webp q82" -}}
+                        {{- $file := $img -}}
+                        {{- if ne $img.MediaType.SubType "jpeg" -}}
+                            {{- $file = $img.Process "jpg q92" -}}
+                        {{- end }}
+                        <li class="kit__photo">
+                            <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ .alt }}" loading="lazy" decoding="async">
+                            <p class="kit__photo-label">{{ .label }}</p>
+                            <a class="kit__download" href="{{ $file.RelPermalink }}" download="italo-vietro-{{ .name | default (.label | urlize) }}.jpg">{{ T "kit.download" (dict "W" $file.Width "H" $file.Height "KB" (int (math.Ceil (div (float (len $file.Content)) 1024)))) }}</a>
+                        </li>
+                    {{- end }}
+                </ul>
+            </section>
+        </div>
+    </div>
+{{- end -}}

@@ -14,7 +14,9 @@ math:
 
 Fico feliz em falar no seu evento ou no seu podcast — [me@italovietro.com](mailto:me@italovietro.com).
 
-Geralmente sobre o custo das plataformas, o que confiabilidade exige, e as partes da liderança em engenharia que ninguém coloca em slide.
+Geralmente sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura.
+
+Organizando um evento? Bio e fotos estão no [kit do palestrante](/pt-br/palestras/kit/).
 
 {{< upcoming heading="Próximas" >}}
 
@@ -41,6 +43,9 @@ Geralmente sobre o custo das plataformas, o que confiabilidade exige, e as parte
 {{< /talk >}}
 
 ## Participações em Podcasts
+
+{{< talk title="How to Take AI Agents From Pilot to Production at Scale" event="Tech Transformed (EM360Tech)" date="October 2026" type="podcast" video_url="https://em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale" >}}
+{{< /talk >}}
 
 {{< talk title="Inside Parloa's AI Kitchen: How the Company Building Agents Builds with Agents" event="Beyond Vibe Coding" date="July 2026" type="podcast" video_url="https://bvc.fm/2026/07/09/005.html" highlights_url="/episodes/shipping-more-not-faster/" highlights_label="Destaques" >}}
 {{< /talk >}}

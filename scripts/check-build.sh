@@ -349,13 +349,74 @@ fi
 CSS=$CSS_ALL
 
 echo 'Job title'
-contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
-contains "$PT_HOME" 'Senior Director of Engineering' 'pt-br homepage states the current title'
+contains "$EN_HOME" 'VP of Engineering at Parloa' 'en homepage states the current title'
+contains "$PT_HOME" 'VP of Engineering na Parloa' 'pt-br homepage states the current title'
+text_has "$EN_ABOUT" 'VP of Engineering at Parloa' 'en About states the current title'
+text_has "$PT_ABOUT" 'VP of Engineering na Parloa' 'pt-br About states the current title'
 nowhere 'Head of Engineering' 'superseded title appears nowhere'
+# Superseded in October 2026. "Director of Engineering" alone still appears, rightly:
+# it was the HelloFresh title on About, and a rung in the ladder in do-job-titles-matter.
+nowhere 'Senior Director of Engineering' 'the title before VP appears nowhere'
+
+echo 'Speaker kit'
+# A bio and photos for organisers, at one URL Italo can paste into a call for papers:
+# /speaking/kit/, linked from the speaking page's invitation. Built from front matter
+# by layouts/speaking/kit.html; the photos are files in its bundle, so the sizes
+# printed beside them are read from the files and cannot claim more than they are.
+EN_KIT="$PUBLIC/speaking/kit/index.html"
+PT_KIT="$PUBLIC/pt-br/palestras/kit/index.html"
+exists "$EN_KIT" 'the speaker kit is built in English'
+exists "$PT_KIT" 'and in Portuguese, under the Portuguese speaking page'
+matches "$EN_SPEAKING" 'href="?/speaking/kit/"?[ >]' 'the en speaking page links to the kit'
+matches "$PT_SPEAKING" 'href="?/pt-br/palestras/kit/"?[ >]' 'the pt-br speaking page links to its kit'
+text_has "$EN_KIT" 'Italo Vietro is VP of Engineering at Parloa' 'the en bios open on the current title'
+text_has "$PT_KIT" 'Italo Vietro é VP of Engineering na Parloa' 'the pt-br bios open on the current title'
+occurs "$EN_KIT" 'kit__bio' 2 'en: a short bio and a long one'
+occurs "$PT_KIT" 'kit__bio' 2 'pt-br: a short bio and a long one'
+# Italo's choices for the bios (October 2026): Urban Sports Club rather than Lykon,
+# "almost two decades" rather than a count of years, and his own three topics in
+# plain words, "engineering" said once, where the speaking page's old line was
+# "the parts of engineering leadership nobody puts on a slide" (it read as written
+# by a machine, so it is gone from the whole site, not only from the kit).
+absent_from "$EN_KIT" 'Lykon' 'the en kit names Urban Sports Club, not Lykon'
+absent_from "$PT_KIT" 'Lykon' 'nor does the pt-br one'
+text_has "$EN_KIT" 'almost two decades' 'the en short bio says almost two decades'
+text_has "$PT_KIT" 'quase duas décadas' 'the pt-br one says quase duas décadas'
+nowhere 'nobody puts on a slide' 'the slide line appears nowhere in English'
+nowhere 'ninguém coloca em slide' 'nor in Portuguese'
+text_has "$EN_KIT" 'speaks about platform engineering, growing teams without slowing them down, and leadership and culture' 'the en bios name the topics Italo gave'
+text_has "$PT_KIT" 'fala sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura' 'and so do the pt-br ones'
+absent_from "$EN_KIT" 'engineering leadership and culture' 'the en topics say engineering once, not three times'
+text_has "$EN_SPEAKING" 'Mostly about platform engineering, growing teams without slowing them down, and leadership and culture.' 'the en speaking intro names the same topics, word for word'
+text_has "$PT_SPEAKING" 'Geralmente sobre engenharia de plataforma, como crescer times sem perder velocidade, e liderança e cultura.' 'the pt-br speaking intro, word for word'
+# Calls for papers cap a bio by words, so each says how long it is.
+matches "$EN_KIT" '[0-9]+ words' 'each en bio says how many words it is'
+matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'
+text_has "$EN_KIT" 'VP of Engineering, Parloa' 'the en kit states the role on its own line'
+text_has "$PT_KIT" 'VP of Engineering, Parloa' 'and so does the pt-br one'
+# Every photo is offered as a JPEG an organiser can download, and the link resolves.
+occurs "$EN_KIT" 'kit__download' 2 'en: two photos to download'
+occurs "$PT_KIT" 'kit__download' 2 'pt-br: two photos to download'
+for kit in "$EN_KIT" "$PT_KIT"; do
+    [ -f "$kit" ] || continue
+    for href in $(grep -oE 'kit__download"? href="?[^" >]+' "$kit" | sed -E 's/.*href="?//'); do
+        exists "$PUBLIC$href" "kit download resolves: $href"
+        case "$href" in *.jpg) ok "kit download is a JPEG: $href" ;; *) bad "kit download is a JPEG: $href" ;; esac
+    done
+done
+absent_from "$EN_ARCHIVE" '/speaking/kit/' 'the kit is not in the writing archive'
+absent_from "$PUBLIC/index.xml" '/speaking/kit/' 'nor in the site feed'
 
 echo 'Speaking page'
 # No apostrophe in the needle: the entry renders it as &#39; in the body and
 # literally in metadata, and this should assert the entry, not the encoding.
+contains "$EN_SPEAKING" 'How to Take AI Agents From Pilot to Production at Scale' 'en speaking page lists the Tech Transformed episode'
+contains "$PT_SPEAKING" 'How to Take AI Agents From Pilot to Production at Scale' 'pt-br speaking page lists the Tech Transformed episode'
+contains "$EN_SPEAKING" 'em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale' 'en Tech Transformed entry links to the episode'
+contains "$PT_SPEAKING" 'em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale' 'pt-br Tech Transformed entry links to the episode'
+# Newest first, within the podcast group as everywhere else on the page.
+in_order "$EN_SPEAKING" 'Pilot to Production at Scale.*AI Kitchen' 'en Tech Transformed (Oct 2026) comes before Beyond Vibe Coding (Jul 2026)'
+in_order "$PT_SPEAKING" 'Pilot to Production at Scale.*AI Kitchen' 'pt-br Tech Transformed comes before Beyond Vibe Coding'
 contains "$EN_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'en speaking page lists the Beyond Vibe Coding episode'
 contains "$PT_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'pt-br speaking page lists the Beyond Vibe Coding episode'
 contains "$EN_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'en episode links to the episode page'
@@ -457,8 +518,8 @@ matches "$PT_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|<
 # The words, whole, as a reader gets them. The typographer curls a quote or an apostrophe
 # the way it does anywhere else in Markdown, which is the one visible change from the
 # raw HTML these sentences used to sit in, so the needles are written curled (`&rsquo;`).
-text_has "$EN_HOME" 'I&rsquo;m Senior Director of Engineering at Parloa, where we&rsquo;re figuring out how to make AI conversations actually work reliably at scale. The kind of problem where &ldquo;move fast and break things&rdquo; doesn&rsquo;t fly. I&rsquo;ve been in tech for 18+ years. Started fixing computers in João Pessoa, Brazil, eventually moved into software, and made my way across Europe building teams and systems.' 'the en intro, word for word'
-text_has "$PT_HOME" 'Sou Senior Director of Engineering na Parloa, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde &ldquo;move fast and break things&rdquo; não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.' 'the pt-br intro, word for word'
+text_has "$EN_HOME" 'I&rsquo;m VP of Engineering at Parloa, where we&rsquo;re figuring out how to make AI conversations actually work reliably at scale. The kind of problem where &ldquo;move fast and break things&rdquo; doesn&rsquo;t fly. I&rsquo;ve been in tech for 18+ years. Started fixing computers in João Pessoa, Brazil, eventually moved into software, and made my way across Europe building teams and systems.' 'the en intro, word for word'
+text_has "$PT_HOME" 'Sou VP of Engineering na Parloa, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde &ldquo;move fast and break things&rdquo; não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.' 'the pt-br intro, word for word'
 text_has "$EN_HOME" 'I write from time to time, and those thoughts end up in writing. I read a good deal more than I write, and the books that stuck are in reading. I also like talking about what I have had to figure out the hard way, which is speaking. If you want the longer version of all this, it is in about.' 'the en Signpost, word for word'
 text_has "$PT_HOME" 'Escrevo de vez em quando, e esses textos acabam em artigos. Leio bem mais do que escrevo, e os livros que ficaram estão em leituras. Também gosto de falar sobre o que tive que descobrir na marra, e isso está em palestras. Se quiser a versão mais longa de tudo isso, está em sobre.' 'the pt-br Signpost, word for word'
 text_has "$EN_HOME" 'When I&rsquo;m not thinking about distributed systems, you&rsquo;ll find me managing my homelab (Kubernetes clusters, self-hosted everything), brewing coffee with an amount of precision that my family finds unreasonable, strategizing over D&amp;D campaigns, and being a dedicated dad and husband. The homelab is where I experiment. The coffee is where I focus. The D&amp;D is where I accept that even the best-laid plans fall apart.' 'the en Beyond the Code paragraph, word for word'

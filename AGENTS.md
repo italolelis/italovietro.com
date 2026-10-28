@@ -44,7 +44,7 @@ Hugo must be the **extended** build, at the version in `.hugo-version` (CI and V
 
 This repo documents its own decisions. Before anything non-trivial:
 
-- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Masthead, Moment, Plate, Post-build assertion.
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Masthead, Moment, Plate, Speaker kit, Post-build assertion.
 - **`docs/adr/`** — six accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
