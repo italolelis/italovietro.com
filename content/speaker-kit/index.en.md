@@ -5,7 +5,8 @@
 #
 # The bios are in the third person, as organisers paste them, and written from what
 # the About page already states. They avoid pronouns ("Italo", not "he"), so the
-# wording is Italo's to settle. Every fact in them is on /about/ or /speaking/.
+# wording is Italo's to settle. Every fact in them is on /about/ or /speaking/, and
+# the topics are the three he named. Lykon is left out of them by his choice.
 #
 # The photos are files in this bundle. The kit prints each one's real size, read
 # from the file, so dropping in a larger original is the whole of an upgrade: keep
@@ -18,21 +19,21 @@ layout: "kit"
 draft: false
 
 role: "VP of Engineering, Parloa"
-topics: "What platforms cost, what reliability takes, and engineering leadership"
+topics: "Platform engineering, engineering organisations that grow without getting slower, and engineering leadership and culture"
 
 bio:
   short: >-
     Italo Vietro is VP of Engineering at Parloa, working on making AI conversations
-    reliable at scale. Across 18 years in Brazil and Europe, Italo has led platform
-    and engineering organisations at Babbel, HelloFresh, N26 and Lykon, and speaks
-    about what platforms cost, what reliability takes, and the parts of engineering
-    leadership nobody puts on a slide.
+    reliable at scale. Across almost two decades in Brazil and Europe, Italo has led
+    platform and engineering organisations at Babbel, HelloFresh, N26 and Urban Sports
+    Club, and speaks about platform engineering, building engineering organisations
+    that grow without getting slower, and engineering leadership and culture.
   long: |-
     Italo Vietro is VP of Engineering at Parloa, working on making AI conversations reliable at scale.
 
-    Italo started out fixing computers in João Pessoa, Brazil, and built high-load systems for the Brazilian government's company registration before moving to Europe. Previous roles include VP of Platform at Babbel, leading more than 120 people across platform, infrastructure and reliability; Director of Engineering at HelloFresh, through its growth from 13 to more than 300 engineers; leading 40 engineers across core banking at N26; helping build Urban Sports Club's TechHub in Spain; and CTO at Lykon, building a team and a platform of more than 40 microservices in a regulated health sector.
+    Italo started out fixing computers in João Pessoa, Brazil, and built high-load systems for the Brazilian government's company registration before moving to Europe. Previous roles include VP of Platform at Babbel, leading more than 120 people across platform, infrastructure and reliability; Director of Engineering at HelloFresh, through its growth from 13 to more than 300 engineers; leading 40 engineers across core banking at N26; and helping build Urban Sports Club's TechHub in Spain.
 
-    Talks include GoLab, GoDays, LeadingEng Berlin, DevTalks Romania and the Platform Engineering and Developer Experience Summit in London. Italo also hosted 23 episodes of The Critical Channel podcast.
+    Italo speaks about platform engineering, building engineering organisations that grow without getting slower, and engineering leadership and culture, at conferences including GoLab, GoDays, LeadingEng Berlin, DevTalks Romania and the Platform Engineering and Developer Experience Summit in London, and hosted 23 episodes of The Critical Channel podcast.
 
 photos:
   - src: "headshot.jpg"

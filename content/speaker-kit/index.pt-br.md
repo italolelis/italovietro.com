@@ -6,7 +6,8 @@
 #
 # As bios estão na terceira pessoa, como se cola num programa, e escritas a partir
 # do que a página Sobre já diz. Evitam pronomes ("Italo", não "ele"), então a
-# redação final é do Italo. Todo fato nelas está em /sobre/ ou /palestras/.
+# redação final é do Italo. Todo fato nelas está em /sobre/ ou /palestras/, e os
+# temas são os três que ele escolheu. A Lykon fica de fora delas, por escolha dele.
 #
 # As fotos são arquivos neste bundle. O kit mostra o tamanho real de cada uma, lido
 # do arquivo, então trocar por um original maior é tudo o que precisa: mantenha o
@@ -19,21 +20,21 @@ layout: "kit"
 draft: false
 
 role: "VP of Engineering, Parloa"
-topics: "O custo das plataformas, o que a confiabilidade exige e liderança em engenharia"
+topics: "Engenharia de plataforma, organizações de engenharia que crescem sem ficar mais lentas, e liderança e cultura em engenharia"
 
 bio:
   short: >-
     Italo Vietro é VP of Engineering na Parloa, onde trabalha para que conversas com
-    IA funcionem de forma confiável em escala. Em 18 anos no Brasil e na Europa,
-    liderou organizações de plataforma e engenharia na Babbel, HelloFresh, N26 e
-    Lykon, e fala sobre o custo das plataformas, o que a confiabilidade exige e as
-    partes da liderança em engenharia que ninguém coloca em slide.
+    IA funcionem de forma confiável em escala. Em quase duas décadas no Brasil e na
+    Europa, liderou organizações de plataforma e engenharia na Babbel, HelloFresh, N26
+    e Urban Sports Club, e fala sobre engenharia de plataforma, como fazer organizações
+    de engenharia crescerem sem ficar mais lentas, e liderança e cultura em engenharia.
   long: |-
     Italo Vietro é VP of Engineering na Parloa, onde trabalha para que conversas com IA funcionem de forma confiável em escala.
 
-    Começou consertando computadores em João Pessoa e construiu sistemas de alta carga para o registro de empresas do governo brasileiro antes de se mudar para a Europa. Entre os cargos anteriores estão VP of Platform na Babbel, à frente de mais de 120 pessoas em plataforma, infraestrutura e confiabilidade; Director of Engineering na HelloFresh, durante o crescimento de 13 para mais de 300 engenheiros; a liderança de 40 engenheiros em core banking na N26; a construção do TechHub da Urban Sports Club na Espanha; e CTO na Lykon, montando um time e uma plataforma de mais de 40 microsserviços num setor de saúde regulado.
+    Começou consertando computadores em João Pessoa e construiu sistemas de alta carga para o registro de empresas do governo brasileiro antes de se mudar para a Europa. Entre os cargos anteriores estão VP of Platform na Babbel, à frente de mais de 120 pessoas em plataforma, infraestrutura e confiabilidade; Director of Engineering na HelloFresh, durante o crescimento de 13 para mais de 300 engenheiros; a liderança de 40 engenheiros em core banking na N26; e a construção do TechHub da Urban Sports Club na Espanha.
 
-    Já falou na GoLab, na GoDays, na LeadingEng Berlin, na DevTalks Romania e no Platform Engineering and Developer Experience Summit, em Londres, e apresentou 23 episódios do podcast The Critical Channel.
+    Fala sobre engenharia de plataforma, como fazer organizações de engenharia crescerem sem ficar mais lentas, e liderança e cultura em engenharia, em conferências como GoLab, GoDays, LeadingEng Berlin, DevTalks Romania e o Platform Engineering and Developer Experience Summit, em Londres, e apresentou 23 episódios do podcast The Critical Channel.
 
 photos:
   - src: "headshot.jpg"

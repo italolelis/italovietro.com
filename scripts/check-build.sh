@@ -373,6 +373,17 @@ text_has "$EN_KIT" 'Italo Vietro is VP of Engineering at Parloa' 'the en bios op
 text_has "$PT_KIT" 'Italo Vietro é VP of Engineering na Parloa' 'the pt-br bios open on the current title'
 occurs "$EN_KIT" 'kit__bio' 2 'en: a short bio and a long one'
 occurs "$PT_KIT" 'kit__bio' 2 'pt-br: a short bio and a long one'
+# Italo's choices for the bios (October 2026): Urban Sports Club rather than Lykon,
+# "almost two decades" rather than a count of years, and his own three topics rather
+# than the speaking page's "nobody puts on a slide" line.
+absent_from "$EN_KIT" 'Lykon' 'the en kit names Urban Sports Club, not Lykon'
+absent_from "$PT_KIT" 'Lykon' 'nor does the pt-br one'
+text_has "$EN_KIT" 'almost two decades' 'the en short bio says almost two decades'
+text_has "$PT_KIT" 'quase duas décadas' 'the pt-br one says quase duas décadas'
+absent_from "$EN_KIT" 'on a slide' 'the en kit drops the slide line'
+absent_from "$PT_KIT" 'em slide' 'and so does the pt-br one'
+text_has "$EN_KIT" 'speaks about platform engineering' 'the en bios name the topics Italo gave'
+text_has "$PT_KIT" 'fala sobre engenharia de plataforma' 'and so do the pt-br ones'
 # Calls for papers cap a bio by words, so each says how long it is.
 matches "$EN_KIT" '[0-9]+ words' 'each en bio says how many words it is'
 matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'
