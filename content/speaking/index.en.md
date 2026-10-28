@@ -16,6 +16,8 @@ Happy to talk at your event or on your podcast — [me@italovietro.com](mailto:m
 
 Mostly about what platforms cost, what reliability takes, and the parts of engineering leadership nobody puts on a slide.
 
+Organising an event? A bio and photos are in the [speaker kit](/speaking/kit/).
+
 {{< upcoming heading="Upcoming" >}}
 
 ## Conference Talks

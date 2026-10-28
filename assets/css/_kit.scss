@@ -1,0 +1,165 @@
+// ==============================
+// Speaker kit (layouts/speaking/kit.html)
+// ==============================
+//
+// A working page for event organisers: they come to copy a bio and download a
+// photo, so the parts are labelled and the things to take are easy to find. The
+// voice is the site's (ADR-0006): the bios are serif, because they are reading;
+// the labels, the facts' names and the download links are sans, because they are
+// furniture.
+//
+// The head sits outside `.content`, like every page title, so it takes the Measure
+// itself to keep the kicker and the dek on the title's left edge (ADR-0004).
+//
+// Selectors that compete with the theme's `[theme=dark] .single .content a` and
+// `h3` rules (0,3,1) carry a type, to tie them and win on order (this file loads
+// after the theme), rather than win in one theme mode and lose in the other.
+
+.kit__head {
+    @include measure;
+    padding-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.kit__kicker {
+    @include kicker;
+    margin: 0 0 0.875rem;
+}
+
+// The type module gives `.single .single-title` a top margin to clear the header;
+// here the head's padding does that, and the kicker sits right above the title, as
+// in the masthead (_masthead.scss).
+.single .kit__head .single-title {
+    margin: 0;
+}
+
+.single .kit__kicker a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.single .kit__kicker a:hover {
+    color: var(--accent);
+}
+
+.kit__dek {
+    @include dek;
+    margin: 0.75rem 0 0;
+}
+
+.kit__section + .kit__section {
+    margin-top: 3rem;
+}
+
+// --- At a glance ---------------------------------------------------------
+//
+// A definition list in two columns: the names small and sans on the left, the
+// values in the reading face on the right. One column on a phone.
+.kit__facts {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 0.5rem 1.5rem;
+    margin: 0;
+}
+
+.kit__facts dt {
+    @include sans;
+    font-size: $text-ui;
+    color: var(--muted);
+    padding-top: 0.2rem;
+}
+
+.kit__facts dd {
+    margin: 0;
+}
+
+// --- Bios ----------------------------------------------------------------
+//
+// Each bio under a label that says which it is and how many words it runs, ruled
+// off from the next so the two can be told apart at a glance and copied whole.
+.kit__bio + .kit__bio {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hairline);
+}
+
+.single .content h3.kit__label {
+    @include kicker;
+    margin: 0 0 0.75rem;
+    color: var(--heading);
+}
+
+.kit__count {
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 0.5rem;
+}
+
+.kit__bio p:last-child {
+    margin-bottom: 0;
+}
+
+// --- Photos --------------------------------------------------------------
+//
+// Two to a row, tops aligned, each with its label and a download link under it.
+// The download link says the format, the pixel size and the weight, read from the
+// file, so an organiser knows what they are getting before clicking.
+.single .content ul.kit__photos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    align-items: start;
+}
+
+.single .content ul.kit__photos li {
+    margin: 0;
+    padding: 0;
+}
+
+.kit__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    background: var(--hairline);
+}
+
+.kit__photo-label {
+    @include sans;
+    font-size: $text-ui;
+    font-weight: 600;
+    color: var(--heading);
+    margin: 0.75rem 0 0.25rem;
+}
+
+.single .content a.kit__download {
+    @include sans;
+    font-size: $text-caption;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--hairline);
+    transition: color $transition-base;
+}
+
+.single .content a.kit__download:hover {
+    color: var(--accent);
+}
+
+// --- Mobile --------------------------------------------------------------
+@media (max-width: 680px) {
+    .kit__facts {
+        grid-template-columns: 1fr;
+        gap: 0.125rem;
+    }
+
+    .kit__facts dd + dt {
+        margin-top: 0.75rem;
+    }
+
+    .single .content ul.kit__photos {
+        grid-template-columns: 1fr;
+    }
+}

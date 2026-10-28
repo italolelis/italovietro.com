@@ -103,3 +103,31 @@ other = "Event"
 # own order. Used with `time.Format`, which writes the month name in the page's language.
 ["entry.dayMonth"]
 other = "January 2"
+
+# The speaker kit (layouts/speaking/kit.html): a bio and photos for event organisers.
+["kit.facts"]
+other = "At a glance"
+["kit.name"]
+other = "Name"
+["kit.role"]
+other = "Role"
+["kit.topics"]
+other = "Talks about"
+["kit.record"]
+other = "Past talks"
+["kit.recordLink"]
+other = "The speaking page"
+["kit.contact"]
+other = "Contact"
+["kit.bio"]
+other = "Bio"
+["kit.short"]
+other = "Short"
+["kit.long"]
+other = "Long"
+["kit.words"]
+other = "{{ .Count }} words"
+["kit.photos"]
+other = "Photos"
+["kit.download"]
+other = "Download JPEG · {{ .W }} × {{ .H }} · {{ .KB }} KB"

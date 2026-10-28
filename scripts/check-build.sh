@@ -358,6 +358,39 @@ nowhere 'Head of Engineering' 'superseded title appears nowhere'
 # it was the HelloFresh title on About, and a rung in the ladder in do-job-titles-matter.
 nowhere 'Senior Director of Engineering' 'the title before VP appears nowhere'
 
+echo 'Speaker kit'
+# A bio and photos for organisers, at one URL Italo can paste into a call for papers:
+# /speaking/kit/, linked from the speaking page's invitation. Built from front matter
+# by layouts/speaking/kit.html; the photos are files in its bundle, so the sizes
+# printed beside them are read from the files and cannot claim more than they are.
+EN_KIT="$PUBLIC/speaking/kit/index.html"
+PT_KIT="$PUBLIC/pt-br/palestras/kit/index.html"
+exists "$EN_KIT" 'the speaker kit is built in English'
+exists "$PT_KIT" 'and in Portuguese, under the Portuguese speaking page'
+matches "$EN_SPEAKING" 'href="?/speaking/kit/"?[ >]' 'the en speaking page links to the kit'
+matches "$PT_SPEAKING" 'href="?/pt-br/palestras/kit/"?[ >]' 'the pt-br speaking page links to its kit'
+text_has "$EN_KIT" 'Italo Vietro is VP of Engineering at Parloa' 'the en bios open on the current title'
+text_has "$PT_KIT" 'Italo Vietro é VP of Engineering na Parloa' 'the pt-br bios open on the current title'
+occurs "$EN_KIT" 'kit__bio' 2 'en: a short bio and a long one'
+occurs "$PT_KIT" 'kit__bio' 2 'pt-br: a short bio and a long one'
+# Calls for papers cap a bio by words, so each says how long it is.
+matches "$EN_KIT" '[0-9]+ words' 'each en bio says how many words it is'
+matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'
+text_has "$EN_KIT" 'VP of Engineering, Parloa' 'the en kit states the role on its own line'
+text_has "$PT_KIT" 'VP of Engineering, Parloa' 'and so does the pt-br one'
+# Every photo is offered as a JPEG an organiser can download, and the link resolves.
+occurs "$EN_KIT" 'kit__download' 2 'en: two photos to download'
+occurs "$PT_KIT" 'kit__download' 2 'pt-br: two photos to download'
+for kit in "$EN_KIT" "$PT_KIT"; do
+    [ -f "$kit" ] || continue
+    for href in $(grep -oE 'kit__download"? href="?[^" >]+' "$kit" | sed -E 's/.*href="?//'); do
+        exists "$PUBLIC$href" "kit download resolves: $href"
+        case "$href" in *.jpg) ok "kit download is a JPEG: $href" ;; *) bad "kit download is a JPEG: $href" ;; esac
+    done
+done
+absent_from "$EN_ARCHIVE" '/speaking/kit/' 'the kit is not in the writing archive'
+absent_from "$PUBLIC/index.xml" '/speaking/kit/' 'nor in the site feed'
+
 echo 'Speaking page'
 # No apostrophe in the needle: the entry renders it as &#39; in the body and
 # literally in metadata, and this should assert the entry, not the encoding.
