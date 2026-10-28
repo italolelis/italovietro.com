@@ -19,7 +19,7 @@
 */ -}}
 {{- $heading := .Get "heading" -}}
 {{- $future := slice -}}
-{{- range site.Data.upcoming -}}
+{{- range hugo.Data.upcoming -}}
     {{- if (time.AsTime .until).After now -}}
         {{- $future = $future | append . -}}
     {{- end -}}

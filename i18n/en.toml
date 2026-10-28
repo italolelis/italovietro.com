@@ -1,0 +1,65 @@
+# Strings for the episode pages (layouts/episodes/single.html and partials/episode/).
+#
+# Keys are quoted so the dot is part of the name rather than a nested table. Hugo
+# merges this file over the theme's own en.toml, so nothing here may reuse one of
+# the theme's keys unless it means to replace it.
+
+["episode.and"]
+other = " and "
+["episode.mapLabel"]
+other = "Episode map"
+["episode.chapter"]
+other = "Chapter"
+["episode.playFrom"]
+other = "Listen from {{ .Clock }} on {{ .Where }}"
+["episode.listenHeading"]
+other = "Listen to the whole thing"
+["episode.colophon"]
+other = "Transcribed from the recording with Whisper, and re-run on the passages where it stumbled. The watercolours were painted by code Claude wrote: polygons deformed and glazed in transparent layers, with pigment that settles into the paper’s grain and pools at the edge of a wash, rendered with OpenCV."
+
+["episode.mapHeading"]
+other = "In this episode"
+["episode.minutes"]
+other = "{{ . }} minutes"
+["episode.intro"]
+other = "Intro"
+["episode.of"]
+other = "of {{ . }}"
+["episode.basedOn"]
+other = "Based on <strong>{{ .Title }}</strong>, with {{ .Hosts }}"
+["episode.released"]
+other = "Released {{ . }}"
+["episode.length"]
+other = "{{ . }} min"
+["episode.writtenUp"]
+other = "Written by Claude from a transcript of the episode, {{ . }}"
+["episode.lesson"]
+other = "The lesson"
+["episode.disclaimer"]
+other = "**Written by Claude, not by Italo.** Claude, an AI model made by Anthropic, wrote these highlights from a transcript of the episode. The quotes are Italo’s own words from the recording, lightly trimmed, each linked to the second it was said. The summaries and lessons are Claude’s reading of them, not Italo’s writing, which is in [Writing]({{ .Writing }})."
+
+# Figures (partials/episode/ask.html and figure.html). Only the generic words
+# live here; each question, label and note is written in the episode's own
+# front matter, per language.
+["episode.askKicker"]
+other = "Before you read on"
+["episode.reveal"]
+other = "Show me"
+["episode.guessYou"]
+other = "Your guess"
+["episode.guessReal"]
+other = "What happened"
+["episode.modelBefore"]
+other = "Before"
+["episode.modelAfter"]
+other = "After"
+["episode.modelFaster"]
+other = "%s× faster"
+["episode.modelSame"]
+other = "no faster"
+["episode.modelLongest"]
+other = "The longest stage is %s."
+["episode.modelToggles"]
+other = "Stages to automate"
+["episode.tipHint"]
+other = "Click to read it"

@@ -17,4 +17,6 @@ I write from time to time, and those thoughts end up in <a href="/posts/">writin
 
 When I'm not thinking about distributed systems, you'll find me managing my homelab (Kubernetes clusters, self-hosted everything), brewing coffee with an amount of precision that my family finds unreasonable, strategizing over D&D campaigns, and being a dedicated dad and husband. The homelab is where I experiment. The coffee is where I focus. The D&D is where I accept that even the best-laid plans fall apart.
 
+{{< home-plate src="images/plates/desk.webp" alt="A watercolour of a desk in Berlin at dusk: a small homelab with blinking lights, a kettle and a pour-over on a scale, a twenty-sided die and a notebook. On the wall, a child’s drawing of a family of three and a postcard from a tropical beach; through the window, the Fernsehturm against an orange sky." >}}
+
 </div>

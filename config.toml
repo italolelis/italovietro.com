@@ -14,8 +14,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
 [languages]
   [languages.en]
     weight = 1
-    languageCode = "en"
-    languageName = "English"
+    locale = "en"
+    label = "English"
     hasCJKLanguage = false
     copyright = "italo Vietro."
       
@@ -118,8 +118,8 @@ ignoreLogs = ['shortcode-twitter-getremote']
 
   [languages.pt-br]
     weight = 2
-    languageCode = "pt-BR"
-    languageName = "Português"
+    locale = "pt-BR"
+    label = "Português"
     hasCJKLanguage = false
     copyright = "italovietro"
     [languages.pt-br.menu]

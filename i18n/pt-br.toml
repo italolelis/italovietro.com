@@ -1,0 +1,61 @@
+# Textos das páginas de episódio (layouts/episodes/single.html e partials/episode/).
+# Ver i18n/en.toml. O Hugo combina este arquivo com o pt-BR.toml do tema.
+
+["episode.and"]
+other = " e "
+["episode.mapLabel"]
+other = "Mapa do episódio"
+["episode.chapter"]
+other = "Capítulo"
+["episode.playFrom"]
+other = "Ouvir a partir de {{ .Clock }} no {{ .Where }}"
+["episode.listenHeading"]
+other = "Ouça o episódio inteiro"
+["episode.colophon"]
+other = "Transcrito da gravação com o Whisper, e refeito nos trechos em que ele tropeçou. As citações foram ditas em inglês e traduzidas aqui. As aquarelas foram pintadas por um código que o Claude escreveu: polígonos deformados e sobrepostos em camadas transparentes, com pigmento que assenta no grão do papel e se acumula na borda de cada aguada, renderizados com OpenCV."
+
+["episode.mapHeading"]
+other = "Neste episódio"
+["episode.minutes"]
+other = "{{ . }} minutos"
+["episode.intro"]
+other = "Abertura"
+["episode.of"]
+other = "de {{ . }}"
+["episode.basedOn"]
+other = "Baseado em <strong>{{ .Title }}</strong>, com {{ .Hosts }}"
+["episode.released"]
+other = "Publicado em {{ . }}"
+["episode.length"]
+other = "{{ . }} min"
+["episode.writtenUp"]
+other = "Escrito pelo Claude a partir da transcrição do episódio, em {{ . }}"
+["episode.lesson"]
+other = "A lição"
+["episode.disclaimer"]
+other = "**Escrito pelo Claude, não pelo Italo.** O Claude, um modelo de IA da Anthropic, escreveu estes destaques a partir da transcrição do episódio. As citações são palavras do próprio Italo na gravação, traduzidas e com pequenos cortes, cada uma ligada ao segundo em que foi dita. Os resumos e as lições são a leitura do Claude, não textos do Italo, que estão em [Artigos]({{ .Writing }})."
+
+# Figuras (partials/episode/ask.html e figure.html). Só as palavras genéricas
+# ficam aqui; cada pergunta, rótulo e nota está no front matter do episódio.
+["episode.askKicker"]
+other = "Antes de continuar"
+["episode.reveal"]
+other = "Mostrar"
+["episode.guessYou"]
+other = "O seu palpite"
+["episode.guessReal"]
+other = "O que aconteceu"
+["episode.modelBefore"]
+other = "Antes"
+["episode.modelAfter"]
+other = "Depois"
+["episode.modelFaster"]
+other = "%s× mais rápido"
+["episode.modelSame"]
+other = "nada mais rápido"
+["episode.modelLongest"]
+other = "A etapa mais longa é %s."
+["episode.modelToggles"]
+other = "Etapas a automatizar"
+["episode.tipHint"]
+other = "Clique para ler"

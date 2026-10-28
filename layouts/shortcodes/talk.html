@@ -2,7 +2,7 @@
 {{- /*
     Parameters: title (required), event (required), date (required), type (required),
     video_url (optional), slides_url (optional), recordings (optional),
-    event_url (optional).
+    event_url (optional), highlights_url (optional), highlights_label (optional).
 
     type is talk | panel | podcast | host.
 
@@ -19,6 +19,12 @@
 
     Labels are written per language in the content file, so a city can be Florence
     in one and Florença in the other.
+
+    `highlights_url` is an episode with a page of its own here (content/episodes/):
+    chapter by chapter, with the lessons pulled out, written by Claude from the
+    transcript and saying so. Labelled "Highlights" rather than "Read" because it
+    is not Italo's writing. It is the one link on the row that stays on this site,
+    so it comes first. `highlights_label` carries the word per language.
 */ -}}
 {{- $title     := .Get "title" -}}
 {{- $event     := .Get "event" -}}
@@ -28,6 +34,8 @@
 {{- $slidesUrl := .Get "slides_url" | default "" -}}
 {{- $recordings := .Get "recordings" | default "" -}}
 {{- $eventUrl  := .Get "event_url" | default "" -}}
+{{- $highlightsUrl   := .Get "highlights_url" | default "" -}}
+{{- $highlightsLabel := .Get "highlights_label" | default "Highlights" -}}
 {{- $inner     := trim .Inner "\n" | .Page.RenderString -}}
 {{- $icon := "fa-microphone" -}}
 {{- if eq $type "panel" -}}{{- $icon = "fa-users" -}}{{- end -}}
@@ -52,6 +60,7 @@
                    bug, whatever combination an entry carries. */ -}}
             {{- $links := slice -}}
             {{- $anchor := `<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>` -}}
+            {{- with $highlightsUrl }}{{- $links = $links | append (printf `<a href="%s">%s</a>` (relLangURL .) $highlightsLabel) -}}{{- end }}
             {{- if $videoUrl }}{{- $links = $links | append (printf $anchor $videoUrl "Watch") -}}{{- end }}
             {{- with $recordings }}
                 {{- range split . "|" }}

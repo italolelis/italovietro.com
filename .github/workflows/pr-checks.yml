@@ -14,7 +14,6 @@ jobs:
     name: Build Check
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.153.2
       # Declared at job level, not step level: a step's own `env` block is not
       # reliably readable from that same step's `if` condition.
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -26,6 +25,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      # One pin for every build: .hugo-version, which vercel.json also reads and
+      # scripts/check-build.sh compares against the Hugo that built the output.
+      - name: Read Hugo version
+        run: echo "HUGO_VERSION=$(cat .hugo-version)" >> "$GITHUB_ENV"
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -54,21 +58,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugo-resources-
 
+      # scripts/build.sh fails on any Hugo warning. It replaces a step that
+      # printed hugo-build.log, a file nothing ever wrote, so it never fired.
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
-        run: |
-          hugo \
-            --gc \
-            --minify
-
-      - name: Check for build warnings
-        run: |
-          if [ -s hugo-build.log ]; then
-            echo "⚠️ Build warnings found:"
-            cat hugo-build.log
-          fi
+        run: ./scripts/build.sh
 
       - name: Assert build output
         run: ./scripts/check-build.sh public

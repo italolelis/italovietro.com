@@ -1,0 +1,99 @@
+{{- /* An explanatory figure inside a chapter, after its summary. Declared in
+       front matter as `figures`, so a new episode gets one without new code:
+
+         type: model -- a toy model: stages with values, each optionally divided
+                        by `cut` when its `toggle` is on. A stacked bar before and
+                        after, the total, and the longest stage. `unit` ("%s
+                        days") and `note` -- the note is not optional in spirit:
+                        if the values are invented, it has to say so where the
+                        numbers are.
+         type: flow  -- a process, top to bottom: steps with a name and a note, a
+                        step with `items`, and at most one `fork` of branches keyed
+                        by `path`. `paths` are the buttons that light one branch.
+
+       Both take kicker and title. Without JavaScript a model shows its starting
+       point and a flow shows both branches; the controls stay hidden.
+
+       Params: page, f. */ -}}
+{{- $f := .f -}}
+
+{{- if eq $f.type "model" -}}
+    {{- $total := 0.0 }}{{ range $f.stages }}{{ $total = add $total (float .value) }}{{ end -}}
+    {{- $days := printf "%.1f" $total -}}
+    {{- if eq site.Language.Lang "pt-br" }}{{ $days = replace $days "." "," }}{{ end -}}
+<figure class="ep-viz ep-model" data-model data-total="{{ $total }}" data-unit="{{ $f.unit }}"
+        data-l-faster="{{ T "episode.modelFaster" }}" data-l-same="{{ T "episode.modelSame" }}" data-l-longest="{{ T "episode.modelLongest" }}">
+    <figcaption class="ep-viz__head">
+        <span class="ep-viz__kicker">{{ $f.kicker }}</span>
+        <span class="ep-viz__title">{{ $f.title }}</span>
+    </figcaption>
+    <div class="ep-model__bars">
+        <div class="ep-model__row ep-model__row--before">
+            <span class="ep-model__label">{{ T "episode.modelBefore" }}</span>
+            <span class="ep-model__stack">
+                {{- range $i, $s := $f.stages }}
+                <span class="ep-model__seg ep-model__seg--{{ add (mod $i 4) 1 }}{{ if $s.accent }} ep-model__seg--accent{{ end }}" style="flex-grow: {{ $s.value }}"><span>{{ $s.label }}</span></span>
+                {{- end }}
+            </span>
+            <span class="ep-model__total">{{ printf $f.unit $days }}</span>
+        </div>
+        <div class="ep-model__row ep-model__row--after" data-after hidden>
+            <span class="ep-model__label">{{ T "episode.modelAfter" }}</span>
+            <span class="ep-model__stack">
+                {{- range $i, $s := $f.stages }}
+                <span class="ep-model__seg ep-model__seg--{{ add (mod $i 4) 1 }}{{ if $s.accent }} ep-model__seg--accent{{ end }}" data-stage="{{ $i }}" data-name="{{ $s.label }}" data-days="{{ $s.value }}" data-cut="{{ $s.cut | default 1 }}" style="flex-grow: {{ $s.value }}"><span>{{ $s.label }}</span></span>
+                {{- end }}
+            </span>
+            <span class="ep-model__total" data-after-total></span>
+        </div>
+    </div>
+    <div class="ep-model__toggles" role="group" aria-label="{{ T "episode.modelToggles" }}" hidden>
+        {{- range $i, $s := $f.stages }}{{ with $s.toggle }}
+        <button type="button" class="ep-viz__toggle" aria-pressed="false" data-toggle="{{ $i }}">
+            <span class="ep-viz__toggle-box" aria-hidden="true"></span>{{ . }}
+        </button>
+        {{- end }}{{ end }}
+    </div>
+    <p class="ep-model__readout" data-readout aria-live="polite"></p>
+    <p class="ep-viz__note">{{ $f.note }}</p>
+</figure>
+
+{{- else if eq $f.type "flow" -}}
+<figure class="ep-viz ep-flow" data-flow data-path="none">
+    <figcaption class="ep-viz__head">
+        <span class="ep-viz__kicker">{{ $f.kicker }}</span>
+        <span class="ep-viz__title">{{ $f.title }}</span>
+    </figcaption>
+    {{- with $f.paths }}
+    <div class="ep-flow__controls" role="group" aria-label="{{ $f.controls }}" hidden>
+        {{- range . }}
+        <button type="button" class="ep-viz__toggle" aria-pressed="false" data-path="{{ .key }}"><span class="ep-viz__toggle-box" aria-hidden="true"></span>{{ .label }}</button>
+        {{- end }}
+    </div>
+    {{- end }}
+    <ol class="ep-flow__steps">
+        {{- range $i, $s := $f.steps }}
+        {{- if $s.fork }}
+        <li class="ep-flow__step ep-flow__step--fork" style="--i: {{ $i }}">
+            {{- range $s.fork }}
+            <div class="ep-flow__branch" data-branch="{{ .path }}">
+                <span class="ep-flow__name">{{ .name }}</span>
+                <span class="ep-flow__note">{{ .note }}</span>
+            </div>
+            {{- end }}
+        </li>
+        {{- else }}
+        <li class="ep-flow__step" style="--i: {{ $i }}">
+            <span class="ep-flow__name">{{ $s.name }}</span>
+            {{- with $s.note }}<span class="ep-flow__note">{{ . }}</span>{{ end }}
+            {{- with $s.items }}
+            <ul class="ep-flow__items">
+                {{- range . }}<li><strong>{{ .name }}</strong> {{ .note }}</li>{{ end }}
+            </ul>
+            {{- end }}
+        </li>
+        {{- end }}
+        {{- end }}
+    </ol>
+</figure>
+{{- end -}}

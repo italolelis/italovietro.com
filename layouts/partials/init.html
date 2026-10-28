@@ -21,9 +21,13 @@
     {{- else if eq .Params.comment false -}}
         {{- .Scratch.Set "comment" dict -}}
     {{- end -}}
-{{- else if eq .Site site.Sites.Default -}}
-    {{- warnf "\n\nCurrent environment is \"development\". The \"comment system\", \"CDN\" and \"fingerprint\" will be disabled.\n当前运行环境是 \"development\". \"评论系统\", \"CDN\" 和 \"fingerprint\" 不会启用.\n" -}}
 {{- end -}}
+{{- /* The theme warns here, on every `hugo server`, that development disables
+       the comment system, the CDN and fingerprinting. This site has no comments
+       and no CDN (see [params.cdn] in config.toml), so the notice only ever said
+       "fingerprinting is off locally", in two languages, as a WARN line next to
+       the ones that matter. Removed, so a warning in the build log means
+       something. */ -}}
 
 {{- .Scratch.Set "params" $params -}}
 {{- /* Seeded with an empty `config`, and it must stay non-nil.

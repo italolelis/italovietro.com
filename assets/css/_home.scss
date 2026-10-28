@@ -123,3 +123,38 @@
         font-size: 1.0625rem;
     }
 }
+
+// The desk.
+//
+// A watercolour of the paragraph above it -- the homelab, the pour-over, the
+// D&D die, a child's drawing, a postcard from the Brazilian coast, Berlin
+// through the window -- painted by scripts/watercolour/plates/desk.py in the
+// same hand as the episode plates. A still life on purpose: the home page keeps
+// a face off it (see avatarURL in config.toml), and objects say who someone is
+// without asking to be looked at.
+//
+// Last on the page, so the greeting stays the first and loudest thing, and at
+// the full measure like everything else (docs/adr/0004). The sheet has a torn
+// alpha edge, so it reads as paper on either theme rather than as a box.
+.home .home-content .home-plate {
+    margin: 2.25rem 0 0;
+    text-align: left;
+}
+
+.home .home-content .home-plate img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+// Paper does not glow: dimmed a little so a white sheet is not the brightest
+// thing on a dark screen. The same treatment as the episode plates.
+[theme=dark] .home .home-content .home-plate img {
+    filter: brightness(0.9);
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] .home .home-content .home-plate img {
+        filter: brightness(0.9);
+    }
+}

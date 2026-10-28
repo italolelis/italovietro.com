@@ -1,0 +1,1316 @@
+// ==============================
+// Episode page
+// ==============================
+//
+// A podcast episode, chapter by chapter, with the lessons pulled out
+// (layouts/episodes/single.html). The only page on the site with its own
+// typographic voice, so everything here is scoped under `.episode` and nothing
+// leaks to the other posts.
+//
+// Two families, the way a newspaper feature does it: a serif for the reading
+// and the headline, the site's system sans for everything that is furniture --
+// kickers, captions, the timeline, the chapter list. Both are system stacks. No
+// webfont is loaded (ADR-0002): Charter ships with macOS and iOS, Sitka and
+// Cambria with Windows, Bitstream Charter with most Linux desktops, and Georgia
+// is everywhere else.
+//
+// One measure (ADR-0004). The masthead and the hero plate sit outside
+// `.content`, so they take the same 800px cap and the same left edge explicitly.
+// Nothing on this page is wider than the prose, the plates included: a
+// full-bleed plate was considered and left out, because it is the one element
+// the ADR asks to justify, and a watercolour reads as an object on a page rather
+// than as a banner. The timeline's background runs the width of the window like
+// the header it sits under; its contents keep the measure.
+//
+// Colour. The accent keeps its five roles (ADR-0001) and gains none: links here
+// are amber because they are links -- the timestamps, the chapter names -- and
+// nothing is amber for decoration. Everything else that marks something uses one
+// ink, the indigo the watercolours are painted in, so the furniture and the
+// plates read as one set:
+//   #3d4f7a  8.08:1 on #fff
+//   #9db0e0  6.64:1 on #292a2d
+
+$ep-serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, "Iowan Old Style", Georgia, serif;
+$ep-ink: #3d4f7a;
+$ep-ink-dark: #9db0e0;
+$ep-rule: #d6d3d1;
+$ep-rule-dark: #4b4d52;
+// Figure fills: grey bands under their own labels (12.5:1 and up for body text in
+// light, 6.4:1 and up in dark), so telling them apart never rests on the fill.
+$ep-fill: (#e7e5e4, #d6d3d1, #cfcac4, #c4beb7);
+$ep-fill-dark: (#3a3b40, #44464b, #4e5056, #575a60);
+$ep-ink-text-dark: #1c1d20; // on $ep-ink-dark: 7.80:1
+$ep-heading-dark: $heading-color-dark;
+
+@mixin ep-kicker {
+    font-family: $global-font-family;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $muted-text-color;
+}
+
+// ---- Masthead ------------------------------------------------------------
+
+.episode .ep-masthead,
+.episode > .ep-plate--hero {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.episode .ep-kicker {
+    @include ep-kicker;
+    margin: 2.5rem 0 0.875rem;
+}
+
+.episode .ep-kicker__show {
+    color: $global-font-color;
+}
+
+.episode .ep-kicker__sep {
+    margin: 0 0.4em;
+}
+
+// The theme sizes .single-title at 1.6rem with 140% leading, set for one-line
+// post titles. This one is a headline: large, and at the regular weight, which
+// is what lets a serif look set rather than shouted.
+.episode .single-title.ep-title {
+    font-family: $ep-serif;
+    font-size: 3.75rem;
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.1rem;
+    text-wrap: balance;
+}
+
+.episode .ep-dek {
+    font-family: $ep-serif;
+    font-size: 1.375rem;
+    font-style: italic;
+    line-height: 1.45;
+    margin: 0 0 1.25rem;
+    color: $global-font-color;
+    text-wrap: pretty;
+}
+
+.episode .ep-meta {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: $muted-text-color;
+    margin: 0 0 2rem;
+}
+
+.episode .ep-meta > span {
+    display: block;
+}
+
+.episode .ep-meta strong {
+    color: $global-font-color;
+    font-weight: 600;
+}
+
+.episode .ep-meta__sep {
+    margin: 0 0.45em;
+}
+
+// Who wrote the page. Claude does, from the transcript, and the reader is told
+// before the first chapter rather than in a colophon nobody reaches. Outlined
+// rather than filled, so it reads as a note about the page and not as one of the
+// lesson boxes inside it; body colour rather than muted, because it is not
+// fine print.
+.episode .ep-disclaimer {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: $global-font-color;
+    margin: -0.75rem 0 2rem;
+    padding: 0.7rem 0.95rem 0.75rem;
+    border: 1px solid $ep-rule;
+    border-radius: 4px;
+}
+
+.episode .ep-disclaimer strong {
+    color: $ep-ink;
+}
+
+// The masthead sits outside .content, where the theme's link colour does not
+// reach; this link is amber because it is a link (ADR-0001), nothing more.
+.episode .ep-disclaimer a {
+    color: $single-link-color;
+}
+
+// ---- Prose ----------------------------------------------------------------
+
+.episode .content {
+    font-family: $ep-serif;
+    font-size: 1.1875rem;
+    line-height: 1.65;
+}
+
+.episode .content p {
+    margin: 0 0 1.1em;
+}
+
+.episode .content > h2:not(.ep-chapter) {
+    font-family: $ep-serif;
+    font-size: 1.875rem;
+    line-height: 1.15;
+    margin: 3.5rem 0 1rem;
+}
+
+.episode .content .ep-chapter {
+    font-family: $ep-serif;
+    margin: 3.75rem 0 1.25rem;
+    scroll-margin-top: 5rem;
+}
+
+.episode .content .ep-chapter__kicker {
+    @include ep-kicker;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.episode .content .ep-chapter__title {
+    display: block;
+    font-size: 2rem;
+    line-height: 1.12;
+    font-weight: 700;
+    text-wrap: balance;
+}
+
+// ---- Moments: quotes with a timestamp ---------------------------------------
+
+.episode .content .ep-moment {
+    margin: 1.75rem 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid $ep-rule;
+    scroll-margin-top: 5rem;
+}
+
+// Undo the theme's blockquote: a tinted box with a thick accent bar.
+.episode .content .ep-moment blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 1.25rem;
+    line-height: 1.5;
+}
+
+.episode .content .ep-moment blockquote p {
+    margin: 0;
+}
+
+.episode .content .ep-moment figcaption {
+    font-family: $global-font-family;
+    font-size: 0.8125rem;
+    color: $muted-text-color;
+    margin-top: 0.4rem;
+}
+
+.episode .content .ep-moment__who {
+    font-weight: 600;
+    margin-right: 0.6rem;
+}
+
+.episode .content .ep-moment__play {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+// The larger treatment, for the lines a reader should still have at the end.
+// No rule: the size carries it, and a hanging quotation mark in the rule's place
+// marks it as speech.
+.episode .content .ep-moment--pull {
+    border-left: 0;
+    padding-left: 0;
+    margin: 2.5rem 0;
+    position: relative;
+}
+
+.episode .content .ep-moment--pull blockquote {
+    font-size: 1.75rem;
+    line-height: 1.28;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+}
+
+.episode .content .ep-moment--pull blockquote::before {
+    content: "\201C";
+    position: absolute;
+    left: -0.55em;
+    top: -0.05em;
+    color: $ep-rule;
+    font-size: 1.75rem;
+}
+
+// ---- Figures in the prose -------------------------------------------------
+//
+// The theme gives every figure in .content a .5rem margin and centred text, for
+// its image shortcode. Every figure here is a quote, a plate or a chart that
+// should start at the left edge with everything else.
+.episode .content figure {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
+}
+
+// ---- Plates ---------------------------------------------------------------
+
+.episode .ep-plate,
+.episode .content .ep-plate {
+    margin: 2.5rem 0;
+}
+
+.episode .ep-plate img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.episode .ep-plate figcaption {
+    font-family: $global-font-family;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: $muted-text-color;
+    margin-top: 0.6rem;
+}
+
+.episode > .ep-plate--hero {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+// Spot plates: object-only illustrations at three fifths of the measure, caption
+// beside rather than under, both still starting at the one left edge.
+.episode .ep-plate--spot {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.episode .ep-plate--spot figcaption {
+    margin: 0 0 1.25rem;
+}
+
+// ---- Episode map -------------------------------------------------------------
+
+.episode .content .ep-map {
+    font-family: $global-font-family;
+    margin: 2.25rem 0 2.75rem;
+}
+
+.episode .content .ep-map__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+.episode .content .ep-map__heading {
+    @include ep-kicker;
+    color: $global-font-color;
+}
+
+.episode .content .ep-map__length {
+    color: $muted-text-color;
+}
+
+.episode .content .ep-map ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.episode .content .ep-map__legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+    margin-top: 0.9rem;
+    border-top: 1px solid $ep-rule;
+}
+
+.episode .content .ep-map__legend a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid $ep-rule;
+    font-size: 0.9375rem;
+    text-decoration: none;
+}
+
+.episode .content .ep-map__legend .ep-map__num {
+    flex: 0 0 2.1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $muted-text-color;
+}
+
+.episode .content .ep-map__name {
+    flex: 1 1 auto;
+}
+
+.episode .content .ep-map__clock {
+    font-size: 0.8125rem;
+    color: $muted-text-color;
+    font-variant-numeric: tabular-nums;
+}
+
+.episode .content .ep-map__legend a.is-current .ep-map__name {
+    font-weight: 700;
+}
+
+.episode .content .ep-map__legend a.is-current .ep-map__num {
+    color: $ep-ink;
+}
+
+.episode .content .visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+// ---- Timeline ------------------------------------------------------------------
+//
+// The episode as a ruler, pinned under the site header for the whole page
+// (partials/episode/timeline.html). It sits in the article's own column, so its
+// contents share the one left edge at every width the theme's percentage-based
+// column takes (ADR-0004), and its background runs the width of the window like
+// the header's. That background is a spread box-shadow clipped to the bar's own
+// height: a shadow is painted, not laid out, so it never adds scrollable width.
+// An earlier full-width hairline drawn with a pseudo-element did, and gave every
+// episode page a sideways scroll; the bar now needs no line at all, because the
+// header's colour against the page draws its edge exactly as it draws the
+// header's.
+//
+// The ruler is paper, like the plates: a physical object on the page, in both
+// themes. Ticks are two repeating gradients sized from the episode's length, one
+// a minute and a taller one every ten, so they land on the right minute at any
+// width without a tick element per minute.
+
+$ep-paper: #efe7d4; // the ruler; the ink labels on it measure 6.56:1
+$ep-paper-dark: #cfc5ae; // 4.72:1 for the same ink, dimmed so it does not glare
+
+.episode .ep-timeline {
+    position: sticky;
+    top: $header-height;
+    z-index: 90;
+    font-family: $global-font-family;
+    background: $header-background-color;
+    box-shadow: 0 0 0 100vmax $header-background-color;
+    clip-path: inset(0 -100vmax);
+}
+
+.episode .ep-timeline__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0.55rem 0;
+}
+
+.episode .ep-timeline__now {
+    flex: 0 0 9rem;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.episode .ep-timeline__clock b {
+    font-size: 1.125rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: $global-font-color;
+}
+
+.episode .ep-timeline__of {
+    font-size: 0.75rem;
+    color: $muted-text-color;
+    font-variant-numeric: tabular-nums;
+}
+
+.episode .ep-timeline__chapter {
+    display: block;
+    font-size: 0.75rem;
+    color: $muted-text-color;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.episode .ep-timeline__ruler {
+    position: relative;
+    flex: 1 1 auto;
+    height: 2.4rem;
+    border-radius: 3px;
+    background-color: $ep-paper;
+    background-image:
+        linear-gradient(90deg, rgba($ep-ink, 0.55) 1px, transparent 1px),
+        linear-gradient(90deg, rgba($ep-ink, 0.8) 1px, transparent 1px);
+    background-size:
+        calc(100% / var(--ep-minutes)) 6px,
+        calc(1000% / var(--ep-minutes)) 13px;
+    background-repeat: repeat-x;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+// Chapters as bands, alternating, with a notch where each one starts.
+.episode .ep-timeline__seg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid rgba($ep-ink, 0.45);
+    transition: background-color $transition-base;
+}
+
+.episode .ep-timeline__seg:nth-of-type(even) {
+    background: rgba($ep-ink, 0.06);
+}
+
+.episode .ep-timeline__seg.is-current {
+    background: rgba($ep-ink, 0.16);
+}
+
+.episode .ep-timeline__label {
+    position: absolute;
+    top: 14px;
+    transform: translateX(-50%);
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: $ep-ink;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+}
+
+.episode .ep-timeline__moment {
+    position: absolute;
+    bottom: 4px;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: rgba($ep-ink, 0.7);
+    pointer-events: none;
+}
+
+.episode .ep-timeline__head {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    margin-left: -1px;
+    background: $ep-ink;
+    pointer-events: none;
+    transition: left 0.15s linear;
+}
+
+.episode .ep-timeline__head::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 0 0 50% 50%;
+    background: $ep-ink;
+}
+
+// Anchors land below the header and the timeline both.
+.episode .content .ep-chapter,
+.episode .content .ep-moment {
+    scroll-margin-top: 8rem;
+}
+
+// ---- Highlights ------------------------------------------------------------------
+//
+// The default format: per chapter, a summary, the quotes that carry it, and the
+// lesson pulled out. The lesson is the one boxed element on the page, so it
+// reads as the thing to keep.
+
+.episode .content .ep-hl__summary p {
+    margin: 0 0 1.1em;
+}
+
+.episode .content .ep-hl__lesson {
+    margin: 1.75rem 0 0;
+    padding: 0.95rem 1.15rem 1rem;
+    background: #f7f2e7; // body text on it 16.73:1, the ink kicker 7.24:1
+    border-left: 3px solid $ep-ink;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+}
+
+.episode .content .ep-hl__lesson-kicker {
+    @include ep-kicker;
+    display: block;
+    margin-bottom: 0.35rem;
+    color: $ep-ink;
+}
+
+// ---- Figures -------------------------------------------------------------------
+//
+// partials/episode/ask.html and figure.html: a question before a chapter answers
+// it, and explanatory figures after its summary. The newspaper convention: a
+// heavy rule over a kicker and a serif title, the figure itself in the sans, a
+// hairline under it all. One ink, the plates' indigo, for whatever is the answer
+// or the thing that changed.
+
+.episode .content .ep-viz {
+    font-family: $global-font-family;
+    margin: 2.25rem 0 2.5rem;
+    padding: 1.15rem 0 1.4rem;
+    border-top: 2px solid $global-font-color;
+    border-bottom: 1px solid $ep-rule;
+}
+
+.episode .content .ep-viz__head {
+    display: block;
+    margin-bottom: 1.15rem;
+}
+
+.episode .content .ep-viz__kicker {
+    @include ep-kicker;
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.episode .content .ep-viz__title {
+    display: block;
+    font-family: $ep-serif;
+    font-size: 1.375rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: $global-font-color;
+    text-wrap: balance;
+}
+
+.episode .content .ep-viz__note {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: $muted-text-color;
+    margin: 1rem 0 0;
+}
+
+.episode .content .ep-viz__button {
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.55rem 1.4rem;
+    border: 0;
+    border-radius: 999px;
+    background: $global-font-color;
+    color: #fff;
+    cursor: pointer;
+}
+
+// Toggles read as checkboxes, because that is what they are: each one is on or
+// off, independently. aria-pressed carries the state; the box draws it.
+.episode .content .ep-viz__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    text-align: left;
+    padding: 0.45rem 0.8rem 0.45rem 0.6rem;
+    border: 1px solid $ep-rule;
+    border-radius: 6px;
+    background: transparent;
+    color: $global-font-color;
+    cursor: pointer;
+    transition: border-color $transition-fast, background-color $transition-fast;
+}
+
+.episode .content .ep-viz__toggle-box {
+    flex: 0 0 auto;
+    width: 0.95rem;
+    height: 0.95rem;
+    border: 1.5px solid $muted-text-color;
+    border-radius: 3px;
+    position: relative;
+}
+
+.episode .content .ep-viz__toggle[aria-pressed="true"] {
+    border-color: $ep-ink;
+}
+
+.episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box {
+    background: $ep-ink;
+    border-color: $ep-ink;
+}
+
+.episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box::after {
+    content: "";
+    position: absolute;
+    left: 0.27rem;
+    top: 0.08rem;
+    width: 0.28rem;
+    height: 0.55rem;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.episode .content .ep-ask__verdict {
+    font-family: $ep-serif;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+    margin: 1rem 0 0;
+    outline: none;
+}
+
+.episode .content .ep-ask__verdict p {
+    display: inline;
+}
+
+.episode .content .ep-ask__play {
+    font-family: $global-font-family;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+// ---- A guess: a slider, then two bars ----------------------------------------------
+
+.episode .content .ep-guess input[type="range"] {
+    width: 100%;
+    margin: 0.5rem 0 0;
+    accent-color: $ep-ink;
+}
+
+.episode .content .ep-guess__scale {
+    position: relative;
+    height: 1.2rem;
+    font-size: 0.75rem;
+    color: $muted-text-color;
+}
+
+.episode .content .ep-guess__scale span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.episode .content .ep-guess__scale span:first-child {
+    transform: none;
+}
+
+.episode .content .ep-guess__scale span:last-child {
+    transform: translateX(-100%);
+}
+
+.episode .content .ep-guess__readout {
+    font-family: $ep-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0.75rem 0 0.9rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.episode .content .ep-guess.is-revealed .ep-guess__readout,
+.episode .content .ep-guess.is-revealed input[type="range"],
+.episode .content .ep-guess.is-revealed .ep-guess__scale {
+    opacity: 0.45;
+}
+
+.episode .content .ep-guess__row {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr) 7.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.episode .content .ep-guess__row[hidden] {
+    display: none;
+}
+
+.episode .content .ep-guess__bar {
+    position: relative;
+    height: 1.4rem;
+    background: nth($ep-fill, 1);
+}
+
+.episode .content .ep-guess__bar > span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: #78716c; // 4.80:1 on #fff
+    transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.episode .content .ep-guess__row--real .ep-guess__bar > span {
+    background: $ep-ink;
+}
+
+// A bar of length zero draws nothing at all. A hairline at the origin says the
+// zero is a measurement, not a missing value.
+.episode .content .ep-guess__row--real .ep-guess__bar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -3px;
+    bottom: -3px;
+    width: 3px;
+    background: $ep-ink;
+}
+
+.episode .content .ep-guess__row--real .ep-guess__val {
+    font-weight: 700;
+    color: $ep-ink;
+}
+
+// ---- A choice: buttons, then the right one marked ------------------------------------
+
+.episode .content .ep-choice__options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.episode .content .ep-choice__option {
+    width: 100%;
+    font: inherit;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid $ep-rule;
+    border-radius: 6px;
+    background: transparent;
+    color: $global-font-color;
+    cursor: pointer;
+    transition: border-color $transition-fast, background-color $transition-fast, opacity $transition-base;
+}
+
+.episode .content .ep-choice__option:disabled {
+    cursor: default;
+}
+
+// Answered: the right option filled in ink (white on it, 8.08:1), the reader's
+// wrong pick struck through, the rest stepping back. Without JavaScript the page
+// arrives answered, so the right option is marked from the start.
+.episode .content .ep-choice__option.is-correct {
+    background: $ep-ink;
+    border-color: $ep-ink;
+    color: #fff;
+    font-weight: 600;
+}
+
+.episode .content .ep-choice__option.is-wrong {
+    text-decoration: line-through;
+    color: $muted-text-color;
+}
+
+.episode .content .ep-choice.is-answered .ep-choice__option:not(.is-correct):not(.is-wrong) {
+    opacity: 0.45;
+}
+
+// ---- A toy model: stacked stages, before and after ------------------------------------
+
+.episode .content .ep-model__row {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 5.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.4rem 0;
+    font-size: 0.8125rem;
+}
+
+.episode .content .ep-model__row[hidden] {
+    display: none;
+}
+
+.episode .content .ep-model__label {
+    color: $muted-text-color;
+}
+
+.episode .content .ep-model__total {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+.episode .content .ep-model__stack {
+    display: flex;
+    gap: 2px;
+    width: 100%;
+    height: 2.4rem;
+    transition: width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.episode .content .ep-model__seg {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0.4rem;
+    overflow: hidden;
+    white-space: nowrap;
+    color: $global-font-color;
+    transition: flex-grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@for $i from 1 through 4 {
+    .episode .content .ep-model__seg--#{$i} { background: nth($ep-fill, $i); }
+}
+
+.episode .content .ep-model__seg--accent {
+    background: $ep-ink;
+    color: #fff;
+}
+
+.episode .content .ep-model__seg.is-narrow > span {
+    visibility: hidden;
+}
+
+.episode .content .ep-model__row--before .ep-model__stack {
+    opacity: 0.55;
+}
+
+.episode .content .ep-model__toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.episode .content .ep-model__readout {
+    font-family: $ep-serif;
+    font-size: 1.1875rem;
+    font-weight: 700;
+    margin: 1rem 0 0;
+    min-height: 1.5em;
+}
+
+// ---- A flow: a rail with stations, top to bottom ---------------------------------------
+//
+// Vertical because it is the one direction that holds the step text at a readable
+// size on a phone.
+
+.episode .content .ep-flow__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.episode .content .ep-flow__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.75rem;
+    position: relative;
+}
+
+.episode .content .ep-flow__steps::before {
+    content: "";
+    position: absolute;
+    left: 0.45rem;
+    top: 0.5rem;
+    bottom: 0.9rem;
+    width: 2px;
+    background: $ep-rule;
+}
+
+.episode .content .ep-flow__step {
+    position: relative;
+    padding: 0 0 1.1rem;
+    line-height: 1.4;
+}
+
+.episode .content .ep-flow__step::before {
+    content: "";
+    position: absolute;
+    left: -1.75rem;
+    top: 0.2rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    border: 2px solid $muted-text-color;
+    background: $global-background-color;
+    box-sizing: border-box;
+}
+
+.episode .content .ep-flow__name {
+    display: block;
+    font-weight: 700;
+    font-size: 0.9375rem;
+}
+
+.episode .content .ep-flow__note,
+.episode .content .ep-flow__items {
+    display: block;
+    font-size: 0.875rem;
+    color: $muted-text-color;
+}
+
+.episode .content .ep-flow__items {
+    list-style: none;
+    margin: 0.3rem 0 0;
+    padding: 0;
+}
+
+.episode .content .ep-flow__items li {
+    margin: 0.15rem 0;
+}
+
+.episode .content .ep-flow__items strong {
+    color: $global-font-color;
+    font-weight: 600;
+}
+
+.episode .content .ep-flow__step--fork {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.episode .content .ep-flow__branch {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid $ep-rule;
+    border-radius: 6px;
+    transition: opacity $transition-base, border-color $transition-base;
+}
+
+// A path lights the stations in order, then the branch it took; the branch it did
+// not take steps back. With no path chosen, the whole flow is neutral.
+.episode .content .ep-flow:not([data-path="none"]) .ep-flow__step::before {
+    animation: ep-station 0.45s calc(var(--i) * 0.16s) both;
+}
+
+.episode .content .ep-flow:not([data-path="none"]) .ep-flow__branch {
+    opacity: 0.35;
+}
+
+.episode .content .ep-flow .ep-flow__branch.is-taken {
+    opacity: 1;
+    border-color: $ep-ink;
+    box-shadow: inset 3px 0 0 $ep-ink;
+}
+
+@keyframes ep-station {
+    from { background: $global-background-color; border-color: $muted-text-color; }
+    to { background: $ep-ink; border-color: $ep-ink; }
+}
+
+@keyframes ep-station-dark {
+    from { background: $global-background-color-dark; border-color: $muted-text-color-dark; }
+    to { background: $ep-ink-dark; border-color: $ep-ink-dark; }
+}
+
+// ---- The timeline's quote preview ------------------------------------------------------
+//
+// Hovering the ruler near a quote's dot shows the quote, the way a newspaper's
+// annotated chart shows a value under the cursor; a click goes to it. Pointer
+// devices only: on touch there is no hover, and the dots are hidden anyway.
+
+// Outside the bar (whose clip would cut it off) and fixed to the window; the
+// script places it under the dot being hovered.
+.episode .ep-timeline__tip {
+    position: fixed;
+    z-index: 95;
+    width: 20rem;
+    max-width: 90vw;
+    padding: 0.6rem 0.8rem 0.65rem;
+    background: #fffdf7; // body text on it: 18.36:1
+    border: 1px solid $ep-rule;
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: $global-font-color;
+    pointer-events: none;
+}
+
+.episode .ep-timeline__tip[hidden] {
+    display: none;
+}
+
+.episode .ep-timeline__tip-clock {
+    display: block;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: $ep-ink;
+    margin-bottom: 0.15rem;
+}
+
+.episode .ep-timeline__moment.is-hot {
+    background: $ep-ink;
+    transform: scale(1.6);
+}
+
+// ---- Colophon ------------------------------------------------------------------
+
+.episode .content .ep-colophon {
+    font-family: $global-font-family;
+    margin: 3.5rem 0 1rem;
+    padding-top: 1.1rem;
+    border-top: 2px solid $global-font-color;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: $muted-text-color;
+}
+
+.episode .content .ep-colophon__title {
+    @include ep-kicker;
+    color: $global-font-color;
+    margin: 0 0 0.5rem;
+}
+
+.episode .content .ep-colophon p {
+    margin: 0 0 0.6rem;
+}
+
+.episode .content .ep-colophon__listen {
+    font-size: 0.9375rem;
+}
+
+// ---- Dark ---------------------------------------------------------------------
+//
+// The plates are paper, and paper does not glow. Dimmed slightly so a white
+// sheet does not become the brightest thing on a dark screen.
+
+@mixin episode-dark {
+    .episode .ep-kicker__show,
+    .episode .ep-dek,
+    .episode .ep-meta strong,
+    .episode .ep-timeline__clock b,
+    .episode .content .ep-map__heading,
+    .episode .content .ep-colophon__title {
+        color: $ep-heading-dark;
+    }
+
+    .episode .ep-kicker,
+    .episode .ep-meta,
+    .episode .content .ep-chapter__kicker,
+    .episode .content .ep-moment figcaption,
+    .episode .ep-plate figcaption,
+    .episode .content .ep-map__length,
+    .episode .content .ep-map__clock,
+    .episode .content .ep-map__legend .ep-map__num,
+    .episode .content .ep-colophon {
+        color: $muted-text-color-dark;
+    }
+
+    .episode .content .ep-moment { border-left-color: $ep-rule-dark; }
+    .episode .content .ep-moment--pull { border-left: 0; }
+    .episode .content .ep-moment--pull blockquote::before { color: $ep-rule-dark; }
+    .episode .ep-plate img { filter: brightness(0.9); }
+
+    .episode .content .ep-map__legend,
+    .episode .content .ep-map__legend a { border-color: $ep-rule-dark; }
+    .episode .content .ep-map__legend a.is-current .ep-map__num { color: $ep-ink-dark; }
+
+    .episode .ep-timeline {
+        background: $header-background-color-dark;
+        box-shadow: 0 0 0 100vmax $header-background-color-dark;
+    }
+    .episode .ep-timeline__of,
+    .episode .ep-timeline__chapter { color: $muted-text-color-dark; }
+    .episode .ep-timeline__ruler { background-color: $ep-paper-dark; }
+    .episode .content .ep-hl__lesson { background: rgba(255, 255, 255, 0.045); border-left-color: $ep-ink-dark; } // #333436: 5.35:1 text, 5.77:1 kicker
+    .episode .content .ep-hl__lesson-kicker { color: $ep-ink-dark; }
+
+    .episode .content .ep-viz { border-top-color: $ep-heading-dark; border-bottom-color: $ep-rule-dark; }
+    .episode .content .ep-viz__title { color: $ep-heading-dark; }
+    .episode .content .ep-viz__kicker,
+    .episode .content .ep-viz__note,
+    .episode .content .ep-guess__scale,
+    .episode .content .ep-model__label,
+    .episode .content .ep-flow__note,
+    .episode .content .ep-flow__items { color: $muted-text-color-dark; }
+    .episode .content .ep-flow__items strong { color: $ep-heading-dark; }
+    .episode .content .ep-viz__button { background: $ep-heading-dark; color: $ep-ink-text-dark; }
+    .episode .content .ep-viz__toggle,
+    .episode .content .ep-choice__option { border-color: $ep-rule-dark; color: $global-font-color-dark; }
+    .episode .content .ep-viz__toggle-box { border-color: $muted-text-color-dark; }
+    .episode .content .ep-viz__toggle[aria-pressed="true"] { border-color: $ep-ink-dark; }
+    .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box { background: $ep-ink-dark; border-color: $ep-ink-dark; }
+    .episode .content .ep-viz__toggle[aria-pressed="true"] .ep-viz__toggle-box::after { border-color: $ep-ink-text-dark; }
+    .episode .content .ep-guess input[type="range"] { accent-color: $ep-ink-dark; }
+    .episode .content .ep-guess__bar { background: nth($ep-fill-dark, 1); }
+    .episode .content .ep-guess__bar > span { background: #8a8c93; } // 4.27:1 on #292a2d
+    .episode .content .ep-guess__row--real .ep-guess__bar > span,
+    .episode .content .ep-guess__row--real .ep-guess__bar::before { background: $ep-ink-dark; }
+    .episode .content .ep-guess__row--real .ep-guess__val { color: $ep-ink-dark; }
+    .episode .content .ep-choice__option.is-correct { background: $ep-ink-dark; border-color: $ep-ink-dark; color: $ep-ink-text-dark; }
+    .episode .content .ep-choice__option.is-wrong { color: $muted-text-color-dark; }
+    @for $i from 1 through 4 {
+        .episode .content .ep-model__seg--#{$i} { background: nth($ep-fill-dark, $i); color: $ep-heading-dark; }
+    }
+    .episode .content .ep-model__seg--accent { background: $ep-ink-dark; color: $ep-ink-text-dark; }
+    .episode .content .ep-flow__steps::before { background: $ep-rule-dark; }
+    .episode .content .ep-flow__step::before { border-color: $muted-text-color-dark; background: $global-background-color-dark; }
+    .episode .content .ep-flow__branch { border-color: $ep-rule-dark; }
+    .episode .content .ep-flow .ep-flow__branch.is-taken { border-color: $ep-ink-dark; box-shadow: inset 3px 0 0 $ep-ink-dark; }
+    .episode .content .ep-flow:not([data-path="none"]) .ep-flow__step::before { animation-name: ep-station-dark; }
+    .episode .ep-timeline__tip { background: #34353a; border-color: $ep-rule-dark; color: $ep-heading-dark; } // 9.74:1
+    .episode .ep-timeline__tip-clock { color: $ep-ink-dark; }
+    .episode .ep-timeline__moment.is-hot { background: $ep-ink-dark; }
+
+    .episode .ep-disclaimer { color: $global-font-color-dark; border-color: $ep-rule-dark; }
+    .episode .ep-disclaimer strong { color: $ep-ink-dark; }
+    .episode .ep-disclaimer a { color: $single-link-color-dark; }
+
+    .episode .content .ep-colophon { border-color: $ep-rule-dark; }
+    .episode .content .ep-colophon { border-top-color: $ep-heading-dark; }
+}
+
+[theme=dark] {
+    @include episode-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    [theme=auto] {
+        @include episode-dark;
+    }
+}
+
+// ---- Small screens -----------------------------------------------------------------
+
+@media (max-width: 680px) {
+    .episode .single-title.ep-title {
+        font-size: 2.5rem;
+    }
+
+    // The mobile header slides away on scroll, so the timeline pins to the very
+    // top and the header covers it when it slides back.
+    .episode .ep-timeline {
+        top: 0;
+    }
+
+    .episode .ep-timeline__inner {
+        flex-wrap: wrap;
+        gap: 0.3rem 0.75rem;
+        padding: 0.45rem 0 0.5rem;
+    }
+
+    .episode .ep-timeline__now {
+        flex: 1 1 100%;
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+    }
+
+    .episode .ep-timeline__chapter {
+        display: inline;
+    }
+
+    .episode .ep-timeline__ruler {
+        height: 1.9rem;
+    }
+
+    .episode .ep-timeline__label {
+        top: 13px;
+        font-size: 0.5625rem;
+    }
+
+    // At this width the quote dots and the minute labels share the same pixels.
+    .episode .ep-timeline__moment {
+        display: none;
+    }
+
+    .episode .ep-dek {
+        font-size: 1.1875rem;
+    }
+
+    .episode .content {
+        font-size: 1.125rem;
+    }
+
+    .episode .content .ep-chapter__title {
+        font-size: 1.625rem;
+    }
+
+    .episode .content .ep-moment--pull blockquote {
+        font-size: 1.4375rem;
+    }
+
+    .episode .content .ep-moment--pull blockquote::before {
+        position: static;
+        display: block;
+        font-size: 2.25rem;
+        line-height: 0.6;
+        margin-bottom: 0.25rem;
+    }
+
+    .episode .ep-plate--spot {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .episode .ep-plate--spot figcaption {
+        margin: 0.6rem 0 0;
+    }
+
+    .episode .content .ep-guess__row {
+        grid-template-columns: 6.5rem minmax(0, 1fr);
+    }
+
+    .episode .content .ep-guess__val {
+        grid-column: 2;
+        margin-top: -0.35rem;
+    }
+
+    .episode .content .ep-choice__options {
+        grid-template-columns: 1fr;
+    }
+
+    .episode .content .ep-model__row {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .episode .content .ep-model__label {
+        grid-column: 1 / -1;
+        margin-bottom: -0.3rem;
+    }
+
+    .episode .content .ep-flow__step--fork {
+        grid-template-columns: 1fr;
+    }
+
+    // A portrait spot plate at full width is a whole screen of hat and apron.
+    .episode .ep-plate--spot img {
+        max-width: 72%;
+    }
+
+    .episode .content .ep-map__legend {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+// Motion is decoration on this page; the end states carry the information.
+@media (prefers-reduced-motion: reduce) {
+    .episode .ep-timeline__head,
+    .episode .content .ep-guess__bar > span,
+    .episode .content .ep-model__stack,
+    .episode .content .ep-model__seg {
+        transition: none;
+    }
+
+    .episode .content .ep-flow:not([data-path="none"]) .ep-flow__step::before {
+        animation-duration: 0s;
+        animation-delay: 0s;
+    }
+}

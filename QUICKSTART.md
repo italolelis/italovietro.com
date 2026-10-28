@@ -45,12 +45,12 @@ choco install hugo-extended
 hugo version
 ```
 
-You should see output like: `hugo v0.153.2+extended...`
+You should see the version in `.hugo-version`, with `+extended`: `hugo v0.164.0+extended...`
 
 ### 3. Run the Development Server
 
 ```bash
-hugo server -D
+hugo server -D --renderToMemory
 ```
 
 The `-D` flag includes draft posts in the build.
@@ -68,7 +68,7 @@ The site will auto-reload when you make changes to files.
 
 ### Start Development Server
 ```bash
-hugo server -D
+hugo server -D --renderToMemory
 ```
 
 ### Build for Production
@@ -136,12 +136,12 @@ git submodule update --init --recursive
 ### CSS Changes Not Appearing
 ```bash
 rm -rf resources/_gen/
-hugo server -D
+hugo server -D --renderToMemory
 ```
 
 ### Port 1313 Already in Use
 ```bash
-hugo server -D -p 1314
+hugo server -D --renderToMemory -p 1314
 ```
 
 ### Build Errors
@@ -155,7 +155,7 @@ Ensure you have Hugo Extended (v0.100.0+)
 
 1. **Create a new branch** for your changes
 2. **Make your changes** to content or layouts
-3. **Test locally** with `hugo server -D`
+3. **Test locally** with `hugo server -D --renderToMemory`
 4. **Commit your changes** with a descriptive message
 5. **Push to GitHub** - deployment happens automatically on `master` branch
 

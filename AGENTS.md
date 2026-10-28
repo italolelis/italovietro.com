@@ -10,21 +10,22 @@ The unusual thing about this repo: **a post-build assertion script decides wheth
 # Clone with the theme submodule
 git clone --recurse-submodules https://github.com/italolelis/italovietro.com.git
 
-# Dev server, drafts included
-hugo server -D               # http://localhost:1313
+# Dev server, drafts included. In memory: by default it writes into public/,
+# which is where the gate reads.
+hugo server -D --renderToMemory   # http://localhost:1313
 
 # Production build + the gate -- RUN THIS BEFORE CALLING ANY CHANGE DONE
-hugo --gc --minify && ./scripts/check-build.sh public
+./scripts/build.sh && ./scripts/check-build.sh public
 
 # Theme submodule repair / update
 git submodule update --init --recursive
 git submodule update --remote
 
 # Clear SCSS cache if styles look stale
-rm -rf resources/ && hugo server -D
+rm -rf resources/ && hugo server -D --renderToMemory
 ```
 
-Hugo must be the **extended** build; the standard one cannot compile the theme's SCSS. There is no test suite, linter, or formatter — `scripts/check-build.sh` is the only automated check, and it is the one that matters.
+Hugo must be the **extended** build, at the version in `.hugo-version` (CI and Vercel read it; the gate notes a mismatch). `scripts/build.sh` is the only build: it starts from an empty `public/` and fails on any Hugo warning, including a deprecation or a translation missing from one language. There is no test suite, linter, or formatter — `scripts/check-build.sh` is the only automated check, and it is the one that matters.
 
 ## Hard rules
 
@@ -43,7 +44,7 @@ Hugo must be the **extended** build; the standard one cannot compile the theme's
 
 This repo documents its own decisions. Before anything non-trivial:
 
-- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Post-build assertion.
+- **`CONTEXT.md`** — the domain glossary. When your output names a concept (commit message, issue title, class name, assertion description), use the term as defined there and avoid the synonyms it explicitly rejects: Measure, Signpost, Greeting, Upcoming, Elsewhere, Entry, Accent, Featured, Episode page, Moment, Plate, Post-build assertion.
 - **`docs/adr/`** — five accepted decisions. Read the ones touching your area:
   - `0001-amber-accent-colour.md` — the accent, and its counted roles
   - `0002-no-webfonts.md` — why no webfont is loaded
@@ -57,7 +58,7 @@ This repo documents its own decisions. Before anything non-trivial:
 
 ## The build gate
 
-`scripts/check-build.sh` runs ~593 lines of assertions against the generated `public/` directory and gates both PR checks and production deploys. If it fails, nothing deploys.
+`scripts/check-build.sh` runs ~670 lines of assertions against the generated `public/` directory and gates both PR checks and production deploys. If it fails, nothing deploys.
 
 It asserts on **compiled output** — what a browser actually receives — not on how the source is authored, so it survives file reorganisation and only fails when something a visitor experiences has regressed. A *Post-build assertion* is deliberately not called a test; see `CONTEXT.md`.
 
@@ -65,7 +66,7 @@ Many assertions are **negative** (`nowhere`, `absent_from`), guarding against re
 
 **When you add something visible, add its assertion.** That is the established pattern here, and the reason the negative ones exist.
 
-Helpers available: `contains`, `contains_re`/`matches`, `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
+Helpers available: `contains`, `contains_re`/`matches`, `in_order` (a regex over the whole file as one line, for things far apart on a page), `nowhere`, `absent_from`, `exists`, `missing`, `occurs`, `same_count`. There is no `nowhere_re`.
 
 Two documented footguns:
 
@@ -91,6 +92,8 @@ categories: ["Engineering"]
 
 Non-post pages also carry `slug`, and `aliases` where a path changed. Every page needs its own `description`. Posts published elsewhere carry `host:` — see *Elsewhere* in `CONTEXT.md`.
 
+**What goes in Writing (`content/posts/`) comes from Italo.** A podcast appearance can get an **episode page** in `content/episodes/` instead: chapter by chapter, a summary, the quotes and the lesson, all from front matter. Claude writes those, in the third person, under a disclaimer that says so; the quotes are verbatim from the recording, lightly trimmed with brackets and ellipses, and linked to their second. Never write in Italo's first person anywhere he did not write it. Quotes are transcribed, not remembered; a claim the recording does not support does not go in. Contract in `docs/agents/architecture.md`.
+
 **The speaking page is a list, not a set of write-ups.** Entries are title + venue + date + links, with no description. Voice lives once at the top of the page, next to the invitation. Don't re-add a paragraph per entry.
 
 Where prose does exist (home page, About, reading list, post bodies) it is first person and takes positions. If a position isn't known, **ask rather than invent one.**
@@ -107,7 +110,7 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 
 ## Pre-flight checklist
 
-1. `hugo --gc --minify && ./scripts/check-build.sh public` — all assertions pass
+1. `./scripts/build.sh && ./scripts/check-build.sh public` — no warnings, all assertions pass
 2. New visible behaviour has a new assertion
 3. Both languages updated, Portuguese correctly accented
 4. New colours measured for contrast; all three theme selectors covered
@@ -117,4 +120,4 @@ Where prose does exist (home page, About, reading list, post bodies) it is first
 
 ---
 
-**Hugo:** 0.153.2 extended (CI and Vercel) · **Theme:** LoveIt 0.2.11 (submodule) · **Maintainer:** Italo Vietro
+**Hugo:** extended, pinned in `.hugo-version`; 0.158 or later is required · **Theme:** LoveIt 0.2.11 (submodule) · **Maintainer:** Italo Vietro

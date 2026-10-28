@@ -4,7 +4,7 @@ Detail split out of `AGENTS.md` so the always-loaded file stays small. Read this
 
 ## Stack
 
-- **Hugo extended** — 0.153.2 pinned in both workflows and in `vercel.json`. The standard (non-extended) build cannot compile the theme's SCSS.
+- **Hugo extended** — pinned once, in `.hugo-version`, which both workflows and `vercel.json` read; `scripts/check-build.sh` notes when the Hugo that built the output differs. Every build goes through `scripts/build.sh`: it empties `public/` first and fails on any Hugo warning (`--panicOnWarning`, with missing translations and duplicate paths reported). The standard (non-extended) build cannot compile the theme's SCSS. **0.158 is the floor**: the templates use `hugo.Sites`, `hugo.Data`, `.Site.Language.Locale` and `.Language.Label`, and `config.toml` uses the `locale`/`label` language keys, all of which replaced deprecated names in 0.156–0.158. A new warning now fails the build rather than waiting to be noticed.
 - **LoveIt theme** — git submodule at `themes/LoveIt`, currently `v0.2.11-219-gc8b65127`. Never edit it; override instead.
 - **Goldmark** markdown, **SCSS** via Hugo Pipes, **TOML** config (~570 lines, heavily commented).
 - **No npm dependencies at the site root.** The workflows run `npm ci` only if a root `package-lock.json` exists; it doesn't. The lockfile under `themes/LoveIt/` is the theme's own tooling and plays no part in building this site.
@@ -22,16 +22,20 @@ italovietro.com/
 │   └── dependabot.yml           # monthly: actions, docker, submodule
 ├── .planning/                   # GSD planning artifacts
 ├── assets/
-│   ├── css/                     # 9 SCSS partials, see below
+│   ├── css/                     # 10 SCSS partials, see below
 │   ├── images/                  # avatar.webp + portrait.jpg, logo.svg
+│   ├── js/episode.js            # the episode page's timeline; no dependencies
 │   └── music/
 ├── content/                     # see content map below
 ├── data/upcoming.yaml           # confirmed future appearances
+├── i18n/                        # strings for the episode layout, merged over the theme's
 ├── docs/
 │   ├── adr/                     # 5 architecture decision records
 │   └── agents/                  # agent-facing conventions (incl. this file)
 ├── layouts/                     # theme overrides only
-├── scripts/check-build.sh       # THE BUILD GATE (~593 lines)
+├── scripts/
+│   ├── check-build.sh           # THE BUILD GATE (~670 lines)
+│   └── watercolour/             # paints the episode plates; not run in CI
 ├── static/                      # favicons, manifest, og-card.jpg
 ├── themes/LoveIt/               # submodule — do not edit
 ├── CONTEXT.md                   # domain glossary — read before naming things
@@ -51,10 +55,14 @@ Page bundles, one file per language. **The directory name is not the URL** — `
 | `content/about/` | `/about/` | `/pt-br/sobre/` |
 | `content/recommended-reading/` | `/recommended-reading/` | `/pt-br/leituras-recomendadas/` |
 | `content/speaking/` | `/speaking/` | `/pt-br/palestras/` |
+| `content/episodes/<slug>/` | `/episodes/<slug>/` | `/pt-br/episodes/<slug>/` |
 
 **Posts render at the site root**, not under `/posts/` — `[Permalinks] posts = ":contentbasename"`. `/posts/` is the archive index, rendered by `layouts/_default/section.html`.
 
 15 post bundles. **8 of them are "Elsewhere"** — pieces published on another site (Parloa Labs, InsideN26, HelloTech, Medium, Urban Sports Club Tech), carrying a `host:` front-matter key. They sit in the same chronological archive as posts written here, told apart only by the source in the right-hand column. See the *Elsewhere* entry in `CONTEXT.md`.
+
+
+**Episode pages** live in `content/episodes/`, not in `posts/`: Claude writes them, and the writing section is only what Italo writes. The section has no list page (`build.render: never`); each episode is reached from its entry on the speaking page. See *Episode pages* under *Shortcode contracts*.
 
 Old paths are preserved as `aliases` (`/talks/` → `/speaking/`, `/my-reading-list/` → `/recommended-reading/`). Keep them when renaming; they are live inbound links.
 
@@ -80,7 +88,14 @@ layouts/
 ├── _default/
 │   ├── section.html              # post archive, incl. Elsewhere rows
 │   └── _markup/                  # codeblock render hooks (goat, mermaid, default)
+├── _default/baseof.html          # theme mirror: .Site.Language.Locale
+├── index.rss.xml, posts/rss.xml, # theme mirrors: .Site.Language.Locale
+│   taxonomy/rss.xml
+├── episodes/single.html          # episode pages
 ├── partials/
+│   ├── episode/                  # timeline, chapters, chapter-heading, moment, clock, seconds
+│   ├── plate.html                # a watercolour, responsive; episode pages and home
+│   ├── head/seo.html             # theme mirror: .Site.Language.Locale
 │   ├── header.html
 │   ├── footer.html               # carries the contact address on every page
 │   ├── init.html                 # theme version + CDN/analytics scratch setup
@@ -91,6 +106,7 @@ layouts/
 │       └── img.html
 ├── shortcodes/
 │   ├── talk.html                 # speaking entries
+│   ├── home-plate.html           # the home page's watercolour, from assets/
 │   ├── upcoming.html             # future appearances from data/upcoming.yaml
 │   ├── book.html                 # reading list entries
 │   ├── portrait.html             # About page headshot + downloads
@@ -101,7 +117,7 @@ layouts/
 
 ## Stylesheets
 
-`assets/css/` — nine partials:
+`assets/css/` — ten partials:
 
 | File | Scope |
 | --- | --- |
@@ -111,6 +127,7 @@ layouts/
 | `_home.scss` | Home page intro and signpost |
 | `_about.scss` | About page + portrait |
 | `_speaking.scss` | Speaking page entries |
+| `_episode.scss` | Episode pages: serif reading face, timeline, chapter list, lessons, plates. Everything scoped under `.episode` |
 | `_reading-list.scss` | Reading list entries |
 | `_archive.scss` | Post archive |
 | `_interactions.scss` | Shared hover/focus/underline rules, focus rings |
@@ -160,6 +177,52 @@ Sections, in order: Upcoming (auto) → Conference Talks → Panels & Roundtable
 Reads `data/upcoming.yaml`. Param: `heading` (required, passed per language). Renders **nothing at all — not even the heading** once every entry's `until` date has passed, because an empty "Upcoming" heading says the opposite of what it exists to say. Entries expire by date rather than by anyone remembering to delete them.
 
 When an appearance happens, move it into `content/speaking/index.*.md` and delete it from the YAML. Nothing does this automatically.
+
+Two optional params for episode pages: `highlights_url` (the page under `/episodes/`, passed through `relLangURL`) and `highlights_label` (the link's word per language, default `Highlights`; `Destaques` in pt-br). Not "Read": the page is not Italo's writing. The link comes first in the row because it is the only one that stays on the site.
+
+### Episode pages — `content/episodes/`
+
+A podcast appearance on its own page: the episode chapter by chapter, each with a short summary, the quotes that carry it, and the lesson pulled out. **Claude writes these pages, from a transcript of the recording, and the page says so** -- a disclaimer under the masthead, `author: "Claude"` in front matter (so the structured data says so too), and the summaries in the third person. The quotes are the only words on the page that are Italo's: verbatim from the recording, lightly trimmed with brackets and ellipses, each linked to its second.
+
+Because they are not his writing, they are kept out of everything that presents his writing: not in `content/posts/`, not in the archive, not in either RSS feed, no tags or categories. They are in the sitemap, and reached from the speaking page through the talk shortcode's `highlights_url`.
+
+Everything below the masthead is built from front matter; the Markdown body is only the short intro. A new episode is a transcript turned into a few hundred words per language. A full long-read format was built for the first episode and dropped in its favour: ten times the words to maintain in two languages, for a page most readers skim for the lessons.
+
+The page carries a masthead, the chapter list, a colophon, and a timeline pinned under the header: the episode as a ruler, with the clock showing the last real timestamp the reader has passed and a playhead that follows the scroll.
+
+Front matter:
+
+| Key | Notes |
+| --- | --- |
+| `episode.show`, `.number` | the kicker above the title, written per language |
+| `episode.title`, `.released` | the original episode's title and air date, for the meta line |
+| `episode.duration` | seconds; scales the timeline |
+| `episode.hosts` | list |
+| `episode.at`, `.at_label` | where a timestamp goes: a URL with `%d` for the second (YouTube `…&t=%ds`, Spotify `…?t=%d`), and the platform's name for the link title |
+| `episode.listen` | `[{ label, url }]`, the "listen" links in the colophon, labels written per language |
+| `episode.hero` | `{ src, alt }`, a plate from the bundle |
+| (no `layout`) | the section picks `layouts/episodes/single.html` |
+| `chapters` | per chapter: `id`, `n`, `t` (start, seconds), `title`, `summary`, `moments: [{ t: "mm:ss", text, size }]`, `lesson`, and an optional `plate: { src, alt, caption, size }` (`size: spot` for the smaller, captioned-beside treatment) |
+| `images` | `["cover.jpg"]`, the 1200×630 card cut from the hero |
+
+**Interactive figures** are front matter too, per chapter, so a new episode gets them without new code:
+
+| Key | Renders | Where |
+| --- | --- | --- |
+| `ask: { type: guess, … }` | a slider the reader commits on, then their guess against the real value. `scale` (log/linear), `min`, `max`, `start`, `ticks`, `unit` (`"%s people"`), `zero`, `answer`, optional `you`/`real` labels | after the chapter heading, before the summary that would give it away |
+| `ask: { type: choice, … }` | buttons, then the right one marked and the wrong pick struck. `options`, `answer` (index) | same |
+| `figures: [{ type: model, … }]` | a toy model: `stages` with `value`, and `cut`/`toggle` to speed one up; `unit`, and a `note` that must say so if the values are invented | after the summary |
+| `figures: [{ type: flow, … }]` | a process top to bottom: `steps` (`name`, `note`, `items`, one `fork` keyed by `path`) and `paths`, the buttons that light a branch | after the summary |
+
+Every `ask` also takes `question`, `verdict` and `t`, the moment in the recording that answers it; the verdict links there. Without JavaScript each figure renders in its final state (answered, at its starting point, both branches) with its controls hidden. Partials: `layouts/partials/episode/ask.html`, `figure.html`; behaviour in `assets/js/episode.js`.
+
+The timeline previews a quote on hover (pointer devices only) and goes to it on click. It sits in the article's column, pinned under the header; its full-width background is a clipped box-shadow, never a positioned element, which once made every episode page scroll sideways -- the gate checks for that.
+
+The recording is **linked, not embedded**: a player is a third-party host loading on every visit, which the asset-host rule exists to prevent. Without JavaScript the timeline is a static ruler; nothing else depends on the script. Interface strings live in `i18n/en.toml` and `i18n/pt-br.toml`.
+
+The plates are painted by `scripts/watercolour/` (`uv run scripts/watercolour/paint.py [plate]`), which writes 2× PNG masters to a gitignored `out/` and exports WebP with a deckled alpha edge to where each plate lives (`DEST` in `paint.py`), cutting each episode's share card from its hero. Only the WebP and JPEG files are committed; the gate fails any plate over 160KB.
+
+A new episode page also needs a line in `EPISODES` at the top of the episode section of `scripts/check-build.sh` (its slug and first chapter id), which runs every episode assertion against it, and a `highlights_url` on its speaking entry.
 
 ### `book` — reading list entries
 

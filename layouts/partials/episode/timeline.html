@@ -1,0 +1,49 @@
+{{- /* The episode as a ruler, pinned under the site header for the whole page.
+
+       The clock on the left reads where the reader is in the recording, and only
+       ever shows a real timestamp: the start of the chapter, or the last quote
+       scrolled past. The playhead between them moves with the scroll, which is
+       an estimate, so it is drawn and never printed.
+
+       Built from the same chapters and moments as the page, so it cannot list a
+       quote the page does not have. Ticks are CSS gradients -- one a minute, a
+       taller one every ten -- so the markup holds only what carries meaning.
+
+       aria-hidden: everything here is also on the page, as headings and as the
+       chapter list, and a screen reader is better served by those. Without
+       JavaScript it is a static ruler with the playhead at zero.
+
+       Params: page, chapters, duration, moments. */ -}}
+{{- $d := .duration -}}
+{{- $min := div $d 60.0 -}}
+<div class="ep-timeline" data-timeline data-duration="{{ $d }}" data-intro="{{ T "episode.intro" }}" aria-hidden="true"
+     style="--ep-minutes: {{ $min }}">
+    <div class="ep-timeline__inner">
+        <div class="ep-timeline__now">
+            <span class="ep-timeline__clock"><b data-clock>00:00</b> <span class="ep-timeline__of">{{ T "episode.of" (partial "episode/clock.html" $d) }}</span></span>
+            <span class="ep-timeline__chapter" data-chapter-name>{{ T "episode.intro" }}</span>
+        </div>
+        <div class="ep-timeline__ruler" data-ruler>
+            {{- range $i, $c := .chapters }}
+            {{- $start := $c.t | int -}}
+            {{- $end := $d -}}
+            {{- if lt (add $i 1) (len $.chapters) }}{{ $end = (index $.chapters (add $i 1)).t | int }}{{ end }}
+            <span class="ep-timeline__seg" data-chapter="{{ $c.id }}" data-t="{{ $start }}" data-name="{{ $c.n }} · {{ $c.title }}"
+                  style="left: {{ printf "%.3f" (div (mul $start 100.0) $d) }}%; width: {{ printf "%.3f" (div (mul (sub $end $start) 100.0) $d) }}%"></span>
+            {{- end }}
+            {{- range seq 10 10 (int $min) }}
+            <span class="ep-timeline__label" style="left: {{ printf "%.3f" (div (mul . 6000.0) $d) }}%">{{ . }}m</span>
+            {{- end }}
+            {{- range .moments }}
+            <span class="ep-timeline__moment" data-t="{{ .t }}" data-text="{{ .text }}" style="left: {{ printf "%.3f" (div (mul .t 100.0) $d) }}%"></span>
+            {{- end }}
+            <span class="ep-timeline__head" data-head></span>
+        </div>
+    </div>
+</div>
+{{- /* The hover preview of a quote, outside the bar: the bar clips everything to
+       its own height, and this has to hang below it. */}}
+<div class="ep-timeline__tip" data-tip hidden aria-hidden="true">
+    <span class="ep-timeline__tip-clock"></span>
+    <span class="ep-timeline__tip-text"></span>
+</div>
