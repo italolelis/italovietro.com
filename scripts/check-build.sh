@@ -361,6 +361,13 @@ nowhere 'Senior Director of Engineering' 'the title before VP appears nowhere'
 echo 'Speaking page'
 # No apostrophe in the needle: the entry renders it as &#39; in the body and
 # literally in metadata, and this should assert the entry, not the encoding.
+contains "$EN_SPEAKING" 'How to Take AI Agents From Pilot to Production at Scale' 'en speaking page lists the Tech Transformed episode'
+contains "$PT_SPEAKING" 'How to Take AI Agents From Pilot to Production at Scale' 'pt-br speaking page lists the Tech Transformed episode'
+contains "$EN_SPEAKING" 'em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale' 'en Tech Transformed entry links to the episode'
+contains "$PT_SPEAKING" 'em360tech.com/podcasts/how-take-ai-agents-pilot-production-scale' 'pt-br Tech Transformed entry links to the episode'
+# Newest first, within the podcast group as everywhere else on the page.
+in_order "$EN_SPEAKING" 'Pilot to Production at Scale.*AI Kitchen' 'en Tech Transformed (Oct 2026) comes before Beyond Vibe Coding (Jul 2026)'
+in_order "$PT_SPEAKING" 'Pilot to Production at Scale.*AI Kitchen' 'pt-br Tech Transformed comes before Beyond Vibe Coding'
 contains "$EN_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'en speaking page lists the Beyond Vibe Coding episode'
 contains "$PT_SPEAKING" 'AI Kitchen: How the Company Building Agents' 'pt-br speaking page lists the Beyond Vibe Coding episode'
 contains "$EN_SPEAKING" 'https://bvc.fm/2026/07/09/005.html' 'en episode links to the episode page'
