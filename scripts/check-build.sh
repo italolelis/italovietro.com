@@ -945,7 +945,10 @@ for key in 'lastmod:' 'description:' 'categories:'; do
 done
 # The dek is the post's description, or its own `subtitle` where it has one.
 in_order "$PUBLIC/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'the dek of a post is its description'
-in_order "$PUBLIC/pt-br/do-job-titles-matter/index.html" 'class=masthead__dek>[A-ZÀ-Ú]' 'and in pt-br too'
+# Fixed text, not a character class: GNU grep on the CI runner rejects a range of
+# accented letters like [A-ZÀ-Ú] ("Invalid collation character") that macOS grep
+# accepts. The post was never translated, so its pt-br description is the English one.
+in_order "$PUBLIC/pt-br/do-job-titles-matter/index.html" 'class=masthead__dek>I like to reflect on titles from time to time' 'and in pt-br too'
 # The dek is not the first paragraph said twice. Four posts (Italo's, so their
 # descriptions are not ours to rewrite) have a `description` that is word for word
 # their opening paragraph, and the dek printed it straight above the same sentence. The
