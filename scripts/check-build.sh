@@ -639,15 +639,25 @@ rule_sets '\.single \.content \.portrait__sizes a' 'color:var\(--muted\)' 'the h
 contains "$PT_ABOUT" 'portrait__img' 'the portrait renders on pt-br About too'
 
 # The photograph was a 428KB PNG of a 512x512 image -- 7x the bytes for no extra
-# pixels. This ceiling fails loudly if an unoptimised export replaces it.
-PORTRAIT="$PUBLIC/images/portrait.jpg"
-if [ ! -f "$PORTRAIT" ]; then
-    bad "portrait is materially smaller than the 428KB it replaced (no such file: $PORTRAIT)"
-elif [ "$(wc -c < "$PORTRAIT")" -lt 120000 ]; then
-    ok 'portrait is materially smaller than the 428KB it replaced'
-else
-    bad "portrait is materially smaller than the 428KB it replaced (got $(wc -c < "$PORTRAIT") bytes, ceiling 120000)"
+# pixels -- and then a 59KB JPEG of the same. Since October 2026 its source is the
+# speaker kit's full-size headshot (1416px, ~370KB), one file for both pages, so the
+# ceiling is on what the About page actually loads: the sizes in the portrait's
+# srcset, each cut from that source. Only the size link points at the full file.
+PORTRAIT_FILES=$(grep -oE '<img class=portrait__img[^>]*>' "$EN_ABOUT" 2>/dev/null | grep -oE '/[^ ,"]+\.jpg' | sort -u)
+if [ -z "$PORTRAIT_FILES" ]; then
+    bad 'About loads its portrait at a light size (no portrait image found)'
 fi
+for f in $PORTRAIT_FILES; do
+    if [ ! -f "$PUBLIC$f" ]; then
+        bad "About loads its portrait at a light size (no such file: $f)"
+    elif [ "$(wc -c < "$PUBLIC$f")" -lt 120000 ]; then
+        ok "About loads its portrait at a light size: $f"
+    else
+        bad "About loads its portrait at a light size: $f ($(wc -c < "$PUBLIC$f") bytes, ceiling 120000)"
+    fi
+done
+contains "$EN_ABOUT" 'href=/speaking/kit/headshot.jpg' 'About links the full-size headshot, the one in the speaker kit'
+contains "$PT_ABOUT" 'href=/speaking/kit/headshot.jpg' 'and so does the pt-br About'
 
 # The archive page showed link-and-date rows and nothing else, while every post
 # already carried a description in front matter. These guard the substance.
