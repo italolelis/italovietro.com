@@ -395,8 +395,24 @@ matches "$PT_KIT" '[0-9]+ palavras' 'each pt-br bio says how many words it is'
 text_has "$EN_KIT" 'VP of Engineering, Parloa' 'the en kit states the role on its own line'
 text_has "$PT_KIT" 'VP of Engineering, Parloa' 'and so does the pt-br one'
 # Every photo is offered as a JPEG an organiser can download, and the link resolves.
-occurs "$EN_KIT" 'kit__download' 2 'en: two photos to download'
-occurs "$PT_KIT" 'kit__download' 2 'pt-br: two photos to download'
+occurs "$EN_KIT" 'kit__download' 3 'en: three photos to download, two headshots and one on stage'
+occurs "$PT_KIT" 'kit__download' 3 'pt-br: three photos to download'
+# Organisers print and project these, so none may be small: every photo the kit offers
+# is at least 1000px wide, read from the size the kit prints beside it (taken from the
+# file, so it cannot be claimed). Digits only in the pattern: no accented letters or
+# symbols inside a bracket, which GNU grep on the CI runner rejects.
+occurs "$EN_KIT" 'download=italo-vietro-headshot.jpg>Download JPEG' 1 'en: the headshot is offered'
+# `.{1,2}` is the middle dot: one character in a UTF-8 locale, two bytes in C.
+for kit in "$EN_KIT" "$PT_KIT"; do
+    [ -f "$kit" ] || continue
+    total=$(grep -oF 'kit__download' "$kit" | wc -l | tr -d ' ')
+    big=$(grep -oE '(Download|Baixar) JPEG .{1,2} [0-9]{4,} ' "$kit" | wc -l | tr -d ' ')
+    if [ "$total" -gt 0 ] && [ "$total" = "$big" ]; then
+        ok "every kit photo is at least 1000px wide: ${kit#"$PUBLIC"/}"
+    else
+        bad "every kit photo is at least 1000px wide: ${kit#"$PUBLIC"/} ($big of $total)"
+    fi
+done
 for kit in "$EN_KIT" "$PT_KIT"; do
     [ -f "$kit" ] || continue
     for href in $(grep -oE 'kit__download"? href="?[^" >]+' "$kit" | sed -E 's/.*href="?//'); do

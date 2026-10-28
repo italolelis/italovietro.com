@@ -82,12 +82,15 @@
                         {{- if not .alt -}}
                             {{- errorf "speaker kit %s: photo %q has no alt text" $.File.Path .src -}}
                         {{- end -}}
-                        {{- $thumb := $img.Resize "720x webp q82" -}}
+                        {{- /* A landscape photo takes the row to itself, so a stage shot is not
+                               shrunk to half the column beside a square headshot. */ -}}
+                        {{- $wide := gt (float $img.Width) (mul (float $img.Height) 1.3) -}}
+                        {{- $thumb := $img.Resize (printf "%dx webp q82" (cond $wide (math.Min $img.Width 1400 | int) 720)) -}}
                         {{- $file := $img -}}
                         {{- if ne $img.MediaType.SubType "jpeg" -}}
                             {{- $file = $img.Process "jpg q92" -}}
                         {{- end }}
-                        <li class="kit__photo">
+                        <li class="kit__photo{{ if $wide }} kit__photo--wide{{ end }}">
                             <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ .alt }}" loading="lazy" decoding="async">
                             <p class="kit__photo-label">{{ .label }}</p>
                             <a class="kit__download" href="{{ $file.RelPermalink }}" download="italo-vietro-{{ .name | default (.label | urlize) }}.jpg">{{ T "kit.download" (dict "W" $file.Width "H" $file.Height "KB" (int (math.Ceil (div (float (len $file.Content)) 1024)))) }}</a>
