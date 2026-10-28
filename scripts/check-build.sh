@@ -349,9 +349,14 @@ fi
 CSS=$CSS_ALL
 
 echo 'Job title'
-contains "$EN_HOME" 'Senior Director of Engineering' 'en homepage states the current title'
-contains "$PT_HOME" 'Senior Director of Engineering' 'pt-br homepage states the current title'
+contains "$EN_HOME" 'VP of Engineering at Parloa' 'en homepage states the current title'
+contains "$PT_HOME" 'VP of Engineering na Parloa' 'pt-br homepage states the current title'
+text_has "$EN_ABOUT" 'VP of Engineering at Parloa' 'en About states the current title'
+text_has "$PT_ABOUT" 'VP of Engineering na Parloa' 'pt-br About states the current title'
 nowhere 'Head of Engineering' 'superseded title appears nowhere'
+# Superseded in October 2026. "Director of Engineering" alone still appears, rightly:
+# it was the HelloFresh title on About, and a rung in the ladder in do-job-titles-matter.
+nowhere 'Senior Director of Engineering' 'the title before VP appears nowhere'
 
 echo 'Speaking page'
 # No apostrophe in the needle: the entry renders it as &#39; in the body and
@@ -457,8 +462,8 @@ matches "$PT_HOME" '<figure class="plate plate--[a-z]+">.*</figure>(</section>|<
 # The words, whole, as a reader gets them. The typographer curls a quote or an apostrophe
 # the way it does anywhere else in Markdown, which is the one visible change from the
 # raw HTML these sentences used to sit in, so the needles are written curled (`&rsquo;`).
-text_has "$EN_HOME" 'I&rsquo;m Senior Director of Engineering at Parloa, where we&rsquo;re figuring out how to make AI conversations actually work reliably at scale. The kind of problem where &ldquo;move fast and break things&rdquo; doesn&rsquo;t fly. I&rsquo;ve been in tech for 18+ years. Started fixing computers in João Pessoa, Brazil, eventually moved into software, and made my way across Europe building teams and systems.' 'the en intro, word for word'
-text_has "$PT_HOME" 'Sou Senior Director of Engineering na Parloa, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde &ldquo;move fast and break things&rdquo; não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.' 'the pt-br intro, word for word'
+text_has "$EN_HOME" 'I&rsquo;m VP of Engineering at Parloa, where we&rsquo;re figuring out how to make AI conversations actually work reliably at scale. The kind of problem where &ldquo;move fast and break things&rdquo; doesn&rsquo;t fly. I&rsquo;ve been in tech for 18+ years. Started fixing computers in João Pessoa, Brazil, eventually moved into software, and made my way across Europe building teams and systems.' 'the en intro, word for word'
+text_has "$PT_HOME" 'Sou VP of Engineering na Parloa, onde a gente tá descobrindo como fazer conversas com IA funcionarem de verdade em escala. O tipo de problema onde &ldquo;move fast and break things&rdquo; não cola. Estou na área de tecnologia há 18+ anos. Comecei consertando computadores em João Pessoa, migrei para software, e fui fazendo meu caminho pela Europa construindo times e sistemas.' 'the pt-br intro, word for word'
 text_has "$EN_HOME" 'I write from time to time, and those thoughts end up in writing. I read a good deal more than I write, and the books that stuck are in reading. I also like talking about what I have had to figure out the hard way, which is speaking. If you want the longer version of all this, it is in about.' 'the en Signpost, word for word'
 text_has "$PT_HOME" 'Escrevo de vez em quando, e esses textos acabam em artigos. Leio bem mais do que escrevo, e os livros que ficaram estão em leituras. Também gosto de falar sobre o que tive que descobrir na marra, e isso está em palestras. Se quiser a versão mais longa de tudo isso, está em sobre.' 'the pt-br Signpost, word for word'
 text_has "$EN_HOME" 'When I&rsquo;m not thinking about distributed systems, you&rsquo;ll find me managing my homelab (Kubernetes clusters, self-hosted everything), brewing coffee with an amount of precision that my family finds unreasonable, strategizing over D&amp;D campaigns, and being a dedicated dad and husband. The homelab is where I experiment. The coffee is where I focus. The D&amp;D is where I accept that even the best-laid plans fall apart.' 'the en Beyond the Code paragraph, word for word'

@@ -61,7 +61,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.en.params]
-      description = "Senior Director of Engineering at Parloa. Talks, podcasts, a reading list, and older writing on leading engineering teams."
+      description = "VP of Engineering at Parloa. Talks, podcasts, a reading list, and older writing on leading engineering teams."
       keywords = ["italolelis", "personal", "software"]
       # App icon config
       [languages.en.params.app]
@@ -149,7 +149,7 @@ ignoreLogs = ['shortcode-twitter-getremote']
       disableAliases = true
       pagerSize = 12
     [languages.pt-br.params]
-      description = "Senior Director of Engineering na Parloa. Palestras, podcasts, lista de leituras e artigos sobre liderança em engenharia."
+      description = "VP of Engineering na Parloa. Palestras, podcasts, lista de leituras e artigos sobre liderança em engenharia."
       keywords = ["italolelis", "personal", "software"]
       [languages.pt-br.params.app]
         title = "Italo Vietro"
